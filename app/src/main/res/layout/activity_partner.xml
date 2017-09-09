@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:background="@drawable/text_background"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_weight="0.7"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.01"
+        android:background="#ffffff"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Delivery Time and date\n(Type of service)"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_weight="0.9"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.01"
+        android:background="#ffffff"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_weight="0.5"/>
+        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearExpand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#d7d7d7" />
+</LinearLayout>
