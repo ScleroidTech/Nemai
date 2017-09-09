@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0f0f0"
+    android:orientation="vertical">
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:layout_marginTop="30dp"
+       android:layout_marginRight="15dp"
+       android:layout_marginLeft="15dp">
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:textStyle="bold"
+           android:text="Package Details"
+           android:textColor="@color/colorPrimary"
+           android:textSize="16sp"/>
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Weight + Dimension+Address"
+           android:layout_marginTop="15dp"
+           android:textSize="15sp"
+           android:textColor="#000000"/>
+
+   </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="40dp">
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_weight="0.7"
+        android:layout_height="40dp"
+        android:textSize="16sp"
+        android:background="@drawable/rounded_edittext"
+        android:hint="Coupon Code"
+        android:textAlignment="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        />
+    <Button
+        android:layout_gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="APPLY"
+        android:paddingLeft="10dp"
+        android:textStyle="bold"
+        android:background="@drawable/btn_rounded"
+        android:textColor="#ffffff"
+        android:layout_weight="0.3"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        />
+    </LinearLayout>
+    <Button
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Proceed to payment"
+        android:paddingLeft="10dp"
+        android:textStyle="bold"
+        android:background="@drawable/btn_rounded"
+        android:textColor="#ffffff"
+        android:drawableRight="@drawable/ic_chevron_right_white_24dp"
+        />
+</LinearLayout>
