@@ -14,8 +14,6 @@ import java.util.HashMap;
 
 import info.androidhive.navigationdrawer.R;
 import info.androidhive.navigationdrawer.ServerConstants;
-import info.androidhive.navigationdrawer.volley_support.MyVolleyGetMethod;
-import info.androidhive.navigationdrawer.volley_support.MyVolleyPostMethod;
 import info.androidhive.navigationdrawer.volley_support.MyVolleyPostMethod1;
 import info.androidhive.navigationdrawer.volley_support.VolleyCompleteListener;
 
@@ -69,7 +67,12 @@ public class TrackingActivity extends AppCompatActivity {
 
         HashMap<String, String> map = new HashMap<String, String>();
         map.put(ServerConstants.URL, ServerConstants.serverUrl.POST_COURIER);
-        new MyVolleyGetMethod(this,volleyCompleteListener,map,ServerConstants.ServiceCode.POST_COURIER,true);
+        map.put("name","ghghj");
+        map.put("monileno","6576576");
+        map.put("emailid","tyututuj");
+        map.put("dob","rghfh");
+        new MyVolleyPostMethod1(this,volleyCompleteListener,map,ServerConstants.ServiceCode.POST_COURIER,true);
+        //new MyVolleyGetMethod(this,volleyCompleteListener,map,ServerConstants.ServiceCode.POST_COURIER,true);
     }
 
 }
