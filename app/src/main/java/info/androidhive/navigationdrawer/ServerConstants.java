@@ -8,7 +8,7 @@ public class ServerConstants {
     public static final String URL = "url";
     public class serverUrl {
 
-        public static final String POST_COURIER = "https://api.aftership.com/v4/couriers/all";
+        public static final String POST_COURIER = "http://ec2-18-220-38-112.us-east-2.compute.amazonaws.com:3002/insert";
 
 
 
@@ -16,8 +16,6 @@ public class ServerConstants {
 
     public class ServiceCode {
         public static final int POST_COURIER = 101;
-
-
     }
 
 

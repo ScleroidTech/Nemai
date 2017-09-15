@@ -399,16 +399,19 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/textWeightDoc"
+
+                    <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:layout_weight="1">
+                        <android.support.design.widget.TextInputLayout
+                        android:id="@+id/textWeightDoc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        >
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+
                             <EditText
                                 android:inputType="numberDecimal"
                                 android:maxLength="6"
@@ -419,8 +422,11 @@
                                 android:id="@+id/editWeightDoc"
                                 android:layout_gravity="center"
                                 />
+                    </android.support.design.widget.TextInputLayout>
+
                             <TextView
                                 android:layout_width="wrap_content"
+                                android:id="@+id/weight_unit_kg_textView"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
@@ -429,8 +435,8 @@
                                 android:layout_marginRight="10dp"
                                 android:textColor="#808080"
                                 />
-                        </RelativeLayout>
-                    </android.support.design.widget.TextInputLayout>
+                    </RelativeLayout>
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/textInvoiceDoc"
                         android:layout_width="0dp"
@@ -464,17 +470,12 @@
             </LinearLayout>
 
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textAddressDoc"
-                android:layout_width="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_height="wrap_content">
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -482,9 +483,18 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/ic_library_books_black_24dp"
                         android:textSize="18sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="40dp"
                         android:textColor="#808080"
                         android:id="@+id/img_address"
                         />
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/textAddressDoc"
+                        android:layout_width="match_parent"
+
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_height="wrap_content">
                     <EditText
                         android:inputType="numberDecimal"
                         android:layout_width="match_parent"
@@ -494,10 +504,10 @@
                         android:layout_alignParentRight="true"
                         android:id="@+id/editAddressDoc"
                         />
-
+                    </android.support.design.widget.TextInputLayout>
                 </RelativeLayout>
 
-            </android.support.design.widget.TextInputLayout>
+
 
             <Button
                 android:id="@+id/btn_saveDoc"
