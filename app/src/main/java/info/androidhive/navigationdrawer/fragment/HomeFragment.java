@@ -5,6 +5,7 @@ package info.androidhive.navigationdrawer.fragment;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -37,9 +39,11 @@ RadioButton radioParcel,radioDocument;
     RadioButton domestic, international;
     LinearLayout linearParcel,linearDocument;
     Button btn_save;
+    TextView mWeightUnitTextView;
     ImageView img_address;
+
     final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
-    EditText editAddress;
+    EditText editAddress,weightdocEditText;
     static String select;
 
 
@@ -66,7 +70,17 @@ RadioButton radioParcel,radioDocument;
         linearDocument.setVisibility(View.VISIBLE);
 
         img_address =  v.findViewById(R.id.img_address);
+        Resources resources = getResources();
 
+        mWeightUnitTextView= v.findViewById(R.id.weight_unit_kg_textView);
+        weightdocEditText = v.findViewById(R.id.editWeightDoc);
+        weightdocEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus) mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                else mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
+            }
+        });
         editAddress = v.findViewById(R.id.editAddressDoc);
 
 img_address.setOnClickListener(new View.OnClickListener() {
