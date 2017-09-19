@@ -20,17 +20,17 @@ import java.util.Map;
 public class MyVolleyPostMethod1 {
 
     Context context;
+    VolleyCompleteListener mVolleylistener;
     private int serviceCode;
     private Map<String, String> map;
-    VolleyCompleteListener mVolleylistener;
-    ShowLoader showLoader;
+    // ShowLoader showLoader;
 
     public MyVolleyPostMethod1(Context context, VolleyCompleteListener volleyCompleteListener, HashMap<String, String> map, int serviceCode, boolean isDialog) {
         this.map = map;
         this.serviceCode = serviceCode;
         this.context = context;
         if (isDialog){
-            showLoader = new ShowLoader(context);
+            //      showLoader = new ShowLoader(context);
         }
         if (isNetworkAvailable(context)) {
             mVolleylistener = (VolleyCompleteListener) volleyCompleteListener;
@@ -40,7 +40,18 @@ public class MyVolleyPostMethod1 {
         }
     }
 
-
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null) {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+        }
+        return false;
+    }
 
     private void myBackgroundGetClass(final Context context, VolleyCompleteListener volleyCompleteListener, int serviceCode, final Map<String, String> map, final boolean isDialog) {
 
@@ -48,7 +59,7 @@ public class MyVolleyPostMethod1 {
         String url = map.get("url");
         map.remove("url");
         if (isDialog){
-            showLoader.showDialog();
+            //    showLoader.showDialog();
         }
         mVolleylistener = (VolleyCompleteListener) volleyCompleteListener;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -57,7 +68,7 @@ public class MyVolleyPostMethod1 {
                     public void onResponse(String response) {
                         mVolleylistener.onTaskCompleted(response, code);
                         if (isDialog){
-                            showLoader.dismissDialog();
+                            //                  showLoader.dismissDialog();
                         }
                     }
                 },
@@ -66,7 +77,7 @@ public class MyVolleyPostMethod1 {
                     public void onErrorResponse(VolleyError error) {
                         mVolleylistener.onTaskFailed(error.toString(), code);
                         if (isDialog){
-                            showLoader.dismissDialog();
+                            //                showLoader.dismissDialog();
                         }
                     }
                 }) {
@@ -87,19 +98,6 @@ public class MyVolleyPostMethod1 {
 
     private void showToast(Context context, String text){
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
-    }
-
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null)
-                for (int i = 0; i < info.length; i++)
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
-                    }
-        }
-        return false;
     }
 
 }
