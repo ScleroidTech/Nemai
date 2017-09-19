@@ -18,33 +18,33 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:layout_collapseMode="pin">
+            android:background="#656576"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/toolbar_title"
-                    android:orientation="horizontal"
+                    style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:layout_marginRight="?attr/actionBarSize"
                     android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:text="Courier"
                     android:textColor="#ffffff"
-                    style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
                     />
 
 
                 <ImageButton
                     android:id="@+id/btn_search"
+                    style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="?attr/actionBarSize"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_gravity="end"
-                    android:src="@mipmap/ic_track_courier"
-                    style="@style/Widget.AppCompat.ActionButton" />
+                    android:src="@mipmap/ic_track_courier" />
 
             </FrameLayout>
         </android.support.v7.widget.Toolbar>

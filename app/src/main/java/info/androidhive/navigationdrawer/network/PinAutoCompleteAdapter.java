@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +20,6 @@ import java.util.List;
 
 import info.androidhive.navigationdrawer.R;
 import info.androidhive.navigationdrawer.ServerConstants;
-import info.androidhive.navigationdrawer.activity.TrackingActivity;
 import info.androidhive.navigationdrawer.models.PinCode;
 import info.androidhive.navigationdrawer.volley_support.MyVolleyPostMethod1;
 import info.androidhive.navigationdrawer.volley_support.VolleyCompleteListener;
@@ -31,9 +29,8 @@ import info.androidhive.navigationdrawer.volley_support.VolleyCompleteListener;
  */
 
 public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
-    String TAG="PinAutoCompleteAdapter";
-
     private static final int MAX_RESULTS = 10;
+    String TAG = "PinAutoCompleteAdapter";
     private Context mContext;
 
     private List<PinCode> mResultPinList = new ArrayList<PinCode>();
@@ -81,6 +78,10 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                 if (constraint != null) {
                     List<PinCode> pinCodes = findPins(mContext, constraint.toString());
 
+
+
+
+
                     // Assign the data to the FilterResults
                   filterResults.values = pinCodes;
                    filterResults.count = pinCodes.size();
@@ -123,11 +124,9 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                                 JSONObject e = json.getJSONObject(i);
                                 String location = e.getString("location");
                                 String pincode= e.getString("pincode");
-                                String state = e.getString("state");
-                                String area = e.getString("area");
+                                Log.i("Mitali", "Location : " + location + "Pincode : " + pincode);
 
-
-                                mResultPinList.add(new PinCode(location,pincode,state,area));
+                                mResultPinList.add(new PinCode(location, pincode));
                             }
 
                         } catch (JSONException e) {
@@ -145,9 +144,9 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
         };
         HashMap<String, String> map = new HashMap<String, String>();
         map.put(ServerConstants.URL, ServerConstants.serverUrl.POST_PINCODE);
+        map.put("origins", "581");
 
         new MyVolleyPostMethod1(mContext,volleyCompleteListener,map,ServerConstants.ServiceCode.POST_PINCODE,true);
-        //new MyVolleyGetMethod(this,volleyCompleteListener,map,ServerConstants.ServiceCode.POST_COURIER,true);
 
         return mResultPinList;
     }

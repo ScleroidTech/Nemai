@@ -1,20 +1,16 @@
 package info.androidhive.navigationdrawer.fragment;
 
 
-
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -30,21 +26,23 @@ import java.util.List;
 
 import info.androidhive.navigationdrawer.R;
 import info.androidhive.navigationdrawer.activity.PartnerActivity;
-
-import static android.view.View.GONE;
+import info.androidhive.navigationdrawer.models.PinCode;
+import info.androidhive.navigationdrawer.network.PinAutoCompleteAdapter;
+import info.androidhive.navigationdrawer.other.DelayedAutoCompleteTextView;
 
 
 public class HomeFragment extends Fragment {
+    public static final int THRESHOLD = 3;
+    static String select;
+    final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
 RadioButton radioParcel,radioDocument;
     RadioButton domestic, international;
     LinearLayout linearParcel,linearDocument;
     Button btn_save;
     TextView mWeightUnitTextView;
     ImageView img_address;
-
-    final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
+    DelayedAutoCompleteTextView pinSourceAutoCompleteTextView, pinDestinationAutoCompleteTextView;
     EditText editAddress,weightdocEditText;
-    static String select;
 
 
     public HomeFragment() {
@@ -69,8 +67,36 @@ RadioButton radioParcel,radioDocument;
         linearDocument=v.findViewById(R.id.linearExpandedDataDoc);
         linearDocument.setVisibility(View.VISIBLE);
 
-        img_address =  v.findViewById(R.id.img_address);
-        Resources resources = getResources();
+        //img_address =  v.findViewById(R.id.img_address);
+
+
+        pinDestinationAutoCompleteTextView = v.findViewById(R.id.pin_dest_autocompletetextview);
+        pinDestinationAutoCompleteTextView.setThreshold(THRESHOLD);
+        pinDestinationAutoCompleteTextView.setAdapter(new PinAutoCompleteAdapter(getActivity()));
+        pinDestinationAutoCompleteTextView.setLoadingIndicator(
+                (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator2));
+        pinDestinationAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                PinCode pinCode = (PinCode) adapterView.getItemAtPosition(position);
+                pinDestinationAutoCompleteTextView.setText(pinCode.getPincode());
+            }
+        });
+
+
+        pinSourceAutoCompleteTextView = v.findViewById(R.id.pin_source_autocompletetextview);
+        pinSourceAutoCompleteTextView.setThreshold(THRESHOLD);
+        pinSourceAutoCompleteTextView.setAdapter(new PinAutoCompleteAdapter(getActivity())); // 'this' is Activity instance
+        pinSourceAutoCompleteTextView.setLoadingIndicator(
+                (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator));
+        pinSourceAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                PinCode pinCode = (PinCode) adapterView.getItemAtPosition(position);
+                pinSourceAutoCompleteTextView.setText(pinCode.getPincode());
+            }
+        });
+
 
         mWeightUnitTextView= v.findViewById(R.id.weight_unit_kg_textView);
         weightdocEditText = v.findViewById(R.id.editWeightDoc);
@@ -81,9 +107,9 @@ RadioButton radioParcel,radioDocument;
                 else mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
             }
         });
-        editAddress = v.findViewById(R.id.editAddressDoc);
+        //    editAddress = v.findViewById(R.id.editAddressDoc);
 
-img_address.setOnClickListener(new View.OnClickListener() {
+/*img_address.setOnClickListener(new View.OnClickListener() {
 
     @Override
     public void onClick(View view) {
@@ -104,7 +130,7 @@ img_address.setOnClickListener(new View.OnClickListener() {
         alertdialog2.show();
 
     }
-});
+});*/
         btn_save= v.findViewById(R.id.btn_saveDoc);
 
         btn_save.setOnClickListener(new View.OnClickListener(){

@@ -1,80 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp">
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
     <EditText
         android:layout_width="0dp"
-        android:layout_weight="2"
         android:layout_height="40dp"
-        android:textSize="16sp"
-        android:background="@drawable/rounded_edittext"
+        android:layout_marginRight="10dp"
+        android:layout_weight="2"
+        android:background="@drawable/round_top"
         android:hint="Tracking ID"
         android:textAlignment="center"
-        android:layout_marginRight="10dp"
+        android:textSize="16sp"
         />
     <Button
         android:id="@+id/btn_scan"
-        android:layout_marginLeft="10dp"
-        android:layout_gravity="center"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="40dp"
-        android:text="Scan"
-        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
         android:background="@drawable/btn_rounded"
+        android:text="Scan"
         android:textColor="#ffffff"
+        android:textStyle="bold"
         />
         </LinearLayout>
     <RadioGroup
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginBottom="15dp"
+        android:id="@+id/rgType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="1"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_marginTop="10dp"
-        android:id="@+id/rgType"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Waybill"
-            android:textColor="@drawable/selector_textview"
-            android:id="@+id/rDocument"
-            android:paddingLeft="15dp"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:checked="true"
-            android:layout_weight="0.5"/>
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <RadioButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:checked="true"
+
+            android:paddingLeft="15dp"
+            android:text="Waybill"
+            android:textColor="@drawable/selector_textview"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:checked="false"
             android:paddingLeft="15dp"
             android:text="Reference"
-            android:textSize="18sp"
             android:textColor="@drawable/selector_textview"
-            android:id="@+id/rParcel"
-            android:checked="false"/>
+
+            android:textSize="18sp" />
     </RadioGroup>
 
     <LinearLayout
+        android:id="@+id/trackLinear"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:id="@+id/trackLinear">
+        android:visibility="gone">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,60 +82,60 @@
             android:orientation="horizontal"
             >
             <TextView
-                android:layout_gravity="center_vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Waybill"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:text="Waybill"
                 android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:layout_weight="0.5"/>
+                android:textStyle="bold" />
             <TextView
-                android:layout_gravity="center_vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="12345678901"
+                android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dp"
+                android:layout_weight="0.7"
+                android:text="12345678901"
                 android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:layout_weight="0.7"/>
+                android:textStyle="bold" />
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.01"
                 android:background="#ffffff"/>
             <TextView
-                android:layout_gravity="center_vertical"
                 android:layout_width="0dp"
-                android:layout_marginLeft="5dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="0.6"
                 android:text="Estimated \ntime"
                 android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:layout_weight="0.6"/>
+                android:textStyle="bold" />
             <TextView
-                android:layout_gravity="center_vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:text="12:03:2017\n12:12:12"
                 android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:layout_weight="1"/>
+                android:textStyle="bold" />
             </LinearLayout>
         <LinearLayout
-            android:orientation="horizontal"
-            android:background="@drawable/text_background"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:gravity="center">
+            android:background="@drawable/text_background"
+            android:gravity="center"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.7"
                 android:text="Date and Time"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
                 android:textAlignment="center"
-                android:layout_weight="0.7"/>
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -144,11 +144,11 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.9"
                 android:text="Location"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
                 android:textAlignment="center"
-                android:layout_weight="0.9"/>
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -157,17 +157,17 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
                 android:text="Estimated delivery"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
                 android:textAlignment="center"
-                android:layout_weight="0.5"/>
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/linearExpand"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#d7d7d7" />
+            android:background="#d7d7d7"
+            android:orientation="vertical" />
     </LinearLayout>
 </LinearLayout>
