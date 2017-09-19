@@ -3,87 +3,50 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f0f0f0"
-    android:orientation="vertical">
+    android:background="@drawable/gradient_bg"
+    android:orientation="vertical"
+    android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#cdd0d1"
-                android:orientation="vertical"
-                android:elevation="4dp">
+                android:background="@drawable/round_top"
+                android:orientation="vertical">
                 <RadioGroup
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
+                    android:id="@+id/rgPlaceType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="1"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_marginTop="5dp"
-                    android:id="@+id/rgPlaceType"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
                     <RadioButton
+                        android:id="@+id/rDomestic"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:checked="true"
+                        android:paddingLeft="15dp"
                         android:text="Domestic"
                         android:textColor="@drawable/selector_textview"
-                        android:id="@+id/rDomestic"
-                        android:paddingLeft="15dp"
-                        android:textStyle="bold"
                         android:textSize="18sp"
-                        android:checked="true"
-                        android:layout_weight="0.5"/>
+                        android:textStyle="bold" />
 
                     <RadioButton
+                        android:id="@+id/rInternational"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
+                        android:checked="false"
                         android:paddingLeft="15dp"
                         android:text="International"
-                        android:textSize="18sp"
                         android:textColor="@drawable/selector_textview"
-                        android:id="@+id/rInternational"
-                        android:checked="false"/>
+                        android:textSize="18sp" />
                 </RadioGroup>
-                <View
-                    android:layout_marginTop="5dp"
-                    android:layout_width="fill_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/colorPrimary"/>
-                <RadioGroup
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="1"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:id="@+id/rgType"
-                    android:orientation="horizontal">
 
-                    <RadioButton
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Document"
-                        android:textColor="@drawable/selector_textview"
-                        android:id="@+id/rDocument"
-                        android:paddingLeft="15dp"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:checked="true"
-                        android:layout_weight="0.5"/>
 
-                    <RadioButton
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:paddingLeft="15dp"
-                        android:text="Parcel"
-                        android:textSize="18sp"
-                        android:textColor="@drawable/selector_textview"
-                        android:id="@+id/rParcel"
-                        android:checked="false"/>
-                </RadioGroup>
 
 </LinearLayout>
             <ScrollView
@@ -96,121 +59,176 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:elevation="4dp">
+                android:background="@color/colorWhite"
+                android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="5dp"
-                        android:background="@drawable/edit_background">
+                        android:padding="5dp">
 
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginLeft="10dp">
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="#918b91"
-                                android:textStyle="bold"
+                                android:layout_marginBottom="5dp"
                                 android:text="From"
-                                android:layout_marginBottom="5dp"/>
+                                android:textColor="#918b91"
+                                android:textStyle="bold" />
                             <ImageView
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:src="@drawable/nearme"/>
                         </LinearLayout>
-                        <EditText
+
+                        <info.androidhive.navigationdrawer.other.DelayedAutoCompleteTextView
+                            android:id="@+id/pin_source_autocompletetextview"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="3"
-                            android:hint="Enter Pincode"
                             android:background="@android:color/transparent"
-                            android:layout_gravity="center_vertical"/>
+                            android:hint="Enter Pincode" />
+
+                        <ProgressBar
+                            android:id="@+id/pb_loading_indicator"
+                            style="?android:attr/progressBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:visibility="gone" />
                     </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginLeft="15dp"
-                        android:background="#000000"
-                        android:layout_height="1dp"/>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-
-                        android:padding="5dp"
-                        android:background="@drawable/edit_background">
+                        android:padding="5dp">
 
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginLeft="10dp">
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="#918b91"
-                                android:textStyle="bold"
+                                android:layout_marginBottom="5dp"
                                 android:text="  To"
-                                android:layout_marginBottom="5dp"/>
+                                android:textColor="#918b91"
+                                android:textStyle="bold" />
                             <ImageView
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:src="@drawable/nearme"/>
                         </LinearLayout>
-                        <EditText
+
+                        <info.androidhive.navigationdrawer.other.DelayedAutoCompleteTextView
+                            android:id="@+id/pin_dest_autocompletetextview"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="3"
-                            android:hint="Enter Pincode"
                             android:background="@android:color/transparent"
-                            android:layout_gravity="center_vertical"/>
+                            android:hint="Enter Pincode" />
+
+                        <ProgressBar
+                            android:id="@+id/pb_loading_indicator2"
+                            style="?android:attr/progressBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                 </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:id="@+id/linearExpandedData"
-                android:visibility="gone">
 
                 <LinearLayout
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/text_background"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
                     <TextView
                         android:id="@+id/txtPkg"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:background="@drawable/round_corners_bottom"
+                        android:padding="10dp"
                         android:text="Package Details"
                         android:textColor="#ffffff"
-                        android:layout_marginLeft="20dp"
-                        android:textStyle="bold"
-                        android:layout_weight="5"
                         android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
                         />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorWhite"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <RadioGroup
+                            android:id="@+id/rgType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginTop="5dp"
+
+                            android:orientation="horizontal"
+                            android:weightSum="1">
+
+                            <RadioButton
+                                android:id="@+id/rDocument"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:checked="true"
+                                android:paddingLeft="15dp"
+                                android:text="Document"
+                                android:textColor="@drawable/selector_textview"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <RadioButton
+                                android:id="@+id/rParcel"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:checked="false"
+                                android:paddingLeft="15dp"
+                                android:text="Parcel"
+                                android:textColor="@drawable/selector_textview"
+                                android:textSize="18sp" />
+                        </RadioGroup>
+
+                    </LinearLayout>
 
                 </LinearLayout>
                 <LinearLayout
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
+                    android:id="@+id/linearExpandedData"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/round_corners_bottom"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                     android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
@@ -224,24 +242,24 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <EditText
-                                android:inputType="numberDecimal"
-                                android:maxLength="6"
+                                android:id="@+id/editWeight"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Weight"
                                 android:layout_alignParentLeft="true"
-                                android:id="@+id/editWeight"
                                 android:layout_gravity="center"
+                                android:hint="Weight"
+                                android:inputType="numberDecimal"
+                                android:maxLength="6"
                                 />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
-                                android:text="Kg"
-                                android:textSize="18sp"
                                 android:layout_marginRight="10dp"
+                                android:text="Kg"
                                 android:textColor="#808080"
+                                android:textSize="18sp"
                                 />
                         </RelativeLayout>
                     </android.support.design.widget.TextInputLayout>
@@ -256,147 +274,127 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <EditText
-                                android:inputType="numberDecimal"
-                                android:maxLength="6"
+                                android:id="@+id/editInvoice"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Invoice Value"
                                 android:layout_alignParentLeft="true"
-                                android:id="@+id/editInvoice"
                                 android:layout_gravity="center"
+                                android:hint="Invoice Value"
+                                android:inputType="numberDecimal"
+                                android:maxLength="6"
                                 />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
-                                android:text="Rs"
-                                android:textSize="18sp"
                                 android:layout_marginRight="10dp"
+                                android:text="Rs"
                                 android:textColor="#808080"
+                                android:textSize="18sp"
                                 />
                         </RelativeLayout>
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
                 <TextView
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:text="Package Dimensions (In cms)"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
+                    android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
-                    android:textAlignment="center"/>
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal"
                     >
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/textLength"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_height="wrap_content">
+                        android:layout_weight="1">
 
                         <EditText
-                            android:inputType="numberDecimal"
-                            android:maxLength="5"
                             android:id="@+id/editLength"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Length" />
+                            android:hint="Length"
+                            android:inputType="numberDecimal"
+                            android:maxLength="5" />
 
                     </android.support.design.widget.TextInputLayout>
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/textWidth"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_height="wrap_content">
+                        android:layout_weight="1">
 
                         <EditText
-                            android:inputType="numberDecimal"
-                            android:maxLength="5"
                             android:id="@+id/editWidth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Width" />
+                            android:hint="Width"
+                            android:inputType="numberDecimal"
+                            android:maxLength="5" />
 
                     </android.support.design.widget.TextInputLayout>
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/textHeight"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_height="wrap_content">
+                        android:layout_weight="1">
 
                         <EditText
-                            android:inputType="numberDecimal"
-                            android:maxLength="5"
                             android:id="@+id/editHeight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Height" />
+                            android:hint="Height"
+                            android:inputType="numberDecimal"
+                            android:maxLength="5" />
 
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/textPckDesc"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_height="wrap_content">
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="8dp">
 
                     <EditText
-                        android:maxLength="70"
                         android:id="@+id/editPckDesc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Package Description" />
+                        android:hint="Package Description"
+                        android:maxLength="70" />
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
 
             <LinearLayout
+                android:id="@+id/linearExpandedDataDoc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:id="@+id/linearExpandedDataDoc">
+
+                android:background="@drawable/round_corners_bottom"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/text_background"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/txtPkgDoc"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Package Details"
-                        android:textColor="#ffffff"
-                        android:layout_marginLeft="20dp"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_weight="5"
-                        />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:orientation="horizontal">
 
 
@@ -408,32 +406,32 @@
                         android:id="@+id/textWeightDoc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+
                         >
 
 
                             <EditText
-                                android:inputType="numberDecimal"
-                                android:maxLength="6"
+                                android:id="@+id/editWeightDoc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Weight"
                                 android:layout_alignParentLeft="true"
-                                android:id="@+id/editWeightDoc"
                                 android:layout_gravity="center"
+                                android:hint="Weight"
+                                android:inputType="numberDecimal"
+                                android:maxLength="6"
                                 />
                     </android.support.design.widget.TextInputLayout>
 
                             <TextView
-                                android:layout_width="wrap_content"
                                 android:id="@+id/weight_unit_kg_textView"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
-                                android:text="Kg"
-                                android:textSize="18sp"
                                 android:layout_marginRight="10dp"
+                                android:text="Kg"
                                 android:textColor="#808080"
+                                android:textSize="18sp"
                                 />
                     </RelativeLayout>
 
@@ -441,7 +439,7 @@
                         android:id="@+id/textInvoiceDoc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+
                         android:layout_weight="1">
 
                         <RelativeLayout
@@ -454,73 +452,63 @@
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/textPckDescDoc"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_height="wrap_content">
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="8dp">
 
                     <EditText
-                        android:maxLength="70"
                         android:id="@+id/editPckDescDoc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Package Description" />
+                        android:hint="Package Description"
+                        android:maxLength="70" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Package Dimensions (In cms)"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textPckDescDoc1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="8dp">
+
+                    <EditText
+                        android:id="@+id/editPckDescDoc1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Package Description"
+                        android:maxLength="70" />
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
 
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_library_books_black_24dp"
-                        android:textSize="18sp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="40dp"
-                        android:textColor="#808080"
-                        android:id="@+id/img_address"
-                        />
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/textAddressDoc"
-                        android:layout_width="match_parent"
-
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_height="wrap_content">
-                    <EditText
-                        android:inputType="numberDecimal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:hint="Address"
-                        android:layout_alignParentRight="true"
-                        android:id="@+id/editAddressDoc"
-                        />
-                    </android.support.design.widget.TextInputLayout>
-                </RelativeLayout>
-
-
-
-            <Button
+                    <Button
                 android:id="@+id/btn_saveDoc"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:text="Save &amp; Search"
-                android:textStyle="bold"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginTop="10dp"
                 android:background="@drawable/btn_rounded"
-                android:textColor="#ffffff"
+                        android:elevation="8dp"
+                        android:text="Save &amp; Search"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp"
                 />
 
         </LinearLayout>
