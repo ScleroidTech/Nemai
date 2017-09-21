@@ -72,28 +72,33 @@ RadioButton radioParcel,radioDocument;
 
         pinDestinationAutoCompleteTextView = v.findViewById(R.id.pin_dest_autocompletetextview);
         pinDestinationAutoCompleteTextView.setThreshold(THRESHOLD);
-        pinDestinationAutoCompleteTextView.setAdapter(new PinAutoCompleteAdapter(getActivity()));
+        PinAutoCompleteAdapter pinAutoCompleteAdapter1 = new PinAutoCompleteAdapter(getActivity());
+        pinAutoCompleteAdapter1.notifyDataSetChanged();
+        pinDestinationAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter1);
+
+
         pinDestinationAutoCompleteTextView.setLoadingIndicator(
                 (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator2));
         pinDestinationAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 PinCode pinCode = (PinCode) adapterView.getItemAtPosition(position);
-                pinDestinationAutoCompleteTextView.setText(pinCode.getPincode());
+                pinDestinationAutoCompleteTextView.setText(pinCode.getPincode() + " (" + pinCode.getLocation() + ")");
             }
         });
 
 
         pinSourceAutoCompleteTextView = v.findViewById(R.id.pin_source_autocompletetextview);
         pinSourceAutoCompleteTextView.setThreshold(THRESHOLD);
-        pinSourceAutoCompleteTextView.setAdapter(new PinAutoCompleteAdapter(getActivity())); // 'this' is Activity instance
+        PinAutoCompleteAdapter pinAutoCompleteAdapter = new PinAutoCompleteAdapter(getActivity());
+        pinSourceAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter); // 'this' is Activity instance
         pinSourceAutoCompleteTextView.setLoadingIndicator(
                 (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator));
         pinSourceAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 PinCode pinCode = (PinCode) adapterView.getItemAtPosition(position);
-                pinSourceAutoCompleteTextView.setText(pinCode.getPincode());
+                pinSourceAutoCompleteTextView.setText(pinCode.getPincode() + " (" + pinCode.getLocation() + ")");
             }
         });
 
@@ -143,7 +148,7 @@ RadioButton radioParcel,radioDocument;
         radioDocument.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b==true){
+                if (b) {
                     linearDocument.setVisibility(View.VISIBLE);
                     linearParcel.setVisibility(View.GONE);
                     radioDocument.setTypeface(null, Typeface.BOLD);
@@ -155,7 +160,7 @@ RadioButton radioParcel,radioDocument;
         radioParcel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b==true){
+                if (b) {
                    linearParcel.setVisibility(View.VISIBLE);
                     linearDocument.setVisibility(View.GONE);
                     radioParcel.setTypeface(null, Typeface.BOLD);
@@ -165,13 +170,13 @@ RadioButton radioParcel,radioDocument;
         });
 
 
-        domestic = (RadioButton) v.findViewById(R.id.rDomestic);
-        international = (RadioButton) v.findViewById(R.id.rInternational);
+        domestic = v.findViewById(R.id.rDomestic);
+        international = v.findViewById(R.id.rInternational);
 
         international.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b == true) {
+                if (b) {
                     international.setTypeface(null, Typeface.BOLD);
                     domestic.setTypeface(null, Typeface.NORMAL);
                 }
@@ -181,7 +186,7 @@ RadioButton radioParcel,radioDocument;
         domestic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b == true) {
+                if (b) {
                     domestic.setTypeface(null, Typeface.BOLD);
                     international.setTypeface(null, Typeface.NORMAL);
                 }
@@ -200,7 +205,7 @@ RadioButton radioParcel,radioDocument;
         for(int i=0;i<5;i++) {
             stringList.add("RadioButton " + (i + 1));
         }
-        RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group);
+        RadioGroup rg = dialog.findViewById(R.id.radio_group);
 
         for(int i=0;i<stringList.size();i++){
             RadioButton rb=new RadioButton(getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
