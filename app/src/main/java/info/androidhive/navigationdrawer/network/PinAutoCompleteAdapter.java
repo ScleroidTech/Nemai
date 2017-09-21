@@ -32,8 +32,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
     private static final int MAX_RESULTS = 10;
     String TAG = "PinAutoCompleteAdapter";
     private Context mContext;
-
-    private List<PinCode> mResultPinList = new ArrayList<PinCode>();
+    private List<PinCode> mResultPinList;
 
     public PinAutoCompleteAdapter(Context mContext) {
         this.mContext = mContext;
@@ -41,6 +40,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public int getCount() {
+
         return mResultPinList.size();
     }
 
@@ -61,7 +61,8 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             listView = inflater.inflate(R.layout.list_item_pin, parent, false);
         }
-        ((TextView) listView.findViewById(R.id.popup_pin_text_view)).setText(getItem(position).getPincode());
+        ((TextView) listView.findViewById(R.id.popup_pin_text_view)).setText(getItem(position).getPincode() + "(" + getItem(position).getLocation() + ")");
+
         return listView;
 
 
@@ -79,12 +80,14 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                     List<PinCode> pinCodes = findPins(mContext, constraint.toString());
 
 
+                    if (pinCodes != null) {
 
 
+                        // Assign the data to the FilterResults
+                        filterResults.values = pinCodes;
 
-                    // Assign the data to the FilterResults
-                  filterResults.values = pinCodes;
-                   filterResults.count = pinCodes.size();
+                        filterResults.count = pinCodes.size();
+                    }//notifyDataSetChanged();
 
                 }
                 return filterResults;
@@ -92,6 +95,8 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
+
+
                 if (results != null && results.count > 0) {
 
                     mResultPinList = (List<PinCode>) results.values;
@@ -106,12 +111,13 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
     /**
      * Returns a search result for the given book title.
      */
-    private List <PinCode> findPins(Context context, String bookTitle) {
+    private List<PinCode> findPins(Context context, String userInput) {
 
-        // GoogleBooksProtocol is a wrapper for the Google Books API
+
         VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
             @Override
             public void onTaskCompleted(String response, int serviceCode) {
+                mResultPinList = new ArrayList<PinCode>();
                 Log.i(TAG,response);
                 switch (serviceCode) {
                     case ServerConstants.ServiceCode.POST_PINCODE:
@@ -120,11 +126,11 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                             JSONArray json = new JSONArray(response);
 
                             for(int i=0;i<json.length();i++){
-                                HashMap<String, String> map = new HashMap<String, String>();
+                                // HashMap<String, String> map = new HashMap<String, String>();
                                 JSONObject e = json.getJSONObject(i);
                                 String location = e.getString("location");
                                 String pincode= e.getString("pincode");
-                                Log.i("Mitali", "Location : " + location + "Pincode : " + pincode);
+                                //   Log.i("Mitali", "Location : " + location + "Pincode : " + pincode + i);
 
                                 mResultPinList.add(new PinCode(location, pincode));
                             }
@@ -144,7 +150,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
         };
         HashMap<String, String> map = new HashMap<String, String>();
         map.put(ServerConstants.URL, ServerConstants.serverUrl.POST_PINCODE);
-        map.put("origins", "581");
+        map.put("origins", userInput);
 
         new MyVolleyPostMethod1(mContext,volleyCompleteListener,map,ServerConstants.ServiceCode.POST_PINCODE,true);
 
