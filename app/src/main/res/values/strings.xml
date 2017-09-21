@@ -46,6 +46,7 @@
     <string name="action_sign_in">Log In</string>
     <string name="action_register">Register </string>
     <string name="action_sign_in_redirect">Not Yet Registered? Click Below </string>
+    <string name="action_register_redirect">Already a user? Sign in Below </string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address or Phone Number is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -55,4 +56,16 @@
         completions."
     </string>
     <string name="title_activity_register">Register</string>
+
+    <!-- Strings relatedto errors -->
+    <string name="fnameerror">Enter a valid First name</string>
+    <string name="lnameerror">Enter a valid Lat name</string>
+    <string name="emailerror">Enter a valid email</string>
+
+    <string name="passwordretypeerror">Passowrds didn\'t match</string>
+    <string name="passworderror">Enter a valid Password</string>
+    <string name="nullerror">Did you forget to fill this</string>
+    <string name="mobileerror">Enter a valid mobile</string>
+
+
 </resources>
