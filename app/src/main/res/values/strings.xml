@@ -66,6 +66,10 @@
     <string name="passworderror">Enter a valid Password</string>
     <string name="nullerror">Did you forget to fill this</string>
     <string name="mobileerror">Enter a valid mobile</string>
+    <string name="title_activity_password">Register</string>
+
+    <string name="facebook_app_id">1912010522393928</string>
+    <string name="fb_login_protocol_scheme">fb1912010522393928</string>
 
 
 </resources>
