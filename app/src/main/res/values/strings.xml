@@ -51,7 +51,7 @@
     <string name="error_invalid_email">This email address or Phone Number is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="error_field_required">You forgot to enter Email or Mobile here</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
@@ -59,13 +59,13 @@
 
     <!-- Strings relatedto errors -->
     <string name="fnameerror">Enter a valid First name</string>
-    <string name="lnameerror">Enter a valid Lat name</string>
-    <string name="emailerror">Enter a valid email</string>
+    <string name="lnameerror">Enter a valid Last name</string>
+    <string name="emailerror">Enter a valid Email</string>
 
-    <string name="passwordretypeerror">Passowrds didn\'t match</string>
+    <string name="passwordretypeerror">Passwords didn\'t match</string>
     <string name="passworderror">Enter a valid Password</string>
     <string name="nullerror">Did you forget to fill this</string>
-    <string name="mobileerror">Enter a valid mobile</string>
+    <string name="mobileerror">Enter a valid Mobile</string>
     <string name="title_activity_password">Register</string>
 
     <string name="facebook_app_id">1912010522393928</string>
