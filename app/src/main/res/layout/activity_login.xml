@@ -41,7 +41,6 @@
                     android:id="@+id/email_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
@@ -79,6 +78,15 @@
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/forgot_password_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/action_forgot_password"
+                android:textAlignment="center"
+                android:textSize="15sp" />
+
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/google_sign_in_button"
                 android:layout_width="match_parent"
@@ -101,10 +109,12 @@
 
 
             <TextView
-                android:id="@+id/register_link"
+                android:id="@+id/register_link_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:clickable="true"
+                android:focusable="true"
                 android:text="@string/action_sign_in_redirect"
                 android:textAlignment="center"
                 android:textSize="15sp" />

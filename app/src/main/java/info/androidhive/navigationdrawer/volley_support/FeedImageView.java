@@ -3,7 +3,6 @@ package info.androidhive.navigationdrawer.volley_support;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
@@ -15,38 +14,24 @@ import com.android.volley.toolbox.ImageLoader;
 
 public class FeedImageView extends android.support.v7.widget.AppCompatImageView {
 
-    public interface ResponseObserver {
-        public void onError();
-        public void onSuccess();
-    }
-
     private ResponseObserver mObserver;
-
-    public void setResponseObserver(ResponseObserver observer) {
-        mObserver = observer;
-    }
-
     /**
      * The URL of the network image to load
      */
     private String mUrl;
-
     /**
      * Resource ID of the image to be used as a placeholder until the network
      * image is loaded.
      */
     private int mDefaultImageId;
-
     /**
      * Resource ID of the image to be used if the network response fails.
      */
     private int mErrorImageId;
-
     /**
      * Local copy of the ImageLoader.
      */
     private ImageLoader mImageLoader;
-
     /**
      * Current ImageContainer. (either in-flight or finished)
      */
@@ -65,6 +50,9 @@ public class FeedImageView extends android.support.v7.widget.AppCompatImageView 
         super(context, attrs, defStyle);
     }
 
+    public void setResponseObserver(ResponseObserver observer) {
+        mObserver = observer;
+    }
 
     public void setImageUrl(String url, ImageLoader imageLoader) {
         mUrl = url;
@@ -245,5 +233,11 @@ public class FeedImageView extends android.support.v7.widget.AppCompatImageView 
         params.width = swidth;
         params.height = new_height;
         setLayoutParams(params);
+    }
+
+    public interface ResponseObserver {
+        void onError();
+
+        void onSuccess();
     }
 }

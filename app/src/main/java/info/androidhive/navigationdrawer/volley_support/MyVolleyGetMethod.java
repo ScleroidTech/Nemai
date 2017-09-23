@@ -20,10 +20,10 @@ import java.util.Map;
 public class MyVolleyGetMethod {
 
     Context context;
+    ShowLoader showLoader;
     private int serviceCode;
     private Map<String, String> map;
     private VolleyCompleteListener mVolleylistener;
-    ShowLoader showLoader;
 
    public MyVolleyGetMethod(Context context,VolleyCompleteListener volleyCompleteListener, HashMap<String, String> map, int serviceCode, boolean isDialog) {
         this.map = map;
@@ -33,11 +33,24 @@ public class MyVolleyGetMethod {
             showLoader = new ShowLoader(context);
         }
         if (isNetworkAvailable(context)) {
-            mVolleylistener = (VolleyCompleteListener) volleyCompleteListener;
+            mVolleylistener = volleyCompleteListener;
             myBackgroundGetClass(context, volleyCompleteListener,serviceCode, map, isDialog);
         } else {
             showToast(context, "No Internet Connection");
         }
+    }
+
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null) {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+        }
+        return false;
     }
 
     private void myBackgroundGetClass(final Context context, VolleyCompleteListener volleyCompleteListener,int serviceCode, final Map<String, String> map, final boolean isDialog) {
@@ -48,7 +61,7 @@ public class MyVolleyGetMethod {
         if (isDialog){
             showLoader.showDialog();
         }
-        mVolleylistener=(VolleyCompleteListener) volleyCompleteListener;
+        mVolleylistener = volleyCompleteListener;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -86,19 +99,6 @@ public class MyVolleyGetMethod {
 
     private void showToast(Context context, String text){
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
-    }
-
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null)
-                for (int i = 0; i < info.length; i++)
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
-                    }
-        }
-        return false;
     }
 
 }

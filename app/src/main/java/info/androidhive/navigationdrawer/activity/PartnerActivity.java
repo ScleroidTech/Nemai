@@ -2,10 +2,8 @@ package info.androidhive.navigationdrawer.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.icu.text.MessagePattern;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +22,7 @@ public class PartnerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_partner);
-        LinearLayout parent = (LinearLayout) findViewById(R.id.linearExpand);
+        LinearLayout parent = findViewById(R.id.linearExpand);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = inflater.inflate(R.layout.insert_partner, null);
         parent.addView(child);
