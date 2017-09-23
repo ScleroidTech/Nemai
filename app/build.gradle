@@ -34,6 +34,7 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.facebook.android:facebook-android-sdk:4.26.0'
+    compile 'com.msg91.sendotp.library:library:3.1'
 
 
 }

@@ -46,11 +46,14 @@
     <string name="action_sign_in">Log In</string>
     <string name="action_register">Register </string>
     <string name="action_sign_in_redirect">Not Yet Registered? Click Here </string>
+    <string name="action_forgot_password">Forgot Password? </string>
+
     <string name="action_register_redirect">Already a user? Log in here </string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address or Phone Number is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_invalid_email">This email address or Mobile Number is invalid</string>
+    <string name="error_invalid_password">Password should be minimum 8 characters</string>
     <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_empty_password">Please enter the password</string>
     <string name="error_field_required">You forgot to enter Email or Mobile here</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
@@ -63,7 +66,7 @@
     <string name="emailerror">Enter a valid Email</string>
 
     <string name="passwordretypeerror">Passwords didn\'t match</string>
-    <string name="passworderror">Enter a valid Password</string>
+    <string name="passworderror">Password should contain uppercase letters,symbols and numbers \nMin 8 characters</string>
     <string name="nullerror">Did you forget to fill this</string>
     <string name="mobileerror">Enter a valid Mobile</string>
     <string name="title_activity_password">Register</string>
@@ -71,5 +74,15 @@
     <string name="facebook_app_id">1912010522393928</string>
     <string name="fb_login_protocol_scheme">fb1912010522393928</string>
 
+    <string name="server_client_id">881661126317-k3hrrp3skmuji51cm9a3ioqj22p066if.apps.googleusercontent.com</string>
+    <string name="sendotp_key">128096AMsirlZWi7ig59c651b6</string>
+
+    <string name="enterphonenumber">Enter your phone number</string>
+    <string name="selectcountry">Select country</string>
+    <string name="sending_sms">We\'re sending an sms to</string>
+    <string name="inprogress">Verification in\nprogress</string>
+    <string name="verified">Verification successful</string>
+    <string name="failed">Verification failed</string>
+    <string name="entercode">Please enter the code you received</string>
 
 </resources>
