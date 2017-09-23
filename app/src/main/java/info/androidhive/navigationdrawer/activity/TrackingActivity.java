@@ -1,7 +1,6 @@
 package info.androidhive.navigationdrawer.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -28,8 +27,8 @@ public class TrackingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tracking);
-        final LinearLayout trackLinear = (LinearLayout) findViewById(R.id.trackLinear);
-        Button btn_scan = (Button) findViewById(R.id.btn_scan);
+        final LinearLayout trackLinear = findViewById(R.id.trackLinear);
+        Button btn_scan = findViewById(R.id.btn_scan);
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -39,7 +38,7 @@ public class TrackingActivity extends AppCompatActivity {
             }
         });
 
-        LinearLayout parent = (LinearLayout) findViewById(R.id.linearExpand);
+        LinearLayout parent = findViewById(R.id.linearExpand);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = inflater.inflate(R.layout.insert_updates, null);
         parent.addView(child);

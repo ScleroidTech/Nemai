@@ -12,7 +12,7 @@
 
     <!-- Login progress -->
     <ProgressBar
-        android:id="@+id/login_progress"
+        android:id="@+id/register_progress"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:layout_weight="0.28"
+                    android:layout_weight="0.24"
                     android:text="@string/prompt_gender"
                     android:textSize="18sp" />
 
@@ -120,7 +120,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.4"
-                    android:checked="false"
+                    android:checked="true"
                     android:paddingLeft="15dp"
                     android:text="@string/prompt_gender_male"
                     android:textColor="@drawable/selector_textview"
@@ -150,7 +150,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
-                    android:inputType="textPassword"
+                    android:inputType="textVisiblePassword"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -166,7 +166,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password_again"
-                    android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
@@ -184,14 +183,6 @@
                 android:text="@string/action_register"
                 android:textStyle="bold" />
 
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:text="@string/action_register_redirect"
-                android:textAlignment="center"
-                android:textSize="15sp" />
 
 
         </LinearLayout>

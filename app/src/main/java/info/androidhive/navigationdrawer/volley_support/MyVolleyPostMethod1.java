@@ -33,7 +33,7 @@ public class MyVolleyPostMethod1 {
             //      showLoader = new ShowLoader(context);
         }
         if (isNetworkAvailable(context)) {
-            mVolleylistener = (VolleyCompleteListener) volleyCompleteListener;
+            mVolleylistener = volleyCompleteListener;
             myBackgroundGetClass(context, volleyCompleteListener, serviceCode, map, isDialog);
         } else {
             showToast(context, "No Internet Connection");
@@ -61,7 +61,7 @@ public class MyVolleyPostMethod1 {
         if (isDialog){
             //    showLoader.showDialog();
         }
-        mVolleylistener = (VolleyCompleteListener) volleyCompleteListener;
+        mVolleylistener = volleyCompleteListener;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
