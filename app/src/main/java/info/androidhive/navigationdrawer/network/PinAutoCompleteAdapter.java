@@ -132,7 +132,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                                 String pincode= e.getString("pincode");
                                 //   Log.i("Mitali", "Location : " + location + "Pincode : " + pincode + i);
 
-                                mResultPinList.add(new PinCode(location, pincode));
+                                mResultPinList.add(new PinCode(location, pincode,null,null));
                             }
 
                         } catch (JSONException e) {
