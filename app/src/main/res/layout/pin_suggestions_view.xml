@@ -3,7 +3,7 @@
 
     android:layout_height="wrap_content">
 
-    <info.androidhive.navigationdrawer.other.DelayedAutoCompleteTextView
+    <com.scleroid.nemai.other.DelayedAutoCompleteTextView
         android:id="@+id/et_book_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

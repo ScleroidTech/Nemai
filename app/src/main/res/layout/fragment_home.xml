@@ -86,7 +86,7 @@
                                 android:src="@drawable/nearme"/>
                         </LinearLayout>
 
-                        <info.androidhive.navigationdrawer.other.DelayedAutoCompleteTextView
+                        <com.scleroid.nemai.other.DelayedAutoCompleteTextView
                             android:id="@+id/pin_source_autocompletetextview"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
                                 android:src="@drawable/nearme"/>
                         </LinearLayout>
 
-                        <info.androidhive.navigationdrawer.other.DelayedAutoCompleteTextView
+                        <com.scleroid.nemai.other.DelayedAutoCompleteTextView
                             android:id="@+id/pin_dest_autocompletetextview"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

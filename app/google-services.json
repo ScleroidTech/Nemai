@@ -8,7 +8,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:881661126317:android:8c34048992f57635",
         "android_client_info": {
-          "package_name": "info.androidhive.navigationdrawer"
+          "package_name": "com.scleroid.nemai"
         }
       },
       "oauth_client": [
@@ -16,7 +16,7 @@
           "client_id": "881661126317-equj9miljntfg943jtdvam2o4fua7g31.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "info.androidhive.navigationdrawer",
+            "package_name": "com.scleroid.nemai",
             "certificate_hash": "417404b07eb3c82d0b816e031e1dbe9ba319c541"
           }
         },
@@ -28,7 +28,7 @@
           "client_id": "881661126317-vsdk8mkbfurhqdg1bmri92om4o6v3eks.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "info.androidhive.navigationdrawer",
+            "package_name": "com.scleroid.nemai",
             "certificate_hash": "e46722613b890ee3a4655769868266365fa1a366"
           }
         }
