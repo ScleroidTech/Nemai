@@ -6,12 +6,30 @@ package info.androidhive.navigationdrawer.models;
 
 public class PinCode {
 
-    private String location, pincode;
+    private String location, pincode, state, area;
 
-    public PinCode(String location, String pincode) {
+    public PinCode(String pincode, String location, String state,String area) {
         this.location = location;
         this.pincode = pincode;
+        this.state =state;
+        this.area = area;
 
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
     public String getLocation() {
