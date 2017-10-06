@@ -24,7 +24,13 @@
         <activity
             android:name="com.scleroid.nemai.activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.scleroid.nemai.activity.AboutUsActivity"
             android:label="@string/activity_title_about_us" />
@@ -36,7 +42,9 @@
         <activity android:name="com.scleroid.nemai.activity.TrackingActivity" />
         <activity
             android:name="com.scleroid.nemai.activity.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login">
+
+        </activity>
         <activity
             android:name="com.scleroid.nemai.activity.RegisterActivity"
             android:label="@string/title_activity_register" />
@@ -49,11 +57,7 @@
         <activity
             android:name="com.scleroid.nemai.activity.TestDBActivity"
             android:label="@string/title_activity_password">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data
