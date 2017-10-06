@@ -2,23 +2,39 @@ package com.scleroid.nemai.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.ServerConstants;
+import com.scleroid.nemai.volley_support.AppController;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
+import static com.scleroid.nemai.activity.MainActivity.session;
+import static com.scleroid.nemai.activity.VerificationActivity.INTENT_PHONENUMBER;
 
 /**
  * A login screen that offers login via email/password.
@@ -26,16 +42,18 @@ import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOU
 public class RegisterActivity extends AppCompatActivity {
 
 
-
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
 
+    public static final String TAG = RegisterActivity.class.getSimpleName();
     // UI references.
     private EditText mEmailView, mFirstNameView, mLastNameView, mMobileNumberview, mPasswordView, mPasswordAgain;
     private View mProgressView;
+
     private View mLoginFormView;
+    private RadioGroup mGenderGroup;
+    private boolean mAuthTask = false;
 
     //defining AwesomeValidation object
     private AwesomeValidation mAwesomeValidation;
@@ -83,7 +101,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -98,18 +115,28 @@ public class RegisterActivity extends AppCompatActivity {
 
             //process the data further
 
-            if (mAuthTask != null) {
+            if (mAuthTask) {
                 return;
             }
+            String gender;
+            if (mGenderGroup.getCheckedRadioButtonId() == R.id.gender_male_radio) gender = "male";
+            else gender = "female";
 
-                // Show a progress spinner, and kick off a background task to
-                // perform the user login attempt.
-                showProgress(true);
+            String firstName = mFirstNameView.getText().toString();
+            String lastName = mLastNameView.getText().toString();
+            String email = mEmailView.getText().toString();
+            String mobile = mMobileNumberview.getText().toString();
+            String password = mPasswordView.getText().toString();
+
+
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            showProgress(true);
+            registerUser(firstName, lastName, email, mobile, gender, password);
             //mAuthTask = new UserLoginTask(email, password);
-                mAuthTask.execute((Void) null);
-            }
+            //mAuthTask.execute((Void) null);
         }
-
+    }
 
 
     /**
@@ -149,49 +176,118 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-
-
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     * Function to store user in MySQL database will post params(tag, name,
+     * email, password) to register url
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+    protected void registerUser(final String firstName, final String lastName, final String email,
+                                final String phone, final String gender, final String password) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_register";
 
 
-            // TODO: register the new account here.
-            return true;
-        }
+        showProgress(true);
 
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
+        JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
+                ServerConstants.serverUrl.POST_REGISTER, null, new Response.Listener<JSONObject>() {
+            @SuppressLint("LongLogTag")
 
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                Log.d(TAG, "Register Response: " + jsonObject.toString());
+                showProgress(false);
+
+                try {
+
+                    // user successfully logged in
+                    // Create login session
+
+
+                    //JSONObject jObj = new JSONObject(jsonObject);
+
+                    boolean error = jsonObject.getBoolean("error");
+                    if (!error) {
+                        // User successfully stored in MySQL
+                        // Now store the user in sqlite
+                        /*
+                        String uid = jObj.getString("uid");
+
+
+                        JSONObject user = jObj.getJSONObject("user");
+                        String name = user.getString("name");
+                        String email = user.getString("email");
+
+                        // Now store the user in SQLite
+
+
+                        String phone = user
+                                .getString("phone");
+
+                        // Inserting row in users table
+                        db.addUser(name, email, uid, phone);
+                        */
+
+                        Toast.makeText(getApplicationContext(), "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
+
+                        //session.setLogin(true);
+
+                        Intent verification = new Intent(getBaseContext(), VerificationActivity.class);
+
+                        verification.putExtra(INTENT_PHONENUMBER, phone);
+                        startActivity(verification);
+                        finish();
+                        // Launch login activity
+                        /*Intent intent = new Intent(
+                                RegisterActivity.this,
+                                LoginActivity.class);
+                        startActivity(intent); */
+                        //finish();
+                    } else {
+
+                        // Error occurred in registration. Get the error
+                        // message
+                        session.setLogin(false);
+                        String errorMsg = jsonObject.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "" + e, Toast.LENGTH_LONG).show();
+                }
+
             }
-        }
+        }, new Response.ErrorListener() {
 
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Registration Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                showProgress(false);
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("first_name", firstName);
+                params.put("last_name", lastName);
+                params.put("gender", gender);
+                params.put("email", email);
+                params.put("phone", phone);
+                params.put("password", password);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
     }
 }
-

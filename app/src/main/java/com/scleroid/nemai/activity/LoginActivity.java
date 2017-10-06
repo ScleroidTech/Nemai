@@ -2,6 +2,7 @@ package com.scleroid.nemai.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
@@ -10,7 +11,6 @@ import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -32,12 +32,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -47,19 +53,26 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.ServerConstants;
+import com.scleroid.nemai.volley_support.AppController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static com.scleroid.nemai.activity.MainActivity.session;
+import static com.scleroid.nemai.activity.VerificationActivity.INTENT_PHONENUMBER;
 
 
 /**
@@ -73,19 +86,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
     private static final int RC_SIGN_IN = 9001;
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
     @Nullable
-    String firstName, lastName, email, gender;
+    String firstName, lastName, email, gender, userId, password;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private boolean mAuthTask = false;
+    private boolean isUserExists = false;
     // UI references.
     private AutoCompleteTextView mEmailView;
     private TextInputLayout mPasswordTextInputLayout, mEmailTextInputLayout;
@@ -100,6 +108,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Session manager
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
@@ -196,6 +205,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             }
         });
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 
     private void signIn() {
@@ -271,7 +282,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         //process the data further
 
-        if (mAuthTask != null) {
+        if (mAuthTask) {
             return;
         }
 
@@ -316,14 +327,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Toast.makeText(this, "Validation Successful", Toast.LENGTH_LONG).show();
 
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            mAuthTask = true;
+            loginUser(email, password);
         }
 
     }
 
     private boolean isValidField(String input) {
-        //TODO: Replace this with your own logic
 
         if (input.contains("@")) {
             Pattern regex = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
@@ -339,7 +349,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 8;
     }
 
@@ -437,14 +446,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             Log.d(TAG, "Result : " + result.isSuccess() + " " + result.getStatus() + "  " + result.getSignInAccount());
-            handleSignInResult(result);
+            handleGoogleSignInResult(result);
         } else
             //Result from Facebook login
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
     }
 
-    private void handleSignInResult(GoogleSignInResult result) {
+    private void handleGoogleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             //TODO work on updating the UI & crosscheck if already updated
@@ -458,6 +467,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             String googleID = acct.getId();
             Log.d(TAG, acct.toString());
             Toast.makeText(this, "firstname " + firstName + "  " + lastName + "  " + email, Toast.LENGTH_LONG).show();
+            if (isUserExists) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                registerUser(firstName, lastName, email, null, null, null);
+            }
 
             // mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             showProgress(false);
@@ -499,6 +515,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     if (object.has("gender")) {
                         gender = object.getString("gender");
                     }
+
+                    if (isAlreadyUser(email)) {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    } else registerUser(firstName, lastName, email, null, gender, null);
 //TODO submit to review first
              /*   if (object.has("location")) {
                     String location = object.getJSONObject("location").getString("name");
@@ -524,7 +547,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-    /*@Override
+    @Override
     public void onStart() {
         super.onStart();
 
@@ -534,7 +557,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // and the GoogleSignInResult will be available instantly.
             Log.d(TAG, "Got cached sign-in");
             GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
+            handleGoogleSignInResult(result);
         } else {
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
@@ -544,11 +567,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
                     showProgress(false);
-                    handleSignInResult(googleSignInResult);
+                    handleGoogleSignInResult(googleSignInResult);
                 }
             });
         }
-    }*/
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -563,6 +586,266 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public void loginUser(String userName, String pass) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        userId = userName;
+        password = pass;
+
+
+        showProgress(true);
+
+        JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
+                ServerConstants.serverUrl.POST_LOGIN, null, new Response.Listener<JSONObject>() {
+            @SuppressLint("LongLogTag")
+
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                Log.d(TAG, "Login Response: " + jsonObject.toString());
+                showProgress(false);
+
+                try {
+
+                    // user successfully logged in
+                    // Create login session
+
+
+                    //JSONObject jObj = new JSONObject(jsonObject);
+
+                    boolean error = jsonObject.getBoolean("error");
+                    if (!error) {
+
+
+                        Toast.makeText(getApplicationContext(), "User successfully logged in", Toast.LENGTH_LONG).show();
+
+                        session.setLogin(true);
+
+                        Intent verification = new Intent(LoginActivity.this, MainActivity.class);
+
+                        startActivity(verification);
+                        finish();
+                    } else {
+
+                        // Error occurred in login. Get the error
+                        // message
+
+                        session.setLogin(false);
+                        String errorMsg = jsonObject.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "" + e, Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Registration Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                showProgress(false);
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("userId", userId);
+                params.put("password", password);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+
+    }
+
+    private boolean isAlreadyUser(String userName) {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_check_user";
+        userId = userName;
+        isUserExists = false;
+
+
+        showProgress(true);
+
+        JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
+                ServerConstants.serverUrl.POST_VALID_USER, null, new Response.Listener<JSONObject>() {
+            @SuppressLint("LongLogTag")
+
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                Log.d(TAG, "Login Response: " + jsonObject.toString());
+                showProgress(false);
+
+                try {
+
+                    // user successfully logged in
+                    // Create login session
+
+
+                    //JSONObject jObj = new JSONObject(jsonObject);
+
+                    boolean error = jsonObject.getBoolean("error");
+                    if (!error) {
+                        isUserExists = jsonObject.getBoolean("success");
+
+
+                        Toast.makeText(getApplicationContext(), "User authentication successful", Toast.LENGTH_LONG).show();
+                    } else {
+
+                        // Error occurred in login. Get the error
+                        // message
+                        isUserExists = false;
+
+                        //session.setLogin(false);
+                        String errorMsg = jsonObject.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "" + e, Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Registration Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                showProgress(false);
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("userId", userId);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+        return isUserExists;
+    }
+
+    /**
+     * Function to store user in MySQL database will post params(tag, name,
+     * email, password) to register url
+     */
+    protected void registerUser(final String firstName, final String lastName, final String email,
+                                final String phone, final String gender, final String password) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_register";
+
+
+        showProgress(true);
+
+        JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
+                ServerConstants.serverUrl.POST_REGISTER, null, new Response.Listener<JSONObject>() {
+            @SuppressLint("LongLogTag")
+
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                Log.d(TAG, "Register Response: " + jsonObject.toString());
+                showProgress(false);
+
+                try {
+
+                    // user successfully logged in
+                    // Create login session
+
+
+                    //JSONObject jObj = new JSONObject(jsonObject);
+
+                    boolean error = jsonObject.getBoolean("error");
+                    if (!error) {
+
+                        Toast.makeText(getApplicationContext(), "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
+
+                        //session.setLogin(true);
+
+                        Intent verification = new Intent(getBaseContext(), VerificationActivity.class);
+
+                        verification.putExtra(INTENT_PHONENUMBER, phone);
+                        startActivity(verification);
+                        finish();
+
+                    } else {
+
+                        // Error occurred in registration. Get the error
+                        // message
+                        session.setLogin(false);
+                        String errorMsg = jsonObject.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "" + e, Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Registration Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                showProgress(false);
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("first_name", firstName);
+                params.put("last_name", lastName);
+                params.put("gender", gender);
+                params.put("email", email);
+                params.put("phone", phone);
+                params.put("password", password);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -572,64 +855,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordTextInputLayout.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
 
 }
 
