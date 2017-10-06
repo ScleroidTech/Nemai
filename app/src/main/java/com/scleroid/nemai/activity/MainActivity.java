@@ -29,6 +29,7 @@ import com.scleroid.nemai.fragment.NotificationsFragment;
 import com.scleroid.nemai.fragment.PhotosFragment;
 import com.scleroid.nemai.fragment.SettingsFragment;
 import com.scleroid.nemai.other.CircleTransform;
+import com.scleroid.nemai.other.SessionManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_MOVIES = "movies";
     private static final String TAG_NOTIFICATIONS = "notifications";
     private static final String TAG_SETTINGS = "settings";
+    public static SessionManager session;
     // index to identify current nav menu item
     public static int navItemIndex = 0;
     public static String CURRENT_TAG = TAG_HOME;
@@ -64,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        session = new SessionManager(getApplicationContext());
+
+        session.setLogin(true);
+        if (!session.isLoggedIn()) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        }
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

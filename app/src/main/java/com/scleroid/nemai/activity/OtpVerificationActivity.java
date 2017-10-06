@@ -23,6 +23,8 @@ import com.msg91.sendotp.library.Verification;
 import com.msg91.sendotp.library.VerificationListener;
 import com.scleroid.nemai.R;
 
+import static com.scleroid.nemai.activity.MainActivity.session;
+
 
 public class OtpVerificationActivity extends AppCompatActivity implements
         ActivityCompat.OnRequestPermissionsResultCallback, VerificationListener {
@@ -168,6 +170,13 @@ public class OtpVerificationActivity extends AppCompatActivity implements
         hideKeypad();
         hideProgressBarAndShowMessage(R.string.verified);
         showCompleted();
+        session.setVerified(true);
+        session.setLogin(true);
+        Intent verification = new Intent(OtpVerificationActivity.this, MainActivity.class);
+
+        startActivity(verification);
+        finish();
+
     }
 
     @Override
@@ -175,6 +184,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements
         Log.e(TAG, "Verification failed: " + exception.getMessage());
         hideKeypad();
         hideProgressBarAndShowMessage(R.string.failed);
+        session.setVerified(false);
         enableInputField(true);
     }
 
@@ -206,4 +216,5 @@ public class OtpVerificationActivity extends AppCompatActivity implements
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
 }
