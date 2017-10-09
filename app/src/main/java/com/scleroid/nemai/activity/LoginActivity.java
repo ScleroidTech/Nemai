@@ -299,6 +299,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password)) {
             mPasswordTextInputLayout.setError(getString(R.string.error_empty_password));
+            cancel = true;
 
         } else if (!isPasswordValid(password)) {
             mPasswordTextInputLayout.setError(getString(R.string.error_invalid_password));
@@ -454,7 +455,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void handleGoogleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        Log.d(TAG, "handleSignInResult:" + result.toString());
         if (result.isSuccess()) {
             //TODO work on updating the UI & crosscheck if already updated
             // Signed in successfully, show authenticated UI.
@@ -467,11 +468,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             String googleID = acct.getId();
             Log.d(TAG, acct.toString());
             Toast.makeText(this, "firstname " + firstName + "  " + lastName + "  " + email, Toast.LENGTH_LONG).show();
-            if (isUserExists) {
+            if (isAlreadyUser(email)) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             } else {
+
                 registerUser(firstName, lastName, email, null, null, null);
             }
 
@@ -762,6 +764,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void registerUser(final String firstName, final String lastName, final String email,
                                 final String phone, final String gender, final String password) {
         // Tag used to cancel the request
+
         String tag_string_req = "req_register";
 
 
@@ -802,12 +805,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         // Error occurred in registration. Get the error
                         // message
                         session.setLogin(false);
-                        String errorMsg = jsonObject.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                       // String errorMsg = jsonObject.getString("error_msg");
+                       // Toast.makeText(getApplicationContext(),
+                        //        errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(TAG,"Error in data parsing " + e.getMessage());
                     Toast.makeText(getApplicationContext(),
                             "" + e, Toast.LENGTH_LONG).show();
                 }
@@ -829,8 +832,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             protected Map<String, String> getParams() {
                 // Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("first_name", firstName);
-                params.put("last_name", lastName);
+                params.put("fname", firstName);
+                params.put("lname", lastName);
                 params.put("gender", gender);
                 params.put("email", email);
                 params.put("phone", phone);

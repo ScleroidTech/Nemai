@@ -69,6 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
         mFirstNameView = (EditText) findViewById(R.id.first_name);
         mLastNameView = (EditText) findViewById(R.id.last_name);
         mMobileNumberview = (EditText) findViewById(R.id.mobile);
+        mGenderGroup = (RadioGroup) findViewById(R.id.gender_radio_group);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordAgain = (EditText) findViewById(R.id.passwordAgain);
@@ -132,6 +133,8 @@ public class RegisterActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+
+
             registerUser(firstName, lastName, email, mobile, gender, password);
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);
@@ -205,27 +208,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                     //JSONObject jObj = new JSONObject(jsonObject);
 
-                    boolean error = jsonObject.getBoolean("error");
-                    if (!error) {
-                        // User successfully stored in MySQL
-                        // Now store the user in sqlite
-                        /*
-                        String uid = jObj.getString("uid");
-
-
-                        JSONObject user = jObj.getJSONObject("user");
-                        String name = user.getString("name");
-                        String email = user.getString("email");
-
-                        // Now store the user in SQLite
-
-
-                        String phone = user
-                                .getString("phone");
-
-                        // Inserting row in users table
-                        db.addUser(name, email, uid, phone);
-                        */
+                    //boolean error = jsonObject.getBoolean("error");
+                    if (true) {
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
 
@@ -252,7 +236,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(TAG,"Error in data parsing " + e.getMessage());
+                    //e.printStackTrace();
                     Toast.makeText(getApplicationContext(),
                             "" + e, Toast.LENGTH_LONG).show();
                 }
@@ -274,8 +259,8 @@ public class RegisterActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("first_name", firstName);
-                params.put("last_name", lastName);
+                params.put("fname", firstName);
+                params.put("lname", lastName);
                 params.put("gender", gender);
                 params.put("email", email);
                 params.put("phone", phone);
