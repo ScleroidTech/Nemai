@@ -1,8 +1,6 @@
 package com.scleroid.nemai.volley_support;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -13,6 +11,8 @@ import com.android.volley.toolbox.StringRequest;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.scleroid.nemai.volley_support.MyVolleyPostMethod1.isNetworkAvailable;
 
 /**
  * Created by Nanostuffs on 14-12-2015.
@@ -40,18 +40,6 @@ public class MyVolleyPostMethod {
         }
     }
 
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null)
-                for (int i = 0; i < info.length; i++)
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
-                    }
-        }
-        return false;
-    }
 
     private void myBackgroundGetClass(final Context context, int serviceCode, final Map<String, String> map, final boolean isDialog) {
 

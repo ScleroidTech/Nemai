@@ -111,7 +111,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
     /**
      * Returns a search result for the given book title.
      */
-    private List<PinCode> findPins(Context context, String userInput) {
+    public List<PinCode> findPins(Context context, String userInput) {
 
 
         VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
@@ -132,13 +132,14 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                                 String pincode= e.getString("pincode");
                                 String state = e.getString("state");
                                 String area = e.getString("area");
-                                //   Log.i("Mitali", "Location : " + location + "Pincode : " + pincode + i);
+                                Log.i(TAG, "Location : " + location + "Pincode : " + pincode + i);
 
                                 mResultPinList.add(new PinCode(location, pincode, state, area));
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.e(TAG, "JSONException " + e.getMessage());
                         }
 
                         break;

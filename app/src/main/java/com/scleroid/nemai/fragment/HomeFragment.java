@@ -1,11 +1,14 @@
 package com.scleroid.nemai.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,52 +24,84 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.ServerConstants;
 import com.scleroid.nemai.activity.PartnerActivity;
+import com.scleroid.nemai.activity.VerificationActivity;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.other.DelayedAutoCompleteTextView;
+import com.scleroid.nemai.volley_support.AppController;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.scleroid.nemai.activity.MainActivity.session;
+import static com.scleroid.nemai.activity.VerificationActivity.INTENT_PHONENUMBER;
 
 
 public class HomeFragment extends Fragment {
     public static final int THRESHOLD = 3;
+    private static final String TAG = HomeFragment.class.getSimpleName();
     static String select;
     final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
-RadioButton radioParcel,radioDocument;
-    RadioButton domestic, international;
-    LinearLayout linearParcel,linearDocument;
-    Button btn_save;
+
+    RadioButton mParcelRadioButton, mDocumentRadioButton;
+    RadioButton mDomesticRadioButton, mInternationalRadioButton;
+    LinearLayout mParcelLinearLayout, mDocumentLinearLayout;
+    Button mSubmitButton;
     TextView mWeightUnitTextView;
-    ImageView img_address;
+    ImageView mAddressImageView;
+    TextInputLayout mWeightParcelTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mParcelDescTIL, mWeightDocTIL, mDescDocTIL;
     DelayedAutoCompleteTextView pinSourceAutoCompleteTextView, pinDestinationAutoCompleteTextView;
-    EditText editAddress,weightdocEditText;
-
-
+    EditText mWeightdocEditText, mWeightParcelEditText, mDescDocEditText, mInvoiceValueParcelEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescParcelEditText;
+    boolean toggleDocParcel = false;//false == doc, true == parcel
+    boolean toggleDomInternational = false;//Domestic false , International = true
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
     }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        radioParcel = v.findViewById(R.id.rParcel);
-        radioDocument = v.findViewById(R.id.rDocument);
+        mWeightParcelTIL = v.findViewById(R.id.textWeight);
+        mInvoiceTIL = v.findViewById(R.id.textInvoice);
+        mLengthTIL = v.findViewById(R.id.textLength);
+        mWidthTIL = v.findViewById(R.id.textWidth);
+        mHeightTIL = v.findViewById(R.id.textHeight);
+        mParcelDescTIL = v.findViewById(R.id.textPckDesc);
+        mWeightDocTIL = v.findViewById(R.id.textWeightDoc);
+        mDescDocTIL = v.findViewById(R.id.textPckDescDoc);
+        mWeightParcelEditText = v.findViewById(R.id.editWeight);
+        mInvoiceValueParcelEditText = v.findViewById(R.id.editInvoice);
+        mPackageLengthParcelEditText = v.findViewById(R.id.editLength);
+        mPackageWidthParcelEditText = v.findViewById(R.id.editWidth);
+        mHeightParcelEditText = v.findViewById(R.id.editHeight);
+        mDescParcelEditText = v.findViewById(R.id.editPckDesc);
+        mDescDocEditText = v.findViewById(R.id.editPckDescDoc);
+        mParcelRadioButton = v.findViewById(R.id.rParcel);
+        mDocumentRadioButton = v.findViewById(R.id.rDocument);
 
-        linearParcel=v.findViewById(R.id.linearExpandedData);
-        linearDocument=v.findViewById(R.id.linearExpandedDataDoc);
-        linearDocument.setVisibility(View.VISIBLE);
+        mParcelLinearLayout = v.findViewById(R.id.linearExpandedParcelView);
+        mDocumentLinearLayout = v.findViewById(R.id.linearExpandedDocumentView);
+        mDocumentLinearLayout.setVisibility(View.VISIBLE);
+
 
         //img_address =  v.findViewById(R.id.img_address);
 
@@ -105,14 +140,15 @@ RadioButton radioParcel,radioDocument;
 
 
         mWeightUnitTextView= v.findViewById(R.id.weight_unit_kg_textView);
-        weightdocEditText = v.findViewById(R.id.editWeightDoc);
-        weightdocEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mWeightdocEditText = v.findViewById(R.id.editWeightDoc);
+        mWeightdocEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if(hasFocus) mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
                 else mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
             }
         });
+
         //    editAddress = v.findViewById(R.id.editAddressDoc);
 
 /*img_address.setOnClickListener(new View.OnClickListener() {
@@ -137,63 +173,129 @@ RadioButton radioParcel,radioDocument;
 
     }
 });*/
-        btn_save= v.findViewById(R.id.btn_saveDoc);
+        mSubmitButton = v.findViewById(R.id.btn_submit);
 
-        btn_save.setOnClickListener(new View.OnClickListener(){
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                validateFields();
+
                 Intent i = new Intent(getActivity(), PartnerActivity.class);
                 startActivity(i);
             }
         });
-        radioDocument.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mDocumentRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    linearDocument.setVisibility(View.VISIBLE);
-                    linearParcel.setVisibility(View.GONE);
-                    radioDocument.setTypeface(null, Typeface.BOLD);
-                    radioParcel.setTypeface(null, Typeface.NORMAL);
+                    mDocumentLinearLayout.setVisibility(View.VISIBLE);
+                    toggleDocParcel = false;
+                    mParcelLinearLayout.setVisibility(View.GONE);
+                    mDocumentRadioButton.setTypeface(null, Typeface.BOLD);
+                    mParcelRadioButton.setTypeface(null, Typeface.NORMAL);
                 }
             }
         });
 
-        radioParcel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mParcelRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                   linearParcel.setVisibility(View.VISIBLE);
-                    linearDocument.setVisibility(View.GONE);
-                    radioParcel.setTypeface(null, Typeface.BOLD);
-                    radioDocument.setTypeface(null, Typeface.NORMAL);
+                    mParcelLinearLayout.setVisibility(View.VISIBLE);
+                    mDocumentLinearLayout.setVisibility(View.GONE);
+                    toggleDocParcel = true;
+                    mParcelRadioButton.setTypeface(null, Typeface.BOLD);
+                    mDocumentRadioButton.setTypeface(null, Typeface.NORMAL);
                 }
             }
         });
 
 
-        domestic = v.findViewById(R.id.rDomestic);
-        international = v.findViewById(R.id.rInternational);
+        mDomesticRadioButton = v.findViewById(R.id.rDomestic);
+        mInternationalRadioButton = v.findViewById(R.id.rInternational);
 
-        international.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mInternationalRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    international.setTypeface(null, Typeface.BOLD);
-                    domestic.setTypeface(null, Typeface.NORMAL);
+                    mInternationalRadioButton.setTypeface(null, Typeface.BOLD);
+                    mDomesticRadioButton.setTypeface(null, Typeface.NORMAL);
+                    toggleDomInternational = true;
                 }
             }
         });
 
-        domestic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mDomesticRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    domestic.setTypeface(null, Typeface.BOLD);
-                    international.setTypeface(null, Typeface.NORMAL);
+                    mDomesticRadioButton.setTypeface(null, Typeface.BOLD);
+                    mDomesticRadioButton.setTypeface(null, Typeface.NORMAL);
+                    toggleDomInternational = false;
                 }
             }
         });
         return v;
+    }
+
+    private void validateFields() {
+        boolean toggleSubmit = false;
+        String delivery;
+        if (toggleDomInternational) delivery = "International";
+        else delivery = "Domestic";
+        if (toggleDocParcel) {
+
+
+            if (isEmpty(mWeightParcelEditText)) {
+                mWeightParcelTIL.setErrorEnabled(true);
+                mWeightParcelTIL.setError("Enter the Weight");
+                toggleSubmit = true;
+            } else mWeightParcelTIL.setErrorEnabled(false);
+
+            if (isEmpty(mPackageWidthParcelEditText)) {
+                mWidthTIL.setErrorEnabled(true);
+                mWidthTIL.setError("Enter the Width");
+                toggleSubmit = true;
+            } else mWidthTIL.setErrorEnabled(false);
+
+            if (isEmpty(mHeightParcelEditText)) {
+                mHeightTIL.setErrorEnabled(true);
+                mHeightTIL.setError("Enter the Height");
+                toggleSubmit = true;
+            } else mHeightTIL.setErrorEnabled(false);
+
+            if (isEmpty(mPackageLengthParcelEditText)) {
+                mLengthTIL.setErrorEnabled(true);
+                mLengthTIL.setError("Enter the Length");
+                toggleSubmit = true;
+            } else mLengthTIL.setErrorEnabled(false);
+
+            if (isEmpty(mInvoiceValueParcelEditText)) {
+                mInvoiceTIL.setErrorEnabled(true);
+                mInvoiceTIL.setError("Enter the Invoice Value");
+            } else mInvoiceTIL.setErrorEnabled(false);
+
+
+            if (!toggleSubmit)
+                nextScreenParcel(mWeightParcelEditText.getText().toString(), mInvoiceValueParcelEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescParcelEditText.getText().toString(), "Parcel", delivery);
+
+
+        } else if (isEmpty(mWeightdocEditText)) {
+            mWeightDocTIL.setErrorEnabled(true);
+            mWeightDocTIL.setError("Enter the Weight");
+
+        } else {
+            mWeightDocTIL.setErrorEnabled(false);
+            nextScreenDocument(mWeightdocEditText.getText().toString(), mDescDocEditText.getText().toString(), "Documents", delivery);
+
+        }
+    }
+
+    private void nextScreenDocument(String weight, String description, String packageType, String deliveryType) {
+    }
+
+    private void nextScreenParcel(String weight, String invoice, String width, String height, String length, String description, String packageType, String deliveryType) {
+
     }
 
     private void showRadioButtonDialog() {
@@ -229,6 +331,107 @@ RadioButton radioParcel,radioDocument;
         });
 
         dialog.show();
+
+    }
+
+    private boolean isEmpty(EditText text) {
+        return text.getText() == null;
+    }
+
+    /**
+     * Function to store user in MySQL database will post params(tag, name,
+     * email, password) to register url
+     */
+    protected void registerCourier(final String firstName, final String lastName, final String email,
+                                   final String phone, final String gender, final String password) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_parcel";
+
+
+        //showProgress(true);
+
+        JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
+                ServerConstants.serverUrl.POST_COURIER, null, new Response.Listener<JSONObject>() {
+            @SuppressLint("LongLogTag")
+
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                Log.d(TAG, "Register Response: " + jsonObject.toString());
+                //showProgress(false);
+
+                try {
+
+                    // user successfully logged in
+                    // Create login session
+
+
+                    //JSONObject jObj = new JSONObject(jsonObject);
+
+                    //boolean error = jsonObject.getBoolean("error");
+                    if (true) {
+
+                        Toast.makeText(getApplicationContext(), "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
+
+                        //session.setLogin(true);
+
+                        Intent verification = new Intent(getApplicationContext(), VerificationActivity.class);
+
+                        verification.putExtra(INTENT_PHONENUMBER, phone);
+                        startActivity(verification);
+
+                        // Launch login activity
+                        /*Intent intent = new Intent(
+                                RegisterActivity.this,
+                                LoginActivity.class);
+                        startActivity(intent); */
+                        //finish();
+                    } else {
+
+                        // Error occurred in registration. Get the error
+                        // message
+                        session.setLogin(false);
+                        String errorMsg = jsonObject.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "Error in data parsing " + e.getMessage());
+                    //e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "" + e, Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Registration Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("fname", firstName);
+                params.put("lname", lastName);
+                params.put("gender", gender);
+                params.put("email", email);
+                params.put("phone", phone);
+                params.put("password", password);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
     }
 }
