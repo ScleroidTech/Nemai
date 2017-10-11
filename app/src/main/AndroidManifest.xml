@@ -85,7 +85,7 @@
             android:name="sendotp.key"
             android:value="@string/sendotp_key" />
 
-        <activity android:name="com.scleroid.nemai.activity.OtpVerificationActivity"></activity>
+        <activity android:name="com.scleroid.nemai.activity.OtpVerificationActivity" />
     </application>
 
 </manifest>

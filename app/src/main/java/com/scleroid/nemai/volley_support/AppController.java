@@ -19,6 +19,7 @@ public class AppController extends Application {
     private static AppController mInstance;
     private RequestQueue mRequestQueue;
 
+
     public static synchronized AppController getInstance() {
         return mInstance;
     }
@@ -53,4 +54,6 @@ public class AppController extends Application {
             mRequestQueue.cancelAll(tag);
         }
     }
+
+
 }
