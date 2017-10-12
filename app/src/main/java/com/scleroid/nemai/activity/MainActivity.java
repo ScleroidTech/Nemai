@@ -76,10 +76,12 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         session = new SessionManager(getApplicationContext());
 
-        session.setLogin(true);
+        //session.setLogin(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
+        } else if (!session.isVerified()) {
+            startActivity(new Intent(MainActivity.this, VerificationActivity.class));
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);

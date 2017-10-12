@@ -28,8 +28,8 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    public static String getKeyVerified() {
-        return KEY_VERIFIED;
+    public boolean isVerified() {
+        return pref.getBoolean(KEY_VERIFIED, false);
     }
 
     public void setVerified(boolean isVerified) {
