@@ -1,5 +1,6 @@
 package com.scleroid.nemai.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,14 +29,18 @@ import com.scleroid.nemai.fragment.MoviesFragment;
 import com.scleroid.nemai.fragment.NotificationsFragment;
 import com.scleroid.nemai.fragment.PhotosFragment;
 import com.scleroid.nemai.fragment.SettingsFragment;
+import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.other.CircleTransform;
 import com.scleroid.nemai.other.SessionManager;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
     // urls to load navigation header background image
     // and profile image
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final String urlNavHeaderBg = "http://api.androidhive.info/images/nav-menu-header-bg.jpg";
     private static final String urlProfileImg = "https://lh3.googleusercontent.com/-CG0dhPwB76w/AAAAAAAAAAI/AAAAAAAAAB4/H2cuC_7i9FE/s60-p-no/photo.jpg";
     // tags used to attach the fragments
@@ -49,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     public static int navItemIndex = 0;
     public static String CURRENT_TAG = TAG_HOME;
     ImageButton btn_search;
+    private List<PinCode> mResultPinList;
+    private Context mContext;
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private View navHeader;
@@ -66,9 +73,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = getApplicationContext();
         session = new SessionManager(getApplicationContext());
 
-        //session.setLogin(true);
+        session.setLogin(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
@@ -107,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
         // initializing navigation menu
        setUpNavigationView();
+        //findPins(getApplicationContext());
+
 
         if (savedInstanceState == null) {
             navItemIndex = 0;

@@ -84,5 +84,6 @@
     <string name="verified">Verification successful</string>
     <string name="failed">Verification failed</string>
     <string name="entercode">Please enter the code you received</string>
+    <string name="submit_main"><![CDATA[Submit & Search]]></string>
 
 </resources>

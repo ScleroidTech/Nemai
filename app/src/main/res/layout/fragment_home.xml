@@ -217,7 +217,7 @@
 
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/linearExpandedData"
+                    android:id="@+id/linearExpandedParcelView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/round_corners_bottom"
@@ -383,7 +383,7 @@
 
 
             <LinearLayout
-                android:id="@+id/linearExpandedDataDoc"
+                android:id="@+id/linearExpandedDocumentView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
@@ -435,19 +435,7 @@
                                 />
                     </RelativeLayout>
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/textInvoiceDoc"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
 
-                        android:layout_weight="1">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                        </RelativeLayout>
-                    </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/textPckDescDoc"
@@ -497,7 +485,7 @@
 
 
                     <Button
-                android:id="@+id/btn_saveDoc"
+                        android:id="@+id/btn_submit"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                         android:layout_gravity="bottom|center_horizontal"
@@ -505,7 +493,7 @@
                         android:layout_marginTop="10dp"
                 android:background="@drawable/btn_rounded"
                         android:elevation="8dp"
-                        android:text="Save &amp; Search"
+                        android:text="@string/submit_main"
                         android:textAllCaps="false"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="16sp"
