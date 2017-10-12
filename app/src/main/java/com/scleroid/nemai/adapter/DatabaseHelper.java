@@ -21,7 +21,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private final static String TAG = "DatabaseHelper";
-    private static final String DATABASE_NAME = "pincode.db";
+    private static final String DATABASE_NAME = "pincode";
     private static final int DATABASE_VERSION = 1;
     private final Context myContext;
     private String pathToSaveDBFile;
@@ -68,7 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
        // AssetManager assetManager=myContext.getAssets();
        //Log.i(TAG, assetManager.toString());
         InputStream is=null;
-        is= myContext.getResources().openRawResource(R.raw.pincode);
+        is = myContext.getResources().openRawResource(R.raw.databasenew);
         if(is !=null){Log.i(TAG,"It worked");
         }
 
