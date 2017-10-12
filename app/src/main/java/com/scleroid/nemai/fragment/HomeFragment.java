@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.ServerConstants;
-import com.scleroid.nemai.activity.PartnerActivity;
 import com.scleroid.nemai.activity.VerificationActivity;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
 import com.scleroid.nemai.models.PinCode;
@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
     Button mSubmitButton;
     TextView mWeightUnitTextView;
     ImageView mAddressImageView;
-    TextInputLayout mWeightParcelTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mParcelDescTIL, mWeightDocTIL, mDescDocTIL;
+    TextInputLayout mWeightParcelTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mParcelDescTIL, mWeightDocTIL, mDescDocTIL, mPinSourceTIL, mPinDestTIL;
     DelayedAutoCompleteTextView pinSourceAutoCompleteTextView, pinDestinationAutoCompleteTextView;
     EditText mWeightdocEditText, mWeightParcelEditText, mDescDocEditText, mInvoiceValueParcelEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescParcelEditText;
     boolean toggleDocParcel = false;//false == doc, true == parcel
@@ -82,6 +82,8 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         mWeightParcelTIL = v.findViewById(R.id.textWeight);
         mInvoiceTIL = v.findViewById(R.id.textInvoice);
+        mPinSourceTIL = v.findViewById(R.id.pin_source_TIL);
+        mPinDestTIL = v.findViewById(R.id.pin_dest_TIL);
         mLengthTIL = v.findViewById(R.id.textLength);
         mWidthTIL = v.findViewById(R.id.textWidth);
         mHeightTIL = v.findViewById(R.id.textHeight);
@@ -180,8 +182,8 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 validateFields();
 
-                Intent i = new Intent(getActivity(), PartnerActivity.class);
-                startActivity(i);
+                // Intent i = new Intent(getActivity(), PartnerActivity.class);
+                //startActivity(i);
             }
         });
         mDocumentRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -239,35 +241,49 @@ public class HomeFragment extends Fragment {
     }
 
     private void validateFields() {
-        boolean toggleSubmit = false;
+        boolean noSubmit = false;
         String delivery;
+
+        if (isEmpty(pinSourceAutoCompleteTextView)) {
+            mPinSourceTIL.setErrorEnabled(true);
+            mPinSourceTIL.setError("Enter the Source first");
+            noSubmit = true;
+        } else mPinSourceTIL.setErrorEnabled(false);
+
+        if (isEmpty(pinDestinationAutoCompleteTextView)) {
+            mPinDestTIL.setErrorEnabled(true);
+            mPinDestTIL.setError("Enter the Destination too");
+            noSubmit = true;
+        } else mPinDestTIL.setErrorEnabled(false);
+
+
+
         if (toggleDomInternational) delivery = "International";
         else delivery = "Domestic";
         if (toggleDocParcel) {
 
-
             if (isEmpty(mWeightParcelEditText)) {
                 mWeightParcelTIL.setErrorEnabled(true);
                 mWeightParcelTIL.setError("Enter the Weight");
-                toggleSubmit = true;
+                noSubmit = true;
             } else mWeightParcelTIL.setErrorEnabled(false);
 
             if (isEmpty(mPackageWidthParcelEditText)) {
                 mWidthTIL.setErrorEnabled(true);
                 mWidthTIL.setError("Enter the Width");
-                toggleSubmit = true;
+                noSubmit = true;
             } else mWidthTIL.setErrorEnabled(false);
 
             if (isEmpty(mHeightParcelEditText)) {
                 mHeightTIL.setErrorEnabled(true);
                 mHeightTIL.setError("Enter the Height");
-                toggleSubmit = true;
+                noSubmit = true;
             } else mHeightTIL.setErrorEnabled(false);
 
             if (isEmpty(mPackageLengthParcelEditText)) {
                 mLengthTIL.setErrorEnabled(true);
                 mLengthTIL.setError("Enter the Length");
-                toggleSubmit = true;
+                noSubmit = true;
             } else mLengthTIL.setErrorEnabled(false);
 
             if (isEmpty(mInvoiceValueParcelEditText)) {
@@ -276,25 +292,34 @@ public class HomeFragment extends Fragment {
             } else mInvoiceTIL.setErrorEnabled(false);
 
 
-            if (!toggleSubmit)
-                nextScreenParcel(mWeightParcelEditText.getText().toString(), mInvoiceValueParcelEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescParcelEditText.getText().toString(), "Parcel", delivery);
+            if (!noSubmit)
+                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightParcelEditText.getText().toString(), mInvoiceValueParcelEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescParcelEditText.getText().toString(), "Parcel", delivery);
 
-
-        } else if (isEmpty(mWeightdocEditText)) {
-            mWeightDocTIL.setErrorEnabled(true);
-            mWeightDocTIL.setError("Enter the Weight");
 
         } else {
-            mWeightDocTIL.setErrorEnabled(false);
-            nextScreenDocument(mWeightdocEditText.getText().toString(), mDescDocEditText.getText().toString(), "Documents", delivery);
+            if (isEmpty(mWeightdocEditText)) {
+                mWeightDocTIL.setErrorEnabled(true);
+                mWeightDocTIL.setError("Enter the Weight");
+                noSubmit = true;
 
+            } else mWeightDocTIL.setErrorEnabled(false);
+
+            if (!noSubmit) {
+                nextScreenDocument(mWeightdocEditText.getText().toString(), mDescDocEditText.getText().toString(), "Documents", delivery);
+
+            }
         }
     }
 
     private void nextScreenDocument(String weight, String description, String packageType, String deliveryType) {
+        submitRequest();
     }
 
-    private void nextScreenParcel(String weight, String invoice, String width, String height, String length, String description, String packageType, String deliveryType) {
+    private void submitRequest() {
+    }
+
+    private void nextScreenParcel(String source, String destination, String weight, String invoice, String width, String height, String length, String description, String packageType, String deliveryType) {
+        submitRequest();
 
     }
 
@@ -335,7 +360,11 @@ public class HomeFragment extends Fragment {
     }
 
     private boolean isEmpty(EditText text) {
-        return text.getText() == null;
+        return TextUtils.isEmpty(text.getText());
+    }
+
+    private boolean isEmpty(DelayedAutoCompleteTextView text) {
+        return TextUtils.isEmpty(text.getText());
     }
 
     /**
