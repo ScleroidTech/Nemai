@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         session = new SessionManager(getApplicationContext());
 
-        //session.setLogin(true);
+        session.setLogin(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
