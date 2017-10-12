@@ -2,7 +2,6 @@ package com.scleroid.nemai.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,24 +17,12 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.ServerConstants;
-import com.scleroid.nemai.volley_support.AppController;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
-import static com.scleroid.nemai.activity.MainActivity.session;
 import static com.scleroid.nemai.activity.VerificationActivity.INTENT_PHONENUMBER;
 
 /**
@@ -198,6 +184,15 @@ public class RegisterActivity extends AppCompatActivity {
      */
     protected void registerUser(final String firstName, final String lastName, final String email,
                                 final String phone, final String gender, final String password) {
+
+        Intent verification = new Intent(getBaseContext(), VerificationActivity.class);
+
+        verification.putExtra(INTENT_PHONENUMBER, phone);
+        startActivity(verification);
+        finish();
+
+
+        /*
         if (isNetworkAvailable(getApplicationContext())) {
 
             // Tag used to cancel the request
@@ -240,7 +235,7 @@ public class RegisterActivity extends AppCompatActivity {
                         /*Intent intent = new Intent(
                                 RegisterActivity.this,
                                 LoginActivity.class);
-                        startActivity(intent); */
+                        startActivity(intent);
                             //finish();
                         } else {
 
@@ -298,5 +293,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         } else
             Toast.makeText(getApplicationContext(), "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();
+    */
     }
+
+
 }

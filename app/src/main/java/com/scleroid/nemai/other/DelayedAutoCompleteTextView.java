@@ -3,8 +3,12 @@ package com.scleroid.nemai.other;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.TextInputLayout;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewParent;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import android.widget.ProgressBar;
 
 /**
@@ -60,6 +64,20 @@ public class DelayedAutoCompleteTextView extends android.support.v7.widget.AppCo
 
 
         super.onFilterComplete(count);
+    }
+
+    @Override
+    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+        final InputConnection ic = super.onCreateInputConnection(outAttrs);
+        if (ic != null && outAttrs.hintText == null) {
+            // If we don't have a hint and our parent is a TextInputLayout, use it's hint for the
+            // EditorInfo. This allows us to display a hint in 'extract mode'.
+            final ViewParent parent = getParent();
+            if (parent instanceof TextInputLayout) {
+                outAttrs.hintText = ((TextInputLayout) parent).getHint();
+            }
+        }
+        return ic;
     }
 
 
