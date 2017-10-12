@@ -25,7 +25,7 @@ import java.util.List;
 
 public class PinDatabaseHelper extends SQLiteOpenHelper {
     public final static String TAG = PinDatabaseHelper.class.getSimpleName();
-    private static final String DATABASE_FILE_NAME = "pincode.db";
+    private static final String DATABASE_FILE_NAME = "databasenew.db";
     private static final String DATABASE_NAME = "pincodes";
     private static final int DATABASE_VERSION = 1;
     private final Context mContext;
@@ -75,8 +75,8 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
     private void copyDatabase() throws IOException {
         OutputStream outputStream = new FileOutputStream(pathToSaveDBFile);
 
-        InputStream inputStream = mContext.getResources().openRawResource(R.raw.pincode);
-        if (inputStream != null) Log.d(TAG, "IT worked,database copied");
+        InputStream inputStream = mContext.getResources().openRawResource(R.raw.databasenew);
+        if (inputStream != null) Log.d(TAG, "It worked,database copied");
         byte[] buffer = new byte[1024];
         int length;
         while ((length = inputStream.read(buffer)) > 0) outputStream.write(buffer, 0, length);
@@ -108,24 +108,49 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
 
     public List<PinCode> getPincodes() {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
-        String query = "SELECT * from pins";
+        String query = "SELECT * from kerala";
         Cursor cursor = db.rawQuery(query, null);
         List<PinCode> list = new ArrayList<PinCode>();
         while (cursor.moveToNext()) {
-            PinCode pinCode = new PinCode(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+            Log.d(TAG, cursor.getString(0) + " " + cursor.getString(1) + " " + cursor.getString(2) + " " + cursor.getString(3));
+            PinCode pinCode = new PinCode(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
             list.add(pinCode);
         }
         db.close();
         return list;
     }
 
-    private int getVersionId() {
+    public List<PinCode> getPincodes(String data) {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
-        String query = "SELECT version_id FROM dbVersion";
-        Cursor cursor = db.rawQuery(query, null);
-        cursor.moveToFirst();
-        int v = cursor.getInt(0);
+        String query;
+        if (numberOrNot(data)) {
+            query = "SELECT * from kerala where cast(pincode AS TEXT) LIKE ?";
+            Log.d(TAG, true + "number");
+        } else {
+            query = "SELECT * from kerala where location LIKE ?";
+
+        }
+        Cursor cursor = db.rawQuery(query, new String[]{data + "%"});
+        List<PinCode> list = new ArrayList<PinCode>();
+        while (cursor.moveToNext()) {
+            // Log.d(TAG,cursor.getString(0)+" " +  cursor.getString(1) + " " + cursor.getString(2)+ " " + cursor.getString(3));
+            PinCode pinCode = new PinCode(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
+            list.add(pinCode);
+        }
         db.close();
-        return v;
+        return list;
+    }
+
+    boolean numberOrNot(String input) {
+        try {
+            Integer.parseInt(input);
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+        return true;
+    }
+    private int getVersionId() {
+
+        return DATABASE_VERSION;
     }
 }
