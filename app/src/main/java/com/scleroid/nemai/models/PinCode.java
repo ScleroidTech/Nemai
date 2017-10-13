@@ -8,7 +8,7 @@ public class PinCode {
 
     private String location, pincode, state, area;
 
-    public PinCode(String pincode, String location, String state,String area) {
+    public PinCode(String location, String pincode, String state, String area) {
         this.location = location;
         this.pincode = pincode;
         this.state =state;

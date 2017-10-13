@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +62,10 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             listView = inflater.inflate(R.layout.list_item_pin, parent, false);
         }
-        ((TextView) listView.findViewById(R.id.popup_pin_text_view)).setText(getItem(position).getPincode() + "(" + getItem(position).getLocation() + ")");
+        ((TextView) listView.findViewById(R.id.popup_pin_location_text_view)).setText(getItem(position).getLocation() + " , ");
+        ((TextView) listView.findViewById(R.id.popup_pin_pincode_text_view)).setText(getItem(position).getPincode() + " , ");
+        ((TextView) listView.findViewById(R.id.popup_pin_area_text_view)).setText(getItem(position).getArea());
+        ((TextView) listView.findViewById(R.id.popup_pin_state_text_view)).setText(getItem(position).getState());
 
         return listView;
 
@@ -77,7 +81,8 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
-                    List<PinCode> pinCodes = findPins(mContext, constraint.toString());
+                    List<PinCode> pinCodes = findPins(constraint.toString(), mContext);
+                    // List<PinCode> pinCodes = findPins(mContext, constraint.toString()); //Call via network
 
 
                     if (pinCodes != null) {
@@ -109,7 +114,24 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
     }
 
     /**
-     * Returns a search result for the given book title.
+     * Returns a search result for the given data from local database
+     */
+    private List<PinCode> findPins(String input, Context mContext) {
+        PinDatabaseHelper dbHelper = new PinDatabaseHelper(mContext);
+        try {
+            dbHelper.prepareDatabase();
+            return dbHelper.getPincodes(input);
+        } catch (IOException e) {
+            Log.d(TAG, e.getMessage());
+            return null;
+        }
+
+
+    }
+
+
+    /**
+     * Returns a search result for the given data from network
      */
     public List<PinCode> findPins(Context context, String userInput) {
 
