@@ -31,13 +31,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.ServerConstants;
-import com.scleroid.nemai.activity.VerificationActivity;
+import com.scleroid.nemai.activity.PartnerActivity;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.other.DelayedAutoCompleteTextView;
 import com.scleroid.nemai.volley_support.AppController;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -46,13 +45,12 @@ import java.util.List;
 import java.util.Map;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.scleroid.nemai.activity.MainActivity.session;
-import static com.scleroid.nemai.activity.VerificationActivity.INTENT_PHONENUMBER;
 
 
 public class HomeFragment extends Fragment {
     public static final int THRESHOLD = 3;
     private static final String TAG = HomeFragment.class.getSimpleName();
+    public static PinCode mPinCodeDestination, mPinCodeSource;
     static String select;
     final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
 
@@ -120,8 +118,8 @@ public class HomeFragment extends Fragment {
         pinDestinationAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                PinCode pinCode = (PinCode) adapterView.getItemAtPosition(position);
-                pinDestinationAutoCompleteTextView.setText(pinCode.getPincode() + " (" + pinCode.getLocation() + ")");
+                mPinCodeDestination = (PinCode) adapterView.getItemAtPosition(position);
+                pinDestinationAutoCompleteTextView.setText(mPinCodeDestination.getLocation() + ", " + mPinCodeDestination.getPincode() + ", " + mPinCodeDestination.getState());
             }
         });
 
@@ -135,8 +133,8 @@ public class HomeFragment extends Fragment {
         pinSourceAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                PinCode pinCode = (PinCode) adapterView.getItemAtPosition(position);
-                pinSourceAutoCompleteTextView.setText(pinCode.getPincode() + " (" + pinCode.getLocation() + ")");
+                mPinCodeSource = (PinCode) adapterView.getItemAtPosition(position);
+                pinSourceAutoCompleteTextView.setText(mPinCodeSource.getPincode() + ", " + mPinCodeSource.getPincode() + ", " + mPinCodeSource.getState());
             }
         });
 
@@ -305,22 +303,94 @@ public class HomeFragment extends Fragment {
             } else mWeightDocTIL.setErrorEnabled(false);
 
             if (!noSubmit) {
-                nextScreenDocument(mWeightdocEditText.getText().toString(), mDescDocEditText.getText().toString(), "Documents", delivery);
+                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightdocEditText.getText().toString(), mDescDocEditText.getText().toString(), "Documents", delivery);
 
             }
         }
     }
 
-    private void nextScreenDocument(String weight, String description, String packageType, String deliveryType) {
-        submitRequest();
+    private void nextScreenDocument(String source, String destination, String weight, String description, String packageType, String deliveryType) {
+        submitRequest(source, destination, weight, null, null, null, null, description, packageType, deliveryType);
     }
 
-    private void submitRequest() {
-    }
 
     private void nextScreenParcel(String source, String destination, String weight, String invoice, String width, String height, String length, String description, String packageType, String deliveryType) {
-        submitRequest();
+        submitRequest(source, destination, weight, invoice, width, height, length, description, packageType, deliveryType);
 
+    }
+
+    private void submitRequest(final String source, final String destination, final String weight, final String invoice, final String width, final String height, final String length, final String description, final String packageType, final String deliveryType) {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_parcel";
+
+
+        //showProgress(true);
+
+        JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
+                ServerConstants.serverUrl.POST_COURIER, null, new Response.Listener<JSONObject>() {
+            @SuppressLint("LongLogTag")
+
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                Log.d(TAG, "Parcel Response: " + jsonObject.toString());
+                //showProgress(false);
+                if (true) {
+
+                    Intent partner = new Intent(getApplicationContext(), PartnerActivity.class);
+                    startActivity(partner);
+
+                    // Launch login activity
+                    /*Intent intent = new Intent(
+                            RegisterActivity.this,
+                            LoginActivity.class);
+                    startActivity(intent); */
+                    //finish();
+                } else {
+
+                    // Error occurred in registration. Get the error
+                    // message
+
+                    //String errorMsg = jsonObject.getString("error_msg");
+                    Toast.makeText(getApplicationContext(),
+                            "An Error occurred", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Server Error on Parcel: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("source", source);
+                params.put("destination", destination);
+                params.put("weight", weight);
+                params.put("invoice", invoice);
+                params.put("width", width);
+                params.put("length", length);
+                params.put("height", height);
+                params.put("description", description);
+                params.put("delivery_type", deliveryType);
+                params.put("package_type", packageType);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     private void showRadioButtonDialog() {
@@ -367,102 +437,6 @@ public class HomeFragment extends Fragment {
         return TextUtils.isEmpty(text.getText());
     }
 
-    /**
-     * Function to store user in MySQL database will post params(tag, name,
-     * email, password) to register url
-     */
-    protected void registerCourier(final String firstName, final String lastName, final String email,
-                                   final String phone, final String gender, final String password) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_parcel";
-
-
-        //showProgress(true);
-
-        JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                ServerConstants.serverUrl.POST_COURIER, null, new Response.Listener<JSONObject>() {
-            @SuppressLint("LongLogTag")
-
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                Log.d(TAG, "Register Response: " + jsonObject.toString());
-                //showProgress(false);
-
-                try {
-
-                    // user successfully logged in
-                    // Create login session
-
-
-                    //JSONObject jObj = new JSONObject(jsonObject);
-
-                    //boolean error = jsonObject.getBoolean("error");
-                    if (true) {
-
-                        Toast.makeText(getApplicationContext(), "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
-
-                        //session.setLogin(true);
-
-                        Intent verification = new Intent(getApplicationContext(), VerificationActivity.class);
-
-                        verification.putExtra(INTENT_PHONENUMBER, phone);
-                        startActivity(verification);
-
-                        // Launch login activity
-                        /*Intent intent = new Intent(
-                                RegisterActivity.this,
-                                LoginActivity.class);
-                        startActivity(intent); */
-                        //finish();
-                    } else {
-
-                        // Error occurred in registration. Get the error
-                        // message
-                        session.setLogin(false);
-                        String errorMsg = jsonObject.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    Log.e(TAG, "Error in data parsing " + e.getMessage());
-                    //e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),
-                            "" + e, Toast.LENGTH_LONG).show();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Registration Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting params to register url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("fname", firstName);
-                params.put("lname", lastName);
-                params.put("gender", gender);
-                params.put("email", email);
-                params.put("phone", phone);
-                params.put("password", password);
-
-                return params;
-            }
-
-        };
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-
-    }
 }
 
 
