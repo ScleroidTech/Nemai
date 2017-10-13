@@ -34,10 +34,21 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
     public PinDatabaseHelper(Context context, String filePath) {
         super(context, DATABASE_NAME, null, 1);
         this.mContext = context;
+        File outFile = context.getDatabasePath(DATABASE_NAME);
+        String outFileName = outFile.getPath();
         pathToSaveDBFile = new StringBuffer(filePath).append("/").append(DATABASE_FILE_NAME).toString();
         Log.d(TAG, pathToSaveDBFile);
     }
 
+    public PinDatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, 1);
+        this.mContext = context;
+        File outFile = context.getDatabasePath(DATABASE_NAME);
+        String outFileName = outFile.getPath();
+        pathToSaveDBFile = outFileName;
+
+        Log.d(TAG, pathToSaveDBFile);
+    }
     public void prepareDatabase() throws IOException {
         boolean dbExist = checkDatabase();
         if (dbExist) {
@@ -124,10 +135,10 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
         String query;
         if (numberOrNot(data)) {
-            query = "SELECT * from kerala where cast(pincode AS TEXT) LIKE ?";
+            query = "SELECT DISTINCT * from kerala where cast(pincode AS TEXT) LIKE ?";
             Log.d(TAG, true + "number");
         } else {
-            query = "SELECT * from kerala where location LIKE ?";
+            query = "SELECT DISTINCT * from kerala where location LIKE ?";
 
         }
         Cursor cursor = db.rawQuery(query, new String[]{data + "%"});

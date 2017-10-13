@@ -26,7 +26,7 @@ public class TestDBActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_activity);
 
-        dbHelper = new PinDatabaseHelper(this, getFilesDir().getAbsolutePath());
+        dbHelper = new PinDatabaseHelper(this);
         Log.d(TAG, getFilesDir().getAbsolutePath());
         try {
             dbHelper.prepareDatabase();
