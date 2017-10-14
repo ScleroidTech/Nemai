@@ -25,7 +25,7 @@ import java.util.List;
 
 public class PinDatabaseHelper extends SQLiteOpenHelper {
     public final static String TAG = PinDatabaseHelper.class.getSimpleName();
-    private static final String DATABASE_FILE_NAME = "databasenew.db";
+    private static final String DATABASE_FILE_NAME = "databasestates.db";
     private static final String DATABASE_NAME = "pincodes";
     private static final int DATABASE_VERSION = 1;
     private final Context mContext;
@@ -86,7 +86,7 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
     private void copyDatabase() throws IOException {
         OutputStream outputStream = new FileOutputStream(pathToSaveDBFile);
 
-        InputStream inputStream = mContext.getResources().openRawResource(R.raw.databasenew);
+        InputStream inputStream = mContext.getResources().openRawResource(R.raw.databasestates);
         if (inputStream != null) Log.d(TAG, "It worked,database copied");
         byte[] buffer = new byte[1024];
         int length;
@@ -119,7 +119,7 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
 
     public List<PinCode> getPincodes() {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
-        String query = "SELECT * from kerala";
+        String query = "SELECT * from india";
         Cursor cursor = db.rawQuery(query, null);
         List<PinCode> list = new ArrayList<PinCode>();
         while (cursor.moveToNext()) {
@@ -135,10 +135,10 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
         String query;
         if (numberOrNot(data)) {
-            query = "SELECT DISTINCT * from kerala where cast(pincode AS TEXT) LIKE ?";
+            query = "SELECT DISTINCT * from india where pincode LIKE ?";
             Log.d(TAG, true + "number");
         } else {
-            query = "SELECT DISTINCT * from kerala where location LIKE ?";
+            query = "SELECT DISTINCT * from india where location LIKE ?";
 
         }
         Cursor cursor = db.rawQuery(query, new String[]{data + "%"});
