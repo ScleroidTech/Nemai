@@ -119,7 +119,7 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
 
     public List<PinCode> getPincodes() {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
-        String query = "SELECT * from kerala";
+        String query = "SELECT * from india";
         Cursor cursor = db.rawQuery(query, null);
         List<PinCode> list = new ArrayList<PinCode>();
         while (cursor.moveToNext()) {
