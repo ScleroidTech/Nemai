@@ -68,7 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
        // AssetManager assetManager=myContext.getAssets();
        //Log.i(TAG, assetManager.toString());
         InputStream is=null;
-        is = myContext.getResources().openRawResource(R.raw.databasenew);
+        is = myContext.getResources().openRawResource(R.raw.databasestates);
         if(is !=null){Log.i(TAG,"It worked");
         }
 
