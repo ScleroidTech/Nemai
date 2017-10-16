@@ -88,9 +88,7 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/mobile_text_input_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:counterEnabled="true"
-                app:counterMaxLength="10">
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/mobile"
@@ -155,17 +153,16 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:hint="@string/prompt_password" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/password_again_text_input_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorPrimary">
 
                 <EditText
                     android:id="@+id/passwordAgain"
@@ -174,7 +171,6 @@
                     android:hint="@string/prompt_password_again"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionDone"
-                    android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -189,6 +185,61 @@
                 android:text="@string/action_register"
                 android:textStyle="bold" />
 
+            <LinearLayout
+                android:id="@+id/register_layout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="horizontal">
+
+
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/google_sign_in_button"
+                    android:layout_width="0dp"
+
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+
+                <FrameLayout
+                    android:id="@+id/FrameLayoutFbButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5">
+
+                    <com.facebook.login.widget.LoginButton
+                        android:id="@+id/facebook_login_button"
+                        style="@style/FacebookLoginButton"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="0.5"
+                        android:elevation="2dp"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp"
+                        android:scaleType="centerInside"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/fb_custom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#3B5991"
+                        android:drawableLeft="@drawable/facebook_logo"
+                        android:drawableStart="@drawable/facebook_logo"
+                        android:paddingEnd="20dp"
+                        android:paddingStart="20dp"
+
+                        android:text="Facebook"
+                        android:textAllCaps="false"
+                        android:textColor="#ffffff"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+            </LinearLayout>
 
 
         </LinearLayout>
