@@ -4,11 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -60,8 +62,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import mehdi.sakout.fancybuttons.FancyButton;
-
 import static android.Manifest.permission.READ_CONTACTS;
 import static com.scleroid.nemai.activity.RegisterActivity.isNetworkAvailable;
 import static com.scleroid.nemai.activity.VerificationActivity.INTENT_PHONENUMBER;
@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean cancel;
     private GoogleApiClient mGoogleApiClient;
     private CallbackManager mCallbackManager;
-    private FancyButton mFacebookLogin;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +109,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView = findViewById(R.id.email_login);
         mPasswordView = findViewById(R.id.password_login);
 
-        Button mRegisterButton = findViewById(R.id.register_link_text_view);
-        mRegisterButton.setOnClickListener(new OnClickListener() {
+        TextView mRegisterTextView = findViewById(R.id.register_link_text_view);
+        mRegisterTextView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -148,6 +148,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailTextInputLayout = findViewById(R.id.email_login_text_input_layout);
 
         Button mSignInButton = findViewById(R.id.sign_in_button);
+
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,6 +187,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
+        //FancyButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
+        Context hostActivity = getApplicationContext();
+        float fbIconScale = 1.65F;
+        Drawable drawable = hostActivity.getResources().getDrawable(
+                com.facebook.R.drawable.com_facebook_button_icon);
+        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * fbIconScale),
+                (int) (drawable.getIntrinsicHeight() * fbIconScale));
+        mFacebookLoginButton.setCompoundDrawables(drawable, null, null, null);
+        mFacebookLoginButton.setCompoundDrawablePadding(hostActivity.getResources().
+                getDimensionPixelSize(R.dimen.fb_margin_override_textpadding));
+        mFacebookLoginButton.setPadding(
+                hostActivity.getResources().getDimensionPixelSize(
+                        R.dimen.fb_margin_override_lr),
+                hostActivity.getResources().getDimensionPixelSize(
+                        R.dimen.fb_margin_override_top),
+                hostActivity.getResources().getDimensionPixelSize(
+                        R.dimen.fb_margin_override_lr),
+                hostActivity.getResources().getDimensionPixelSize(
+                        R.dimen.fb_margin_override_bottom));
         mFacebookLoginButton.setReadPermissions(Arrays.asList(new String[]{"email", "public_profile"/*TODO review app permission from fb birthday  location*/}));
         mFacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
