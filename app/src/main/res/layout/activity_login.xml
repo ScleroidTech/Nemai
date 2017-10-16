@@ -20,13 +20,18 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/ic_launcher" />
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/email_login_form"
+            android:id="@+id/login_form_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -37,12 +42,12 @@
                 android:layout_height="wrap_content"
                 app:errorEnabled="true">
 
+
                 <AutoCompleteTextView
                     android:id="@+id/email_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -52,20 +57,17 @@
                 android:id="@+id/password_login_text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorAccent">
 
                 <EditText
                     android:id="@+id/password_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
 
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -74,41 +76,20 @@
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/forgot_password_text_view"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_gravity="end"
                 android:text="@string/action_forgot_password"
                 android:textAlignment="center"
                 android:textSize="15sp" />
 
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/google_sign_in_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
 
-
-                />
-
-
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/facebook_login_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="30dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:paddingBottom="12dp"
-                android:paddingTop="12dp" />
-
-
-            <TextView
+            <Button
                 android:id="@+id/register_link_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -120,6 +101,46 @@
                 android:textSize="15sp" />
 
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Or" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/google_sign_in_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/facebook_login_button"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="0.5"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    app:fb_defaultColor="#39579B"
+                    app:fb_focusColor="#6183d2"
+                    app:fb_fontIconResource="&#xf230;"
+                    app:fb_fontIconSize="20sp"
+                    app:fb_iconPaddingRight="10dp"
+                    app:fb_iconPosition="left"
+                    app:fb_radius="2dp"
+                    app:fb_text="Facebook Connect"
+                    app:fb_textColor="#ffffff"
+                    app:fb_textSize="16sp" />
+            </LinearLayout>
         </LinearLayout>
+
     </ScrollView>
 </LinearLayout>

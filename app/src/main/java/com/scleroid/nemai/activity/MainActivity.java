@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         session = new SessionManager(getApplicationContext());
 
-        session.setLogin(true);
+        session.setLogin(false);
+        session.setVerified(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
@@ -84,13 +85,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, VerificationActivity.class));
         }
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mHandler = new Handler();
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
 
 
         // Navigation view header
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
-        btn_search = (ImageButton) findViewById(R.id.btn_search);
+        btn_search = findViewById(R.id.btn_search);
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
