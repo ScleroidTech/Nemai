@@ -135,13 +135,13 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
         String query;
         if (numberOrNot(data)) {
-            query = "SELECT DISTINCT * from india where pincode LIKE ?";
+            query = "SELECT * from india where pincode LIKE ?";
             Log.d(TAG, true + "number");
         } else {
-            query = "SELECT DISTINCT * from india where location LIKE ?";
+            query = "SELECT * from india where location LIKE ? or area LIKE ?";
 
         }
-        Cursor cursor = db.rawQuery(query, new String[]{data + "%"});
+        Cursor cursor = db.rawQuery(query, new String[]{data + "%", data + "%"});
         List<PinCode> list = new ArrayList<PinCode>();
         while (cursor.moveToNext()) {
             // Log.d(TAG,cursor.getString(0)+" " +  cursor.getString(1) + " " + cursor.getString(2)+ " " + cursor.getString(3));

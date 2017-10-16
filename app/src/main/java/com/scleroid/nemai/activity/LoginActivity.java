@@ -48,7 +48,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.scleroid.nemai.R;
@@ -60,6 +59,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import mehdi.sakout.fancybuttons.FancyButton;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static com.scleroid.nemai.activity.RegisterActivity.isNetworkAvailable;
@@ -85,6 +86,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private boolean mAuthTask = false;
     private boolean isUserExists = false;
+
     // UI references.
     private AutoCompleteTextView mEmailView;
     private TextInputLayout mPasswordTextInputLayout, mEmailTextInputLayout;
@@ -95,6 +97,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean cancel;
     private GoogleApiClient mGoogleApiClient;
     private CallbackManager mCallbackManager;
+    private FancyButton mFacebookLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,14 +106,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email_login);
-        mPasswordView = (EditText) findViewById(R.id.password_login);
+        mEmailView = findViewById(R.id.email_login);
+        mPasswordView = findViewById(R.id.password_login);
 
-        TextView mRegisterTextView = (TextView) findViewById(R.id.register_link_text_view);
-        mRegisterTextView.setOnClickListener(new OnClickListener() {
+        Button mRegisterButton = findViewById(R.id.register_link_text_view);
+        mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        TextView mResetPasswordTextView = findViewById(R.id.forgot_password_text_view);
+        mResetPasswordTextView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
                 startActivity(intent);
             }
         });
@@ -131,11 +143,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         populateAutoComplete();
 
-        mPasswordView = (EditText) findViewById(R.id.password_login);
-        mPasswordTextInputLayout = (TextInputLayout) findViewById(R.id.password_login_text_input_layout);
-        mEmailTextInputLayout = (TextInputLayout) findViewById(R.id.email_login_text_input_layout);
+        mPasswordView = findViewById(R.id.password_login);
+        mPasswordTextInputLayout = findViewById(R.id.password_login_text_input_layout);
+        mEmailTextInputLayout = findViewById(R.id.email_login_text_input_layout);
 
-        Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        Button mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,7 +155,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        SignInButton mGoogleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
+        SignInButton mGoogleSignInButton = findViewById(R.id.google_sign_in_button);
         mGoogleSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 .build();
 
         mCallbackManager = CallbackManager.Factory.create();
-        LoginButton mFacebookLoginButton = (LoginButton) findViewById(R.id.facebook_login_button);
+        LoginButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
         mFacebookLoginButton.setReadPermissions(Arrays.asList(new String[]{"email", "public_profile"/*TODO review app permission from fb birthday  location*/}));
         mFacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -261,7 +273,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
+        if (REQUEST_READ_CONTACTS == requestCode) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 populateAutoComplete();
             }
@@ -548,7 +560,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onStart() {
         super.onStart();
-
+/*
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
         if (opr.isDone()) {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
@@ -569,6 +581,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             });
         }
+  */
     }
     @Override
     protected void onResume() {
@@ -873,7 +886,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-    private interface ProfileQuery {
+    protected interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
                 ContactsContract.CommonDataKinds.Email.IS_PRIMARY,

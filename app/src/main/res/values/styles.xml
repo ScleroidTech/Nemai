@@ -9,11 +9,12 @@
         <item name="android:dropDownListViewStyle">@style/MyListViewStyle</item>
     </style>
 
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="RadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
-    </style>
+    <style name="RadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton"></style>
 
     <style name="MyListViewStyle" parent="@android:style/Widget.ListView">
         <item name="android:divider">@color/sendotp_grey</item>
