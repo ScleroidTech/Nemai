@@ -18,6 +18,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.facebook.FacebookSdk;
+import com.facebook.login.widget.LoginButton;
 import com.scleroid.nemai.R;
 
 import java.util.regex.Pattern;
@@ -43,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     private View mLoginFormView;
     private RadioGroup mGenderGroup;
     private boolean mAuthTask = false;
+    private Button mFBcloneButton;
 
     //defining AwesomeValidation object
     private AwesomeValidation mAwesomeValidation;
@@ -63,21 +66,22 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_register);
 
         mAwesomeValidation = new AwesomeValidation(TEXT_INPUT_LAYOUT);
         // Set up the login form.
-        mEmailView = (EditText) findViewById(R.id.email);
-        mFirstNameView = (EditText) findViewById(R.id.first_name);
-        mLastNameView = (EditText) findViewById(R.id.last_name);
-        mMobileNumberview = (EditText) findViewById(R.id.mobile);
-        mGenderGroup = (RadioGroup) findViewById(R.id.gender_radio_group);
+        mEmailView = findViewById(R.id.email);
+        mFirstNameView = findViewById(R.id.first_name);
+        mLastNameView = findViewById(R.id.last_name);
+        mMobileNumberview = findViewById(R.id.mobile);
+        mGenderGroup = findViewById(R.id.gender_radio_group);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordAgain = (EditText) findViewById(R.id.passwordAgain);
+        mPasswordView = findViewById(R.id.password);
+        mPasswordAgain = findViewById(R.id.passwordAgain);
 
 
-        Button mRegisterButton = (Button) findViewById(R.id.register_button);
+        Button mRegisterButton = findViewById(R.id.register_button);
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,6 +91,14 @@ public class RegisterActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.register_form);
         mProgressView = findViewById(R.id.register_progress);
+        mFBcloneButton = findViewById(R.id.fb_custom);
+        final LoginButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
+        mFBcloneButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFacebookLoginButton.performClick();
+            }
+        });
 
         //adding validation to edit-texts
         mAwesomeValidation.addValidation(this, R.id.fname_text_input_layout, "[a-zA-Z\\s]+", R.string.fnameerror);
