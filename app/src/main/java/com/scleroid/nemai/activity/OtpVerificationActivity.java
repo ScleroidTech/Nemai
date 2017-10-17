@@ -25,7 +25,7 @@ import com.scleroid.nemai.R;
 
 import static com.scleroid.nemai.activity.MainActivity.session;
 
-
+//TODO send by call button not working, remove the phone number screen, call OTPVerificationActivity, Add multiple parcel options, disable country selection from the phone
 public class OtpVerificationActivity extends AppCompatActivity implements
         ActivityCompat.OnRequestPermissionsResultCallback, VerificationListener {
 
@@ -68,7 +68,6 @@ public class OtpVerificationActivity extends AppCompatActivity implements
                     (SendOtpVerification
                             .config(countryCode + phoneNumber)
                             .context(this)
-                            .senderId("Nemai")
                             .autoVerification(true)
                             .build(), this);
             mVerification.initiate();
