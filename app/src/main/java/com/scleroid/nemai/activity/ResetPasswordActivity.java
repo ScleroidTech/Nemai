@@ -195,17 +195,23 @@ public class ResetPasswordActivity extends AppCompatActivity implements LoaderMa
             findViewById(R.id.reset_text_view).setVisibility(View.VISIBLE);
             findViewById(R.id.reset_image_view).setVisibility(View.VISIBLE);
             showProgress(true);
-            resetPassword(email);
-            Button mLoginButton = findViewById(R.id.back_to_login_button);
-            mLoginButton.setVisibility(View.VISIBLE);
-            mLoginButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
+            if (email.contains("@")) {
+                resetPassword(email);
+                Button mLoginButton = findViewById(R.id.back_to_login_button);
+                mLoginButton.setVisibility(View.VISIBLE);
+                mLoginButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            } else {
+                Intent intent = new Intent(ResetPasswordActivity.this, VerificationActivity.class);
+                intent.putExtra(VerificationActivity.INTENT_REASON, true);
+                startActivity(intent);
+            }
 
         }
 
@@ -311,8 +317,12 @@ public class ResetPasswordActivity extends AppCompatActivity implements LoaderMa
             Pattern regex = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
             return regex.matcher(input).matches();
+        } else {
+            Pattern regex = Pattern.compile("^[789]\\d{9}$");
+
+            return regex.matcher(input).matches();
+
         }
-        return false;
 
     }
 
