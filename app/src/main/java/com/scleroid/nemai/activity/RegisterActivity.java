@@ -39,6 +39,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.hbb20.CountryCodePicker;
 import com.scleroid.nemai.R;
 
 import org.json.JSONException;
@@ -49,6 +50,7 @@ import java.util.regex.Pattern;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
 import static com.scleroid.nemai.activity.MainActivity.session;
+import static com.scleroid.nemai.activity.VerificationActivity.INTENT_COUNTRY_CODE;
 import static com.scleroid.nemai.activity.VerificationActivity.INTENT_PHONENUMBER;
 
 /**
@@ -65,6 +67,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     private static final int RC_SIGN_IN = 9001;
     @Nullable
     String firstName, lastName, email, gender, userId, password;
+    CountryCodePicker ccp;
     // UI references.
     private EditText mEmailView, mFirstNameView, mLastNameView, mMobileNumberview, mPasswordView, mPasswordAgain;
     private View mProgressView;
@@ -78,6 +81,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     private Button mFBcloneButton;
     private GoogleApiClient mGoogleApiClient;
     private CallbackManager mCallbackManager;
+    private String countryCode;
 
     //defining AwesomeValidation object
     private AwesomeValidation mAwesomeValidation;
@@ -110,6 +114,11 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
         mPasswordView = findViewById(R.id.password);
         mPasswordAgain = findViewById(R.id.passwordAgain);
+        ccp = findViewById(R.id.ccp);
+        ccp.registerCarrierNumberEditText(mMobileNumberview);
+        countryCode = ccp.getSelectedCountryCode();
+        Log.d(TAG, "Country Code " + countryCode);
+
 
 
         Button mRegisterButton = findViewById(R.id.register_button);
@@ -472,6 +481,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         Intent verification = new Intent(getBaseContext(), VerificationActivity.class);
 
         verification.putExtra(INTENT_PHONENUMBER, phone);
+        verification.putExtra(INTENT_COUNTRY_CODE, countryCode);
         startActivity(verification);
         finish();
 

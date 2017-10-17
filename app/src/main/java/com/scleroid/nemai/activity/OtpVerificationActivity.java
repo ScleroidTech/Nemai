@@ -31,17 +31,26 @@ public class OtpVerificationActivity extends AppCompatActivity implements
 
     private static final String TAG = Verification.class.getSimpleName();
     TextView resend_timer;
+    TextView resend_sms_timer;
+    private boolean reason;
     private Verification mVerification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp_verification);
-        resend_timer = (TextView) findViewById(R.id.resend_timer);
+        resend_sms_timer = findViewById(R.id.resend_timer_sms);
+        resend_sms_timer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResendCode("text");
+            }
+        });
+        resend_timer = findViewById(R.id.resend_timer);
         resend_timer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResendCode();
+                ResendCode("voice");
             }
         });
         startTimer();
@@ -59,6 +68,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements
                     (SendOtpVerification
                             .config(countryCode + phoneNumber)
                             .context(this)
+                            .senderId("Nemai")
                             .autoVerification(true)
                             .build(), this);
             mVerification.initiate();
@@ -92,15 +102,16 @@ public class OtpVerificationActivity extends AppCompatActivity implements
         if (intent != null) {
             String phoneNumber = intent.getStringExtra(VerificationActivity.INTENT_PHONENUMBER);
             String countryCode = intent.getStringExtra(VerificationActivity.INTENT_COUNTRY_CODE);
-            TextView phoneText = (TextView) findViewById(R.id.numberText);
+            reason = intent.getBooleanExtra(VerificationActivity.INTENT_REASON, false);
+            TextView phoneText = findViewById(R.id.numberText);
             phoneText.setText("+" + countryCode + phoneNumber);
             createVerification(phoneNumber, skipPermissionCheck, countryCode);
         }
     }
 
-    public void ResendCode() {
+    public void ResendCode(String param) {
         startTimer();
-        mVerification.resend("voice");
+        mVerification.resend(param);
     }
 
     public void onSubmitClicked(View view) {
@@ -110,7 +121,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements
             if (mVerification != null) {
                 mVerification.verify(code);
                 showProgress();
-                TextView messageText = (TextView) findViewById(R.id.textView);
+                TextView messageText = findViewById(R.id.textView);
                 messageText.setText("Verification in progress");
                 enableInputField(false);
             }
@@ -121,35 +132,37 @@ public class OtpVerificationActivity extends AppCompatActivity implements
         View container = findViewById(R.id.inputContainer);
         if (enable) {
             container.setVisibility(View.VISIBLE);
-            EditText input = (EditText) findViewById(R.id.inputCode);
+            EditText input = findViewById(R.id.inputCode);
             input.requestFocus();
         } else {
             container.setVisibility(View.GONE);
         }
-        TextView resend_timer = (TextView) findViewById(R.id.resend_timer);
+        TextView resend_timer = findViewById(R.id.resend_timer);
+        TextView resend_sms_timer = findViewById(R.id.resend_timer_sms);
         resend_timer.setClickable(false);
+        resend_sms_timer.setClickable(false);
     }
 
     void hideProgressBarAndShowMessage(int message) {
         hideProgressBar();
-        TextView messageText = (TextView) findViewById(R.id.textView);
+        TextView messageText = findViewById(R.id.textView);
         messageText.setText(message);
     }
 
     void hideProgressBar() {
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressIndicator);
+        ProgressBar progressBar = findViewById(R.id.progressIndicator);
         progressBar.setVisibility(View.INVISIBLE);
-        TextView progressText = (TextView) findViewById(R.id.progressText);
+        TextView progressText = findViewById(R.id.progressText);
         progressText.setVisibility(View.INVISIBLE);
     }
 
     void showProgress() {
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressIndicator);
+        ProgressBar progressBar = findViewById(R.id.progressIndicator);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     void showCompleted() {
-        ImageView checkMark = (ImageView) findViewById(R.id.checkmarkImage);
+        ImageView checkMark = findViewById(R.id.checkmarkImage);
         checkMark.setVisibility(View.VISIBLE);
     }
 
@@ -172,7 +185,11 @@ public class OtpVerificationActivity extends AppCompatActivity implements
         showCompleted();
         session.setVerified(true);
         session.setLogin(true);
-        Intent verification = new Intent(OtpVerificationActivity.this, MainActivity.class);
+        Intent verification;
+        if (reason)
+            verification = new Intent(OtpVerificationActivity.this, PasswordChangeActivity.class);
+        else
+            verification = new Intent(OtpVerificationActivity.this, MainActivity.class);
 
         startActivity(verification);
         finish();
@@ -190,8 +207,10 @@ public class OtpVerificationActivity extends AppCompatActivity implements
 
     private void startTimer() {
         resend_timer.setClickable(false);
+        resend_sms_timer.setClickable(false);
+        resend_sms_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.sendotp_grey));
         resend_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.sendotp_grey));
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(60000, 1000) {
             int secondsLeft = 0;
 
             public void onTick(long ms) {
@@ -204,6 +223,22 @@ public class OtpVerificationActivity extends AppCompatActivity implements
             public void onFinish() {
                 resend_timer.setClickable(true);
                 resend_timer.setText("Resend via call");
+                resend_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.colorPrimary));
+            }
+        }.start();
+        new CountDownTimer(30000, 1000) {
+            int secondsLeft = 0;
+
+            public void onTick(long ms) {
+                if (Math.round((float) ms / 1000.0f) != secondsLeft) {
+                    secondsLeft = Math.round((float) ms / 1000.0f);
+                    resend_timer.setText("Resend via Text ( " + secondsLeft + " )");
+                }
+            }
+
+            public void onFinish() {
+                resend_timer.setClickable(true);
+                resend_timer.setText("Resend via Text");
                 resend_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.colorPrimary));
             }
         }.start();
