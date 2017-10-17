@@ -15,7 +15,7 @@ public class ServerConstants {
         public static final String POST_REGISTER = "http://ec2-18-221-108-81.us-east-2.compute.amazonaws.com:3008/insertuser";
         public static final String POST_LOGIN = "abcd  ";
         public static final String POST_VALID_USER = "abcd  ";
-        public static final String POST_RESET = "abcd  ";
+        public static final String POST_RESET_PASS = "abcd  ";
 
 
     }
