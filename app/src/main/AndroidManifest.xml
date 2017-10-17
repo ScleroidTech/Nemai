@@ -41,18 +41,19 @@
         <activity android:name=".activity.TrackingActivity" />
         <activity
             android:name=".activity.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".activity.RegisterActivity"
             android:exported="true"
             android:label="@string/title_activity_register" />
         <activity
             android:name=".activity.VerificationActivity"
-            android:label="@string/title_activity_password"></activity>
+            android:exported="true"
+            android:label="@string/title_activity_password" />
         <activity
             android:name=".activity.TestDBActivity"
             android:exported="true"
-            android:label="@string/title_activity_password"></activity>
+            android:label="@string/title_activity_password" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -84,7 +85,8 @@
             android:name=".activity.ResetPasswordActivity"
             android:exported="true"
             android:label="@string/title_activity_reset_password"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.PasswordChangeActivity"></activity>
     </application>
 
 </manifest>
