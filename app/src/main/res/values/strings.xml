@@ -38,6 +38,7 @@
 
     <string name="prompt_email">Email or Mobile</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_new_password">New Password</string>
     <string name="prompt_password_again">Retype Password</string>
     <string name="prompt_city">City</string>
     <string name="prompt_gender">Gender :</string>
@@ -48,6 +49,7 @@
     <string name="action_sign_in">Log In</string>
     <string name="action_reset_password">Reset Password</string>
     <string name="action_register">Register </string>
+    <string name="action_new_password">Change Password </string>
     <string name="action_sign_in_redirect">Register</string>
     <string name="action_forgot_password">Forgot Password?\n<b> Create A New One</b> </string>
 

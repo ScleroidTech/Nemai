@@ -11,11 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.hbb20.CountryCodePicker;
 import com.msg91.sendotp.library.PhoneNumberFormattingTextWatcher;
 import com.msg91.sendotp.library.PhoneNumberUtils;
 import com.msg91.sendotp.library.internal.Iso2Phone;
@@ -31,12 +33,15 @@ public class VerificationActivity extends AppCompatActivity {
 
     public static final String INTENT_PHONENUMBER = "phonenumber";
     public static final String INTENT_COUNTRY_CODE = "code";
+    public static final String INTENT_REASON = "reason";
     private static String TAG = VerificationActivity.class.getSimpleName();
     private EditText mPhoneNumber;
-    private String PhoneNumber;
+    private String PhoneNumber, CountryCode;
+    private boolean reason;
     private Button mSmsButton;
     private String mCountryIso;
     private TextWatcher mNumberTextWatcher;
+    private CountryCodePicker ccp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +49,25 @@ public class VerificationActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_verification);
 
-        mPhoneNumber = (EditText) findViewById(R.id.phoneNumber);
-        mSmsButton = (Button) findViewById(R.id.smsVerificationButton);
+        mPhoneNumber = findViewById(R.id.phoneNumber);
+        mSmsButton = findViewById(R.id.smsVerificationButton);
 
 
         mCountryIso = PhoneNumberUtils.getDefaultCountryIso(this);
+        Log.d(TAG, "default country " + mCountryIso);
         final String defaultCountryName = new Locale("", mCountryIso).getDisplayName();
+        Log.d(TAG, "default country " + Iso2Phone.getPhone(mCountryIso));
+        ccp = findViewById(R.id.ccp2);
+        ccp.registerCarrierNumberEditText(mPhoneNumber);
+
+
+
 
         PhoneNumber = getIntent().getStringExtra(INTENT_PHONENUMBER);
+        CountryCode = getIntent().getStringExtra(INTENT_COUNTRY_CODE);
+        reason = getIntent().getBooleanExtra(INTENT_REASON, false);
+        Log.d(TAG, "default country " + ccp.getSelectedCountryCode());
+        if (CountryCode != null) ccp.setCountryForNameCode(CountryCode);
 
         resetNumberTextWatcher(mCountryIso);
 
@@ -85,7 +101,8 @@ public class VerificationActivity extends AppCompatActivity {
     private void openActivity(String phoneNumber) {
         Intent verification = new Intent(this, OtpVerificationActivity.class);
         verification.putExtra(INTENT_PHONENUMBER, phoneNumber);
-        verification.putExtra(INTENT_COUNTRY_CODE, Iso2Phone.getPhone(mCountryIso));
+        verification.putExtra(INTENT_COUNTRY_CODE, ccp.getSelectedCountryCode());
+        if (reason) verification.putExtra(INTENT_REASON, reason);
         startActivity(verification);
     }
 
@@ -120,7 +137,7 @@ public class VerificationActivity extends AppCompatActivity {
                 super.afterTextChanged(s);
                 if (isPossiblePhoneNumber()) {
                     setButtonsEnabled(true);
-                    mPhoneNumber.setTextColor(Color.BLACK);
+                    mPhoneNumber.setTextColor(Color.BLUE);
                 } else {
                     setButtonsEnabled(false);
                     mPhoneNumber.setTextColor(Color.RED);
