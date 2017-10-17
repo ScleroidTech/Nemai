@@ -4,13 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,7 +46,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -63,6 +60,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static com.scleroid.nemai.activity.MainActivity.session;
 import static com.scleroid.nemai.activity.RegisterActivity.isNetworkAvailable;
 import static com.scleroid.nemai.activity.VerificationActivity.INTENT_PHONENUMBER;
 
@@ -97,6 +95,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean cancel;
     private GoogleApiClient mGoogleApiClient;
     private CallbackManager mCallbackManager;
+    private Button mFBcloneButton;
 
 
     @Override
@@ -104,6 +103,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         // Session manager
         setContentView(R.layout.activity_login);
+
 
         // Set up the login form.
         mEmailView = findViewById(R.id.email_login);
@@ -128,6 +128,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -156,7 +157,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        SignInButton mGoogleSignInButton = findViewById(R.id.google_sign_in_button);
+        //SignInButton mGoogleSignInButton = findViewById(R.id.google_sign_in_button);
+        Button mGoogleSignInButton = findViewById(R.id.google_sign_in_button);
+
         mGoogleSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,8 +189,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 .build();
 
         mCallbackManager = CallbackManager.Factory.create();
-        LoginButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
-        //FancyButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
+        mFBcloneButton = findViewById(R.id.fb_custom);
+        final LoginButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
+        mFBcloneButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFacebookLoginButton.performClick();
+            }
+        });
+
+        /*FancyButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
         Context hostActivity = getApplicationContext();
         float fbIconScale = 1.65F;
         Drawable drawable = hostActivity.getResources().getDrawable(
@@ -205,7 +216,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 hostActivity.getResources().getDimensionPixelSize(
                         R.dimen.fb_margin_override_lr),
                 hostActivity.getResources().getDimensionPixelSize(
-                        R.dimen.fb_margin_override_bottom));
+                        R.dimen.fb_margin_override_bottom));*/
         mFacebookLoginButton.setReadPermissions(Arrays.asList(new String[]{"email", "public_profile"/*TODO review app permission from fb birthday  location*/}));
         mFacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -235,6 +246,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
+        showProgress(true);
     }
 
     private void signIn() {
@@ -357,6 +369,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             showProgress(true);
             mAuthTask = true;
+
+            session.setLoggedInMethod("email");
             loginUser(email, password);
         }
 
@@ -507,6 +521,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             // mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             showProgress(false);
+
+            session.setLoggedInMethod("google");
             // updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
@@ -565,6 +581,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Log.d(TAG, "JSONException " + e);
                 }
 
+
+                session.setLoggedInMethod("facebook");
                 Toast.makeText(LoginActivity.this, object.toString(), Toast.LENGTH_LONG).show();
 
             }
@@ -897,6 +915,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
 
             };
+
 
             // Adding request to request queue
             AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
