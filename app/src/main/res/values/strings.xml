@@ -91,7 +91,7 @@
     <string name="entercode">Please enter the code you received</string>
     <string name="submit_main"><![CDATA[Submit & Search]]></string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
-    <string name="register_text">New User? \n<b> Register Using Email </b></string>
+    <string name="register_text">New User? \n<b> Register Here </b></string>
 
 
 </resources>

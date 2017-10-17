@@ -9,7 +9,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,19 +21,40 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.scleroid.nemai.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
+import static com.scleroid.nemai.activity.MainActivity.session;
 import static com.scleroid.nemai.activity.VerificationActivity.INTENT_PHONENUMBER;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
 
     /**
@@ -38,14 +62,22 @@ public class RegisterActivity extends AppCompatActivity {
      */
 
     public static final String TAG = RegisterActivity.class.getSimpleName();
+    private static final int RC_SIGN_IN = 9001;
+    @Nullable
+    String firstName, lastName, email, gender, userId, password;
     // UI references.
     private EditText mEmailView, mFirstNameView, mLastNameView, mMobileNumberview, mPasswordView, mPasswordAgain;
     private View mProgressView;
-
+    /**
+     * Keep track of the login task to ensure we can cancel it if requested.
+     */
+    private boolean mAuthTask = false;
+    private boolean isUserExists = false;
     private View mLoginFormView;
     private RadioGroup mGenderGroup;
-    private boolean mAuthTask = false;
     private Button mFBcloneButton;
+    private GoogleApiClient mGoogleApiClient;
+    private CallbackManager mCallbackManager;
 
     //defining AwesomeValidation object
     private AwesomeValidation mAwesomeValidation;
@@ -66,7 +98,6 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_register);
 
         mAwesomeValidation = new AwesomeValidation(TEXT_INPUT_LAYOUT);
@@ -89,6 +120,36 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        Button mGoogleSignInButton = findViewById(R.id.google_login);
+
+        mGoogleSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isNetworkAvailable(getApplicationContext())) {
+
+
+                    showProgress(true);
+                    signIn();
+                } else
+                    Toast.makeText(getApplicationContext(), "No Internet Available, try again later", Toast.LENGTH_LONG).show();
+
+            }
+        });
+        // Configure sign-in to request the user's ID, email address, and basic
+// profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail().requestProfile().requestId()
+                .build();
+
+        // Build a GoogleApiClient with access to the Google Sign-In API and the
+// options specified by gso.
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        mCallbackManager = CallbackManager.Factory.create();
+
         mLoginFormView = findViewById(R.id.register_form);
         mProgressView = findViewById(R.id.register_progress);
         mFBcloneButton = findViewById(R.id.fb_custom);
@@ -99,6 +160,36 @@ public class RegisterActivity extends AppCompatActivity {
                 mFacebookLoginButton.performClick();
             }
         });
+
+        mFacebookLoginButton.setReadPermissions(Arrays.asList(new String[]{"email", "public_profile"/*TODO review app permission from fb birthday  location*/}));
+        mFacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+                showProgress(true);
+
+                Log.i(TAG, "Hello" + loginResult.getAccessToken().getToken());
+                Toast.makeText(RegisterActivity.this, "Token:" + loginResult.getAccessToken(), Toast.LENGTH_SHORT).show();
+
+                handleFacebookAccessToken(loginResult.getAccessToken());
+
+                showProgress(false);
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(RegisterActivity.this, "Cancelled Log in request to facebook", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(RegisterActivity.this, "Couldn't log in ", Toast.LENGTH_LONG).show();
+
+            }
+        });
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         //adding validation to edit-texts
         mAwesomeValidation.addValidation(this, R.id.fname_text_input_layout, "[a-zA-Z\\s]+", R.string.fnameerror);
@@ -115,6 +206,186 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    // [START signOut]
+    private void signOut() {
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // [START_EXCLUDE]
+                        //TODO signout
+                        //updateUI(false);
+                        // [END_EXCLUDE]
+                    }
+                });
+    }
+// [END signOut]
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            Log.d(TAG, "Result : " + result.isSuccess() + " " + result.getStatus() + "  " + result.getSignInAccount());
+            handleGoogleSignInResult(result);
+        } else
+            //Result from Facebook login
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    private void handleGoogleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.toString());
+        if (result.isSuccess()) {
+            //TODO work on updating the UI & crosscheck if already updated
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            Toast.makeText(this, "Google Login successful for" + acct.getDisplayName(), Toast.LENGTH_LONG).show();
+            String fullName = acct.getDisplayName();
+            firstName = acct.getGivenName();
+            lastName = acct.getFamilyName();
+            email = acct.getEmail();
+            String googleID = acct.getId();
+            Log.d(TAG, acct.toString());
+            session.setLoggedInMethod("google");
+            Toast.makeText(this, "firstname " + firstName + "  " + lastName + "  " + email, Toast.LENGTH_LONG).show();
+            if (isAlreadyUser(email)) {
+                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+
+                registerUser(firstName, lastName, email, null, null, null);
+            }
+
+            // mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
+            showProgress(false);
+            // updateUI(true);
+        } else {
+            // Signed out, show unauthenticated UI.
+            // updateUI(false);
+            showProgress(false);
+            Toast.makeText(this, "Google Authentication wasn't successful, Try another way", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
+
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                Log.i(TAG, response.toString());
+                // Get facebook data from login
+                //Intent i = new Intent(LoginActivity.this,HomePage.class);
+                //startActivity(i);
+                //i.putExtras(bFacebookData);
+
+                try {
+                    if (object.has("first_name")) {
+
+                        firstName = object.getString("first_name");
+                    }
+                    if (object.has("last_name")) {
+                        lastName = object.getString("last_name");
+
+                    }
+                    if (object.has("email")) {
+                        email = object.getString("email");
+
+                    }
+                    if (object.has("gender")) {
+                        gender = object.getString("gender");
+                    }
+
+
+                    session.setLoggedInMethod("facebook");
+                    if (isAlreadyUser(email)) {
+                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    } else registerUser(firstName, lastName, email, null, gender, null);
+//TODO submit to review first
+             /*   if (object.has("location")) {
+                    String location = object.getJSONObject("location").getString("name");
+
+                }
+                    if (object.has("birthday")) {
+                        String birthday = object.getString("birthday");
+
+                    }*/
+                } catch (JSONException e) {
+                    Log.d(TAG, "JSONException " + e);
+                }
+
+                Toast.makeText(RegisterActivity.this, object.toString(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id, first_name, last_name, email,gender" /*, birthday, location" */); // Parámetros que pedimos a facebook
+        request.setParameters(parameters);
+        request.executeAsync();
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+/*
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (opr.isDone()) {
+            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+            // and the GoogleSignInResult will be available instantly.
+            Log.d(TAG, "Got cached sign-in");
+            GoogleSignInResult result = opr.get();
+            handleGoogleSignInResult(result);
+        } else {
+            // If the user has not previously signed in on this device or the sign-in has expired,
+            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+            // single sign-on will occur in this branch.
+            showProgress(true);
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(GoogleSignInResult googleSignInResult) {
+                    showProgress(false);
+                    handleGoogleSignInResult(googleSignInResult);
+                }
+            });
+        }
+  */
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showProgress(false);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mProgressView != null) {
+            showProgress(false);
+        }
+    }
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -148,6 +419,7 @@ public class RegisterActivity extends AppCompatActivity {
             showProgress(true);
 
 
+            session.setLoggedInMethod("email");
             registerUser(firstName, lastName, email, mobile, gender, password);
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);
@@ -300,6 +572,7 @@ public class RegisterActivity extends AppCompatActivity {
             };
 
 
+
             // Adding request to request queue
             AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
@@ -307,6 +580,95 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();
     */
     }
+
+    private boolean isAlreadyUser(String userName) {
+
+        return false;
+        /*
+        if (isNetworkAvailable(getApplicationContext())) {
+
+            // Tag used to cancel the request
+            String tag_string_req = "req_check_user";
+            userId = userName;
+            isUserExists = false;
+
+
+            showProgress(true);
+
+            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
+                    ServerConstants.serverUrl.POST_VALID_USER, null, new Response.Listener<JSONObject>() {
+                @SuppressLint("LongLogTag")
+
+                @Override
+                public void onResponse(JSONObject jsonObject) {
+                    Log.d(TAG, "Login Response: " + jsonObject.toString());
+                    showProgress(false);
+
+                    try {
+
+                        // user successfully logged in
+                        // Create login session
+
+
+                        //JSONObject jObj = new JSONObject(jsonObject);
+
+                        boolean error = jsonObject.getBoolean("error");
+                        if (!error) {
+                            isUserExists = jsonObject.getBoolean("success");
+
+
+                            Toast.makeText(getApplicationContext(), "User authentication successful", Toast.LENGTH_LONG).show();
+                        } else {
+
+                            // Error occurred in login. Get the error
+                            // message
+                            isUserExists = false;
+
+                            //session.setLogin(false);
+                            String errorMsg = jsonObject.getString("error_msg");
+                            Toast.makeText(getApplicationContext(),
+                                    errorMsg, Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(),
+                                "" + e, Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "Registration Error: " + error.getMessage());
+                    Toast.makeText(getApplicationContext(),
+                            error.getMessage(), Toast.LENGTH_LONG).show();
+                    showProgress(false);
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting params to register url
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("userId", userId);
+
+                    return params;
+                }
+
+            };
+
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+            return isUserExists;
+        } else
+            Toast.makeText(getApplicationContext(), "Network is not available , try again later", Toast.LENGTH_LONG).show();
+        return false;
+        */
+    }
+
 
 
 }

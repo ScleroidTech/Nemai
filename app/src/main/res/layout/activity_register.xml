@@ -188,24 +188,44 @@
             <LinearLayout
                 android:id="@+id/register_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="52dp"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:orientation="horizontal">
 
 
-                <com.google.android.gms.common.SignInButton
-                    android:id="@+id/google_sign_in_button"
+                <!-- <com.google.android.gms.common.SignInButton
+                     android:id="@+id/google_sign_in_button"
+                     android:layout_width="0dp"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="0.5" />
+                 -->
+                <Button
+                    android:id="@+id/google_login"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5" />
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="0.5"
+
+                    android:background="@drawable/border_shadow_google"
+                    android:drawableStart="@drawable/googleg_standard_color_18"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
+                    android:text="Sign in"
+                    android:textAllCaps="false"
+                    android:textColor="#000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <FrameLayout
                     android:id="@+id/FrameLayoutFbButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5">
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="0.5"
+
+                    android:background="@drawable/border_shadow_fb">
 
                     <com.facebook.login.widget.LoginButton
                         android:id="@+id/facebook_login_button"
@@ -226,15 +246,16 @@
                         android:id="@+id/fb_custom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#3B5991"
+                        android:background="@drawable/border_shadow_fb"
                         android:drawableLeft="@drawable/facebook_logo"
                         android:drawableStart="@drawable/facebook_logo"
-                        android:paddingEnd="10dp"
+                        android:elevation="2dp"
+                        android:paddingEnd="20dp"
                         android:paddingStart="10dp"
 
-                        android:text="Facebook"
+                        android:text="Sign in"
                         android:textAllCaps="false"
-                        android:textColor="#ffffff"
+                        android:textColor="#fff"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </FrameLayout>

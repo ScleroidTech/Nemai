@@ -13,6 +13,9 @@ public class SessionManager {
     private static final String PREF_NAME = "NemaiApp";
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
     private static final String KEY_VERIFIED = "isVerified";
+
+
+    private static final String LOGGED_IN_METHOD = "loggedInVia";
     // LogCat tag
     private static String TAG = SessionManager.class.getSimpleName();
     // Shared Preferences
@@ -26,6 +29,20 @@ public class SessionManager {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
+    }
+
+    public static String getLoggedInMethod() {
+        return LOGGED_IN_METHOD;
+    }
+
+    public void setLoggedInMethod(String isLoggedIn) {
+
+        editor.putString(KEY_IS_LOGGEDIN, isLoggedIn);
+
+        // commit changes
+        editor.commit();
+
+        Log.d(TAG, "User login method noted!");
     }
 
     public boolean isVerified() {
