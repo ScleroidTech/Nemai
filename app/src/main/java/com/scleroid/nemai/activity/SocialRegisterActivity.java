@@ -37,8 +37,16 @@ public class SocialRegisterActivity extends AppCompatActivity {
 
     public static final String INTENT_PHONENUMBER = "phonenumber";
     public static final String INTENT_COUNTRY_CODE = "code";
+
+    public static final String INTENT_FIRST_NAME = "first_name";
+    public static final String INTENT_LAST_NAME = "last_name";
+    public static final String INTENT_EMAIL = "email";
+    public static final String INTENT_GENDER = "gender";
+    public static final String INTENT_METHOD = "login_method";
+
     public static final String INTENT_REASON = "reason";
     private static String TAG = SocialRegisterActivity.class.getSimpleName();
+    private String mFirstName, mLastName, mEmail, mGender, mLoginMethod;
     private EditText mPhoneNumber;
     private String PhoneNumber, CountryCode;
     private Button mSmsButton;
@@ -57,6 +65,16 @@ public class SocialRegisterActivity extends AppCompatActivity {
         mSmsButton = findViewById(R.id.smsVerificationButton);
         mLoginFormView = findViewById(R.id.register_social_form);
         mProgressView = findViewById(R.id.register_social_progress);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+
+            mFirstName = bundle.getString(INTENT_FIRST_NAME);
+            mLastName = bundle.getString(INTENT_LAST_NAME);
+            mEmail = bundle.getString(INTENT_EMAIL);
+            mGender = bundle.getString(INTENT_GENDER);
+            mLoginMethod = bundle.getString(INTENT_METHOD);
+        }
 
 
         mCountryIso = PhoneNumberUtils.getDefaultCountryIso(this);
@@ -118,7 +136,13 @@ public class SocialRegisterActivity extends AppCompatActivity {
     }
 
     public void onButtonClicked(View view) {
-        openActivity(getE164Number());
+        attemptSignup();
+    }
+
+    private void attemptSignup() {
+        String mobile = getE164Number();
+        registerSocialUser(mFirstName, mLastName, mEmail, mobile, mGender, mLoginMethod);
+
     }
 
     private void resetNumberTextWatcher(String countryIso) {
@@ -198,6 +222,117 @@ public class SocialRegisterActivity extends AppCompatActivity {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+    /**
+     * Function to store user in MySQL database will post params(tag, name,
+     * email, password) to register url
+     */
+    protected void registerSocialUser(final String firstName, final String lastName, final String email,
+                                      final String phone, final String gender, final String loginMethod) {
+
+        openActivity(phone);
+
+
+        /*
+        if (isNetworkAvailable(getApplicationContext())) {
+
+            // Tag used to cancel the request
+            String tag_string_req = "req_register";
+
+
+            showProgress(true);
+
+
+            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
+                    ServerConstants.serverUrl.POST_REGISTER, null, new Response.Listener<JSONObject>() {
+                @SuppressLint("LongLogTag")
+
+                @Override
+                public void onResponse(JSONObject jsonObject) {
+                    Log.d(TAG, "Register Response: " + jsonObject.toString());
+                    showProgress(false);
+
+                    try {
+
+                        // user successfully logged in
+                        // Create login session
+
+
+                        //JSONObject jObj = new JSONObject(jsonObject);
+
+                        //boolean error = jsonObject.getBoolean("error");
+                        if (true) {
+
+                            Toast.makeText(getApplicationContext(), "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
+
+                            //session.setLogin(true);
+
+                            openActivity(phone);
+                            // Launch login activity
+                        /*Intent intent = new Intent(
+                                RegisterActivity.this,
+                                LoginActivity.class);
+                        startActivity(intent);
+                            //finish();
+                        } else {
+
+                            // Error occurred in registration. Get the error
+                            // message
+                            session.setLogin(false);
+                            String errorMsg = jsonObject.getString("error_msg");
+                            Toast.makeText(getApplicationContext(),
+                                    errorMsg, Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Error in data parsing " + e.getMessage());
+                        //e.printStackTrace();
+                        Toast.makeText(getApplicationContext(),
+                                "" + e, Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "Registration Error: " + error.getMessage());
+                    Toast.makeText(getApplicationContext(),
+                            error.getMessage(), Toast.LENGTH_LONG).show();
+                    showProgress(false);
+                }
+            }) {
+
+
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting params to register url
+
+
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_SOCIAL_REGISTER);
+
+                    params.put("fname", firstName);
+                    params.put("lname", lastName);
+                    params.put("gender", gender);
+                    params.put("email", email);
+                    params.put("phone", phone);
+                    params.put("method",loginMethod);
+
+                    return params;
+                }
+
+            };
+
+
+
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+        } else
+            Toast.makeText(getApplicationContext(), "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();
+    */
     }
 
 

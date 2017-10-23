@@ -52,6 +52,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.hbb20.CountryCodePicker;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.other.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -371,7 +372,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             //TODO work on updating the UI & crosscheck if already updated
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            Toast.makeText(this, "Google Login successful for" + acct.getDisplayName(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Google Login successful for " + acct.getDisplayName(), Toast.LENGTH_LONG).show();
             String fullName = acct.getDisplayName();
             firstName = acct.getGivenName();
             lastName = acct.getFamilyName();
@@ -379,15 +380,23 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             String googleID = acct.getId();
             Log.d(TAG, acct.toString());
             session.setLoggedInMethod("google");
-            Toast.makeText(this, "firstname " + firstName + "  " + lastName + "  " + email, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, " firstname " + firstName + "  " + lastName + "  " + email, Toast.LENGTH_LONG).show();
+            Intent intent;
             if (isAlreadyUser(email)) {
-                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
+                intent = new Intent(RegisterActivity.this, MainActivity.class);
 
-                registerUser(firstName, lastName, email, null, null, null);
+            } else {
+                intent = new Intent(RegisterActivity.this, SocialRegisterActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString(SocialRegisterActivity.INTENT_FIRST_NAME, firstName);
+                extras.putString(SocialRegisterActivity.INTENT_LAST_NAME, lastName);
+                extras.putString(SocialRegisterActivity.INTENT_EMAIL, email);
+                extras.putString(SocialRegisterActivity.INTENT_METHOD, SessionManager.getLoggedInMethod());
+                intent.putExtras(extras);
             }
+
+            startActivity(intent);
+            finish();
 
             // mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             showProgress(false);
@@ -432,12 +441,23 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
 
                     session.setLoggedInMethod("facebook");
+                    Intent intent;
                     if (isAlreadyUser(email)) {
-                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        intent = new Intent(RegisterActivity.this, MainActivity.class);
 
-                    } else registerUser(firstName, lastName, email, null, gender, null);
+                    } else {
+                        intent = new Intent(RegisterActivity.this, SocialRegisterActivity.class);
+                        Bundle extras = new Bundle();
+                        extras.putString(SocialRegisterActivity.INTENT_FIRST_NAME, firstName);
+                        extras.putString(SocialRegisterActivity.INTENT_LAST_NAME, lastName);
+                        extras.putString(SocialRegisterActivity.INTENT_EMAIL, email);
+                        extras.putString(SocialRegisterActivity.INTENT_GENDER, gender);
+                        extras.putString(SocialRegisterActivity.INTENT_METHOD, SessionManager.getLoggedInMethod());
+                        intent.putExtras(extras);
+                    }
+                    startActivity(intent);
+                    finish();
+
 //TODO submit to review first
              /*   if (object.has("location")) {
                     String location = object.getJSONObject("location").getString("name");
