@@ -13,6 +13,7 @@ public class ServerConstants {
         public static final String POST_PINCODE_LIST = "http://ec2-18-221-108-81.us-east-2.compute.amazonaws.com:3008/customer";
 
         public static final String POST_REGISTER = "http://ec2-18-221-108-81.us-east-2.compute.amazonaws.com:3008/insertuser";
+        public static final String POST_SOCIAL_REGISTER = "http://ec2-18-221-108-81.us-east-2.compute.amazonaws.com:3008/insertuser";
         public static final String POST_LOGIN = "abcd  ";
         public static final String POST_VALID_USER = "abcd  ";
         public static final String POST_RESET_PASS = "abcd  ";
