@@ -32,6 +32,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements
     private static final String TAG = Verification.class.getSimpleName();
     TextView resend_timer;
     TextView resend_sms_timer;
+    private String phoneNumber;
     private boolean reason;
     private Verification mVerification;
 
@@ -99,7 +100,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements
     void initiateVerification(boolean skipPermissionCheck) {
         Intent intent = getIntent();
         if (intent != null) {
-            String phoneNumber = intent.getStringExtra(VerificationActivity.INTENT_PHONENUMBER);
+            phoneNumber = intent.getStringExtra(VerificationActivity.INTENT_PHONENUMBER);
             String countryCode = intent.getStringExtra(VerificationActivity.INTENT_COUNTRY_CODE);
             reason = intent.getBooleanExtra(VerificationActivity.INTENT_REASON, false);
             TextView phoneText = findViewById(R.id.numberText);
@@ -182,14 +183,16 @@ public class OtpVerificationActivity extends AppCompatActivity implements
         hideKeypad();
         hideProgressBarAndShowMessage(R.string.verified);
         showCompleted();
-        session.setVerified(true);
-        session.setLogin(true);
-        Intent verification;
-        if (reason)
-            verification = new Intent(OtpVerificationActivity.this, PasswordChangeActivity.class);
-        else
-            verification = new Intent(OtpVerificationActivity.this, MainActivity.class);
 
+        Intent verification;
+        if (reason) {
+            verification = new Intent(OtpVerificationActivity.this, PasswordChangeActivity.class);
+            verification.putExtra(VerificationActivity.INTENT_PHONENUMBER, phoneNumber);
+        } else {
+            session.setVerified(true);
+            session.setLogin(true);
+            verification = new Intent(OtpVerificationActivity.this, MainActivity.class);
+        }
         startActivity(verification);
         finish();
 
@@ -206,39 +209,41 @@ public class OtpVerificationActivity extends AppCompatActivity implements
 
     private void startTimer() {
         resend_timer.setClickable(false);
+        resend_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.sendotp_grey));
         resend_sms_timer.setClickable(false);
         resend_sms_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.sendotp_grey));
-        resend_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.sendotp_grey));
+
         new CountDownTimer(60000, 1000) {
             int secondsLeft = 0;
 
             public void onTick(long ms) {
                 if (Math.round((float) ms / 1000.0f) != secondsLeft) {
                     secondsLeft = Math.round((float) ms / 1000.0f);
-                    resend_timer.setText("Resend via call ( " + secondsLeft + " )");
+                    resend_timer.setText("Resend via Call ( " + secondsLeft + " )");
                 }
             }
 
             public void onFinish() {
                 resend_timer.setClickable(true);
-                resend_timer.setText("Resend via call");
+                resend_timer.setText("Resend via Call");
                 resend_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.colorPrimary));
             }
         }.start();
+
         new CountDownTimer(30000, 1000) {
             int secondsLeft = 0;
 
             public void onTick(long ms) {
                 if (Math.round((float) ms / 1000.0f) != secondsLeft) {
                     secondsLeft = Math.round((float) ms / 1000.0f);
-                    resend_timer.setText("Resend via Text ( " + secondsLeft + " )");
+                    resend_sms_timer.setText("Resend via Text ( " + secondsLeft + " )");
                 }
             }
 
             public void onFinish() {
-                resend_timer.setClickable(true);
-                resend_timer.setText("Resend via Text");
-                resend_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.colorPrimary));
+                resend_sms_timer.setClickable(true);
+                resend_sms_timer.setText("Resend via Text");
+                resend_sms_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.colorPrimary));
             }
         }.start();
     }
