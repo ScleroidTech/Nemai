@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,7 +15,11 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <ScrollView
+    <!--<ScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">-->
+    <RelativeLayout
         android:id="@+id/register_social_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -41,22 +45,21 @@
                  android:textColor="@color/colorPrimary"
                  android:textSize="18sp" />
      -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <!--  <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">-->
 
                 <com.hbb20.CountryCodePicker
                     android:id="@+id/ccp2"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.304"
-                    app:ccp_showFullName="true" />
+                    app:ccp_showFullName="true"
+                    app:ccp_textSize="32dp" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/mobile_text_input_layout"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.706"
                     app:counterEnabled="true"
                     app:counterMaxLength="10">
 
@@ -67,87 +70,87 @@
                         android:hint="@string/prompt_phone_only"
                         android:inputType="phone"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="20sp">
+                        android:textSize="32sp">
 
                         <requestFocus />
                     </EditText>
                 </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
+            <!--</LinearLayout>-->
+
+            <!--
+                        <RadioGroup
+                            android:id="@+id/gender_radio_group"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="0.24"
+                                android:text="@string/prompt_gender"
+                                android:textSize="18sp" />
+
+                            <RadioButton
+                                android:id="@+id/gender_male_radio"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.4"
+                                android:checked="true"
+                                android:paddingLeft="15dp"
+                                android:text="@string/prompt_gender_male"
+                                android:textColor="@drawable/selector_textview"
+                                android:textSize="18sp" />
+
+                            <RadioButton
+                                android:id="@+id/gender_female_radio"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.4"
+                                android:checked="false"
+                                android:paddingLeft="15dp"
+                                android:text="@string/prompt_gender_female"
+                                android:textColor="@drawable/selector_textview"
+                                android:textSize="18sp" />
+                        </RadioGroup>
 
 
-            <RadioGroup
-                android:id="@+id/gender_radio_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="0.24"
-                    android:text="@string/prompt_gender"
-                    android:textSize="18sp" />
-
-                <RadioButton
-                    android:id="@+id/gender_male_radio"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:checked="true"
-                    android:paddingLeft="15dp"
-                    android:text="@string/prompt_gender_male"
-                    android:textColor="@drawable/selector_textview"
-                    android:textSize="18sp" />
-
-                <RadioButton
-                    android:id="@+id/gender_female_radio"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:checked="false"
-                    android:paddingLeft="15dp"
-                    android:text="@string/prompt_gender_female"
-                    android:textColor="@drawable/selector_textview"
-                    android:textSize="18sp" />
-            </RadioGroup>
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/password_text_input_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:passwordToggleEnabled="true"
+                            app:passwordToggleTint="@color/colorPrimary">
 
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/password_text_input_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/colorPrimary">
+                            <EditText
+                                android:id="@+id/password"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/prompt_password" />
 
+                        </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password" />
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/password_again_text_input_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:passwordToggleEnabled="true"
+                            app:passwordToggleTint="@color/colorPrimary">
 
-            </android.support.design.widget.TextInputLayout>
+                            <EditText
+                                android:id="@+id/passwordAgain"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/prompt_password_again"
+                                android:imeActionLabel="@string/action_sign_in_short"
+                                android:imeOptions="actionDone"
+                                android:maxLines="1"
+                                android:singleLine="true" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/password_again_text_input_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/colorPrimary">
-
-                <EditText
-                    android:id="@+id/passwordAgain"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password_again"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionDone"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </android.support.design.widget.TextInputLayout>
+                        </android.support.design.widget.TextInputLayout>-->
         </LinearLayout>
 
         <LinearLayout
@@ -176,5 +179,6 @@
 
 
         </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+    </RelativeLayout>
+    <!--</ScrollView>-->
+</LinearLayout>

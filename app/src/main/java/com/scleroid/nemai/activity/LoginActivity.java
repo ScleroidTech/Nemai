@@ -50,6 +50,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.other.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,7 +63,6 @@ import java.util.regex.Pattern;
 import static android.Manifest.permission.READ_CONTACTS;
 import static com.scleroid.nemai.activity.MainActivity.session;
 import static com.scleroid.nemai.activity.RegisterActivity.isNetworkAvailable;
-import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_PHONENUMBER;
 
 
 /**
@@ -520,7 +520,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 finish();
             } else {
 
-                registerUser(firstName, lastName, email, null, null, null);
+                registerUser(firstName, lastName, email, null);
             }
 
             // mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
@@ -571,7 +571,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         startActivity(intent);
                         finish();
 
-                    } else registerUser(firstName, lastName, email, null, gender, null);
+                    } else registerUser(firstName, lastName, email, gender);
 //TODO submit to review first
              /*   if (object.has("location")) {
                     String location = object.getJSONObject("location").getString("name");
@@ -648,6 +648,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Tag used to cancel the request
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
 
     /*
         if (isNetworkAvailable(getApplicationContext())) {
@@ -824,109 +825,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         */
     }
 
-    /**
-     * Function to store user in MySQL database will post params(tag, name,
-     * email, password) to register url
-     */
-    protected void registerUser(final String firstName, final String lastName, final String email,
-                                final String phone, final String gender, final String password) {
-        Intent verification = new Intent(getBaseContext(), SocialRegisterActivity.class);
 
-        verification.putExtra(INTENT_PHONENUMBER, phone);
-        startActivity(verification);
+    protected void registerUser(final String firstName, final String lastName, final String email, final String gender) {
+        if (isNetworkAvailable(getApplicationContext())) {
+            Intent intent = new Intent(LoginActivity.this, SocialRegisterActivity.class);
+            Bundle extras = new Bundle();
+            extras.putString(SocialRegisterActivity.INTENT_FIRST_NAME, firstName);
+            extras.putString(SocialRegisterActivity.INTENT_LAST_NAME, lastName);
+            extras.putString(SocialRegisterActivity.INTENT_EMAIL, email);
+            extras.putString(SocialRegisterActivity.INTENT_GENDER, gender);
+            extras.putString(SocialRegisterActivity.INTENT_METHOD, SessionManager.getLoggedInMethod());
+            intent.putExtras(extras);
+            startActivity(intent);
         finish();
 
-        return;
-        /*
-        // Tag used to cancel the request
-        if (isNetworkAvailable(getApplicationContext())) {
-
-
-            String tag_string_req = "req_register";
-
-
-            showProgress(true);
-
-            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_REGISTER, null, new Response.Listener<JSONObject>() {
-                @SuppressLint("LongLogTag")
-
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    Log.d(TAG, "Register Response: " + jsonObject.toString());
-                    showProgress(false);
-
-                    try {
-
-                        // user successfully logged in
-                        // Create login session
-
-
-                        //JSONObject jObj = new JSONObject(jsonObject);
-
-                        boolean error = jsonObject.getBoolean("error");
-                        if (!error) {
-
-                            Toast.makeText(getApplicationContext(), "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
-
-                            //session.setLogin(true);
-
-                            Intent verification = new Intent(getBaseContext(), SocialRegisterActivity.class);
-
-                            verification.putExtra(INTENT_PHONENUMBER, phone);
-                            startActivity(verification);
-                            finish();
-
-                        } else {
-
-                            // Error occurred in registration. Get the error
-                            // message
-                            session.setLogin(false);
-                            // String errorMsg = jsonObject.getString("error_msg");
-                            // Toast.makeText(getApplicationContext(),
-                            //        errorMsg, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Error in data parsing " + e.getMessage());
-                        Toast.makeText(getApplicationContext(),
-                                "" + e, Toast.LENGTH_LONG).show();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-
-                @SuppressLint("LongLogTag")
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Registration Error: " + error.getMessage());
-                    Toast.makeText(getApplicationContext(),
-                            error.getMessage(), Toast.LENGTH_LONG).show();
-                    showProgress(false);
-                }
-            }) {
-
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting params to register url
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("fname", firstName);
-                    params.put("lname", lastName);
-                    params.put("gender", gender);
-                    params.put("email", email);
-                    params.put("phone", phone);
-                    params.put("password", password);
-
-                    return params;
-                }
-
-            };
-
-
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
         } else
             Toast.makeText(getApplicationContext(), "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();
-*/
+
 
     }
 
