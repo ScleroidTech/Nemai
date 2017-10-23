@@ -48,8 +48,8 @@ public class PasswordChangeActivity extends AppCompatActivity {
         final Intent intent = getIntent();
 
         if (intent != null) {
-            mMobileView.setText(intent.getStringExtra(VerificationActivity.INTENT_PHONENUMBER));
-//            ccp.setCountryForNameCode(intent.getStringExtra(VerificationActivity.INTENT_COUNTRY_CODE));
+            mMobileView.setText(intent.getStringExtra(SocialRegisterActivity.INTENT_PHONENUMBER));
+//            ccp.setCountryForNameCode(intent.getStringExtra(SocialRegisterActivity.INTENT_COUNTRY_CODE));
         }
         mChangePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override

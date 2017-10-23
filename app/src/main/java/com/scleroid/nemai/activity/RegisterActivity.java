@@ -64,8 +64,8 @@ import java.util.regex.Pattern;
 import static android.Manifest.permission.READ_CONTACTS;
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
 import static com.scleroid.nemai.activity.MainActivity.session;
-import static com.scleroid.nemai.activity.VerificationActivity.INTENT_COUNTRY_CODE;
-import static com.scleroid.nemai.activity.VerificationActivity.INTENT_PHONENUMBER;
+import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_COUNTRY_CODE;
+import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_PHONENUMBER;
 
 /**
  * A login screen that offers login via email/password.
@@ -135,6 +135,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         ccp = findViewById(R.id.ccp);
         ccp.registerCarrierNumberEditText(mMobileNumberview);
         ccp.setCcpClickable(false);
+        ccp.setNumberAutoFormattingEnabled(false);
         countryCode = ccp.getSelectedCountryCode();
         Log.d(TAG, "Country Code " + countryCode);
 
@@ -627,7 +628,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
                             //session.setLogin(true);
 
-                            Intent verification = new Intent(getBaseContext(), VerificationActivity.class);
+                            Intent verification = new Intent(getBaseContext(), SocialRegisterActivity.class);
 
                             verification.putExtra(INTENT_PHONENUMBER, phone);
                             startActivity(verification);

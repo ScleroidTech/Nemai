@@ -47,7 +47,7 @@
             android:exported="true"
             android:label="@string/title_activity_register" />
         <activity
-            android:name=".activity.VerificationActivity"
+            android:name=".activity.SocialRegisterActivity"
             android:exported="true"
             android:label="@string/title_activity_password" />
         <activity

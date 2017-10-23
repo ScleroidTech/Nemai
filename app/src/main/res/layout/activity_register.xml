@@ -102,7 +102,9 @@
                     android:id="@+id/mobile_text_input_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.706">
+                    android:layout_weight="0.706"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="10">
 
                     <EditText
                         android:id="@+id/mobile"

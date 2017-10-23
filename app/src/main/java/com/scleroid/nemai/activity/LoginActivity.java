@@ -62,7 +62,7 @@ import java.util.regex.Pattern;
 import static android.Manifest.permission.READ_CONTACTS;
 import static com.scleroid.nemai.activity.MainActivity.session;
 import static com.scleroid.nemai.activity.RegisterActivity.isNetworkAvailable;
-import static com.scleroid.nemai.activity.VerificationActivity.INTENT_PHONENUMBER;
+import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_PHONENUMBER;
 
 
 /**
@@ -830,7 +830,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     protected void registerUser(final String firstName, final String lastName, final String email,
                                 final String phone, final String gender, final String password) {
-        Intent verification = new Intent(getBaseContext(), VerificationActivity.class);
+        Intent verification = new Intent(getBaseContext(), SocialRegisterActivity.class);
 
         verification.putExtra(INTENT_PHONENUMBER, phone);
         startActivity(verification);
@@ -871,7 +871,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                             //session.setLogin(true);
 
-                            Intent verification = new Intent(getBaseContext(), VerificationActivity.class);
+                            Intent verification = new Intent(getBaseContext(), SocialRegisterActivity.class);
 
                             verification.putExtra(INTENT_PHONENUMBER, phone);
                             startActivity(verification);

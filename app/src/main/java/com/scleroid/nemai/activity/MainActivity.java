@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
         } else if (!session.isVerified()) {
-            startActivity(new Intent(MainActivity.this, VerificationActivity.class));
+            startActivity(new Intent(MainActivity.this, SocialRegisterActivity.class));
         }
 
         toolbar = findViewById(R.id.toolbar);
