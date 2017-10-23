@@ -94,6 +94,7 @@
     <string name="submit_main"><![CDATA[Submit & Search]]></string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="register_text">New User? \n<b> Register Here </b></string>
+    <string name="title_activity_login2">Sign in</string>
 
 
 </resources>

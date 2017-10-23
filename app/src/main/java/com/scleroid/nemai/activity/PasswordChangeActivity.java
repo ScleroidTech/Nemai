@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
-import com.hbb20.CountryCodePicker;
 import com.scleroid.nemai.R;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
@@ -25,7 +24,7 @@ public class PasswordChangeActivity extends AppCompatActivity {
     private AwesomeValidation mAwesomeValidation;
     private EditText mPasswordView, mPasswordAgain, mMobileView;
     private TextInputLayout mMobileTIL;
-    private CountryCodePicker ccp;
+
     private Button mChangePasswordButton;
     private boolean mAuthTask = false;
     private View mLoginFormView;
@@ -40,7 +39,7 @@ public class PasswordChangeActivity extends AppCompatActivity {
 
         mPasswordView = findViewById(R.id.passwordnew);
         mPasswordAgain = findViewById(R.id.passwordAgainnew);
-        mMobileView = findViewById(R.id.mobile_password);
+        mMobileView = findViewById(R.id.otp_password);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.password_progress);
         mMobileView.setEnabled(false);
@@ -50,7 +49,7 @@ public class PasswordChangeActivity extends AppCompatActivity {
 
         if (intent != null) {
             mMobileView.setText(intent.getStringExtra(VerificationActivity.INTENT_PHONENUMBER));
-            ccp.setCountryForNameCode(intent.getStringExtra(VerificationActivity.INTENT_COUNTRY_CODE));
+//            ccp.setCountryForNameCode(intent.getStringExtra(VerificationActivity.INTENT_COUNTRY_CODE));
         }
         mChangePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,8 +62,6 @@ public class PasswordChangeActivity extends AppCompatActivity {
 
             }
         });
-        ccp = findViewById(R.id.ccp_password);
-        ccp.setClickable(false);
 
 
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
