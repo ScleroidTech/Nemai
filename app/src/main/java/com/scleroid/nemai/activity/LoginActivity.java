@@ -108,6 +108,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = findViewById(R.id.email_login);
         mPasswordView = findViewById(R.id.password_login);
+        populateAutoComplete();
 
         TextView mRegisterTextView = findViewById(R.id.register_link_text_view);
         mRegisterTextView.setOnClickListener(new OnClickListener() {
@@ -142,7 +143,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
 
-        populateAutoComplete();
+
 
         mPasswordView = findViewById(R.id.password_login);
         mPasswordTextInputLayout = findViewById(R.id.password_login_text_input_layout);
@@ -269,7 +270,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 // [END signOut]
 
-    private void populateAutoComplete() {
+    public void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
         }
@@ -305,7 +306,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (REQUEST_READ_CONTACTS == requestCode) {
+        if (requestCode == REQUEST_READ_CONTACTS) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 populateAutoComplete();
             }
@@ -454,8 +455,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             emails.add(cursor.getString(ProfileQuery.ADDRESS));
+
+            Log.d(TAG, "Email List" + cursor.getString(ProfileQuery.ADDRESS));
             cursor.moveToNext();
         }
+
 
         addEmailsToAutoComplete(emails);
     }
@@ -621,6 +625,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
   */
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -928,12 +933,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+                //ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
         };
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
+
 
 }
 

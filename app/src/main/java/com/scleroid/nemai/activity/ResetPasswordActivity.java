@@ -208,7 +208,9 @@ public class ResetPasswordActivity extends AppCompatActivity implements LoaderMa
                     }
                 });
             } else {
-                Intent intent = new Intent(ResetPasswordActivity.this, VerificationActivity.class);
+                Intent intent = new Intent(ResetPasswordActivity.this, OtpVerificationActivity.class);
+                intent.putExtra(VerificationActivity.INTENT_PHONENUMBER, email);
+                intent.putExtra(VerificationActivity.INTENT_COUNTRY_CODE, "91");
                 intent.putExtra(VerificationActivity.INTENT_REASON, true);
                 startActivity(intent);
             }
