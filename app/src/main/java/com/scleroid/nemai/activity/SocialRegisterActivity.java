@@ -84,6 +84,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
         ccp = findViewById(R.id.ccp2);
         ccp.registerCarrierNumberEditText(mPhoneNumber);
         ccp.setCcpClickable(false);
+        ccp.setNumberAutoFormattingEnabled(false);
 
 
 
