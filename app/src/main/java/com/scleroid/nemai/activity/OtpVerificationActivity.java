@@ -25,7 +25,7 @@ import com.scleroid.nemai.R;
 
 import static com.scleroid.nemai.activity.MainActivity.session;
 
-//TODO send by call button not working, remove the phone number screen, call OTPVerificationActivity, Add multiple parcel options, disable country selection from the phone
+//TODO Add multiple parcel options
 public class OtpVerificationActivity extends AppCompatActivity implements
         ActivityCompat.OnRequestPermissionsResultCallback, VerificationListener {
 
@@ -100,9 +100,9 @@ public class OtpVerificationActivity extends AppCompatActivity implements
     void initiateVerification(boolean skipPermissionCheck) {
         Intent intent = getIntent();
         if (intent != null) {
-            phoneNumber = intent.getStringExtra(VerificationActivity.INTENT_PHONENUMBER);
-            String countryCode = intent.getStringExtra(VerificationActivity.INTENT_COUNTRY_CODE);
-            reason = intent.getBooleanExtra(VerificationActivity.INTENT_REASON, false);
+            phoneNumber = intent.getStringExtra(SocialRegisterActivity.INTENT_PHONENUMBER);
+            String countryCode = intent.getStringExtra(SocialRegisterActivity.INTENT_COUNTRY_CODE);
+            reason = intent.getBooleanExtra(SocialRegisterActivity.INTENT_REASON, false);
             TextView phoneText = findViewById(R.id.numberText);
             phoneText.setText("+" + countryCode + phoneNumber);
             createVerification(phoneNumber, skipPermissionCheck, countryCode);
@@ -187,7 +187,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements
         Intent verification;
         if (reason) {
             verification = new Intent(OtpVerificationActivity.this, PasswordChangeActivity.class);
-            verification.putExtra(VerificationActivity.INTENT_PHONENUMBER, phoneNumber);
+            verification.putExtra(SocialRegisterActivity.INTENT_PHONENUMBER, phoneNumber);
         } else {
             session.setVerified(true);
             session.setLogin(true);
