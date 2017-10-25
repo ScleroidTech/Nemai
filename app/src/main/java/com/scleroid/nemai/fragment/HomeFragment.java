@@ -60,9 +60,9 @@ public class HomeFragment extends Fragment {
     Button mSubmitButton;
     TextView mWeightUnitTextView;
     ImageView mAddressImageView;
-    TextInputLayout mWeightParcelTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mParcelDescTIL, mWeightDocTIL, mDescDocTIL, mPinSourceTIL, mPinDestTIL;
+    TextInputLayout mWeightTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mParcelDescTIL, mDescDocTIL, mPinSourceTIL, mPinDestTIL;
     DelayedAutoCompleteTextView pinSourceAutoCompleteTextView, pinDestinationAutoCompleteTextView;
-    EditText mWeightdocEditText, mWeightParcelEditText, mDescDocEditText, mInvoiceValueParcelEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescParcelEditText;
+    EditText mWeightEditText, mDescDocEditText, mInvoiceValueEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescParcelEditText;
     boolean toggleDocParcel = false;//false == doc, true == parcel
     boolean toggleDomInternational = false;//Domestic false , International = true
     public HomeFragment() {
@@ -78,7 +78,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        mWeightParcelTIL = v.findViewById(R.id.textWeight);
+        mWeightTIL = v.findViewById(R.id.textWeight);
         mInvoiceTIL = v.findViewById(R.id.textInvoice);
         mPinSourceTIL = v.findViewById(R.id.pin_source_TIL);
         mPinDestTIL = v.findViewById(R.id.pin_dest_TIL);
@@ -86,10 +86,9 @@ public class HomeFragment extends Fragment {
         mWidthTIL = v.findViewById(R.id.textWidth);
         mHeightTIL = v.findViewById(R.id.textHeight);
         mParcelDescTIL = v.findViewById(R.id.textPckDesc);
-        mWeightDocTIL = v.findViewById(R.id.textWeightDoc);
         mDescDocTIL = v.findViewById(R.id.textPckDescDoc);
-        mWeightParcelEditText = v.findViewById(R.id.editWeight);
-        mInvoiceValueParcelEditText = v.findViewById(R.id.editInvoice);
+        mWeightEditText = v.findViewById(R.id.editWeight);
+        mInvoiceValueEditText = v.findViewById(R.id.editInvoice);
         mPackageLengthParcelEditText = v.findViewById(R.id.editLength);
         mPackageWidthParcelEditText = v.findViewById(R.id.editWidth);
         mHeightParcelEditText = v.findViewById(R.id.editHeight);
@@ -140,8 +139,8 @@ public class HomeFragment extends Fragment {
 
 
         mWeightUnitTextView= v.findViewById(R.id.weight_unit_kg_textView);
-        mWeightdocEditText = v.findViewById(R.id.editWeightDoc);
-        mWeightdocEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mWeightEditText = v.findViewById(R.id.editWeightDoc);
+        mWeightEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if(hasFocus) mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -254,17 +253,25 @@ public class HomeFragment extends Fragment {
             noSubmit = true;
         } else mPinDestTIL.setErrorEnabled(false);
 
+        if (isEmpty(mWeightEditText)) {
+            mWeightTIL.setErrorEnabled(true);
+            mWeightTIL.setError("Enter the Weight");
+            noSubmit = true;
+        } else mWeightTIL.setErrorEnabled(false);
+
+        if (isEmpty(mInvoiceValueEditText)) {
+            mInvoiceTIL.setErrorEnabled(true);
+            mInvoiceTIL.setError("Enter the Invoice Value");
+        } else mInvoiceTIL.setErrorEnabled(false);
+
+
 
 
         if (toggleDomInternational) delivery = "International";
         else delivery = "Domestic";
         if (toggleDocParcel) {
 
-            if (isEmpty(mWeightParcelEditText)) {
-                mWeightParcelTIL.setErrorEnabled(true);
-                mWeightParcelTIL.setError("Enter the Weight");
-                noSubmit = true;
-            } else mWeightParcelTIL.setErrorEnabled(false);
+
 
             if (isEmpty(mPackageWidthParcelEditText)) {
                 mWidthTIL.setErrorEnabled(true);
@@ -284,33 +291,24 @@ public class HomeFragment extends Fragment {
                 noSubmit = true;
             } else mLengthTIL.setErrorEnabled(false);
 
-            if (isEmpty(mInvoiceValueParcelEditText)) {
-                mInvoiceTIL.setErrorEnabled(true);
-                mInvoiceTIL.setError("Enter the Invoice Value");
-            } else mInvoiceTIL.setErrorEnabled(false);
 
 
             if (!noSubmit)
-                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightParcelEditText.getText().toString(), mInvoiceValueParcelEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescParcelEditText.getText().toString(), "Parcel", delivery);
+                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescParcelEditText.getText().toString(), "Parcel", delivery);
 
 
         } else {
-            if (isEmpty(mWeightdocEditText)) {
-                mWeightDocTIL.setErrorEnabled(true);
-                mWeightDocTIL.setError("Enter the Weight");
-                noSubmit = true;
 
-            } else mWeightDocTIL.setErrorEnabled(false);
 
             if (!noSubmit) {
-                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightdocEditText.getText().toString(), mDescDocEditText.getText().toString(), "Documents", delivery);
+                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mDescDocEditText.getText().toString(), "Documents", delivery);
 
             }
         }
     }
 
-    private void nextScreenDocument(String source, String destination, String weight, String description, String packageType, String deliveryType) {
-        submitRequest(source, destination, weight, null, null, null, null, description, packageType, deliveryType);
+    private void nextScreenDocument(String source, String destination, String weight, String invoice, String description, String packageType, String deliveryType) {
+        submitRequest(source, destination, weight, invoice, null, null, null, description, packageType, deliveryType);
     }
 
 
