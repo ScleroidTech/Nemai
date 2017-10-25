@@ -257,6 +257,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
+                    android:baselineAligned="false"
                     android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
@@ -342,6 +343,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
+                    android:baselineAligned="false"
                     android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
@@ -428,6 +430,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
+                    android:baselineAligned="false"
                     android:orientation="horizontal">
 
 

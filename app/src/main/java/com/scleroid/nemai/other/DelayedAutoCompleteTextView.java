@@ -21,7 +21,7 @@ public class DelayedAutoCompleteTextView extends android.support.v7.widget.AppCo
 
     private static final int MESSAGE_TEXT_CHANGED = 0;
     private static final int DEFAULT_AUTOCOMPLETE_DELAY = 1;
-    private final Handler mHandler;
+    private static Handler mHandler;
     private int mAutoCompleteDelay = DEFAULT_AUTOCOMPLETE_DELAY;
     private ProgressBar mLoadingIndicator;
 

@@ -118,21 +118,28 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public List<PinCode> getPincodes() {
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
+//        SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
         String query = "SELECT * from india";
-        Cursor cursor = db.rawQuery(query, null);
-        List<PinCode> list = new ArrayList<PinCode>();
-        while (cursor.moveToNext()) {
-            Log.d(TAG, cursor.getString(0) + " " + cursor.getString(1) + " " + cursor.getString(2) + " " + cursor.getString(3));
-            PinCode pinCode = new PinCode(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
-            list.add(pinCode);
+        List<PinCode> list;
+
+        try (SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
+             Cursor cursor = db.rawQuery(query, null)) {
+            list = new ArrayList<PinCode>();
+            while (cursor.moveToNext()) {
+                Log.d(TAG, cursor.getString(0) + " " + cursor.getString(1) + " " + cursor.getString(2) + " " + cursor.getString(3));
+                PinCode pinCode = new PinCode(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
+                list.add(pinCode);
+            }
         }
-        db.close();
+        /*finally {
+            db.close();
+        }*/
+
         return list;
     }
 
     public List<PinCode> getPincodes(String data) {
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
+//        SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
         String query;
         if (numberOrNot(data)) {
             query = "SELECT * from india where pincode LIKE ?";
@@ -141,14 +148,20 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
             query = "SELECT * from india where location LIKE ? or area LIKE ?";
 
         }
-        Cursor cursor = db.rawQuery(query, new String[]{data + "%", data + "%"});
-        List<PinCode> list = new ArrayList<PinCode>();
-        while (cursor.moveToNext()) {
-            // Log.d(TAG,cursor.getString(0)+" " +  cursor.getString(1) + " " + cursor.getString(2)+ " " + cursor.getString(3));
-            PinCode pinCode = new PinCode(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
-            list.add(pinCode);
+        List<PinCode> list;
+        try (SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
+             Cursor cursor = db.rawQuery(query, new String[]{data + "%", data + "%"})) {
+            list = new ArrayList<PinCode>();
+            while (cursor.moveToNext()) {
+                // Log.d(TAG,cursor.getString(0)+" " +  cursor.getString(1) + " " + cursor.getString(2)+ " " + cursor.getString(3));
+                PinCode pinCode = new PinCode(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
+                list.add(pinCode);
+            }
         }
-        db.close();
+        /*finally {
+            db.close();
+        }*/
+
         return list;
     }
 
