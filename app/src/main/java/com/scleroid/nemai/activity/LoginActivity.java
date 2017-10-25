@@ -827,8 +827,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
     protected void registerUser(final String firstName, final String lastName, final String email, final String gender) {
+
         if (isNetworkAvailable(getApplicationContext())) {
-            Intent intent = new Intent(LoginActivity.this, SocialRegisterActivity.class);
+            Intent intent;
+            intent = new Intent(LoginActivity.this, SocialRegisterActivity.class);
             Bundle extras = new Bundle();
             extras.putString(SocialRegisterActivity.INTENT_FIRST_NAME, firstName);
             extras.putString(SocialRegisterActivity.INTENT_LAST_NAME, lastName);
