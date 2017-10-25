@@ -21,21 +21,22 @@ public class DelayedAutoCompleteTextView extends android.support.v7.widget.AppCo
 
     private static final int MESSAGE_TEXT_CHANGED = 0;
     private static final int DEFAULT_AUTOCOMPLETE_DELAY = 1;
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-
-            DelayedAutoCompleteTextView.super.performFiltering((CharSequence) msg.obj, msg.arg1);
-
-
-        }
-    };
+    private final Handler mHandler;
     private int mAutoCompleteDelay = DEFAULT_AUTOCOMPLETE_DELAY;
     private ProgressBar mLoadingIndicator;
 
 
     public DelayedAutoCompleteTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+
+                DelayedAutoCompleteTextView.super.performFiltering((CharSequence) msg.obj, msg.arg1);
+
+
+            }
+        };
     }
 
     public void setLoadingIndicator(ProgressBar progressBar) {

@@ -29,6 +29,7 @@ public class SessionManager {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
+        editor.apply();
     }
 
     public static String getLoggedInMethod() {
@@ -40,7 +41,7 @@ public class SessionManager {
         editor.putString(KEY_IS_LOGGEDIN, isLoggedIn);
 
         // commit changes
-        editor.commit();
+        editor.apply();
 
         Log.d(TAG, "User login method noted!");
     }
@@ -51,7 +52,7 @@ public class SessionManager {
 
     public void setVerified(boolean isVerified) {
         editor.putBoolean(KEY_VERIFIED, isVerified);
-        editor.commit();
+        editor.apply();
     }
 
     public void setLogin(boolean isLoggedIn) {
@@ -59,7 +60,7 @@ public class SessionManager {
         editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
 
         // commit changes
-        editor.commit();
+        editor.apply();
 
         Log.d(TAG, "User login session modified!");
     }
