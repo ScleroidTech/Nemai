@@ -172,7 +172,7 @@
                 android:minHeight="56dp"
                 android:minWidth="132dp"
                 android:onClick="onButtonClicked"
-                android:text="Verify Your Number"
+                android:text="@string/verify_your_number"
                 android:textAllCaps="true"
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
