@@ -29,7 +29,7 @@
                         android:layout_weight="0.5"
                         android:checked="true"
                         android:paddingLeft="15dp"
-                        android:text="Domestic"
+                        android:text="@string/domestic"
                         android:textColor="@drawable/selector_textview"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -41,7 +41,7 @@
                         android:layout_weight="0.5"
                         android:checked="false"
                         android:paddingLeft="15dp"
-                        android:text="International"
+                        android:text="@string/international"
                         android:textColor="@drawable/selector_textview"
                         android:textSize="18sp" />
                 </RadioGroup>
@@ -77,7 +77,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
-                                android:text="From"
+                                android:text="@string/from"
                                 android:textColor="#918b91"
                                 android:textStyle="bold" />
                             <ImageView
@@ -92,7 +92,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="6"
-                            android:hint="Source City">
+                            android:hint="@string/source_city">
 
                             <com.scleroid.nemai.other.DelayedAutoCompleteTextView
                                 android:id="@+id/pin_source_autocompletetextview"
@@ -128,7 +128,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
-                                android:text="  To"
+                                android:text="@string/to"
                                 android:textColor="#918b91"
                                 android:textStyle="bold" />
                             <ImageView
@@ -144,7 +144,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="6"
 
-                            android:hint="Destination City">
+                            android:hint="@string/destination_city">
 
                             <com.scleroid.nemai.other.DelayedAutoCompleteTextView
                                 android:id="@+id/pin_dest_autocompletetextview"
@@ -177,7 +177,7 @@
                         android:layout_weight="5"
                         android:background="@drawable/round_corners_bottom"
                         android:padding="10dp"
-                        android:text="Package Details"
+                        android:text="@string/package_details"
                         android:textColor="#ffffff"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -209,7 +209,7 @@
                                 android:layout_weight="0.5"
                                 android:checked="true"
                                 android:paddingLeft="15dp"
-                                android:text="Document"
+                                android:text="@string/document"
                                 android:textColor="@drawable/selector_textview"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
@@ -221,7 +221,7 @@
                                 android:layout_weight="0.5"
                                 android:checked="false"
                                 android:paddingLeft="15dp"
-                                android:text="Parcel"
+                                android:text="@string/parcel"
                                 android:textColor="@drawable/selector_textview"
                                 android:textSize="18sp" />
                         </RadioGroup>
@@ -260,7 +260,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
                                 android:layout_gravity="center"
-                                android:hint="Weight"
+                                android:hint="@string/weight"
                                 android:inputType="numberDecimal"
                                 android:maxLength="6"
                                 />
@@ -270,7 +270,7 @@
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
                                 android:layout_marginRight="10dp"
-                                android:text="Kg"
+                                android:text="@string/weight_unit"
                                 android:textColor="#808080"
                                 android:textSize="18sp"
                                 />
@@ -292,7 +292,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
                                 android:layout_gravity="center"
-                                android:hint="Invoice Value"
+                                android:hint="@string/invoice_value"
                                 android:inputType="numberDecimal"
                                 android:maxLength="6"
                                 />
@@ -302,7 +302,7 @@
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
                                 android:layout_marginRight="10dp"
-                                android:text="Rs"
+                                android:text="@string/currency_unit"
                                 android:textColor="#808080"
                                 android:textSize="18sp"
                                 />
@@ -314,7 +314,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Package Dimensions (In cms)"
+                    android:text="@string/package_dimensions_in_cms"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
@@ -338,7 +338,7 @@
                             android:id="@+id/editLength"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Length"
+                            android:hint="@string/length"
                             android:inputType="numberDecimal"
                             android:maxLength="5" />
 
@@ -354,7 +354,7 @@
                             android:id="@+id/editWidth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Width"
+                            android:hint="@string/width"
                             android:inputType="numberDecimal"
                             android:maxLength="5" />
 
@@ -370,7 +370,7 @@
                             android:id="@+id/editHeight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Height"
+                            android:hint="@string/height"
                             android:inputType="numberDecimal"
                             android:maxLength="5" />
 
@@ -388,7 +388,7 @@
                         android:id="@+id/editPckDesc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Package Description"
+                        android:hint="@string/package_description"
                         android:maxLength="70" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -429,7 +429,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
                                 android:layout_gravity="center"
-                                android:hint="Weight"
+                                android:hint="@string/weight"
                                 android:inputType="numberDecimal"
                                 android:maxLength="6"
                                 />
@@ -442,7 +442,7 @@
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
                                 android:layout_marginRight="10dp"
-                                android:text="Kg"
+                                android:text="@string/weight_unit"
                                 android:textColor="#808080"
                                 android:textSize="18sp"
                                 />
@@ -462,7 +462,7 @@
                         android:id="@+id/editPckDescDoc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Package Description"
+                        android:hint="@string/package_description"
                         android:maxLength="70" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -472,7 +472,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Package Dimensions (In cms)"
+                    android:text="@string/package_dimensions_in_cms"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
@@ -490,7 +490,7 @@
                         android:id="@+id/editPckDescDoc1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Package Description"
+                        android:hint="@string/package_description"
                         android:maxLength="70" />
 
                 </android.support.design.widget.TextInputLayout>

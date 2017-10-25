@@ -33,7 +33,7 @@
                     android:layout_marginRight="?attr/actionBarSize"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:text="Courier"
+                    android:text="@string/courier"
                     android:textColor="#ffffff"
                     />
 
