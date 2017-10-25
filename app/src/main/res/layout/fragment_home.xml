@@ -235,13 +235,7 @@
                     </LinearLayout>
 
                 </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/linearExpandedParcelView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/round_corners_bottom"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -316,90 +310,102 @@
                         </RelativeLayout>
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/package_dimensions_in_cms"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:baselineAligned="true"
-                    android:orientation="horizontal">
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/textLength"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/editLength"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/length"
-                            android:inputType="numberDecimal"
-                            android:maxLength="5" />
-
-                    </android.support.design.widget.TextInputLayout>
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/textWidth"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/editWidth"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/width"
-                            android:inputType="numberDecimal"
-                            android:maxLength="5" />
-
-                    </android.support.design.widget.TextInputLayout>
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/textHeight"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/editHeight"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/height"
-                            android:inputType="numberDecimal"
-                            android:maxLength="5" />
-
-                    </android.support.design.widget.TextInputLayout>
-                </LinearLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/textPckDesc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp">
-
-                    <EditText
-                        android:id="@+id/editPckDesc"
+                    <LinearLayout
+                        android:id="@+id/linearExpandedParcelView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/package_description"
-                        android:maxLength="70" />
+                        android:background="@drawable/round_corners_bottom"
+                        android:orientation="vertical">
 
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginStart="10dp"
+                            android:text="@string/package_dimensions_in_cms"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginStart="10dp"
+                            android:baselineAligned="true"
+                            android:orientation="horizontal">
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/textLength"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/editLength"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/length"
+                                    android:inputType="numberDecimal"
+                                    android:maxLength="5" />
+
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/textWidth"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/editWidth"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/width"
+                                    android:inputType="numberDecimal"
+                                    android:maxLength="5" />
+
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/textHeight"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/editHeight"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/height"
+                                    android:inputType="numberDecimal"
+                                    android:maxLength="5" />
+
+                            </android.support.design.widget.TextInputLayout>
+                        </LinearLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/textPckDesc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="8dp">
+
+                            <EditText
+                                android:id="@+id/editPckDesc"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/package_description"
+                                android:maxLength="70" />
+
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
 
 
             <LinearLayout
@@ -407,10 +413,84 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
+
                 android:background="@drawable/round_corners_bottom"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <!--<LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:baselineAligned="true"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/textWeightDoc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <EditText
+                                android:id="@+id/editWeightDoc"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_gravity="center"
+                                android:hint="@string/weight"
+                                android:inputType="numberDecimal"
+                                android:maxLength="6"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="10dp"
+                                android:text="@string/weight_unit"
+                                android:textColor="#808080"
+                                android:textSize="18sp"
+                                />
+                        </RelativeLayout>
+                    </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/textInvoiceDoc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <EditText
+                                android:id="@+id/editInvoiceDoc"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_gravity="center"
+                                android:hint="@string/invoice_value"
+                                android:inputType="numberDecimal"
+                                android:maxLength="6"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="10dp"
+                                android:text="@string/currency_unit"
+                                android:textColor="#808080"
+                                android:textSize="18sp"
+                                />
+                        </RelativeLayout>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>-->
+                <!--<LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
@@ -457,7 +537,7 @@
                     </RelativeLayout>
 
 
-                </LinearLayout>
+                </LinearLayout>-->
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/textPckDescDoc"
                     android:layout_width="match_parent"
