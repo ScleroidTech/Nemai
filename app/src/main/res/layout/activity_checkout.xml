@@ -16,7 +16,7 @@
        <TextView
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:text="Package Details"
+           android:text="@string/package_details"
            android:textColor="@color/colorPrimary"
            android:textSize="16sp"
            android:textStyle="bold" />
@@ -24,7 +24,7 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_marginTop="15dp"
-           android:text="Weight + Dimension+Address"
+           android:text="@string/weight_dimension_address"
            android:textColor="#000000"
            android:textSize="15sp" />
 
@@ -42,7 +42,7 @@
         android:layout_marginRight="10dp"
         android:layout_weight="0.7"
         android:background="@drawable/round_top"
-        android:hint="Coupon Code"
+        android:hint="@string/coupon_code"
         android:textAlignment="center"
         android:textSize="16sp"
         />
@@ -55,7 +55,7 @@
         android:layout_weight="0.3"
         android:background="@drawable/btn_rounded"
         android:paddingLeft="10dp"
-        android:text="APPLY"
+        android:text="@string/apply"
         android:textColor="#ffffff"
         android:textStyle="bold"
         />
@@ -68,7 +68,7 @@
         android:background="@drawable/btn_rounded"
         android:drawableRight="@drawable/ic_chevron_right_white_24dp"
         android:paddingLeft="10dp"
-        android:text="Proceed to payment"
+        android:text="@string/proceed_to_payment"
         android:textColor="#ffffff"
         android:textStyle="bold"
         />

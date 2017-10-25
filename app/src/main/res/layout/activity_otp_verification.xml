@@ -33,8 +33,8 @@
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="0dp"
-            android:hint="Enter Number"
-            android:text="+46123456789"
+            android:hint="@string/enter_number"
+            android:text="@string/dummy_number"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp" />
@@ -80,7 +80,7 @@
                     android:layout_marginBottom="10dp"
                     android:minHeight="56dp"
                     android:onClick="onSubmitClicked"
-                    android:text="Enter"
+                    android:text="@string/enter"
                     android:textAllCaps="true"
                     android:textColor="#ffffff"
                     android:textSize="20sp" />
@@ -99,7 +99,7 @@
                         android:layout_weight="0.5"
                         android:clickable="true"
                         android:gravity="center"
-                        android:text="Resend via text ()"
+                        android:text="@string/resend_via_text"
                         android:textColor="@color/sendotp_grey"
                         android:textSize="20sp" />
 
@@ -113,7 +113,7 @@
                         android:layout_weight="0.5"
                         android:clickable="true"
                         android:gravity="center"
-                        android:text="Resend via call ()"
+                        android:text="@string/resend_via_call"
                         android:textColor="@color/sendotp_grey"
                         android:textSize="20sp" />
                 </LinearLayout>

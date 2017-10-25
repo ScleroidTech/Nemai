@@ -36,7 +36,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class ResetPasswordActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int REQUEST_READ_CONTACTS = 0;
-
+    //TODO add Open Email App option here
     TextInputLayout mResetEmailTIL;
     AutoCompleteTextView mResetEmail;
     private View focusView, mLoginFormView, mProgressView;

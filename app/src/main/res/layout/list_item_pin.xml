@@ -28,7 +28,7 @@
                 android:id="@+id/popup_pin_location_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hinjewadi,"
+                android:text="@string/dummy_area"
                 android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
                 android:textSize="12sp" />
 
@@ -36,7 +36,7 @@
                 android:id="@+id/popup_pin_area_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" Pune "
+                android:text="@string/dummy_city"
                 android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -50,7 +50,7 @@
                 android:id="@+id/popup_pin_pincode_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="411001,"
+                android:text="@string/dummy_pincode"
                 android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
                 android:textColor="@color/sendotp_grey"
                 android:textSize="12sp" />
@@ -59,7 +59,7 @@
                 android:id="@+id/popup_pin_state_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Maharashtra"
+                android:text="dummy_state"
                 android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"
                 android:textColor="@color/sendotp_grey"
                 android:textSize="12sp" />

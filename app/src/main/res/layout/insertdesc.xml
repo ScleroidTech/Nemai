@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_weight="5"
-            android:text="Package1"
+            android:text="@string/package1"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -31,7 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="EDIT"
+            android:text="@string/edit"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -41,7 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="SAVE"
+            android:text="@string/save"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:textStyle="bold"/>
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="center"
-                android:hint="Weight"
+                android:hint="@string/weight"
                 android:inputType="numberDecimal"
                 android:maxLength="6"
                 />
@@ -74,7 +74,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:text="Kg"
+                android:text="@string/weight_unit"
                 android:textColor="#808080"
                 android:textSize="18sp"
                 />
@@ -93,7 +93,7 @@
             android:id="@+id/editPckDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Package Description"
+            android:hint="@string/package_description"
             android:maxLength="70" />
 
     </android.support.design.widget.TextInputLayout>

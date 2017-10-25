@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_weight="5"
-            android:text="Package1"
+            android:text="@string/package1"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -31,7 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="EDIT"
+            android:text="@string/edit"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -41,7 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="SAVE"
+            android:text="@string/save"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:textStyle="bold"/>
@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_gravity="center"
-                    android:hint="Weight"
+                    android:hint="@string/weight"
                     android:inputType="numberDecimal"
                     android:maxLength="6"
                     />
@@ -79,7 +79,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:text="Kg"
+                    android:text="@string/weight_unit"
                     android:textColor="#808080"
                     android:textSize="18sp"
                     />
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_gravity="center"
-                    android:hint="Invoice Value"
+                    android:hint="@string/invoice_value"
                     android:inputType="numberDecimal"
                     android:maxLength="6"
                     />
@@ -111,7 +111,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:text="Rs"
+                    android:text="@string/currency_unit"
                     android:textColor="#808080"
                     android:textSize="18sp"
                     />
@@ -123,7 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="Package Dimensions (In cms)"
+        android:text="@string/package_dimensions_in_cms"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp"
@@ -147,7 +147,7 @@
                 android:id="@+id/editLength"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Length"
+                android:hint="@string/length"
                 android:inputType="numberDecimal"
                 android:maxLength="5" />
 
@@ -163,7 +163,7 @@
                 android:id="@+id/editWidth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Width"
+                android:hint="@string/width"
                 android:inputType="numberDecimal"
                 android:maxLength="5" />
 
@@ -179,7 +179,7 @@
                 android:id="@+id/editHeight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Height"
+                android:hint="@string/height"
                 android:inputType="numberDecimal"
                 android:maxLength="5" />
 
@@ -197,7 +197,7 @@
             android:id="@+id/editPckDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Package Description"
+            android:hint="@string/package_description"
             android:maxLength="70" />
 
     </android.support.design.widget.TextInputLayout>
