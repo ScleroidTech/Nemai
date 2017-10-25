@@ -119,7 +119,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 mPinCodeDestination = (PinCode) adapterView.getItemAtPosition(position);
-                pinDestinationAutoCompleteTextView.setText(mPinCodeDestination.getLocation() + ", " + mPinCodeDestination.getPincode() + ", " + mPinCodeDestination.getState());
+                pinDestinationAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeDestination.getLocation(), mPinCodeDestination.getPincode(), mPinCodeDestination.getState()));
             }
         });
 
@@ -134,7 +134,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 mPinCodeSource = (PinCode) adapterView.getItemAtPosition(position);
-                pinSourceAutoCompleteTextView.setText(mPinCodeSource.getPincode() + ", " + mPinCodeSource.getPincode() + ", " + mPinCodeSource.getState());
+                pinSourceAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeSource.getPincode(), mPinCodeSource.getPincode(), mPinCodeSource.getState()));
             }
         });
 

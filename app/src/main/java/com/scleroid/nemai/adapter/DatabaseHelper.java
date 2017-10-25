@@ -98,21 +98,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<PinCode> getPincodes() {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
         String query = "SELECT * from pins";
-        Cursor cursor = db.rawQuery(query, null);
-        List<PinCode> list = new ArrayList<PinCode>();
-        while(cursor.moveToNext()) {
-            PinCode pinCode = new PinCode(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
-            list.add(pinCode);
+        List<PinCode> list;
+        try (Cursor cursor = db.rawQuery(query, null)) {
+            list = new ArrayList<PinCode>();
+            while (cursor.moveToNext()) {
+                PinCode pinCode = new PinCode(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+                list.add(pinCode);
+            }
         }
+
         db.close();
         return list;
     }
     private int getVersionId() {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
         String query = "SELECT version_id FROM dbVersion";
-        Cursor cursor = db.rawQuery(query, null);
-        cursor.moveToFirst();
-        int v =  cursor.getInt(0);
+        int v;
+        try (Cursor cursor = db.rawQuery(query, null)) {
+            cursor.moveToFirst();
+            v = cursor.getInt(0);
+        }
         db.close();
         return v;
     }

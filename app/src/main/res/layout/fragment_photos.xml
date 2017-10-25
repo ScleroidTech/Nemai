@@ -9,6 +9,7 @@
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:alpha="0.3"
+        android:contentDescription="TODO"
         android:src="@drawable/ic_photo_library_black_24dp" />
 
 </FrameLayout>

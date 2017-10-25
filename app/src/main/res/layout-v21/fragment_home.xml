@@ -16,8 +16,8 @@
             android:id="@+id/rgPlaceType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:weightSum="1">
@@ -28,8 +28,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:checked="true"
-                android:paddingLeft="15dp"
-                android:text="Domestic"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:text="@string/domestic"
                 android:textColor="@drawable/selector_textview"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -40,8 +41,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:checked="false"
-                android:paddingLeft="15dp"
-                android:text="International"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:text="@string/international"
                 android:textColor="@drawable/selector_textview"
                 android:textSize="18sp" />
         </RadioGroup>
@@ -73,7 +75,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
@@ -81,13 +83,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="From"
+                            android:text="@string/from"
                             android:textColor="#918b91"
                             android:textStyle="bold" />
 
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:contentDescription="@string/location_arrow_icon"
                             android:src="@drawable/nearme" />
                     </LinearLayout>
 
@@ -97,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="6"
-                        android:hint="Source City">
+                        android:hint="@string/source_city">
 
                         <com.scleroid.nemai.other.DelayedAutoCompleteTextView
                             android:id="@+id/pin_source_autocompletetextview"
@@ -126,7 +129,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
@@ -134,13 +137,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="  To"
+                            android:text="@string/to"
                             android:textColor="#918b91"
                             android:textStyle="bold" />
 
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:contentDescription="@string/location_arrow_icon"
                             android:src="@drawable/nearme" />
                     </LinearLayout>
 
@@ -151,7 +155,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_weight="6"
 
-                        android:hint="Destination City">
+                        android:hint="@string/destination_city">
 
                         <com.scleroid.nemai.other.DelayedAutoCompleteTextView
                             android:id="@+id/pin_dest_autocompletetextview"
@@ -182,11 +186,11 @@
                 <TextView
                     android:id="@+id/txtPkg"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="5"
                     android:background="@drawable/round_corners_bottom"
                     android:padding="10dp"
-                    android:text="Package Details"
+                    android:text="@string/package_details"
                     android:textColor="#ffffff"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -203,8 +207,8 @@
                         android:id="@+id/rgType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="15dp"
                         android:layout_marginTop="5dp"
 
                         android:orientation="horizontal"
@@ -216,8 +220,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:checked="true"
-                            android:paddingLeft="15dp"
-                            android:text="Document"
+                            android:paddingEnd="15dp"
+                            android:paddingStart="15dp"
+                            android:text="@string/document"
                             android:textColor="@drawable/selector_textview"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -228,8 +233,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:checked="false"
-                            android:paddingLeft="15dp"
-                            android:text="Parcel"
+                            android:paddingEnd="15dp"
+                            android:paddingStart="15dp"
+                            android:text="@string/parcel"
                             android:textColor="@drawable/selector_textview"
                             android:textSize="18sp" />
                     </RadioGroup>
@@ -249,8 +255,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
@@ -268,19 +274,19 @@
                                 android:id="@+id/editWeight"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
                                 android:layout_gravity="center"
-                                android:hint="Weight"
+                                android:hint="@string/weight"
                                 android:inputType="numberDecimal"
                                 android:maxLength="6" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
-                                android:text="Kg"
+                                android:layout_marginEnd="10dp"
+                                android:text="@string/weight_unit"
                                 android:textColor="#808080"
                                 android:textSize="18sp" />
                         </RelativeLayout>
@@ -301,19 +307,19 @@
                                 android:id="@+id/editInvoice"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
                                 android:layout_gravity="center"
-                                android:hint="Invoice Value"
+                                android:hint="@string/invoice_value"
                                 android:inputType="numberDecimal"
                                 android:maxLength="6" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
-                                android:text="Rs"
+                                android:layout_marginEnd="10dp"
+                                android:text="@string/currency_unit"
                                 android:textColor="#808080"
                                 android:textSize="18sp" />
                         </RelativeLayout>
@@ -323,9 +329,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Package Dimensions (In cms)"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/package_dimensions_in_cms"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
@@ -334,8 +340,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
@@ -349,7 +355,7 @@
                             android:id="@+id/editLength"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Length"
+                            android:hint="@string/length"
                             android:inputType="numberDecimal"
                             android:maxLength="5" />
 
@@ -366,7 +372,7 @@
                             android:id="@+id/editWidth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Width"
+                            android:hint="@string/width"
                             android:inputType="numberDecimal"
                             android:maxLength="5" />
 
@@ -383,7 +389,7 @@
                             android:id="@+id/editHeight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Height"
+                            android:hint="@string/height"
                             android:inputType="numberDecimal"
                             android:maxLength="5" />
 
@@ -394,15 +400,15 @@
                     android:id="@+id/textPckDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp">
 
                     <EditText
                         android:id="@+id/editPckDesc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Package Description"
+                        android:hint="@string/package_description"
                         android:maxLength="70" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -420,8 +426,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:orientation="horizontal">
 
 
@@ -442,9 +448,9 @@
                                 android:id="@+id/editWeightDoc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
                                 android:layout_gravity="center"
-                                android:hint="Weight"
+                                android:hint="@string/weight"
                                 android:inputType="numberDecimal"
                                 android:maxLength="6" />
                         </android.support.design.widget.TextInputLayout>
@@ -453,10 +459,10 @@
                             android:id="@+id/weight_unit_kg_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="10dp"
-                            android:text="Kg"
+                            android:layout_marginEnd="10dp"
+                            android:text="@string/weight_unit"
                             android:textColor="#808080"
                             android:textSize="18sp" />
                     </RelativeLayout>
@@ -468,15 +474,15 @@
                     android:id="@+id/textPckDescDoc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp">
 
                     <EditText
                         android:id="@+id/editPckDescDoc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Package Description"
+                        android:hint="@string/package_description"
                         android:maxLength="70" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -484,9 +490,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Package Dimensions (In cms)"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/package_dimensions_in_cms"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
@@ -496,15 +502,15 @@
                     android:id="@+id/textPckDescDoc1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp">
 
                     <EditText
                         android:id="@+id/editPckDescDoc1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Package Description"
+                        android:hint="@string/package_description"
                         android:maxLength="70" />
 
                 </android.support.design.widget.TextInputLayout>
