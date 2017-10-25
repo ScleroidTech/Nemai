@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         session = new SessionManager(getApplicationContext());
 
-        session.setLogin(false);
+        session.setLogin(true);
         session.setVerified(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
      * name, website, notifications action view (dot)
      */
     private void loadNavHeader() {
-        // name, website
+        // TODO
         txtName.setText("Ravi Tamada");
         txtWebsite.setText("www.androidhive.info");
 

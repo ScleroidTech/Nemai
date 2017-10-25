@@ -36,7 +36,6 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@color/colorWhite"
-            android:elevation="3dp"
             android:gravity="center"
 
             android:orientation="vertical"
@@ -46,7 +45,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@mipmap/ic_launcher" />
+
+                android:background="@mipmap/ic_launcher"
+                android:contentDescription="@string/app_icon" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/email_login_text_input_layout"
@@ -88,9 +89,9 @@
                 android:id="@+id/sign_in_button"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="0dp"
                 android:layout_weight="0.66"
-                android:elevation="8dp"
+
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
@@ -118,7 +119,7 @@
                 android:id="@+id/google_sign_in_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="0.5"
 
                 android:background="@drawable/border_shadow_google"
@@ -135,20 +136,16 @@
                 android:id="@+id/FrameLayoutFbButton"
                 android:layout_width="0dp"
                 android:layout_height="52dp"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="0.5"
-                android:elevation="8dp">
+                android:layout_marginStart="5dp"
+                android:layout_weight="0.5">
 
                 <com.facebook.login.widget.LoginButton
                     android:id="@+id/facebook_login_button"
                     style="@style/FacebookLoginButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:layout_gravity="center_horizontal"
-                    android:layout_weight="0.5"
-                    android:elevation="2dp"
+
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp"
                     android:scaleType="centerInside"
@@ -160,9 +157,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/com_facebook_button_background"
-                    android:drawableLeft="@drawable/facebook_logo"
+
                     android:drawableStart="@drawable/facebook_logo"
-                    android:elevation="8dp"
+
                     android:paddingEnd="20dp"
 
                     android:paddingStart="20dp"
@@ -205,8 +202,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignTop="@+id/register_layout"
-            android:background="@android:color/white"
-            android:elevation="2dp" />
+            android:background="@android:color/white" />
 
         <LinearLayout
             android:id="@+id/register_layout"
@@ -232,7 +228,7 @@
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/darker_gray"
-                android:elevation="2dp"
+
                 android:fadingEdgeLength="@dimen/activity_horizontal_margin" />
 
             <TextView

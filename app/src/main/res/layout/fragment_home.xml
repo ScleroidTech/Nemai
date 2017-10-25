@@ -16,8 +16,8 @@
                     android:id="@+id/rgPlaceType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="5dp"
                     android:orientation="horizontal"
                     android:weightSum="1">
@@ -28,7 +28,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
                         android:checked="true"
-                        android:paddingLeft="15dp"
+                        android:paddingEnd="15dp"
+                        android:paddingStart="15dp"
                         android:text="@string/domestic"
                         android:textColor="@drawable/selector_textview"
                         android:textSize="18sp"
@@ -40,7 +41,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
                         android:checked="false"
-                        android:paddingLeft="15dp"
+                        android:paddingEnd="15dp"
+                        android:paddingStart="15dp"
                         android:text="@string/international"
                         android:textColor="@drawable/selector_textview"
                         android:textSize="18sp" />
@@ -70,7 +72,7 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
                             <TextView
@@ -83,7 +85,8 @@
                             <ImageView
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/nearme"/>
+                                android:contentDescription="@string/location_arrow_icon"
+                                android:src="@drawable/nearme" />
                         </LinearLayout>
 
                         <android.support.design.widget.TextInputLayout
@@ -121,7 +124,7 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
                             <TextView
@@ -134,7 +137,8 @@
                             <ImageView
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/nearme"/>
+                                android:contentDescription="@string/location_arrow_icon"
+                                android:src="@drawable/nearme" />
                         </LinearLayout>
 
                         <android.support.design.widget.TextInputLayout
@@ -173,7 +177,7 @@
                     <TextView
                         android:id="@+id/txtPkg"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_weight="5"
                         android:background="@drawable/round_corners_bottom"
                         android:padding="10dp"
@@ -188,15 +192,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/colorWhite"
-                        android:elevation="4dp"
+
                         android:orientation="vertical">
 
                         <RadioGroup
                             android:id="@+id/rgType"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginRight="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginStart="15dp"
                             android:layout_marginTop="5dp"
 
                             android:orientation="horizontal"
@@ -208,7 +212,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
                                 android:checked="true"
-                                android:paddingLeft="15dp"
+                                android:paddingEnd="15dp"
+                                android:paddingStart="15dp"
                                 android:text="@string/document"
                                 android:textColor="@drawable/selector_textview"
                                 android:textSize="18sp"
@@ -220,7 +225,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
                                 android:checked="false"
-                                android:paddingLeft="15dp"
+                                android:paddingEnd="15dp"
+                                android:paddingStart="15dp"
                                 android:text="@string/parcel"
                                 android:textColor="@drawable/selector_textview"
                                 android:textSize="18sp" />
@@ -240,8 +246,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:baselineAligned="true"
                     android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
@@ -258,7 +265,7 @@
                                 android:id="@+id/editWeight"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
                                 android:layout_gravity="center"
                                 android:hint="@string/weight"
                                 android:inputType="numberDecimal"
@@ -267,9 +274,9 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
+                                android:layout_marginEnd="10dp"
                                 android:text="@string/weight_unit"
                                 android:textColor="#808080"
                                 android:textSize="18sp"
@@ -290,7 +297,7 @@
                                 android:id="@+id/editInvoice"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
                                 android:layout_gravity="center"
                                 android:hint="@string/invoice_value"
                                 android:inputType="numberDecimal"
@@ -299,9 +306,9 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
+                                android:layout_marginEnd="10dp"
                                 android:text="@string/currency_unit"
                                 android:textColor="#808080"
                                 android:textSize="18sp"
@@ -312,8 +319,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:text="@string/package_dimensions_in_cms"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
@@ -323,10 +330,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:orientation="horizontal"
-                    >
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:baselineAligned="true"
+                    android:orientation="horizontal">
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/textLength"
                         android:layout_width="0dp"
@@ -380,8 +387,8 @@
                     android:id="@+id/textPckDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp">
 
                     <EditText
@@ -406,8 +413,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:baselineAligned="true"
                     android:orientation="horizontal">
 
 
@@ -427,7 +435,7 @@
                                 android:id="@+id/editWeightDoc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
                                 android:layout_gravity="center"
                                 android:hint="@string/weight"
                                 android:inputType="numberDecimal"
@@ -439,9 +447,9 @@
                                 android:id="@+id/weight_unit_kg_textView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
+                                android:layout_marginEnd="10dp"
                                 android:text="@string/weight_unit"
                                 android:textColor="#808080"
                                 android:textSize="18sp"
@@ -454,8 +462,8 @@
                     android:id="@+id/textPckDescDoc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp">
 
                     <EditText
@@ -470,8 +478,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:text="@string/package_dimensions_in_cms"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
@@ -482,8 +490,8 @@
                     android:id="@+id/textPckDescDoc1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp">
 
                     <EditText
@@ -505,7 +513,7 @@
                         android:layout_marginBottom="1dp"
                         android:layout_marginTop="10dp"
                 android:background="@drawable/btn_rounded"
-                        android:elevation="8dp"
+
                         android:text="@string/submit_main"
                         android:textAllCaps="false"
                         android:textColor="@color/colorPrimaryDark"

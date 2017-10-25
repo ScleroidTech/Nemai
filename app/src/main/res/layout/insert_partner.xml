@@ -9,6 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_weight="0.7"
+        android:contentDescription="@string/dtdc"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
         android:src="@drawable/dtdc" />

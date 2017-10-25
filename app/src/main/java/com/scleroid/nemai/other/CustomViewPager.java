@@ -28,7 +28,12 @@ public class CustomViewPager extends ViewPager {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Never allow swiping to switch between pages
-        return false;
+        return performClick();
     }
 
+    @Override
+    public boolean performClick() {
+        super.performClick();
+        return false;
+    }
 }
