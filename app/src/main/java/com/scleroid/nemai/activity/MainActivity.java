@@ -49,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_MOVIES = "movies";
     private static final String TAG_NOTIFICATIONS = "notifications";
     private static final String TAG_SETTINGS = "settings";
-    public static SessionManager session;
     // index to identify current nav menu item
     public static int navItemIndex = 0;
     public static String CURRENT_TAG = TAG_HOME;
+    protected static SessionManager session;
     ImageButton btn_search;
     private List<PinCode> mResultPinList;
     private Context mContext;

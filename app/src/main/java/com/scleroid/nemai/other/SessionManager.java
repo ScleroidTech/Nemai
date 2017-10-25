@@ -21,13 +21,12 @@ public class SessionManager {
     // Shared Preferences
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private Context _context;
     // Shared pref mode
     private int PRIVATE_MODE = 0;
 
     public SessionManager(Context context) {
-        this._context = context;
-        pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+
+        pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
         editor.apply();
     }
