@@ -53,7 +53,11 @@ public class HomeFragment extends Fragment {
     public static PinCode mPinCodeDestination, mPinCodeSource;
     static String select;
     final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
-
+    //TODO read this https://medium.com/square-corner-blog/advocating-against-android-fragments-81fd0b462c97
+    //TODo & this too http://smarterer.com/tests/android-developer https://www.buzzingandroid.com/ http://www.jbrugge.com/glean/index.html
+    //TODO 7 this too https://www.infoq.com/presentations/Android-Design/ https://antonioleiva.com/free-guide/
+    //TODO this too www.codacy.com https://possiblemobile.com/ http://www.andreamaglie.com/dont-waste-time-coding-2/
+    //TODO https://androidbycode.wordpress.com/2015/02/13/static-code-analysis-automation-using-findbugs-android-studio/
     RadioButton mParcelRadioButton, mDocumentRadioButton;
     RadioButton mDomesticRadioButton, mInternationalRadioButton;
     LinearLayout mParcelLinearLayout, mDocumentLinearLayout;
@@ -65,6 +69,7 @@ public class HomeFragment extends Fragment {
     EditText mWeightEditText, mDescDocEditText, mInvoiceValueEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescParcelEditText;
     boolean toggleDocParcel = false;//false == doc, true == parcel
     boolean toggleDomInternational = false;//Domestic false , International = true
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -73,6 +78,7 @@ public class HomeFragment extends Fragment {
         HomeFragment fragment = new HomeFragment();
         return fragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -138,12 +144,13 @@ public class HomeFragment extends Fragment {
         });
 
 
-        mWeightUnitTextView= v.findViewById(R.id.weight_unit_kg_textView);
+        mWeightUnitTextView = v.findViewById(R.id.weight_unit_kg_textView);
         mWeightEditText = v.findViewById(R.id.editWeightDoc);
         mWeightEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus) mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                if (hasFocus)
+                    mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
                 else mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
             }
         });
@@ -265,12 +272,9 @@ public class HomeFragment extends Fragment {
         } else mInvoiceTIL.setErrorEnabled(false);
 
 
-
-
         if (toggleDomInternational) delivery = "International";
         else delivery = "Domestic";
         if (toggleDocParcel) {
-
 
 
             if (isEmpty(mPackageWidthParcelEditText)) {
@@ -292,7 +296,6 @@ public class HomeFragment extends Fragment {
             } else mLengthTIL.setErrorEnabled(false);
 
 
-
             if (!noSubmit)
                 nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescParcelEditText.getText().toString(), "Parcel", delivery);
 
@@ -307,14 +310,21 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void nextScreenDocument(String source, String destination, String weight, String invoice, String description, String packageType, String deliveryType) {
-        submitRequest(source, destination, weight, invoice, null, null, null, description, packageType, deliveryType);
+    private boolean isEmpty(DelayedAutoCompleteTextView text) {
+        return TextUtils.isEmpty(text.getText());
     }
 
+    private boolean isEmpty(EditText text) {
+        return TextUtils.isEmpty(text.getText());
+    }
 
     private void nextScreenParcel(String source, String destination, String weight, String invoice, String width, String height, String length, String description, String packageType, String deliveryType) {
         submitRequest(source, destination, weight, invoice, width, height, length, description, packageType, deliveryType);
 
+    }
+
+    private void nextScreenDocument(String source, String destination, String weight, String invoice, String description, String packageType, String deliveryType) {
+        submitRequest(source, destination, weight, invoice, null, null, null, description, packageType, deliveryType);
     }
 
     private void submitRequest(final String source, final String destination, final String weight, final String invoice, final String width, final String height, final String length, final String description, final String packageType, final String deliveryType) {
@@ -397,14 +407,14 @@ public class HomeFragment extends Fragment {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.radio_buttondiaglog);
-        List<String> stringList=new ArrayList<>();  // here is list
-        for(int i=0;i<5;i++) {
+        List<String> stringList = new ArrayList<>();  // here is list
+        for (int i = 0; i < 5; i++) {
             stringList.add("RadioButton " + (i + 1));
         }
         RadioGroup rg = dialog.findViewById(R.id.radio_group);
 
-        for(int i=0;i<stringList.size();i++){
-            RadioButton rb=new RadioButton(getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
+        for (int i = 0; i < stringList.size(); i++) {
+            RadioButton rb = new RadioButton(getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
             rb.setText(stringList.get(i));
             rg.addView(rb);
         }
@@ -416,7 +426,7 @@ public class HomeFragment extends Fragment {
                 for (int x = 0; x < childCount; x++) {
                     RadioButton btn = (RadioButton) group.getChildAt(x);
                     if (btn.getId() == checkedId) {
-                        Toast.makeText(getActivity(),btn.getText(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), btn.getText(), Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -425,14 +435,6 @@ public class HomeFragment extends Fragment {
 
         dialog.show();
 
-    }
-
-    private boolean isEmpty(EditText text) {
-        return TextUtils.isEmpty(text.getText());
-    }
-
-    private boolean isEmpty(DelayedAutoCompleteTextView text) {
-        return TextUtils.isEmpty(text.getText());
     }
 
 }
