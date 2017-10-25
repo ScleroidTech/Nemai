@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-
+//TODO CHange most activities to fragment if performance becomes a bottleneck
 
 public class HomeFragment extends Fragment {
     public static final int THRESHOLD = 3;
