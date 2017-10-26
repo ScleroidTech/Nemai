@@ -46,27 +46,35 @@ import java.util.Map;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 //TODO CHange most activities to fragment if performance becomes a bottleneck
-
+//TODO implement ROOm
+//TODO implement this http://droidmentor.com/credit-card-form/
 public class HomeFragment extends Fragment {
     public static final int THRESHOLD = 3;
     private static final String TAG = HomeFragment.class.getSimpleName();
     public static PinCode mPinCodeDestination, mPinCodeSource;
     static String select;
     final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
+/*
     //TODO read this https://medium.com/square-corner-blog/advocating-against-android-fragments-81fd0b462c97
     //TODo & this too http://smarterer.com/tests/android-developer https://www.buzzingandroid.com/ http://www.jbrugge.com/glean/index.html
     //TODO 7 this too https://www.infoq.com/presentations/Android-Design/ https://antonioleiva.com/free-guide/
     //TODO this too www.codacy.com https://possiblemobile.com/ http://www.andreamaglie.com/dont-waste-time-coding-2/
     //TODO https://androidbycode.wordpress.com/2015/02/13/static-code-analysis-automation-using-findbugs-android-studio/
+    //TODO read this https://www.bignerdranch.com/blog/categories/android/ https://www.bignerdranch.com/blog/building-interfaces-with-constraintlayout/ https://www.bignerdranch.com/blog/the-rxjava-repository-pattern/ https://www.bignerdranch.com/blog/room-data-storage-for-everyone/ https://www.bignerdranch.com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/ https://www.bignerdranch.com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/ https://www.bignerdranch.com/blog/frame-animations-in-android/ https://www.bignerdranch.com/blog/building-animations-android-transition-framework-part-2/ https://www.bignerdranch.com/blog/testing-the-android-way/
+    https://developer.android.com/topic/libraries/architecture/room.html https://medium.com/google-developers/7-steps-to-room-27a5fe5f99b2 https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9 https://android.jlelse.eu/room-store-your-data-c6d49b4d53a3 http://www.vogella.com/tutorials/AndroidSQLite/article.html
+*/
+
     RadioButton mParcelRadioButton, mDocumentRadioButton;
     RadioButton mDomesticRadioButton, mInternationalRadioButton;
     LinearLayout mParcelLinearLayout, mDocumentLinearLayout;
     Button mSubmitButton;
-    TextView mWeightUnitTextView;
+    TextView mWeightUnitTextView, mCurrencyUnitTextView;
     ImageView mAddressImageView;
-    TextInputLayout mWeightTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mParcelDescTIL, mDescDocTIL, mPinSourceTIL, mPinDestTIL;
+    TextInputLayout mWeightTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mDescriptionTIL, /*mDescDocTIL,*/
+            mPinSourceTIL, mPinDestTIL;
     DelayedAutoCompleteTextView pinSourceAutoCompleteTextView, pinDestinationAutoCompleteTextView;
-    EditText mWeightEditText, mDescDocEditText, mInvoiceValueEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescParcelEditText;
+    EditText mWeightEditText,/* mDescDocEditText,*/
+            mInvoiceValueEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescriptionEditText;
     boolean toggleDocParcel = false;//false == doc, true == parcel
     boolean toggleDomInternational = false;//Domestic false , International = true
 
@@ -91,21 +99,21 @@ public class HomeFragment extends Fragment {
         mLengthTIL = v.findViewById(R.id.textLength);
         mWidthTIL = v.findViewById(R.id.textWidth);
         mHeightTIL = v.findViewById(R.id.textHeight);
-        mParcelDescTIL = v.findViewById(R.id.textPckDesc);
-        mDescDocTIL = v.findViewById(R.id.textPckDescDoc);
+        mDescriptionTIL = v.findViewById(R.id.textDescription);
+        //mDescDocTIL = v.findViewById(R.id.textPckDescDoc);
         mWeightEditText = v.findViewById(R.id.editWeight);
         mInvoiceValueEditText = v.findViewById(R.id.editInvoice);
         mPackageLengthParcelEditText = v.findViewById(R.id.editLength);
         mPackageWidthParcelEditText = v.findViewById(R.id.editWidth);
         mHeightParcelEditText = v.findViewById(R.id.editHeight);
-        mDescParcelEditText = v.findViewById(R.id.editPckDesc);
-        mDescDocEditText = v.findViewById(R.id.editPckDescDoc);
+        mDescriptionEditText = v.findViewById(R.id.editDescription);
+//        mDescDocEditText = v.findViewById(R.id.editPckDescDoc);
         mParcelRadioButton = v.findViewById(R.id.rParcel);
         mDocumentRadioButton = v.findViewById(R.id.rDocument);
 
         mParcelLinearLayout = v.findViewById(R.id.linearExpandedParcelView);
-        mDocumentLinearLayout = v.findViewById(R.id.linearExpandedDocumentView);
-        mDocumentLinearLayout.setVisibility(View.VISIBLE);
+//        mDocumentLinearLayout = v.findViewById(R.id.linearExpandedDocumentView);
+//        mDocumentLinearLayout.setVisibility(View.VISIBLE);
 
 
         //img_address =  v.findViewById(R.id.img_address);
@@ -145,13 +153,23 @@ public class HomeFragment extends Fragment {
 
 
         mWeightUnitTextView = v.findViewById(R.id.weight_unit_kg_textView);
-        mWeightEditText = v.findViewById(R.id.editWeightDoc);
+
         mWeightEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus)
                     mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
                 else mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
+            }
+        });
+
+        mCurrencyUnitTextView = v.findViewById(R.id.currency_unit_text_view);
+        mInvoiceValueEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mCurrencyUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                else mCurrencyUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
             }
         });
 
@@ -194,9 +212,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    mDocumentLinearLayout.setVisibility(View.VISIBLE);
+                    //mDocumentLinearLayout.setVisibility(View.VISIBLE);
                     toggleDocParcel = false;
                     mParcelLinearLayout.setVisibility(View.GONE);
+
+                    mDescriptionEditText.setMinLines(6);
                     mDocumentRadioButton.setTypeface(null, Typeface.BOLD);
                     mParcelRadioButton.setTypeface(null, Typeface.NORMAL);
                 }
@@ -208,7 +228,8 @@ public class HomeFragment extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     mParcelLinearLayout.setVisibility(View.VISIBLE);
-                    mDocumentLinearLayout.setVisibility(View.GONE);
+                    // mDocumentLinearLayout.setVisibility(View.GONE);
+                    mDescriptionEditText.setMinLines(1);
                     toggleDocParcel = true;
                     mParcelRadioButton.setTypeface(null, Typeface.BOLD);
                     mDocumentRadioButton.setTypeface(null, Typeface.NORMAL);
@@ -297,14 +318,14 @@ public class HomeFragment extends Fragment {
 
 
             if (!noSubmit)
-                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescParcelEditText.getText().toString(), "Parcel", delivery);
+                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescriptionEditText.getText().toString(), "Parcel", delivery);
 
 
         } else {
 
 
             if (!noSubmit) {
-                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mDescDocEditText.getText().toString(), "Documents", delivery);
+                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mDescriptionEditText.getText().toString(), "Documents", delivery);
 
             }
         }
