@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -73,6 +74,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     RadioButton mDomesticRadioButton, mInternationalRadioButton;
     LinearLayout mParcelLinearLayout, mDocumentLinearLayout;
     Button mSubmitButton;
+    FloatingActionButton fabNewCourier;
     TextView mWeightUnitTextView, mCurrencyUnitTextView;
     ImageView mAddressImageView;
 
@@ -99,6 +101,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
+        v.clearFocus();
 
         mWeightTIL = v.findViewById(R.id.textWeight);
         mInvoiceTIL = v.findViewById(R.id.textInvoice);
@@ -119,6 +122,13 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         mParcelRadioButton = v.findViewById(R.id.rParcel);
         mDocumentRadioButton = v.findViewById(R.id.rDocument);
 
+        fabNewCourier = v.findViewById(R.id.fab_new_data);
+        fabNewCourier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//TODO Add A cartView, then refresh the layout, add data to database, & check existing data before sending it to server.& send all data to server at once
+            }
+        });
         mParcelLinearLayout = v.findViewById(R.id.linearExpandedParcelView);
 //        mDocumentLinearLayout = v.findViewById(R.id.linearExpandedDocumentView);
 //        mDocumentLinearLayout.setVisibility(View.VISIBLE);
