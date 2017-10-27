@@ -405,6 +405,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
+        mHandler.post(mPendingRunnable);
     }
 
 }

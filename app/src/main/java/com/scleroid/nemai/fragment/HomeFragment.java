@@ -127,7 +127,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         fabNewCourier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//TODO Add A cartView, then refresh the layout, add data to database, & check existing data before sending it to server.& send all data to server at once
+//TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data before sending it to server.& send all data to server at once
                 MainActivity activity = (MainActivity) getActivity();
                 activity.createFragment();
 
