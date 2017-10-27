@@ -128,6 +128,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
             @Override
             public void onClick(View v) {
 //TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data before sending it to server.& send all data to server at once
+                //TODO IMP https://android.jlelse.eu/android-architecture-components-room-livedata-and-viewmodel-fca5da39e26b
                 MainActivity activity = (MainActivity) getActivity();
                 activity.createFragment();
 
