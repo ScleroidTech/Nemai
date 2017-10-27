@@ -31,5 +31,10 @@
     </style>
 
 
-    <dimen name="smallTxtSize">12sp</dimen>
+    <style name="FloatingActionButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/fab_background</item>
+        <!--<item name="stateListAnimator">@animator/fab_state_list_animator</item>-->
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+    </style>
 </resources>

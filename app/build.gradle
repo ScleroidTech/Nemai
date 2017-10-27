@@ -18,8 +18,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
     productFlavors {
     }
+
 }
 
 dependencies {
@@ -36,6 +40,8 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
     compile 'com.hbb20:ccp:2.0.5'
+    compile "android.arch.persistence.room:runtime:1.0.0-rc1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0-rc1"
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'findbugs'
