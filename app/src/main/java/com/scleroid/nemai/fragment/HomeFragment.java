@@ -34,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.ServerConstants;
+import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.activity.PartnerActivity;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
 import com.scleroid.nemai.models.PinCode;
@@ -127,6 +128,10 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
             @Override
             public void onClick(View v) {
 //TODO Add A cartView, then refresh the layout, add data to database, & check existing data before sending it to server.& send all data to server at once
+                MainActivity activity = (MainActivity) getActivity();
+                activity.createFragment();
+
+
             }
         });
         mParcelLinearLayout = v.findViewById(R.id.linearExpandedParcelView);
