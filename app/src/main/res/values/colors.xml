@@ -15,5 +15,6 @@
 
     <color name="bg_view_sms">#ffd423</color>
     <color name="bg_view_otp">#fc6d38</color>
+    <color name="colorControlHighlight">#00ff00</color>
 
 </resources>

@@ -205,6 +205,8 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
     }
 });*/
+
+//TODO https://uk.linkedin.com/in/chrisbanes/
         mSubmitButton = v.findViewById(R.id.btn_submit);
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
