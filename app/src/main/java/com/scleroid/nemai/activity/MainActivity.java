@@ -389,5 +389,22 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void createFragment() {
+        Runnable mPendingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                // update the main content by replacing fragments
+
+                Fragment fragment = new HomeFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction.add(R.id.frame, fragment, TAG_HOME)
+                        .addToBackStack(TAG_HOME);
+                fragmentTransaction.commitAllowingStateLoss();
+
+            }
+        };
+    }
 
 }
