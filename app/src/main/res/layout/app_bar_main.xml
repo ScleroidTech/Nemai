@@ -21,8 +21,10 @@
             android:background="#656576"
             app:layout_collapseMode="pin"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-            <FrameLayout
+
+            <RelativeLayout
                 android:layout_width="match_parent"
+
                 android:layout_height="match_parent">
 
                 <TextView
@@ -43,11 +45,22 @@
                     style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="?attr/actionBarSize"
                     android:layout_height="?attr/actionBarSize"
+                    android:layout_gravity="end|right"
+                    android:layout_toStartOf="@id/btn_cart"
+                    android:contentDescription="@string/search_icon"
+                    app:srcCompat="@drawable/ic_search" />
+
+                <ImageButton
+                    android:id="@+id/btn_cart"
+                    style="@style/Widget.AppCompat.ActionButton"
+                    android:layout_width="?attr/actionBarSize"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_alignParentEnd="true"
                     android:layout_gravity="end"
                     android:contentDescription="@string/search_icon"
-                    android:src="@mipmap/ic_track_courier" />
+                    app:srcCompat="@drawable/ic_shopping_cart" />
 
-            </FrameLayout>
+            </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
