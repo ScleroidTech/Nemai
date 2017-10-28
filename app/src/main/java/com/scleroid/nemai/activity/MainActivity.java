@@ -25,11 +25,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.adapter.AppDatabase;
+import com.scleroid.nemai.adapter.DatabaseHelper;
 import com.scleroid.nemai.fragment.HomeFragment;
 import com.scleroid.nemai.fragment.MoviesFragment;
 import com.scleroid.nemai.fragment.NotificationsFragment;
 import com.scleroid.nemai.fragment.PhotosFragment;
 import com.scleroid.nemai.fragment.SettingsFragment;
+import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.other.CircleTransform;
 import com.scleroid.nemai.other.SessionManager;
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     // flag to load home fragment when user presses back key
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -389,23 +393,29 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void createFragment() {
+    public void newParcel(final Parcel parcel) {
+        databaseHelper = new DatabaseHelper();
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
                 // update the main content by replacing fragments
-
+                DatabaseHelper.addParcel(AppDatabase.getAppDatabase(getApplicationContext()), parcel);
                 Fragment fragment = new HomeFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
+                fragmentTransaction.setCustomAnimations(android.R.anim.slide_out_right,
+                        android.R.anim.slide_in_left);
                 fragmentTransaction.add(R.id.frame, fragment, TAG_HOME)
                         .addToBackStack(TAG_HOME);
-                fragmentTransaction.commitAllowingStateLoss();
+                fragmentTransaction.commit();
 
             }
         };
         mHandler.post(mPendingRunnable);
     }
 
+    @Override
+    protected void onDestroy() {
+        AppDatabase.destroyInstance();
+        super.onDestroy();
+    }
 }

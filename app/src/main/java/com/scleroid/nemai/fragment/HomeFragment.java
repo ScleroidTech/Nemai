@@ -37,6 +37,7 @@ import com.scleroid.nemai.ServerConstants;
 import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.activity.PartnerActivity;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
+import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.other.DelayedAutoCompleteTextView;
 import com.scleroid.nemai.volley_support.AppController;
@@ -129,8 +130,9 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
             public void onClick(View v) {
 //TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data before sending it to server.& send all data to server at once
                 //TODO IMP https://android.jlelse.eu/android-architecture-components-room-livedata-and-viewmodel-fca5da39e26b
-                MainActivity activity = (MainActivity) getActivity();
-                activity.createFragment();
+
+                validateFields(false);
+
 
 
             }
@@ -145,8 +147,8 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
         pinDestinationAutoCompleteTextView = v.findViewById(R.id.pin_dest_autocompletetextview);
         pinDestinationAutoCompleteTextView.setThreshold(THRESHOLD);
-        PinAutoCompleteAdapter pinAutoCompleteAdapter1 = new PinAutoCompleteAdapter(getActivity());
-        pinAutoCompleteAdapter1.notifyDataSetChanged();
+        PinAutoCompleteAdapter pinAutoCompleteAdapter1 = new PinAutoCompleteAdapter(getApplicationContext());
+        //pinAutoCompleteAdapter1.notifyDataSetChanged();
         pinDestinationAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter1);
 
 
@@ -163,7 +165,10 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
         pinSourceAutoCompleteTextView = v.findViewById(R.id.pin_source_autocompletetextview);
         pinSourceAutoCompleteTextView.setThreshold(THRESHOLD);
-        PinAutoCompleteAdapter pinAutoCompleteAdapter = new PinAutoCompleteAdapter(getActivity());
+        PinAutoCompleteAdapter pinAutoCompleteAdapter = new PinAutoCompleteAdapter(getApplicationContext());
+        //pinAutoCompleteAdapter.notifyDataSetChanged();
+        /*PinAutoCompleteAdapter pinAutoCompleteAdapter2 = new PinAutoCompleteAdapter(getApplicationContext());
+        pinAutoCompleteAdapter1.notifyDataSetChanged();*/
         pinSourceAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter); // 'this' is Activity instance
         pinSourceAutoCompleteTextView.setLoadingIndicator(
                 (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator));
@@ -171,7 +176,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 mPinCodeSource = (PinCode) adapterView.getItemAtPosition(position);
-                pinSourceAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeSource.getPincode(), mPinCodeSource.getPincode(), mPinCodeSource.getState()));
+                pinSourceAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeSource.getLocation(), mPinCodeSource.getPincode(), mPinCodeSource.getState()));
             }
         });
 
@@ -228,7 +233,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validateFields();
+                validateFields(true);
 
                 // Intent i = new Intent(getActivity(), PartnerActivity.class);
                 //startActivity(i);
@@ -291,7 +296,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         return v;
     }
 
-    private void validateFields() {
+    private void validateFields(boolean toggleMultiple) {
         boolean noSubmit = false;
         String delivery;
 
@@ -344,14 +349,14 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
 
             if (!noSubmit)
-                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescriptionEditText.getText().toString(), "Parcel", delivery);
+                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescriptionEditText.getText().toString(), delivery, toggleMultiple);
 
 
         } else {
 
 
             if (!noSubmit) {
-                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mDescriptionEditText.getText().toString(), "Documents", delivery);
+                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mDescriptionEditText.getText().toString(), delivery, toggleMultiple);
 
             }
         }
@@ -365,87 +370,96 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         return TextUtils.isEmpty(text.getText());
     }
 
-    private void nextScreenParcel(String source, String destination, String weight, String invoice, String width, String height, String length, String description, String packageType, String deliveryType) {
-        submitRequest(source, destination, weight, invoice, width, height, length, description, packageType, deliveryType);
+    private void nextScreenParcel(String source, String destination, String weight, String invoice, String width, String height, String length, String description, String deliveryType, boolean toggleMultiple) {
+        Parcel parcel = new Parcel(source, destination, deliveryType, "Parcel", weight, invoice, length, width, height, description);
+        submitRequest(parcel, toggleMultiple);
 
     }
 
-    private void nextScreenDocument(String source, String destination, String weight, String invoice, String description, String packageType, String deliveryType) {
-        submitRequest(source, destination, weight, invoice, null, null, null, description, packageType, deliveryType);
+    private void nextScreenDocument(String source, String destination, String weight, String invoice, String description, String deliveryType, boolean toggleMultiple) {
+
+        Parcel parcel = new Parcel(source, destination, deliveryType, "Parcel", weight, invoice, null, null, null, description);
+        submitRequest(parcel, toggleMultiple);
     }
 
-    private void submitRequest(final String source, final String destination, final String weight, final String invoice, final String width, final String height, final String length, final String description, final String packageType, final String deliveryType) {
+    private void submitRequest(final Parcel parcel, boolean toggleMultiple) {
 
-        // Tag used to cancel the request
-        String tag_string_req = "req_parcel";
+        if (toggleMultiple) {
+            // Tag used to cancel the request
+            String tag_string_req = "req_parcel";
 
 
-        //showProgress(true);
+            //showProgress(true);
 
-        JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                ServerConstants.serverUrl.POST_COURIER, null, new Response.Listener<JSONObject>() {
-            @SuppressLint("LongLogTag")
+            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
+                    ServerConstants.serverUrl.POST_COURIER, null, new Response.Listener<JSONObject>() {
+                @SuppressLint("LongLogTag")
 
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                Log.d(TAG, "Parcel Response: " + jsonObject.toString());
-                //showProgress(false);
-                if (true) {
+                @Override
+                public void onResponse(JSONObject jsonObject) {
+                    Log.d(TAG, "Parcel Response: " + jsonObject.toString());
+                    //showProgress(false);
+                    if (true) {
 
-                    Intent partner = new Intent(getApplicationContext(), PartnerActivity.class);
-                    startActivity(partner);
+                        Intent partner = new Intent(getApplicationContext(), PartnerActivity.class);
+                        startActivity(partner);
 
-                    // Launch login activity
+                        // Launch login activity
                     /*Intent intent = new Intent(
                             RegisterActivity.this,
                             LoginActivity.class);
                     startActivity(intent); */
-                    //finish();
-                } else {
+                        //finish();
+                    } else {
 
-                    // Error occurred in registration. Get the error
-                    // message
+                        // Error occurred in registration. Get the error
+                        // message
 
-                    //String errorMsg = jsonObject.getString("error_msg");
+                        //String errorMsg = jsonObject.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                "An Error occurred", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "Server Error on Parcel: " + error.getMessage());
                     Toast.makeText(getApplicationContext(),
-                            "An Error occurred", Toast.LENGTH_LONG).show();
+                            error.getMessage(), Toast.LENGTH_LONG).show();
+
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting params to register url
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("source", parcel.getSourcePin());
+                    params.put("destination", parcel.getDestinationPin());
+                    params.put("weight", parcel.getWeight());
+                    params.put("invoice", parcel.getInvoice());
+                    params.put("width", parcel.getWidth());
+                    params.put("length", parcel.getLength());
+                    params.put("height", parcel.getHeight());
+                    params.put("description", parcel.getDescription());
+                    params.put("delivery_type", parcel.getDeliveryType());
+                    params.put("package_type", parcel.getPackageType());
+
+                    return params;
                 }
 
-            }
-        }, new Response.ErrorListener() {
+            };
 
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Server Error on Parcel: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        } else {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.newParcel(parcel);
 
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting params to register url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("source", source);
-                params.put("destination", destination);
-                params.put("weight", weight);
-                params.put("invoice", invoice);
-                params.put("width", width);
-                params.put("length", length);
-                params.put("height", height);
-                params.put("description", description);
-                params.put("delivery_type", deliveryType);
-                params.put("package_type", packageType);
-
-                return params;
-            }
-
-        };
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        }
     }
 
     private void showRadioButtonDialog() {
