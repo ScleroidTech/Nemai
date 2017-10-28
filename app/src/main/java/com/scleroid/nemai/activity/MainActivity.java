@@ -2,6 +2,7 @@ package com.scleroid.nemai.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -49,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_MOVIES = "movies";
     private static final String TAG_NOTIFICATIONS = "notifications";
     private static final String TAG_SETTINGS = "settings";
-    public static SessionManager session;
     // index to identify current nav menu item
     public static int navItemIndex = 0;
     public static String CURRENT_TAG = TAG_HOME;
+    protected static SessionManager session;
     ImageButton btn_search;
     private List<PinCode> mResultPinList;
     private Context mContext;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         session = new SessionManager(getApplicationContext());
 
-        session.setLogin(false);
+        session.setLogin(true);
         session.setVerified(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+        drawer.setScrimColor(Color.parseColor("#33000000"));
 
 
         // Navigation view header
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
      * name, website, notifications action view (dot)
      */
     private void loadNavHeader() {
-        // name, website
+        // TODO
         txtName.setText("Ravi Tamada");
         txtWebsite.setText("www.androidhive.info");
 
@@ -154,93 +156,6 @@ public class MainActivity extends AppCompatActivity {
 
         // showing dot next to notifications label
         navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
-    }
-
-    /***
-     * Returns respected fragment that user
-     * selected from navigation menu
-     */
-    private void loadHomeFragment() {
-        // selecting appropriate nav menu item
-        selectNavMenu();
-
-        // set toolbar title
-        setToolbarTitle();
-
-        // if user select the current navigation menu again, don't do anything
-        // just close the navigation drawer
-        if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
-            drawer.closeDrawers();
-
-            return;
-        }
-
-        // Sometimes, when fragment has huge data, screen seems hanging
-        // when switching between navigation menus
-        // So using runnable, the fragment is loaded with cross fade effect
-        // This effect can be seen in GMail app
-        Runnable mPendingRunnable = new Runnable() {
-            @Override
-            public void run() {
-                // update the main content by replacing fragments
-                Fragment fragment = getHomeFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
-        };
-
-        // If mPendingRunnable is not null, then add to the message queue
-        if (mPendingRunnable != null) {
-            mHandler.post(mPendingRunnable);
-        }
-
-        // show or hide the fab button
-
-
-        //Closing drawer on item click
-        drawer.closeDrawers();
-
-        // refresh toolbar menu
-        invalidateOptionsMenu();
-    }
-
-    private Fragment getHomeFragment() {
-        switch (navItemIndex) {
-            case 0:
-                // home
-                HomeFragment homeFragment = new HomeFragment();
-                return homeFragment;
-            case 1:
-                // photos
-                PhotosFragment photosFragment = new PhotosFragment();
-                return photosFragment;
-            case 2:
-                // movies fragment
-                MoviesFragment moviesFragment = new MoviesFragment();
-                return moviesFragment;
-            case 3:
-                // notifications fragment
-                NotificationsFragment notificationsFragment = new NotificationsFragment();
-                return notificationsFragment;
-
-            case 4:
-                // settings fragment
-                SettingsFragment settingsFragment = new SettingsFragment();
-                return settingsFragment;
-            default:
-                return new HomeFragment();
-        }
-    }
-
-    private void setToolbarTitle() {
-        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
-    }
-
-    private void selectNavMenu() {
-        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
 
     private void setUpNavigationView() {
@@ -306,15 +221,15 @@ public class MainActivity extends AppCompatActivity {
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
             @Override
-            public void onDrawerClosed(View drawerView) {
-                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
-                super.onDrawerClosed(drawerView);
-            }
-
-            @Override
             public void onDrawerOpened(View drawerView) {
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
                 super.onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
             }
         };
 
@@ -346,6 +261,89 @@ public class MainActivity extends AppCompatActivity {
         }
 
         super.onBackPressed();
+    }
+
+    /***
+     * Returns respected fragment that user
+     * selected from navigation menu
+     */
+    private void loadHomeFragment() {
+        // selecting appropriate nav menu item
+        selectNavMenu();
+
+        // set toolbar title
+        setToolbarTitle();
+
+        // if user select the current navigation menu again, don't do anything
+        // just close the navigation drawer
+        if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
+            drawer.closeDrawers();
+
+            return;
+        }
+
+        // Sometimes, when fragment has huge data, screen seems hanging
+        // when switching between navigation menus
+        // So using runnable, the fragment is loaded with cross fade effect
+        // This effect can be seen in GMail app
+        Runnable mPendingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                // update the main content by replacing fragments
+                Fragment fragment = getHomeFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+                fragmentTransaction.commitAllowingStateLoss();
+            }
+        };
+
+        // If mPendingRunnable is not null, then add to the message queue
+        if (mPendingRunnable != null) {
+            mHandler.post(mPendingRunnable);
+        }
+
+        // show or hide the fab button
+
+
+        //Closing drawer on item click
+        drawer.closeDrawers();
+
+        // refresh toolbar menu
+        invalidateOptionsMenu();
+    }
+
+    private void selectNavMenu() {
+        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+    }
+
+    private void setToolbarTitle() {
+        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+    }
+
+    private Fragment getHomeFragment() {
+        switch (navItemIndex) {
+            case 0:
+                // home
+                return new HomeFragment();
+            case 1:
+                // photos
+
+                return new PhotosFragment();
+            case 2:
+                // movies fragment
+                return new MoviesFragment();
+            case 3:
+                // notifications fragment
+                return new NotificationsFragment();
+
+            case 4:
+                // settings fragment
+                return new SettingsFragment();
+            default:
+                return new HomeFragment();
+        }
     }
 
     @Override
@@ -391,5 +389,23 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void createFragment() {
+        Runnable mPendingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                // update the main content by replacing fragments
+
+                Fragment fragment = new HomeFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction.add(R.id.frame, fragment, TAG_HOME)
+                        .addToBackStack(TAG_HOME);
+                fragmentTransaction.commitAllowingStateLoss();
+
+            }
+        };
+        mHandler.post(mPendingRunnable);
+    }
 
 }

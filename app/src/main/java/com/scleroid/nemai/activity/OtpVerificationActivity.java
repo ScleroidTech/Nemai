@@ -104,7 +104,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements
             String countryCode = intent.getStringExtra(SocialRegisterActivity.INTENT_COUNTRY_CODE);
             reason = intent.getBooleanExtra(SocialRegisterActivity.INTENT_REASON, false);
             TextView phoneText = findViewById(R.id.numberText);
-            phoneText.setText("+" + countryCode + phoneNumber);
+            phoneText.setText(String.format("+%s%s", countryCode, phoneNumber));
             createVerification(phoneNumber, skipPermissionCheck, countryCode);
         }
     }
@@ -122,7 +122,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements
                 mVerification.verify(code);
                 showProgress();
                 TextView messageText = findViewById(R.id.textView);
-                messageText.setText("Verification in progress");
+                messageText.setText(R.string.verification_in_progress);
                 enableInputField(false);
             }
         }
@@ -219,13 +219,13 @@ public class OtpVerificationActivity extends AppCompatActivity implements
             public void onTick(long ms) {
                 if (Math.round((float) ms / 1000.0f) != secondsLeft) {
                     secondsLeft = Math.round((float) ms / 1000.0f);
-                    resend_timer.setText("Resend via Call ( " + secondsLeft + " )");
+                    resend_timer.setText(String.format(getString(R.string.resend_call_placeholder), secondsLeft));
                 }
             }
 
             public void onFinish() {
                 resend_timer.setClickable(true);
-                resend_timer.setText("Resend via Call");
+                resend_timer.setText(R.string.resend_call);
                 resend_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.colorPrimary));
             }
         }.start();
@@ -236,13 +236,13 @@ public class OtpVerificationActivity extends AppCompatActivity implements
             public void onTick(long ms) {
                 if (Math.round((float) ms / 1000.0f) != secondsLeft) {
                     secondsLeft = Math.round((float) ms / 1000.0f);
-                    resend_sms_timer.setText("Resend via Text ( " + secondsLeft + " )");
+                    resend_sms_timer.setText(String.format(getString(R.string.resend_text_placeholder), secondsLeft));
                 }
             }
 
             public void onFinish() {
                 resend_sms_timer.setClickable(true);
-                resend_sms_timer.setText("Resend via Text");
+                resend_sms_timer.setText(R.string.resend_text);
                 resend_sms_timer.setTextColor(ContextCompat.getColor(OtpVerificationActivity.this, R.color.colorPrimary));
             }
         }.start();

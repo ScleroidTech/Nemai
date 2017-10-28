@@ -9,8 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/text_background"
         android:gravity="center"
@@ -19,9 +19,9 @@
             android:id="@+id/txtPkg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_weight="5"
-            android:text="Package1"
+            android:text="@string/package1"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -31,7 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="EDIT"
+            android:text="@string/edit"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -41,7 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="SAVE"
+            android:text="@string/save"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:textStyle="bold"/>
@@ -51,8 +51,8 @@
         android:id="@+id/textPckWeight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="8dp">
 
         <RelativeLayout
@@ -62,19 +62,19 @@
                 android:id="@+id/editWeight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_gravity="center"
-                android:hint="Weight"
+                android:hint="@string/weight"
                 android:inputType="numberDecimal"
                 android:maxLength="6"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:text="Kg"
+                android:layout_marginEnd="10dp"
+                android:text="@string/weight_unit"
                 android:textColor="#808080"
                 android:textSize="18sp"
                 />
@@ -85,15 +85,15 @@
         android:id="@+id/textPckDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="8dp">
 
         <EditText
             android:id="@+id/editPckDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Package Description"
+            android:hint="@string/package_description"
             android:maxLength="70" />
 
     </android.support.design.widget.TextInputLayout>

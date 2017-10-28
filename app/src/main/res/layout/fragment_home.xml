@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_bg"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:layout_margin="10dp"
+    android:clipChildren="false"
+    android:orientation="vertical">
+
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:elevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_corners"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_top"
+
+                android:baselineAligned="false"
                 android:orientation="vertical">
+
                 <RadioGroup
                     android:id="@+id/rgPlaceType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="5dp"
                     android:orientation="horizontal"
                     android:weightSum="1">
@@ -28,8 +44,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
                         android:checked="true"
-                        android:paddingLeft="15dp"
-                        android:text="Domestic"
+                        android:paddingEnd="15dp"
+                        android:paddingStart="15dp"
+                        android:text="@string/domestic"
                         android:textColor="@drawable/selector_textview"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -40,209 +57,212 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
                         android:checked="false"
-                        android:paddingLeft="15dp"
-                        android:text="International"
+                        android:paddingStart="15dp"
+                        android:text="@string/international"
                         android:textColor="@drawable/selector_textview"
                         android:textSize="18sp" />
                 </RadioGroup>
 
 
+            </LinearLayout>
 
-</LinearLayout>
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
                 android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="5dp"
-                                android:text="From"
-                                android:textColor="#918b91"
-                                android:textStyle="bold" />
-                            <ImageView
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:src="@drawable/nearme"/>
-                        </LinearLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/pin_source_TIL"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="6"
-                            android:hint="Source City">
-
-                            <com.scleroid.nemai.other.DelayedAutoCompleteTextView
-                                android:id="@+id/pin_source_autocompletetextview"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/transparent" />
-                        </android.support.design.widget.TextInputLayout>
-
-
-                        <ProgressBar
-                            android:id="@+id/pb_loading_indicator"
-                            style="?android:attr/progressBarStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|end"
-                            android:visibility="gone" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="5dp"
-                                android:text="  To"
-                                android:textColor="#918b91"
-                                android:textStyle="bold" />
-                            <ImageView
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:src="@drawable/nearme"/>
-                        </LinearLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/pin_dest_TIL"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="6"
-
-                            android:hint="Destination City">
-
-                            <com.scleroid.nemai.other.DelayedAutoCompleteTextView
-                                android:id="@+id/pin_dest_autocompletetextview"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/transparent" />
-                        </android.support.design.widget.TextInputLayout>
-                        <ProgressBar
-                            android:id="@+id/pb_loading_indicator2"
-                            style="?android:attr/progressBarStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|end"
-                            android:visibility="gone" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
 
                 <LinearLayout
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/txtPkg"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:background="@drawable/round_corners_bottom"
-                        android:padding="10dp"
-                        android:text="Package Details"
-                        android:textColor="#ffffff"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:visibility="gone"
-                        />
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorWhite"
-                        android:elevation="4dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <RadioGroup
-                            android:id="@+id/rgType"
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginRight="15dp"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:text="@string/from"
+                            android:textColor="#918b91"
+                            android:textStyle="bold" />
 
-                            android:orientation="horizontal"
-                            android:weightSum="1">
-
-                            <RadioButton
-                                android:id="@+id/rDocument"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
-                                android:checked="true"
-                                android:paddingLeft="15dp"
-                                android:text="Document"
-                                android:textColor="@drawable/selector_textview"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                            <RadioButton
-                                android:id="@+id/rParcel"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
-                                android:checked="false"
-                                android:paddingLeft="15dp"
-                                android:text="Parcel"
-                                android:textColor="@drawable/selector_textview"
-                                android:textSize="18sp" />
-                        </RadioGroup>
-
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:contentDescription="@string/location_arrow_icon"
+                            android:src="@drawable/nearme" />
                     </LinearLayout>
 
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/pin_source_TIL"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="6"
+                        android:hint="@string/source_city">
+
+                        <com.scleroid.nemai.other.DelayedAutoCompleteTextView
+                            android:id="@+id/pin_source_autocompletetextview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <ProgressBar
+                        android:id="@+id/pb_loading_indicator"
+                        style="?android:attr/progressBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|end"
+                        android:visibility="gone" />
                 </LinearLayout>
+
+
                 <LinearLayout
-                    android:id="@+id/linearExpandedParcelView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/round_corners_bottom"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:text="@string/to"
+                            android:textColor="#918b91"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:contentDescription="@string/location_arrow_icon"
+                            android:src="@drawable/nearme" />
+                    </LinearLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/pin_dest_TIL"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="6"
+
+                        android:hint="@string/destination_city">
+
+                        <com.scleroid.nemai.other.DelayedAutoCompleteTextView
+                            android:id="@+id/pin_dest_autocompletetextview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ProgressBar
+                        android:id="@+id/pb_loading_indicator2"
+                        style="?android:attr/progressBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|end"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <!--<LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/txtPkg"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/round_corners_bottom"
+                    android:padding="10dp"
+                    android:text="@string/package_details"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+
+                    />-->
+
+            <LinearLayout
+                android:id="@+id/parcelView"
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+
+                    android:orientation="vertical">
+
+                    <RadioGroup
+                        android:id="@+id/rgType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                    android:orientation="horizontal">
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="5dp"
+
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <RadioButton
+                            android:id="@+id/rDocument"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:checked="true"
+                            android:paddingEnd="15dp"
+                            android:paddingStart="15dp"
+                            android:text="@string/document"
+                            android:textColor="@drawable/selector_textview"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <RadioButton
+                            android:id="@+id/rParcel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:checked="false"
+                            android:paddingEnd="15dp"
+                            android:paddingStart="15dp"
+                            android:text="@string/parcel"
+                            android:textColor="@drawable/selector_textview"
+                            android:textSize="18sp" />
+                    </RadioGroup>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="true"
+                    android:orientation="horizontal"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp">
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/textWeight"
@@ -254,28 +274,30 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <EditText
                                 android:id="@+id/editWeight"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
                                 android:layout_gravity="center"
-                                android:hint="Weight"
+                                android:hint="@string/weight"
                                 android:inputType="numberDecimal"
-                                android:maxLength="6"
-                                />
+                                android:maxLength="6" />
+
                             <TextView
+                                android:id="@+id/weight_unit_kg_textView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
-                                android:text="Kg"
+                                android:layout_marginEnd="10dp"
+                                android:text="@string/weight_unit"
                                 android:textColor="#808080"
-                                android:textSize="18sp"
-                                />
+                                android:textSize="18sp" />
                         </RelativeLayout>
                     </android.support.design.widget.TextInputLayout>
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/textInvoice"
                         android:layout_width="0dp"
@@ -286,128 +308,219 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <EditText
                                 android:id="@+id/editInvoice"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
                                 android:layout_gravity="center"
-                                android:hint="Invoice Value"
+                                android:hint="@string/invoice_value"
+                                android:inputType="numberDecimal"
+                                android:maxLength="6" />
+
+                            <TextView
+                                android:id="@+id/currency_unit_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="10dp"
+                                android:text="@string/currency_unit"
+                                android:textColor="#808080"
+                                android:textSize="18sp" />
+                        </RelativeLayout>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearExpandedParcelView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/package_dimensions_in_cms"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:baselineAligned="true"
+                        android:orientation="horizontal">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/textLength"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/editLength"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/length"
+                                android:inputType="numberDecimal"
+                                android:maxLength="5" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/textWidth"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/editWidth"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/width"
+                                android:inputType="numberDecimal"
+                                android:maxLength="5" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/textHeight"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/editHeight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/height"
+                                android:inputType="numberDecimal"
+                                android:maxLength="5" />
+
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+
+                    <!--<android.support.design.widget.TextInputLayout
+                        android:id="@+id/textPckDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="8dp">
+
+                        <EditText
+                            android:id="@+id/editPckDesc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lines="2"
+                        android:minLines="2"
+                        android:hint="@string/package_description"
+                            android:maxLength="70" />
+
+                    </android.support.design.widget.TextInputLayout>-->
+                </LinearLayout>
+
+
+                <!--<LinearLayout
+                    android:id="@+id/linearExpandedDocumentView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+
+                    android:background="@drawable/round_corners_bottom"
+                    android:orientation="vertical">-->
+
+                <!--<LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:baselineAligned="true"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/textWeightDoc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <EditText
+                                android:id="@+id/editWeightDoc"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_gravity="center"
+                                android:hint="@string/weight"
                                 android:inputType="numberDecimal"
                                 android:maxLength="6"
                                 />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
-                                android:text="Rs"
+                                android:layout_marginEnd="10dp"
+                                android:text="@string/weight_unit"
                                 android:textColor="#808080"
                                 android:textSize="18sp"
                                 />
                         </RelativeLayout>
                     </android.support.design.widget.TextInputLayout>
-                </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Package Dimensions (In cms)"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:orientation="horizontal"
-                    >
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/textLength"
+                        android:id="@+id/textInvoiceDoc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1">
 
-                        <EditText
-                            android:id="@+id/editLength"
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Length"
-                            android:inputType="numberDecimal"
-                            android:maxLength="5" />
-
+                            android:layout_height="wrap_content">
+                            <EditText
+                                android:id="@+id/editInvoiceDoc"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_gravity="center"
+                                android:hint="@string/invoice_value"
+                                android:inputType="numberDecimal"
+                                android:maxLength="6"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="10dp"
+                                android:text="@string/currency_unit"
+                                android:textColor="#808080"
+                                android:textSize="18sp"
+                                />
+                        </RelativeLayout>
                     </android.support.design.widget.TextInputLayout>
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/textWidth"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/editWidth"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Width"
-                            android:inputType="numberDecimal"
-                            android:maxLength="5" />
-
-                    </android.support.design.widget.TextInputLayout>
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/textHeight"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/editHeight"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Height"
-                            android:inputType="numberDecimal"
-                            android:maxLength="5" />
-
-                    </android.support.design.widget.TextInputLayout>
-                </LinearLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/textPckDesc"
+                </LinearLayout>-->
+                <!--<LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="8dp">
-
-                    <EditText
-                        android:id="@+id/editPckDesc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Package Description"
-                        android:maxLength="70" />
-
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/linearExpandedDocumentView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:background="@drawable/round_corners_bottom"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:baselineAligned="true"
                     android:orientation="horizontal">
 
 
@@ -427,9 +540,9 @@
                                 android:id="@+id/editWeightDoc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
                                 android:layout_gravity="center"
-                                android:hint="Weight"
+                                android:hint="@string/weight"
                                 android:inputType="numberDecimal"
                                 android:maxLength="6"
                                 />
@@ -439,40 +552,25 @@
                                 android:id="@+id/weight_unit_kg_textView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
-                                android:text="Kg"
+                                android:layout_marginEnd="10dp"
+                                android:text="@string/weight_unit"
                                 android:textColor="#808080"
                                 android:textSize="18sp"
                                 />
                     </RelativeLayout>
 
 
-                </LinearLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/textPckDescDoc"
+                </LinearLayout>-->
+
+
+                <!--<TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="8dp">
-
-                    <EditText
-                        android:id="@+id/editPckDescDoc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Package Description"
-                        android:maxLength="70" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Package Dimensions (In cms)"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/package_dimensions_in_cms"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
@@ -482,38 +580,79 @@
                     android:id="@+id/textPckDescDoc1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp">
 
                     <EditText
                         android:id="@+id/editPckDescDoc1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Package Description"
+                        android:hint="@string/package_description"
                         android:maxLength="70" />
+
+                </android.support.design.widget.TextInputLayout>-->
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="160">
+
+                    <EditText
+                        android:id="@+id/editDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="6dp"
+                        android:hint="@string/package_description"
+                        android:inputType="textMultiLine"
+                        android:maxLength="160"
+                        android:maxLines="5"
+                        android:minLines="5" />
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
-
-
-                    <Button
-                        android:id="@+id/btn_submit"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                        android:layout_gravity="bottom|center_horizontal"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginTop="10dp"
-                android:background="@drawable/btn_rounded"
-                        android:elevation="8dp"
-                        android:text="@string/submit_main"
-                        android:textAllCaps="false"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="16sp"
-                />
-
         </LinearLayout>
+        <!--</LinearLayout>-->
 
-</ScrollView>
 
-</LinearLayout>
+        <!--</LinearLayout>-->
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/scrollView"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="1dp"
+        android:layout_marginTop="10dp"
+
+        android:background="@drawable/btn_rounded"
+        android:text="@string/submit_main"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+
+        app:rippleColor="#fff" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_new_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+
+        app:rippleColor="#fff"
+        app:srcCompat="@drawable/ic_plus_24dp" />
+</android.support.design.widget.CoordinatorLayout>

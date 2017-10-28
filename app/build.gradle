@@ -18,8 +18,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
     productFlavors {
     }
+
 }
 
 dependencies {
@@ -36,5 +46,28 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
     compile 'com.hbb20:ccp:2.0.5'
+    compile "android.arch.persistence.room:runtime:1.0.0-rc1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0-rc1"
 }
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'findbugs'
+
+task findbugs(type: FindBugs) {
+    ignoreFailures = false
+    effort = "default"
+    reportLevel = "medium"
+    excludeFilter = new File("${project.rootDir}/findbugs/findbugs-filter.xml")
+    classes = files("${project.rootDir}/app/build/intermediates/classes")
+    source = fileTree('src/main/java/')
+    classpath = files()
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        xml {
+            destination "$project.buildDir/findbugs/findbugs-output.xml"
+        }
+        html {
+            destination "$project.buildDir/findbugs/findbugs-output.html"
+        }
+    }
+}

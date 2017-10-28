@@ -6,8 +6,11 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.ServerConstants;
+import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.activity.PartnerActivity;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
 import com.scleroid.nemai.models.PinCode;
@@ -45,26 +49,44 @@ import java.util.List;
 import java.util.Map;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-
-
+//TODO CHange most activities to fragment if performance becomes a bottleneck
+//TODO implement ROOm
+//TODO implement this http://droidmentor.com/credit-card-form/
 public class HomeFragment extends Fragment {
     public static final int THRESHOLD = 3;
     private static final String TAG = HomeFragment.class.getSimpleName();
     public static PinCode mPinCodeDestination, mPinCodeSource;
     static String select;
     final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
+/*https://try.kotlinlang.org/
+https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
+    //TODO read this https://medium.com/square-corner-blog/advocating-against-android-fragments-81fd0b462c97
+    //TODo & this too http://smarterer.com/tests/android-developer https://www.buzzingandroid.com/ http://www.jbrugge.com/glean/index.html
+    //TODO 7 this too https://www.infoq.com/presentations/Android-Design/ https://antonioleiva.com/free-guide/
+    //TODO this too www.codacy.com https://possiblemobile.com/ http://www.andreamaglie.com/dont-waste-time-coding-2/
+    //TODO https://androidbycode.wordpress.com/2015/02/13/static-code-analysis-automation-using-findbugs-android-studio/
+    //TODO read this https://www.bignerdranch.com/blog/categories/android/ https://www.bignerdranch.com/blog/building-interfaces-with-constraintlayout/ https://www.bignerdranch.com/blog/the-rxjava-repository-pattern/ https://www.bignerdranch.com/blog/room-data-storage-for-everyone/ https://www.bignerdranch.com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/ https://www.bignerdranch.com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/ https://www.bignerdranch.com/blog/frame-animations-in-android/ https://www.bignerdranch.com/blog/building-animations-android-transition-framework-part-2/ https://www.bignerdranch.com/blog/testing-the-android-way/
+    https://blog.mindorks.com/a-complete-guide-to-learn-kotlin-for-android-development-b1e5d23cc2d8
+    https://developer.android.com/topic/libraries/architecture/room.html https://medium.com/google-developers/7-steps-to-room-27a5fe5f99b2 https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9 https://android.jlelse.eu/room-store-your-data-c6d49b4d53a3 http://www.vogella.com/tutorials/AndroidSQLite/article.html
+    https://android.jlelse.eu/demystifying-the-jvmoverloads-in-kotlin-10dd098e6f72
+*/
 
     RadioButton mParcelRadioButton, mDocumentRadioButton;
     RadioButton mDomesticRadioButton, mInternationalRadioButton;
     LinearLayout mParcelLinearLayout, mDocumentLinearLayout;
     Button mSubmitButton;
-    TextView mWeightUnitTextView;
+    FloatingActionButton fabNewCourier;
+    TextView mWeightUnitTextView, mCurrencyUnitTextView;
     ImageView mAddressImageView;
-    TextInputLayout mWeightParcelTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mParcelDescTIL, mWeightDocTIL, mDescDocTIL, mPinSourceTIL, mPinDestTIL;
+
+    TextInputLayout mWeightTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mDescriptionTIL, /*mDescDocTIL,*/
+            mPinSourceTIL, mPinDestTIL;
     DelayedAutoCompleteTextView pinSourceAutoCompleteTextView, pinDestinationAutoCompleteTextView;
-    EditText mWeightdocEditText, mWeightParcelEditText, mDescDocEditText, mInvoiceValueParcelEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescParcelEditText;
+    EditText mWeightEditText,/* mDescDocEditText,*/
+            mInvoiceValueEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescriptionEditText;
     boolean toggleDocParcel = false;//false == doc, true == parcel
     boolean toggleDomInternational = false;//Domestic false , International = true
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -73,34 +95,49 @@ public class HomeFragment extends Fragment {
         HomeFragment fragment = new HomeFragment();
         return fragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        mWeightParcelTIL = v.findViewById(R.id.textWeight);
+        v.clearFocus();
+
+        mWeightTIL = v.findViewById(R.id.textWeight);
         mInvoiceTIL = v.findViewById(R.id.textInvoice);
         mPinSourceTIL = v.findViewById(R.id.pin_source_TIL);
         mPinDestTIL = v.findViewById(R.id.pin_dest_TIL);
         mLengthTIL = v.findViewById(R.id.textLength);
         mWidthTIL = v.findViewById(R.id.textWidth);
         mHeightTIL = v.findViewById(R.id.textHeight);
-        mParcelDescTIL = v.findViewById(R.id.textPckDesc);
-        mWeightDocTIL = v.findViewById(R.id.textWeightDoc);
-        mDescDocTIL = v.findViewById(R.id.textPckDescDoc);
-        mWeightParcelEditText = v.findViewById(R.id.editWeight);
-        mInvoiceValueParcelEditText = v.findViewById(R.id.editInvoice);
+        mDescriptionTIL = v.findViewById(R.id.textDescription);
+        //mDescDocTIL = v.findViewById(R.id.textPckDescDoc);
+        mWeightEditText = v.findViewById(R.id.editWeight);
+        mInvoiceValueEditText = v.findViewById(R.id.editInvoice);
         mPackageLengthParcelEditText = v.findViewById(R.id.editLength);
         mPackageWidthParcelEditText = v.findViewById(R.id.editWidth);
         mHeightParcelEditText = v.findViewById(R.id.editHeight);
-        mDescParcelEditText = v.findViewById(R.id.editPckDesc);
-        mDescDocEditText = v.findViewById(R.id.editPckDescDoc);
+        mDescriptionEditText = v.findViewById(R.id.editDescription);
+//        mDescDocEditText = v.findViewById(R.id.editPckDescDoc);
         mParcelRadioButton = v.findViewById(R.id.rParcel);
         mDocumentRadioButton = v.findViewById(R.id.rDocument);
 
+        fabNewCourier = v.findViewById(R.id.fab_new_data);
+        fabNewCourier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data before sending it to server.& send all data to server at once
+                //TODO IMP https://android.jlelse.eu/android-architecture-components-room-livedata-and-viewmodel-fca5da39e26b
+                MainActivity activity = (MainActivity) getActivity();
+                activity.createFragment();
+
+
+            }
+        });
         mParcelLinearLayout = v.findViewById(R.id.linearExpandedParcelView);
-        mDocumentLinearLayout = v.findViewById(R.id.linearExpandedDocumentView);
-        mDocumentLinearLayout.setVisibility(View.VISIBLE);
+//        mDocumentLinearLayout = v.findViewById(R.id.linearExpandedDocumentView);
+//        mDocumentLinearLayout.setVisibility(View.VISIBLE);
 
 
         //img_address =  v.findViewById(R.id.img_address);
@@ -119,7 +156,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 mPinCodeDestination = (PinCode) adapterView.getItemAtPosition(position);
-                pinDestinationAutoCompleteTextView.setText(mPinCodeDestination.getLocation() + ", " + mPinCodeDestination.getPincode() + ", " + mPinCodeDestination.getState());
+                pinDestinationAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeDestination.getLocation(), mPinCodeDestination.getPincode(), mPinCodeDestination.getState()));
             }
         });
 
@@ -134,18 +171,29 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 mPinCodeSource = (PinCode) adapterView.getItemAtPosition(position);
-                pinSourceAutoCompleteTextView.setText(mPinCodeSource.getPincode() + ", " + mPinCodeSource.getPincode() + ", " + mPinCodeSource.getState());
+                pinSourceAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeSource.getPincode(), mPinCodeSource.getPincode(), mPinCodeSource.getState()));
             }
         });
 
 
-        mWeightUnitTextView= v.findViewById(R.id.weight_unit_kg_textView);
-        mWeightdocEditText = v.findViewById(R.id.editWeightDoc);
-        mWeightdocEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mWeightUnitTextView = v.findViewById(R.id.weight_unit_kg_textView);
+
+        mWeightEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus) mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                if (hasFocus)
+                    mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
                 else mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
+            }
+        });
+
+        mCurrencyUnitTextView = v.findViewById(R.id.currency_unit_text_view);
+        mInvoiceValueEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mCurrencyUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                else mCurrencyUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
             }
         });
 
@@ -173,6 +221,8 @@ public class HomeFragment extends Fragment {
 
     }
 });*/
+
+//TODO https://uk.linkedin.com/in/chrisbanes/
         mSubmitButton = v.findViewById(R.id.btn_submit);
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
@@ -188,9 +238,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    mDocumentLinearLayout.setVisibility(View.VISIBLE);
+                    //mDocumentLinearLayout.setVisibility(View.VISIBLE);
                     toggleDocParcel = false;
                     mParcelLinearLayout.setVisibility(View.GONE);
+
+                    mDescriptionEditText.setMinLines(6);
                     mDocumentRadioButton.setTypeface(null, Typeface.BOLD);
                     mParcelRadioButton.setTypeface(null, Typeface.NORMAL);
                 }
@@ -202,7 +254,8 @@ public class HomeFragment extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     mParcelLinearLayout.setVisibility(View.VISIBLE);
-                    mDocumentLinearLayout.setVisibility(View.GONE);
+                    // mDocumentLinearLayout.setVisibility(View.GONE);
+                    mDescriptionEditText.setMinLines(1);
                     toggleDocParcel = true;
                     mParcelRadioButton.setTypeface(null, Typeface.BOLD);
                     mDocumentRadioButton.setTypeface(null, Typeface.NORMAL);
@@ -254,17 +307,22 @@ public class HomeFragment extends Fragment {
             noSubmit = true;
         } else mPinDestTIL.setErrorEnabled(false);
 
+        if (isEmpty(mWeightEditText)) {
+            mWeightTIL.setErrorEnabled(true);
+            mWeightTIL.setError("Enter the Weight");
+            noSubmit = true;
+        } else mWeightTIL.setErrorEnabled(false);
+
+        if (isEmpty(mInvoiceValueEditText)) {
+            mInvoiceTIL.setErrorEnabled(true);
+            mInvoiceTIL.setError("Enter the Invoice Value");
+        } else mInvoiceTIL.setErrorEnabled(false);
 
 
         if (toggleDomInternational) delivery = "International";
         else delivery = "Domestic";
         if (toggleDocParcel) {
 
-            if (isEmpty(mWeightParcelEditText)) {
-                mWeightParcelTIL.setErrorEnabled(true);
-                mWeightParcelTIL.setError("Enter the Weight");
-                noSubmit = true;
-            } else mWeightParcelTIL.setErrorEnabled(false);
 
             if (isEmpty(mPackageWidthParcelEditText)) {
                 mWidthTIL.setErrorEnabled(true);
@@ -284,39 +342,36 @@ public class HomeFragment extends Fragment {
                 noSubmit = true;
             } else mLengthTIL.setErrorEnabled(false);
 
-            if (isEmpty(mInvoiceValueParcelEditText)) {
-                mInvoiceTIL.setErrorEnabled(true);
-                mInvoiceTIL.setError("Enter the Invoice Value");
-            } else mInvoiceTIL.setErrorEnabled(false);
-
 
             if (!noSubmit)
-                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightParcelEditText.getText().toString(), mInvoiceValueParcelEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescParcelEditText.getText().toString(), "Parcel", delivery);
+                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescriptionEditText.getText().toString(), "Parcel", delivery);
 
 
         } else {
-            if (isEmpty(mWeightdocEditText)) {
-                mWeightDocTIL.setErrorEnabled(true);
-                mWeightDocTIL.setError("Enter the Weight");
-                noSubmit = true;
 
-            } else mWeightDocTIL.setErrorEnabled(false);
 
             if (!noSubmit) {
-                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightdocEditText.getText().toString(), mDescDocEditText.getText().toString(), "Documents", delivery);
+                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mDescriptionEditText.getText().toString(), "Documents", delivery);
 
             }
         }
     }
 
-    private void nextScreenDocument(String source, String destination, String weight, String description, String packageType, String deliveryType) {
-        submitRequest(source, destination, weight, null, null, null, null, description, packageType, deliveryType);
+    private boolean isEmpty(DelayedAutoCompleteTextView text) {
+        return TextUtils.isEmpty(text.getText());
     }
 
+    private boolean isEmpty(EditText text) {
+        return TextUtils.isEmpty(text.getText());
+    }
 
     private void nextScreenParcel(String source, String destination, String weight, String invoice, String width, String height, String length, String description, String packageType, String deliveryType) {
         submitRequest(source, destination, weight, invoice, width, height, length, description, packageType, deliveryType);
 
+    }
+
+    private void nextScreenDocument(String source, String destination, String weight, String invoice, String description, String packageType, String deliveryType) {
+        submitRequest(source, destination, weight, invoice, null, null, null, description, packageType, deliveryType);
     }
 
     private void submitRequest(final String source, final String destination, final String weight, final String invoice, final String width, final String height, final String length, final String description, final String packageType, final String deliveryType) {
@@ -399,14 +454,14 @@ public class HomeFragment extends Fragment {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.radio_buttondiaglog);
-        List<String> stringList=new ArrayList<>();  // here is list
-        for(int i=0;i<5;i++) {
+        List<String> stringList = new ArrayList<>();  // here is list
+        for (int i = 0; i < 5; i++) {
             stringList.add("RadioButton " + (i + 1));
         }
         RadioGroup rg = dialog.findViewById(R.id.radio_group);
 
-        for(int i=0;i<stringList.size();i++){
-            RadioButton rb=new RadioButton(getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
+        for (int i = 0; i < stringList.size(); i++) {
+            RadioButton rb = new RadioButton(getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
             rb.setText(stringList.get(i));
             rg.addView(rb);
         }
@@ -418,7 +473,7 @@ public class HomeFragment extends Fragment {
                 for (int x = 0; x < childCount; x++) {
                     RadioButton btn = (RadioButton) group.getChildAt(x);
                     if (btn.getId() == checkedId) {
-                        Toast.makeText(getActivity(),btn.getText(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), btn.getText(), Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -429,14 +484,34 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private boolean isEmpty(EditText text) {
-        return TextUtils.isEmpty(text.getText());
-    }
+    class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private boolean isEmpty(DelayedAutoCompleteTextView text) {
-        return TextUtils.isEmpty(text.getText());
-    }
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    // Fragment for Center side
+                    return new HomeFragment();
+            }
+            return null;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+
+    }
 }
 
 
