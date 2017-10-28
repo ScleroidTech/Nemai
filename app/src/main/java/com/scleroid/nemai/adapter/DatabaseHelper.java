@@ -1,5 +1,7 @@
 package com.scleroid.nemai.adapter;
 
+import android.os.AsyncTask;
+
 import com.scleroid.nemai.models.Parcel;
 
 
@@ -23,7 +25,7 @@ public class DatabaseHelper {
     }
 
 
-    /*private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final AppDatabase mDb;
 
@@ -36,5 +38,5 @@ public class DatabaseHelper {
             return null;
         }
 
-    }*/
+    }
 }

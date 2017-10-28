@@ -64,10 +64,10 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             listView = inflater.inflate(R.layout.list_item_pin, parent, false);
         }
-        Log.d(TAG, "Location " + getItem(position).getLocation() + "\n" +
+        /*Log.d(TAG, "Location " + getItem(position).getLocation() + "\n" +
                 getItem(position).getPincode() + "\n" +
                 getItem(position).getArea() + "\n" +
-                " State" + getItem(position).getState());
+                " State" + getItem(position).getState());*/
         ((TextView) listView.findViewById(R.id.popup_pin_location_text_view)).setText(String.format("%s , ", getItem(position).getLocation()));
         ((TextView) listView.findViewById(R.id.popup_pin_pincode_text_view)).setText(String.format("%s , ", getItem(position).getPincode()));
         ((TextView) listView.findViewById(R.id.popup_pin_area_text_view)).setText(getItem(position).getArea());
