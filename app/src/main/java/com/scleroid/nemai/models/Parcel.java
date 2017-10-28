@@ -21,9 +21,9 @@ public class Parcel {
     private String length;
     private String width;
     private String height;
-    private String desc;
+    private String description;
 
-    Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, String weight, String invoice, String length, String width, String height, String desc) {
+    public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, String weight, String invoice, String length, String width, String height, String description) {
         this.sourcePin = sourcePin;
         this.destinationPin = destinationPin;
         this.deliveryType = deliveryType;
@@ -33,7 +33,7 @@ public class Parcel {
         this.length = length;
         this.width = width;
         this.height = height;
-        this.desc = desc;
+        this.description = description;
     }
 
     int getSerialNo() {
@@ -44,7 +44,7 @@ public class Parcel {
         serialNo = pSerialNo;
     }
 
-    String getSourcePin() {
+    public String getSourcePin() {
         return sourcePin;
     }
 
@@ -52,7 +52,7 @@ public class Parcel {
         sourcePin = pSourcePin;
     }
 
-    String getDestinationPin() {
+    public String getDestinationPin() {
         return destinationPin;
     }
 
@@ -60,7 +60,7 @@ public class Parcel {
         destinationPin = pDestinationPin;
     }
 
-    String getDeliveryType() {
+    public String getDeliveryType() {
         return deliveryType;
     }
 
@@ -68,7 +68,7 @@ public class Parcel {
         deliveryType = pDeliveryType;
     }
 
-    String getPackageType() {
+    public String getPackageType() {
         return packageType;
     }
 
@@ -116,11 +116,11 @@ public class Parcel {
         this.height = height;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String pkgDesc) {
-        this.desc = pkgDesc;
+    public void setDescription(String pkgDesc) {
+        this.description = pkgDesc;
     }
 }

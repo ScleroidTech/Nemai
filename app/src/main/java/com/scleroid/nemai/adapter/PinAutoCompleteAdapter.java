@@ -42,7 +42,9 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
     @Override
     public int getCount() {
 
-        return mResultPinList.size();
+        if (mResultPinList != null)
+            return mResultPinList.size();
+        return 0;
     }
 
     @Override
@@ -62,6 +64,10 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             listView = inflater.inflate(R.layout.list_item_pin, parent, false);
         }
+        Log.d(TAG, "Location " + getItem(position).getLocation() + "\n" +
+                getItem(position).getPincode() + "\n" +
+                getItem(position).getArea() + "\n" +
+                " State" + getItem(position).getState());
         ((TextView) listView.findViewById(R.id.popup_pin_location_text_view)).setText(String.format("%s , ", getItem(position).getLocation()));
         ((TextView) listView.findViewById(R.id.popup_pin_pincode_text_view)).setText(String.format("%s , ", getItem(position).getPincode()));
         ((TextView) listView.findViewById(R.id.popup_pin_area_text_view)).setText(getItem(position).getArea());
@@ -76,7 +82,8 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public Filter getFilter() {
-        Filter filter = new Filter() {
+
+        return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
@@ -110,7 +117,6 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                     notifyDataSetInvalidated();
                 }
             }};
-        return filter;
     }
 
     /**
@@ -122,7 +128,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
             dbHelper.prepareDatabase();
             return dbHelper.getPincodes(input);
         } catch (IOException e) {
-            Log.d(TAG, e.getMessage());
+            Log.d(TAG, "IOException" + e.getMessage());
             return null;
         }
 

@@ -15,13 +15,14 @@ import android.widget.ProgressBar;
  * Created by Ganesh on 18/9/17.
  */
 
+
 public class DelayedAutoCompleteTextView extends android.support.v7.widget.AppCompatAutoCompleteTextView {
     /* Custom View of AutocompleteTextView which helps load the textview after a few keystrokes,
-    to prevent fewer network calles & avoid invalid data - */
+    to prevent fewer network calls & avoid invalid data - */
 
     private static final int MESSAGE_TEXT_CHANGED = 0;
-    private static final int DEFAULT_AUTOCOMPLETE_DELAY = 1;
-    private static Handler mHandler;
+    private static final int DEFAULT_AUTOCOMPLETE_DELAY = 0;
+    private Handler mHandler;
     private int mAutoCompleteDelay = DEFAULT_AUTOCOMPLETE_DELAY;
     private ProgressBar mLoadingIndicator;
 
@@ -38,7 +39,6 @@ public class DelayedAutoCompleteTextView extends android.support.v7.widget.AppCo
             }
         };
     }
-
     public void setLoadingIndicator(ProgressBar progressBar) {
         mLoadingIndicator = progressBar;
     }
@@ -53,6 +53,9 @@ public class DelayedAutoCompleteTextView extends android.support.v7.widget.AppCo
         if (mLoadingIndicator != null) {
             mLoadingIndicator.setVisibility(View.VISIBLE);
         }
+
+        //removed static handler
+        //andler= new Handler();
         mHandler.removeMessages(MESSAGE_TEXT_CHANGED);
         mHandler.sendMessage(mHandler.obtainMessage(MESSAGE_TEXT_CHANGED, text));
     }

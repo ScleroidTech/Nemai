@@ -17,7 +17,7 @@ public class DatabaseHelper {
     }
 */
 
-    private static Parcel addParce(final AppDatabase db, Parcel parcel) {
+    public static Parcel addParcel(final AppDatabase db, Parcel parcel) {
         db.parcelDao().insert(parcel);
         return parcel;
     }
