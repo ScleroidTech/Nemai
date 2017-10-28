@@ -131,8 +131,8 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 //TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data before sending it to server.& send all data to server at once
                 //TODO IMP https://android.jlelse.eu/android-architecture-components-room-livedata-and-viewmodel-fca5da39e26b
 
-                validateFields(false);
-
+                //validateFields(false);
+                submitRequest(null, false);
 
 
             }

@@ -1,10 +1,12 @@
 package com.scleroid.nemai.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.rollbar.android.Rollbar;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.AppDatabase;
 import com.scleroid.nemai.adapter.DatabaseHelper;
@@ -79,8 +82,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
+        Rollbar.init(this, "fe4fb1ae0576446eb3b4b7b082aa25bf", "development");
         session = new SessionManager(getApplicationContext());
 
+        Rollbar.reportMessage("Test message", "debug");
+        Rollbar.reportException(new Exception("Test exception"));
         session.setLogin(true);
         session.setVerified(true);
         if (!session.isLoggedIn()) {
@@ -396,14 +402,24 @@ public class MainActivity extends AppCompatActivity {
     public void newParcel(final Parcel parcel) {
         databaseHelper = new DatabaseHelper();
         Runnable mPendingRunnable = new Runnable() {
+            @SuppressLint("HandlerLeak")
             @Override
             public void run() {
                 // update the main content by replacing fragments
-                DatabaseHelper.addParcel(AppDatabase.getAppDatabase(getApplicationContext()), parcel);
+
+                new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        DatabaseHelper.addParcel(AppDatabase.getAppDatabase(
+
+                                getApplicationContext()), parcel);
+                    }
+                };
                 Fragment fragment = new HomeFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.slide_out_right,
-                        android.R.anim.slide_in_left);
+                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right);
                 fragmentTransaction.add(R.id.frame, fragment, TAG_HOME)
                         .addToBackStack(TAG_HOME);
                 fragmentTransaction.commit();
