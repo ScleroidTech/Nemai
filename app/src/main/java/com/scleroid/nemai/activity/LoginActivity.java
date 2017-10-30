@@ -677,8 +677,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                         //JSONObject jObj = new JSONObject(jsonObject);
 
-                        boolean error = jsonObject.getBoolean("error");
-                        if (!error) {
+                        boolean error = jsonObject.getBoolean("status");
+                        if (error) {
 
 
                             Toast.makeText(getApplicationContext(), "User successfully logged in", Toast.LENGTH_LONG).show();
@@ -695,7 +695,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             // message
 
                             session.setLogin(false);
-                            String errorMsg = jsonObject.getString("error_msg");
+                            String errorMsg = jsonObject.getString("message");
                             Toast.makeText(getApplicationContext(),
                                     errorMsg, Toast.LENGTH_LONG).show();
                         }
@@ -756,7 +756,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 @Override
                 public void onResponse(JSONObject jsonObject) {
-                    Log.d(TAG, "Login Response: " + jsonObject.toString());
+                    //Log.d(TAG, "Login Response: " + jsonObject.toString());
                     showProgress(false);
 
                     try {
@@ -767,8 +767,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                         //JSONObject jObj = new JSONObject(jsonObject);
 
-                        boolean error = jsonObject.getBoolean("error");
-                        if (!error) {
+                        boolean error = jsonObject.getBoolean("status");
+                        if (error) {
                             isUserExists = jsonObject.getBoolean("success");
 
 
@@ -780,9 +780,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             isUserExists = false;
 
                             //session.setLogin(false);
-                            String errorMsg = jsonObject.getString("error_msg");
+                            /*String errorMsg = jsonObject.getString("error_msg");
                             Toast.makeText(getApplicationContext(),
-                                    errorMsg, Toast.LENGTH_LONG).show();
+                                    errorMsg, Toast.LENGTH_LONG).show();*/
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

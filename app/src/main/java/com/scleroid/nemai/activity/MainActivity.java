@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.AppDatabase;
 import com.scleroid.nemai.adapter.ParcelLab;
@@ -40,6 +42,8 @@ import com.scleroid.nemai.other.CircleTransform;
 import com.scleroid.nemai.other.SessionManager;
 
 import java.util.List;
+
+import okhttp3.OkHttpClient;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -79,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stetho.initializeWithDefaults(this);
+        new OkHttpClient.Builder()
+                .addNetworkInterceptor(new StethoInterceptor())
+                .build();
+
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
 // TODO add after development complete       Rollbar.init(this, "fe4fb1ae0576446eb3b4b7b082aa25bf", "development");
@@ -86,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        Rollbar.reportMessage("Test message", "debug");
 //        Rollbar.reportException(new Exception("Test exception"));
-        session.setLogin(false);
+        session.setLogin(true);
         session.setVerified(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
