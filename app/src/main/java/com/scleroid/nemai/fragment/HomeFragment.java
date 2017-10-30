@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -55,6 +56,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 //TODO implement this http://droidmentor.com/credit-card-form/
 public class HomeFragment extends Fragment {
     public static final int THRESHOLD = 3;
+    private static final String ARG_PARCEL_ID = "parcel_id";
     private static final String TAG = HomeFragment.class.getSimpleName();
     public static PinCode mPinCodeDestination, mPinCodeSource;
     static String select;
@@ -88,13 +90,37 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     boolean toggleDocParcel = false;//false == doc, true == parcel
     boolean toggleDomInternational = false;//Domestic false , International = true
 
+    Parcel parcel;
+
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    public static HomeFragment newInstance() {
+    public static HomeFragment newInstance(int parcel_id) {
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_PARCEL_ID, parcel_id);
+
+
         HomeFragment fragment = new HomeFragment();
+        fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        final int serialNo = (int) getArguments().getSerializable(ARG_PARCEL_ID);
+       /* new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                parcel = ParcelLab.get(getActivity()).getParcel(AppDatabase.getAppDatabase(getApplicationContext()),serialNo );
+
+            }
+        };*/
+
+
     }
 
     @Override
