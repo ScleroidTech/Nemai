@@ -10,8 +10,10 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
     private ParcelLab parcelLab;
+    private ViewPager mViewPager;
+    private List<Parcel> parcels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         drawer.setScrimColor(Color.parseColor("#33000000"));
+
+        mViewPager = findViewById(R.id.frame);
 
 
         // Navigation view header
@@ -304,10 +310,12 @@ public class MainActivity extends AppCompatActivity {
         // when switching between navigation menus
         // So using runnable, the fragment is loaded with cross fade effect
         // This effect can be seen in GMail app
+
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
                 // update the main content by replacing fragments
+
                 Fragment fragment = getHomeFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
@@ -409,6 +417,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void newParcel(final Parcel parcel, final Context applicationContext) {
 
+        final int[] totalParcels = new int[1];
+
         parcelLab = new ParcelLab(applicationContext);
         Runnable mPendingRunnable = new Runnable() {
             @SuppressLint("HandlerLeak")
@@ -420,9 +430,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
+
                         ParcelLab.addParcel(AppDatabase.getAppDatabase(applicationContext), parcel);
                         //ParcelLab.addParcel(AppDatabase.getAppDatabase(applicationContext), new Parcel());
-                        HomeFragment.parcelCount = ParcelLab.getCount(AppDatabase.getAppDatabase(applicationContext));
+                        totalParcels[0] = ParcelLab.getCount(AppDatabase.getAppDatabase(applicationContext));
+                        //wrong idea    HomeFragment.parcelCount = ParcelLab.getCount(AppDatabase.getAppDatabase(applicationContext));
+                        HomeFragment.parcelCount++;
+                        parcels = ParcelLab.getAllParcels(AppDatabase.getAppDatabase(applicationContext));
 
                     }
                 };
@@ -436,6 +450,18 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
+        mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return HomeFragment.newInstance(HomeFragment.parcelCount);
+            }
+
+            @Override
+            public int getCount() {
+                return totalParcels[0];
+            }
+        });
+
         mHandler.post(mPendingRunnable);
     }
 
