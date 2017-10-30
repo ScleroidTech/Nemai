@@ -2,6 +2,7 @@ package com.scleroid.nemai.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
@@ -31,6 +32,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -50,14 +55,18 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.ServerConstants;
 import com.scleroid.nemai.other.SessionManager;
+import com.scleroid.nemai.volley_support.AppController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -639,11 +648,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     public void loginUser(String userName, String pass) {
         // Tag used to cancel the request
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+       /* Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
-        finish();
+        finish();*/
 
-    /*
         if (isNetworkAvailable(getApplicationContext())) {
             String tag_string_req = "req_login";
             userId = userName;
@@ -714,8 +722,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 protected Map<String, String> getParams() {
                     // Posting params to register url
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put("userId", userId);
-                    params.put("password", password);
+                    params.put("email_id", userId);
+                    params.put("pwd", password);
 
                     return params;
                 }
@@ -727,13 +735,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else
             Toast.makeText(getApplicationContext(), "Network not connected, try again", Toast.LENGTH_LONG).show();
 
-*/
     }
 
     private boolean isAlreadyUser(String userName) {
 
-        return false;
-        /*
+//        return false;
         if (isNetworkAvailable(getApplicationContext())) {
 
             // Tag used to cancel the request
@@ -815,7 +821,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else
             Toast.makeText(getApplicationContext(), "Network is not available , try again later", Toast.LENGTH_LONG).show();
         return false;
-        */
     }
 
 

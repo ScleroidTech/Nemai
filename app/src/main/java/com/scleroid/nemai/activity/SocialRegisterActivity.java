@@ -3,6 +3,7 @@ package com.scleroid.nemai.activity;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -21,13 +22,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.hbb20.CountryCodePicker;
 import com.msg91.sendotp.library.PhoneNumberFormattingTextWatcher;
 import com.msg91.sendotp.library.PhoneNumberUtils;
 import com.msg91.sendotp.library.internal.Iso2Phone;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.ServerConstants;
+import com.scleroid.nemai.volley_support.AppController;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
+import static com.scleroid.nemai.activity.MainActivity.session;
+import static com.scleroid.nemai.activity.RegisterActivity.isNetworkAvailable;
 
 
 /**
@@ -228,7 +243,6 @@ public class SocialRegisterActivity extends AppCompatActivity {
         openActivity(phone);
 
 
-        /*
         if (isNetworkAvailable(getApplicationContext())) {
 
             // Tag used to cancel the request
@@ -268,7 +282,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
                                 RegisterActivity.this,
                                 LoginActivity.class);
                         startActivity(intent);
-                            //finish();
+                            //finish(); */
                         } else {
 
                             // Error occurred in registration. Get the error
@@ -307,10 +321,10 @@ public class SocialRegisterActivity extends AppCompatActivity {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_SOCIAL_REGISTER);
 
-                    params.put("fname", firstName);
-                    params.put("lname", lastName);
+                    params.put("first_name", firstName);
+                    params.put("last_name", lastName);
                     params.put("gender", gender);
-                    params.put("email", email);
+                    params.put("email_id", email);
                     params.put("phone", phone);
                     params.put("method",loginMethod);
 
@@ -326,7 +340,6 @@ public class SocialRegisterActivity extends AppCompatActivity {
 
         } else
             Toast.makeText(getApplicationContext(), "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();
-    */
     }
 
 

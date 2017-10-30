@@ -2,6 +2,7 @@ package com.scleroid.nemai.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.content.Context;
@@ -31,6 +32,10 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -52,20 +57,23 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.hbb20.CountryCodePicker;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.ServerConstants;
 import com.scleroid.nemai.other.SessionManager;
+import com.scleroid.nemai.volley_support.AppController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
 import static com.scleroid.nemai.activity.MainActivity.session;
-import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_COUNTRY_CODE;
 import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_PHONENUMBER;
 
 /**
@@ -599,15 +607,14 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     protected void registerUser(final String firstName, final String lastName, final String email,
                                 final String phone, final String gender, final String password) {
 
-        Intent verification = new Intent(getBaseContext(), OtpVerificationActivity.class);
+       /* Intent verification = new Intent(getBaseContext(), OtpVerificationActivity.class);
 
         verification.putExtra(INTENT_PHONENUMBER, phone);
         verification.putExtra(INTENT_COUNTRY_CODE, countryCode);
         startActivity(verification);
-        finish();
+        finish();*/
 
 
-        /*
         if (isNetworkAvailable(getApplicationContext())) {
 
             // Tag used to cancel the request
@@ -651,7 +658,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                                 RegisterActivity.this,
                                 LoginActivity.class);
                         startActivity(intent);
-                            //finish();
+                            //finish(); */
                         } else {
 
                             // Error occurred in registration. Get the error
@@ -690,12 +697,12 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                     Map<String, String> params = new HashMap<String, String>();
                     params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_COURIER);
 
-                    params.put("fname", firstName);
-                    params.put("lname", lastName);
+                    params.put("first_name", firstName);
+                    params.put("last_name", lastName);
                     params.put("gender", gender);
-                    params.put("email", email);
+                    params.put("email_id", email);
                     params.put("phone", phone);
-                    params.put("password", password);
+                    params.put("pwd", password);
 
                     return params;
                 }
@@ -709,13 +716,11 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
         } else
             Toast.makeText(getApplicationContext(), "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();
-    */
     }
 
     private boolean isAlreadyUser(String userName) {
 
-        return false;
-        /*
+        //return false;
         if (isNetworkAvailable(getApplicationContext())) {
 
             // Tag used to cancel the request
@@ -797,7 +802,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         } else
             Toast.makeText(getApplicationContext(), "Network is not available , try again later", Toast.LENGTH_LONG).show();
         return false;
-        */
     }
 
 
