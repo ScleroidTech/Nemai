@@ -45,10 +45,6 @@ public class ParcelLab {
 
     }
 
-    public static ParcelLab get(Context context) {
-        if (parcelLab == null) parcelLab = new ParcelLab(context);
-        return parcelLab;
-    }
 
     public void updateParcel(AppDatabase db, Parcel parcel) {
         db.parcelDao().updateParcel(parcel);

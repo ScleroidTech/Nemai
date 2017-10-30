@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        Rollbar.reportMessage("Test message", "debug");
 //        Rollbar.reportException(new Exception("Test exception"));
-        session.setLogin(true);
+        session.setLogin(false);
         session.setVerified(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
         switch (navItemIndex) {
             case 0:
                 // home
-                return new HomeFragment();
+                return HomeFragment.newInstance(HomeFragment.parcelCount);
             case 1:
                 // photos
 
@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
                 // settings fragment
                 return new SettingsFragment();
             default:
-                return new HomeFragment();
+                return HomeFragment.newInstance(HomeFragment.parcelCount);
         }
     }
 
@@ -398,8 +398,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void newParcel(final Parcel parcel) {
-        parcelLab = new ParcelLab(getApplicationContext());
+    public void newParcel(final Parcel parcel, final Context applicationContext) {
+
+        parcelLab = new ParcelLab(applicationContext);
         Runnable mPendingRunnable = new Runnable() {
             @SuppressLint("HandlerLeak")
             @Override
@@ -410,12 +411,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
-                        ParcelLab.addParcel(AppDatabase.getAppDatabase(
+                        ParcelLab.addParcel(AppDatabase.getAppDatabase(applicationContext), parcel);
+                        //ParcelLab.addParcel(AppDatabase.getAppDatabase(applicationContext), new Parcel());
+                        HomeFragment.parcelCount = ParcelLab.getCount(AppDatabase.getAppDatabase(applicationContext));
 
-                                getApplicationContext()), parcel);
                     }
                 };
-                Fragment fragment = new HomeFragment();
+                Fragment fragment = HomeFragment.newInstance(HomeFragment.parcelCount);
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
                         android.R.anim.slide_out_right);
