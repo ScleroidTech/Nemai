@@ -36,6 +36,10 @@ public class Parcel {
         this.description = description;
     }
 
+    public Parcel() {
+
+    }
+
     int getSerialNo() {
         return serialNo;
     }

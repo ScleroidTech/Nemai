@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
@@ -37,6 +39,8 @@ import com.scleroid.nemai.R;
 import com.scleroid.nemai.ServerConstants;
 import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.activity.PartnerActivity;
+import com.scleroid.nemai.adapter.AppDatabase;
+import com.scleroid.nemai.adapter.ParcelLab;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
@@ -59,6 +63,7 @@ public class HomeFragment extends Fragment {
     private static final String ARG_PARCEL_ID = "parcel_id";
     private static final String TAG = HomeFragment.class.getSimpleName();
     public static PinCode mPinCodeDestination, mPinCodeSource;
+    public static int parcelCount = 1;
     static String select;
     final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
 /*https://try.kotlinlang.org/
@@ -92,6 +97,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
     Parcel parcel;
 
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -110,16 +116,23 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        final int serialNo = (int) getArguments().getSerializable(ARG_PARCEL_ID);
-       /* new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                parcel = ParcelLab.get(getActivity()).getParcel(AppDatabase.getAppDatabase(getApplicationContext()),serialNo );
 
-            }
-        };*/
+        final int serialNo;
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            serialNo = (int) getArguments().getSerializable(ARG_PARCEL_ID);
 
+            new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+                    if (ParcelLab.getCount(AppDatabase.getAppDatabase(getApplicationContext())) > 0)
+
+                        parcel = ParcelLab.getParcel(AppDatabase.getAppDatabase(getApplicationContext()), serialNo);
+
+                }
+            };
+        } else parcel = new Parcel();
 
     }
 
@@ -141,11 +154,17 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         mDescriptionTIL = v.findViewById(R.id.textDescription);
         //mDescDocTIL = v.findViewById(R.id.textPckDescDoc);
         mWeightEditText = v.findViewById(R.id.editWeight);
+        mWeightEditText.setText(parcel.getWeight());
         mInvoiceValueEditText = v.findViewById(R.id.editInvoice);
+        mInvoiceValueEditText.setText(parcel.getInvoice());
         mPackageLengthParcelEditText = v.findViewById(R.id.editLength);
+        mPackageLengthParcelEditText.setText(parcel.getLength());
         mPackageWidthParcelEditText = v.findViewById(R.id.editWidth);
+        mPackageWidthParcelEditText.setText(parcel.getWidth());
         mHeightParcelEditText = v.findViewById(R.id.editHeight);
+        mHeightParcelEditText.setText(parcel.getHeight());
         mDescriptionEditText = v.findViewById(R.id.editDescription);
+        mDescriptionEditText.setText(parcel.getDescription());
 //        mDescDocEditText = v.findViewById(R.id.editPckDescDoc);
         mParcelRadioButton = v.findViewById(R.id.rParcel);
         mDocumentRadioButton = v.findViewById(R.id.rDocument);
@@ -172,6 +191,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
 
         pinDestinationAutoCompleteTextView = v.findViewById(R.id.pin_dest_autocompletetextview);
+        pinDestinationAutoCompleteTextView.setText(parcel.getDestinationPin());
         pinDestinationAutoCompleteTextView.setThreshold(THRESHOLD);
         PinAutoCompleteAdapter pinAutoCompleteAdapter1 = new PinAutoCompleteAdapter(getApplicationContext());
         //pinAutoCompleteAdapter1.notifyDataSetChanged();
@@ -190,6 +210,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
 
         pinSourceAutoCompleteTextView = v.findViewById(R.id.pin_source_autocompletetextview);
+        pinSourceAutoCompleteTextView.setText(parcel.getSourcePin());
         pinSourceAutoCompleteTextView.setThreshold(THRESHOLD);
         PinAutoCompleteAdapter pinAutoCompleteAdapter = new PinAutoCompleteAdapter(getApplicationContext());
         //pinAutoCompleteAdapter.notifyDataSetChanged();
@@ -319,6 +340,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
                 }
             }
         });
+
         return v;
     }
 
@@ -483,7 +505,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
             AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
         } else {
             MainActivity activity = (MainActivity) getActivity();
-            activity.newParcel(parcel);
+            activity.newParcel(parcel, getApplicationContext());
 
         }
     }
