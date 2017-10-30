@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -74,6 +75,7 @@ import java.util.regex.Pattern;
 import static android.Manifest.permission.READ_CONTACTS;
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
 import static com.scleroid.nemai.activity.MainActivity.session;
+import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_COUNTRY_CODE;
 import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_PHONENUMBER;
 
 /**
@@ -641,18 +643,20 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
                         //JSONObject jObj = new JSONObject(jsonObject);
 
-                        //boolean error = jsonObject.getBoolean("error");
-                        if (true) {
+                        boolean error = jsonObject.getBoolean("status");
+                        if (error) {
 
                             Toast.makeText(getApplicationContext(), "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
 
                             //session.setLogin(true);
 
-                            Intent verification = new Intent(getBaseContext(), SocialRegisterActivity.class);
+                            Intent verification = new Intent(getBaseContext(), OtpVerificationActivity.class);
 
                             verification.putExtra(INTENT_PHONENUMBER, phone);
+                            verification.putExtra(INTENT_COUNTRY_CODE, ccp.getDefaultCountryCode());
                             startActivity(verification);
-                            finish();
+                            //finish();
+
                             // Launch login activity
                         /*Intent intent = new Intent(
                                 RegisterActivity.this,
@@ -664,7 +668,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                             // Error occurred in registration. Get the error
                             // message
                             session.setLogin(false);
-                            String errorMsg = jsonObject.getString("error_msg");
+                            String errorMsg = jsonObject.getString("message");
                             Toast.makeText(getApplicationContext(),
                                     errorMsg, Toast.LENGTH_LONG).show();
                         }
@@ -695,7 +699,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
 
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_COURIER);
+                    params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_REGISTER);
 
                     params.put("first_name", firstName);
                     params.put("last_name", lastName);
@@ -710,6 +714,10 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             };
 
 
+            int socketTimeout = 10000000;//10 seconds - change to what you want
+            strReq.setRetryPolicy(new DefaultRetryPolicy(socketTimeout,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
             // Adding request to request queue
             AppController.getInstance().addToRequestQueue(strReq, tag_string_req);

@@ -12,10 +12,10 @@ public class ServerConstants {
         public static final String POST_PINCODE = "http://ec2-18-221-108-81.us-east-2.compute.amazonaws.com:3008/insertQuery";
         public static final String POST_PINCODE_LIST = "http://ec2-18-221-108-81.us-east-2.compute.amazonaws.com:3008/customer";
 
-        public static final String POST_REGISTER = "http://ec2-54-147-43-135.compute-1.amazonaws.com:3010/register";
+        public static final String POST_REGISTER = "http://ec2-54-147-43-135.compute-1.amazonaws.com:3008/register";
         public static final String POST_SOCIAL_REGISTER = "http://ec2-18-221-108-81.us-east-2.compute.amazonaws.com:3008/insertuser";
-        public static final String POST_LOGIN = "http://ec2-54-147-43-135.compute-1.amazonaws.com:3010/login";
-        public static final String POST_VALID_USER = "http://ec2-54-147-43-135.compute-1.amazonaws.com:3010/alreadyexists";
+        public static final String POST_LOGIN = "http://ec2-54-147-43-135.compute-1.amazonaws.com:3007/selectuser";
+        public static final String POST_VALID_USER = "http://ec2-54-147-43-135.compute-1.amazonaws.com:3007/alreadyexists";
         public static final String POST_RESET_PASS = "abcd  ";
 
 
