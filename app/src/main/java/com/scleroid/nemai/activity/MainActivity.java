@@ -26,10 +26,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.rollbar.android.Rollbar;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.AppDatabase;
-import com.scleroid.nemai.adapter.DatabaseHelper;
+import com.scleroid.nemai.adapter.ParcelLab;
 import com.scleroid.nemai.fragment.HomeFragment;
 import com.scleroid.nemai.fragment.MoviesFragment;
 import com.scleroid.nemai.fragment.NotificationsFragment;
@@ -75,18 +74,18 @@ public class MainActivity extends AppCompatActivity {
     // flag to load home fragment when user presses back key
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
-    private DatabaseHelper databaseHelper;
+    private ParcelLab parcelLab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
-        Rollbar.init(this, "fe4fb1ae0576446eb3b4b7b082aa25bf", "development");
+// TODO add after development complete       Rollbar.init(this, "fe4fb1ae0576446eb3b4b7b082aa25bf", "development");
         session = new SessionManager(getApplicationContext());
 
-        Rollbar.reportMessage("Test message", "debug");
-        Rollbar.reportException(new Exception("Test exception"));
+//        Rollbar.reportMessage("Test message", "debug");
+//        Rollbar.reportException(new Exception("Test exception"));
         session.setLogin(true);
         session.setVerified(true);
         if (!session.isLoggedIn()) {
@@ -400,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void newParcel(final Parcel parcel) {
-        databaseHelper = new DatabaseHelper();
+        parcelLab = new ParcelLab(getApplicationContext());
         Runnable mPendingRunnable = new Runnable() {
             @SuppressLint("HandlerLeak")
             @Override
@@ -411,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
-                        DatabaseHelper.addParcel(AppDatabase.getAppDatabase(
+                        ParcelLab.addParcel(AppDatabase.getAppDatabase(
 
                                 getApplicationContext()), parcel);
                     }
