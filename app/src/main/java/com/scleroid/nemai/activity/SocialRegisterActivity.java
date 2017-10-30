@@ -269,8 +269,8 @@ public class SocialRegisterActivity extends AppCompatActivity {
 
                         //JSONObject jObj = new JSONObject(jsonObject);
 
-                        //boolean error = jsonObject.getBoolean("error");
-                        if (true) {
+                        boolean error = jsonObject.getBoolean("status");
+                        if (error) {
 
                             Toast.makeText(getApplicationContext(), "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
 
@@ -288,7 +288,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
                             // Error occurred in registration. Get the error
                             // message
                             session.setLogin(false);
-                            String errorMsg = jsonObject.getString("error_msg");
+                            String errorMsg = jsonObject.getString("message");
                             Toast.makeText(getApplicationContext(),
                                     errorMsg, Toast.LENGTH_LONG).show();
                         }
@@ -319,7 +319,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
 
 
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_SOCIAL_REGISTER);
+                    params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_REGISTER);
 
                     params.put("first_name", firstName);
                     params.put("last_name", lastName);
