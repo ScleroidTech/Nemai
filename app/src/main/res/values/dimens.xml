@@ -25,5 +25,6 @@
     <dimen name="smallTxtSize">12sp</dimen>
     <dimen name="fab_elevation">5dp</dimen>
     <dimen name="fab_rise">3dp</dimen>
+    <dimen name="pager_padding">16dp</dimen>
     <integer name="fab_duration">100</integer>
 </resources>

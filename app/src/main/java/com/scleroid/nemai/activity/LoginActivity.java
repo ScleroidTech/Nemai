@@ -2,9 +2,9 @@ package com.scleroid.nemai.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -32,10 +32,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -55,23 +51,21 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.ServerConstants;
+import com.scleroid.nemai.network.NetworkCalls;
 import com.scleroid.nemai.other.SessionManager;
-import com.scleroid.nemai.volley_support.AppController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static com.scleroid.nemai.activity.MainActivity.session;
 import static com.scleroid.nemai.activity.RegisterActivity.isNetworkAvailable;
+import static com.scleroid.nemai.network.NetworkCalls.isAlreadyUser;
 
 
 /**
@@ -85,9 +79,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
     private static final int RC_SIGN_IN = 9001;
-
     @Nullable
     String firstName, lastName, email, gender, userId, password;
+    private Context context;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -106,10 +100,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private CallbackManager mCallbackManager;
     private Button mFBcloneButton;
 
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    public static void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
+
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mProgressView.animate().setDuration(shortAnimTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
+        FacebookSdk.sdkInitialize(context);
         // Session manager
         setContentView(R.layout.activity_login);
 
@@ -173,13 +197,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mGoogleSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isNetworkAvailable(getApplicationContext())) {
+                if (isNetworkAvailable(context)) {
 
 
                     showProgress(true);
                     signIn();
                 } else
-                    Toast.makeText(getApplicationContext(), "No Internet Available, try again later", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "No Internet Available, try again later", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -209,7 +233,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         /*FancyButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
-        Context hostActivity = getApplicationContext();
+        Context hostActivity = context;
         float fbIconScale = 1.65F;
         Drawable drawable = hostActivity.getResources().getDrawable(
                 com.facebook.R.drawable.com_facebook_button_icon);
@@ -254,7 +278,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             }
         });
-        FacebookSdk.sdkInitialize(getApplicationContext());
+
         AppEventsLogger.activateApp(this);
         showProgress(true);
     }
@@ -263,6 +287,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+// [END signOut]
 
     // [START signOut]
     private void signOut() {
@@ -277,7 +302,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
                 });
     }
-// [END signOut]
 
     public void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -321,7 +345,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         }
     }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -381,7 +404,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = true;
 
             session.setLoggedInMethod("email");
-            loginUser(email, password);
+            NetworkCalls.loginUser(context, email, password);
         }
 
     }
@@ -403,35 +426,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         return password.length() > 8;
-    }
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            }
-        });
-
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mProgressView.animate().setDuration(shortAnimTime).alpha(
-                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            }
-        });
     }
 
     @Override
@@ -642,191 +636,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public void loginUser(String userName, String pass) {
-        // Tag used to cancel the request
-       /* Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();*/
-
-        if (isNetworkAvailable(getApplicationContext())) {
-            String tag_string_req = "req_login";
-            userId = userName;
-            password = pass;
-
-
-            showProgress(true);
-
-            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_LOGIN, null, new Response.Listener<JSONObject>() {
-                @SuppressLint("LongLogTag")
-
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    Log.d(TAG, "Login Response: " + jsonObject.toString());
-                    showProgress(false);
-
-                    try {
-
-                        // user successfully logged in
-                        // Create login session
-
-
-                        //JSONObject jObj = new JSONObject(jsonObject);
-
-                        boolean error = jsonObject.getBoolean("status");
-                        if (error) {
-
-
-                            Toast.makeText(getApplicationContext(), "User successfully logged in", Toast.LENGTH_LONG).show();
-
-                            session.setLogin(true);
-
-                            Intent verification = new Intent(LoginActivity.this, MainActivity.class);
-
-                            startActivity(verification);
-                            finish();
-                        } else {
-
-                            // Error occurred in login. Get the error
-                            // message
-
-                            session.setLogin(false);
-                            String errorMsg = jsonObject.getString("message");
-                            Toast.makeText(getApplicationContext(),
-                                    errorMsg, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(),
-                                "" + e, Toast.LENGTH_LONG).show();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-
-                @SuppressLint("LongLogTag")
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Registration Error: " + error.getMessage());
-                    Toast.makeText(getApplicationContext(),
-                            error.getMessage(), Toast.LENGTH_LONG).show();
-                    showProgress(false);
-                }
-            }) {
-
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting params to register url
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("email_id", userId);
-                    params.put("pwd", password);
-
-                    return params;
-                }
-
-            };
-
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-        } else
-            Toast.makeText(getApplicationContext(), "Network not connected, try again", Toast.LENGTH_LONG).show();
-
-    }
-
-    private boolean isAlreadyUser(String userName) {
-
-//        return false;
-        if (isNetworkAvailable(getApplicationContext())) {
-
-            // Tag used to cancel the request
-            String tag_string_req = "req_check_user";
-            userId = userName;
-            isUserExists = false;
-
-
-            showProgress(true);
-
-            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_VALID_USER, null, new Response.Listener<JSONObject>() {
-                @SuppressLint("LongLogTag")
-
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    //Log.d(TAG, "Login Response: " + jsonObject.toString());
-                    showProgress(false);
-
-                    try {
-
-                        // user successfully logged in
-                        // Create login session
-
-
-                        //JSONObject jObj = new JSONObject(jsonObject);
-
-                        boolean error = jsonObject.getBoolean("status");
-                        if (error) {
-                            isUserExists = jsonObject.getBoolean("success");
-
-
-                            Toast.makeText(getApplicationContext(), "User authentication successful", Toast.LENGTH_LONG).show();
-                        } else {
-
-                            // Error occurred in login. Get the error
-                            // message
-                            isUserExists = false;
-
-                            //session.setLogin(false);
-                            /*String errorMsg = jsonObject.getString("error_msg");
-                            Toast.makeText(getApplicationContext(),
-                                    errorMsg, Toast.LENGTH_LONG).show();*/
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(),
-                                "" + e, Toast.LENGTH_LONG).show();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-
-                @SuppressLint("LongLogTag")
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Registration Error: " + error.getMessage());
-                    Toast.makeText(getApplicationContext(),
-                            error.getMessage(), Toast.LENGTH_LONG).show();
-                    showProgress(false);
-                }
-            }) {
-
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting params to register url
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("userId", userId);
-
-                    return params;
-                }
-
-            };
-
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-
-            return isUserExists;
-        } else
-            Toast.makeText(getApplicationContext(), "Network is not available , try again later", Toast.LENGTH_LONG).show();
-        return false;
-    }
 
 
     protected void registerUser(final String firstName, final String lastName, final String email, final String gender) {
 
-        if (isNetworkAvailable(getApplicationContext())) {
+        if (isNetworkAvailable(context)) {
             Intent intent;
             intent = new Intent(LoginActivity.this, SocialRegisterActivity.class);
             Bundle extras = new Bundle();
@@ -837,10 +651,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             extras.putString(SocialRegisterActivity.INTENT_METHOD, SessionManager.getLoggedInMethod());
             intent.putExtras(extras);
             startActivity(intent);
-        finish();
+            finish();
 
         } else
-            Toast.makeText(getApplicationContext(), "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();
 
 
     }
