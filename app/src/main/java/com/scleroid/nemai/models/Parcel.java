@@ -5,6 +5,7 @@ package com.scleroid.nemai.models;
  */
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity
@@ -36,6 +37,7 @@ public class Parcel {
         this.description = description;
     }
 
+    @Ignore
     public Parcel() {
 
     }

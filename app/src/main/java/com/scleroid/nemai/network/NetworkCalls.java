@@ -114,13 +114,13 @@ public class NetworkCalls {
 
     public static boolean isAlreadyUser(final String userName) {
 
-        boolean isUserExists;
+        final boolean[] isUserExists = new boolean[1];
 //        return false;
         if (isNetworkAvailable(getApplicationContext())) {
 
             // Tag used to cancel the request
             String tag_string_req = "req_check_user";
-            isUserExists = false;
+            isUserExists[0] = false;
 
 
             showProgress(true);
@@ -144,7 +144,7 @@ public class NetworkCalls {
 
                         boolean error = jsonObject.getBoolean("status");
                         if (error) {
-                            isUserExists = jsonObject.getBoolean("success");
+                            isUserExists[0] = jsonObject.getBoolean("success");
 
 
                             Toast.makeText(getApplicationContext(), "User authentication successful", Toast.LENGTH_LONG).show();
@@ -191,7 +191,7 @@ public class NetworkCalls {
             // Adding request to request queue
             AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
-            return isUserExists;
+            return isUserExists[0];
         } else
             Toast.makeText(getApplicationContext(), "Network is not available , try again later", Toast.LENGTH_LONG).show();
         return false;
