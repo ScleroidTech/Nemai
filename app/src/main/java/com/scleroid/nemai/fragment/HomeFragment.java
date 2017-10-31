@@ -1,60 +1,28 @@
 package com.scleroid.nemai.fragment;
 
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.text.TextUtils;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.ServerConstants;
-import com.scleroid.nemai.activity.MainActivity;
-import com.scleroid.nemai.activity.PartnerActivity;
-import com.scleroid.nemai.adapter.AppDatabase;
-import com.scleroid.nemai.adapter.ParcelLab;
-import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
+import com.scleroid.nemai.adapter.PagerAdapter;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
-import com.scleroid.nemai.other.DelayedAutoCompleteTextView;
-import com.scleroid.nemai.volley_support.AppController;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 //TODO CHange most activities to fragment if performance becomes a bottleneck
 //TODO implement ROOm
 //TODO implement this http://droidmentor.com/credit-card-form/
@@ -78,24 +46,26 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     https://developer.android.com/topic/libraries/architecture/room.html https://medium.com/google-developers/7-steps-to-room-27a5fe5f99b2 https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9 https://android.jlelse.eu/room-store-your-data-c6d49b4d53a3 http://www.vogella.com/tutorials/AndroidSQLite/article.html
     https://android.jlelse.eu/demystifying-the-jvmoverloads-in-kotlin-10dd098e6f72
 */
+//TODO https://uk.linkedin.com/in/chrisbanes/
 
-    RadioButton mParcelRadioButton, mDocumentRadioButton;
+    /*RadioButton mParcelRadioButton, mDocumentRadioButton;
     RadioButton mDomesticRadioButton, mInternationalRadioButton;
     LinearLayout mParcelLinearLayout, mDocumentLinearLayout;
-    Button mSubmitButton;
-    FloatingActionButton fabNewCourier;
+    */ Button mSubmitButton;
+    FloatingActionButton fabNewCourier;/*
     TextView mWeightUnitTextView, mCurrencyUnitTextView;
     ImageView mAddressImageView;
 
-    TextInputLayout mWeightTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mDescriptionTIL, /*mDescDocTIL,*/
+    TextInputLayout mWeightTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mDescriptionTIL,
             mPinSourceTIL, mPinDestTIL;
     DelayedAutoCompleteTextView pinSourceAutoCompleteTextView, pinDestinationAutoCompleteTextView;
-    EditText mWeightEditText,/* mDescDocEditText,*/
-            mInvoiceValueEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescriptionEditText;
-    boolean toggleDocParcel = false;//false == doc, true == parcel
-    boolean toggleDomInternational = false;//Domestic false , International = true
+    EditText mWeightEditText,// mDescDocEditText,
+            mInvoiceValueEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescriptionEditText;*/
+   /* boolean toggleDocParcel = false;//false == doc, true == parcel
+    boolean toggleDomInternational = false;//Domestic false , International = true*/
 
     Parcel parcel;
+    PagerAdapter adapter;
 
 
     public HomeFragment() {
@@ -113,7 +83,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         return fragment;
     }
 
-    @Override
+   /* @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -134,7 +104,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
             };
         } else parcel = new Parcel();
 
-    }
+    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -144,7 +114,14 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         v.clearFocus();
 
-        mWeightTIL = v.findViewById(R.id.textWeight);
+        RecyclerViewPager pager = v.findViewById(R.id.pager);
+
+        pager.setLayoutManager(new LinearLayoutManager(getContext(),
+                LinearLayoutManager.HORIZONTAL, false));
+        adapter = new PagerAdapter(pager, getLayoutInflater(), getContext());
+        pager.setAdapter(adapter);
+
+       /* mWeightTIL = v.findViewById(R.id.textWeight);
         mInvoiceTIL = v.findViewById(R.id.textInvoice);
         mPinSourceTIL = v.findViewById(R.id.pin_source_TIL);
         mPinDestTIL = v.findViewById(R.id.pin_dest_TIL);
@@ -163,19 +140,19 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
         mHeightParcelEditText = v.findViewById(R.id.editHeight);
 
-        mDescriptionEditText = v.findViewById(R.id.editDescription);
-        if (parcel != null) {
+        mDescriptionEditText = v.findViewById(R.id.editDescription);*/
+       /* if (parcel != null) {
             mWeightEditText.setText(parcel.getWeight());
             mInvoiceValueEditText.setText(parcel.getInvoice());
             mPackageLengthParcelEditText.setText(parcel.getLength());
             mPackageWidthParcelEditText.setText(parcel.getWidth());
             mHeightParcelEditText.setText(parcel.getHeight());
             mDescriptionEditText.setText(parcel.getDescription());
-        }
+        }*/
 //        mDescDocEditText = v.findViewById(R.id.editPckDescDoc);
-        mParcelRadioButton = v.findViewById(R.id.rParcel);
+       /* mParcelRadioButton = v.findViewById(R.id.rParcel);
         mDocumentRadioButton = v.findViewById(R.id.rDocument);
-
+*/
         fabNewCourier = v.findViewById(R.id.fab_new_data);
         fabNewCourier.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,12 +161,12 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
                 //TODO IMP https://android.jlelse.eu/android-architecture-components-room-livedata-and-viewmodel-fca5da39e26b
 
                 //validateFields(false);
-                submitRequest(null, false);
+                //submitRequest(null, false);
 
 
             }
         });
-        mParcelLinearLayout = v.findViewById(R.id.linearExpandedParcelView);
+//        mParcelLinearLayout = v.findViewById(R.id.linearExpandedParcelView);
 //        mDocumentLinearLayout = v.findViewById(R.id.linearExpandedDocumentView);
 //        mDocumentLinearLayout.setVisibility(View.VISIBLE);
 
@@ -197,13 +174,14 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         //img_address =  v.findViewById(R.id.img_address);
 
 
-        pinDestinationAutoCompleteTextView = v.findViewById(R.id.pin_dest_autocompletetextview);
+      /*  pinDestinationAutoCompleteTextView = v.findViewById(R.id.pin_dest_autocompletetextview);
         pinDestinationAutoCompleteTextView.setText(parcel.getDestinationPin());
         pinDestinationAutoCompleteTextView.setThreshold(THRESHOLD);
         PinAutoCompleteAdapter pinAutoCompleteAdapter1 = new PinAutoCompleteAdapter(getApplicationContext());
         //pinAutoCompleteAdapter1.notifyDataSetChanged();
-        pinDestinationAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter1);
+        pinDestinationAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter1);*/
 
+/*
 
         pinDestinationAutoCompleteTextView.setLoadingIndicator(
                 (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator2));
@@ -214,15 +192,16 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
                 pinDestinationAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeDestination.getLocation(), mPinCodeDestination.getPincode(), mPinCodeDestination.getState()));
             }
         });
+*/
 
 
-        pinSourceAutoCompleteTextView = v.findViewById(R.id.pin_source_autocompletetextview);
+     /*   pinSourceAutoCompleteTextView = v.findViewById(R.id.pin_source_autocompletetextview);
         pinSourceAutoCompleteTextView.setText(parcel.getSourcePin());
         pinSourceAutoCompleteTextView.setThreshold(THRESHOLD);
         PinAutoCompleteAdapter pinAutoCompleteAdapter = new PinAutoCompleteAdapter(getApplicationContext());
         //pinAutoCompleteAdapter.notifyDataSetChanged();
-        /*PinAutoCompleteAdapter pinAutoCompleteAdapter2 = new PinAutoCompleteAdapter(getApplicationContext());
-        pinAutoCompleteAdapter1.notifyDataSetChanged();*/
+        *//*PinAutoCompleteAdapter pinAutoCompleteAdapter2 = new PinAutoCompleteAdapter(getApplicationContext());
+        pinAutoCompleteAdapter1.notifyDataSetChanged();*//*
         pinSourceAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter); // 'this' is Activity instance
         pinSourceAutoCompleteTextView.setLoadingIndicator(
                 (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator));
@@ -233,9 +212,9 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
                 pinSourceAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeSource.getLocation(), mPinCodeSource.getPincode(), mPinCodeSource.getState()));
             }
         });
+*/
 
-
-        mWeightUnitTextView = v.findViewById(R.id.weight_unit_kg_textView);
+       /* mWeightUnitTextView = v.findViewById(R.id.weight_unit_kg_textView);
 
         mWeightEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -245,16 +224,16 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
                 else mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
             }
         });
-
-        mCurrencyUnitTextView = v.findViewById(R.id.currency_unit_text_view);
-        mInvoiceValueEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+*/
+       /* mCurrencyUnitTextView = v.findViewById(R.id.currency_unit_text_view);*/
+       /* mInvoiceValueEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus)
                     mCurrencyUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
                 else mCurrencyUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
             }
-        });
+        });*/
 
         //    editAddress = v.findViewById(R.id.editAddressDoc);
 
@@ -287,13 +266,13 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validateFields(true);
+                // validateFields(true);
 
                 // Intent i = new Intent(getActivity(), PartnerActivity.class);
                 //startActivity(i);
             }
         });
-        mDocumentRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+     /*   mDocumentRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
@@ -322,11 +301,11 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
             }
         });
 
+*/
+       /* mDomesticRadioButton = v.findViewById(R.id.rDomestic);
+        mInternationalRadioButton = v.findViewById(R.id.rInternational);*/
 
-        mDomesticRadioButton = v.findViewById(R.id.rDomestic);
-        mInternationalRadioButton = v.findViewById(R.id.rInternational);
-
-        mInternationalRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        /*mInternationalRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
@@ -346,12 +325,12 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
                     toggleDomInternational = false;
                 }
             }
-        });
+        });*/
 
         return v;
     }
 
-    private void validateFields(boolean toggleMultiple) {
+   /* private void validateFields(boolean toggleMultiple) {
         boolean noSubmit = false;
         String delivery;
 
@@ -416,106 +395,8 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
             }
         }
     }
+*/
 
-    private boolean isEmpty(DelayedAutoCompleteTextView text) {
-        return TextUtils.isEmpty(text.getText());
-    }
-
-    private boolean isEmpty(EditText text) {
-        return TextUtils.isEmpty(text.getText());
-    }
-
-    private void nextScreenParcel(String source, String destination, String weight, String invoice, String width, String height, String length, String description, String deliveryType, boolean toggleMultiple) {
-        Parcel parcel = new Parcel(source, destination, deliveryType, "Parcel", weight, invoice, length, width, height, description);
-        submitRequest(parcel, toggleMultiple);
-
-    }
-
-    private void nextScreenDocument(String source, String destination, String weight, String invoice, String description, String deliveryType, boolean toggleMultiple) {
-
-        Parcel parcel = new Parcel(source, destination, deliveryType, "Parcel", weight, invoice, null, null, null, description);
-        submitRequest(parcel, toggleMultiple);
-    }
-
-    private void submitRequest(final Parcel parcel, boolean toggleMultiple) {
-
-        if (toggleMultiple) {
-            // Tag used to cancel the request
-            String tag_string_req = "req_parcel";
-
-
-            //showProgress(true);
-
-            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_COURIER, null, new Response.Listener<JSONObject>() {
-                @SuppressLint("LongLogTag")
-
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    Log.d(TAG, "Parcel Response: " + jsonObject.toString());
-                    //showProgress(false);
-                    if (true) {
-
-                        Intent partner = new Intent(getApplicationContext(), PartnerActivity.class);
-                        startActivity(partner);
-
-                        // Launch login activity
-                    /*Intent intent = new Intent(
-                            RegisterActivity.this,
-                            LoginActivity.class);
-                    startActivity(intent); */
-                        //finish();
-                    } else {
-
-                        // Error occurred in registration. Get the error
-                        // message
-
-                        //String errorMsg = jsonObject.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                "An Error occurred", Toast.LENGTH_LONG).show();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-
-                @SuppressLint("LongLogTag")
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Server Error on Parcel: " + error.getMessage());
-                    Toast.makeText(getApplicationContext(),
-                            error.getMessage(), Toast.LENGTH_LONG).show();
-
-                }
-            }) {
-
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting params to register url
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("source", parcel.getSourcePin());
-                    params.put("destination", parcel.getDestinationPin());
-                    params.put("weight", parcel.getWeight());
-                    params.put("invoice", parcel.getInvoice());
-                    params.put("width", parcel.getWidth());
-                    params.put("length", parcel.getLength());
-                    params.put("height", parcel.getHeight());
-                    params.put("description", parcel.getDescription());
-                    params.put("delivery_type", parcel.getDeliveryType());
-                    params.put("package_type", parcel.getPackageType());
-
-                    return params;
-                }
-
-            };
-
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-        } else {
-            MainActivity activity = (MainActivity) getActivity();
-            activity.newParcel(parcel, getApplicationContext());
-
-        }
-    }
 
     private void showRadioButtonDialog() {
 
@@ -553,34 +434,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
     }
 
-    class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-        public ViewPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    // Fragment for Center side
-                    return new HomeFragment();
-            }
-            return null;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-
-    }
 }
 
 

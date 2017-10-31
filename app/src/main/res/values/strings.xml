@@ -182,6 +182,8 @@
     <string name="resend_call_placeholder">Resend via Call\n ( %d )</string>
     <string name="resend_text_placeholder">Resend via Text ( %d )</string>
     <string name="search_icon">Search Icon</string>
+    <string name="hint">Editor #%d</string>
+    <string name="courier_count">Courier %1d of %2d</string>
 
 
 </resources>
