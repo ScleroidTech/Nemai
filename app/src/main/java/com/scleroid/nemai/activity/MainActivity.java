@@ -10,7 +10,6 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -28,8 +27,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.facebook.stetho.Stetho;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.rollbar.android.Rollbar;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.AppDatabase;
 import com.scleroid.nemai.adapter.ParcelLab;
@@ -44,8 +42,6 @@ import com.scleroid.nemai.other.CircleTransform;
 import com.scleroid.nemai.other.SessionManager;
 
 import java.util.List;
-
-import okhttp3.OkHttpClient;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -66,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public static String CURRENT_TAG = TAG_HOME;
     protected static SessionManager session;
     ImageButton btn_search;
+    int[] totalParcels;
     private List<PinCode> mResultPinList;
     private Context mContext;
     private NavigationView navigationView;
@@ -87,18 +84,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Stetho.initializeWithDefaults(this);
+        /*Stetho.initializeWithDefaults(this);
         new OkHttpClient.Builder()
                 .addNetworkInterceptor(new StethoInterceptor())
                 .build();
-
+*/
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
-// TODO add after development complete       Rollbar.init(this, "fe4fb1ae0576446eb3b4b7b082aa25bf", "development");
+// TODO add after development complet Rollbar.init(this, "fe4fb1ae0576446eb3b4b7b082aa25bf", "development");
         session = new SessionManager(getApplicationContext());
 
-//        Rollbar.reportMessage("Test message", "debug");
-//        Rollbar.reportException(new Exception("Test exception"));
+        Rollbar.reportMessage("Test message", "debug");
+        Rollbar.reportException(new Exception("Test exception"));
         session.setLogin(true);
         session.setVerified(true);
         if (!session.isLoggedIn()) {
@@ -117,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         drawer.setScrimColor(Color.parseColor("#33000000"));
 
-        mViewPager = findViewById(R.id.frame);
+        //  mViewPager = findViewById(R.id.frame_pager);
 
 
         // Navigation view header
@@ -133,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this,TrackingActivity.class);
+                Intent i = new Intent(MainActivity.this, TrackingActivity.class);
                 startActivity(i);
             }
         });
@@ -143,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         loadNavHeader();
 
         // initializing navigation menu
-       setUpNavigationView();
+        setUpNavigationView();
         //findPins(getApplicationContext());
 
 
@@ -310,7 +307,17 @@ public class MainActivity extends AppCompatActivity {
         // when switching between navigation menus
         // So using runnable, the fragment is loaded with cross fade effect
         // This effect can be seen in GMail app
+       /* mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return getHomeFragment();
+            }
 
+            @Override
+            public int getCount() {
+                return totalParcels[0];
+            }
+        });*/
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
@@ -352,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
         switch (navItemIndex) {
             case 0:
                 // home
-                return HomeFragment.newInstance(HomeFragment.parcelCount);
+                return new HomeFragment();
             case 1:
                 // photos
 
@@ -368,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
                 // settings fragment
                 return new SettingsFragment();
             default:
-                return HomeFragment.newInstance(HomeFragment.parcelCount);
+                return new HomeFragment();// HomeFragment.newInstance(HomeFragment.parcelCount);
         }
     }
 
@@ -395,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
 
-            Intent i = new Intent(MainActivity.this,TrackingActivity.class);
+            Intent i = new Intent(MainActivity.this, TrackingActivity.class);
             startActivity(i);
             return true;
         }
@@ -417,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void newParcel(final Parcel parcel, final Context applicationContext) {
 
-        final int[] totalParcels = new int[1];
+        totalParcels = new int[1];
 
         parcelLab = new ParcelLab(applicationContext);
         Runnable mPendingRunnable = new Runnable() {
@@ -450,17 +457,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                return HomeFragment.newInstance(HomeFragment.parcelCount);
-            }
 
-            @Override
-            public int getCount() {
-                return totalParcels[0];
-            }
-        });
 
         mHandler.post(mPendingRunnable);
     }
