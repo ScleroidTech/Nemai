@@ -154,17 +154,24 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         mDescriptionTIL = v.findViewById(R.id.textDescription);
         //mDescDocTIL = v.findViewById(R.id.textPckDescDoc);
         mWeightEditText = v.findViewById(R.id.editWeight);
-        mWeightEditText.setText(parcel.getWeight());
+
         mInvoiceValueEditText = v.findViewById(R.id.editInvoice);
-        mInvoiceValueEditText.setText(parcel.getInvoice());
+
         mPackageLengthParcelEditText = v.findViewById(R.id.editLength);
-        mPackageLengthParcelEditText.setText(parcel.getLength());
+
         mPackageWidthParcelEditText = v.findViewById(R.id.editWidth);
-        mPackageWidthParcelEditText.setText(parcel.getWidth());
+
         mHeightParcelEditText = v.findViewById(R.id.editHeight);
-        mHeightParcelEditText.setText(parcel.getHeight());
+
         mDescriptionEditText = v.findViewById(R.id.editDescription);
-        mDescriptionEditText.setText(parcel.getDescription());
+        if (parcel != null) {
+            mWeightEditText.setText(parcel.getWeight());
+            mInvoiceValueEditText.setText(parcel.getInvoice());
+            mPackageLengthParcelEditText.setText(parcel.getLength());
+            mPackageWidthParcelEditText.setText(parcel.getWidth());
+            mHeightParcelEditText.setText(parcel.getHeight());
+            mDescriptionEditText.setText(parcel.getDescription());
+        }
 //        mDescDocEditText = v.findViewById(R.id.editPckDescDoc);
         mParcelRadioButton = v.findViewById(R.id.rParcel);
         mDocumentRadioButton = v.findViewById(R.id.rDocument);

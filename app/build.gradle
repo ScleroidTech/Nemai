@@ -51,7 +51,8 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0-rc1"
     compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     compile 'com.facebook.stetho:stetho:1.5.0'
-//    compile 'com.rollbar:rollbar-android:0+'
+    compile 'com.github.lsjwzh.RecyclerViewPager:lib:v1.1.2@aar'
+    compile 'com.rollbar:rollbar-android:0+'
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'findbugs'
