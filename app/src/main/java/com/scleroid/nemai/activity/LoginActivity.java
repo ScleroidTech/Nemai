@@ -104,11 +104,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public static void showProgress(final boolean show) {
+    public void showProgress(final Context context, final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
-        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = context.getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         mLoginFormView.animate().setDuration(shortAnimTime).alpha(
@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if (isNetworkAvailable(context)) {
 
 
-                    showProgress(true);
+                    showProgress(context, true);
                     signIn();
                 } else
                     Toast.makeText(context, "No Internet Available, try again later", Toast.LENGTH_LONG).show();
@@ -256,14 +256,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                showProgress(true);
+                showProgress(context, true);
 
                 Log.i(TAG, "Hello" + loginResult.getAccessToken().getToken());
                 Toast.makeText(LoginActivity.this, "Token:" + loginResult.getAccessToken(), Toast.LENGTH_SHORT).show();
 
                 handleFacebookAccessToken(loginResult.getAccessToken());
 
-                showProgress(false);
+                showProgress(context, false);
             }
 
             @Override
@@ -280,7 +280,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         AppEventsLogger.activateApp(this);
-        showProgress(true);
+        showProgress(context, true);
     }
 
     private void signIn() {
@@ -400,7 +400,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // perform the user login attempt.
             Toast.makeText(this, "Validation Successful", Toast.LENGTH_LONG).show();
 
-            showProgress(true);
+            showProgress(context, true);
             mAuthTask = true;
 
             session.setLoggedInMethod("email");
@@ -520,14 +520,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             // mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-            showProgress(false);
+            showProgress(context, false);
 
             session.setLoggedInMethod("google");
             // updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
             // updateUI(false);
-            showProgress(false);
+            showProgress(context, false);
             Toast.makeText(this, "Google Authentication wasn't successful, Try another way", Toast.LENGTH_LONG).show();
         }
     }
@@ -610,11 +610,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
             // single sign-on will occur in this branch.
-            showProgress(true);
+            showProgress(context, true);
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
-                    showProgress(false);
+                    showProgress(context, false);
                     handleGoogleSignInResult(googleSignInResult);
                 }
             });
@@ -625,14 +625,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onResume() {
         super.onResume();
-        showProgress(false);
+        showProgress(context, false);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         if (mProgressView != null) {
-            showProgress(false);
+            showProgress(context, false);
         }
     }
 
