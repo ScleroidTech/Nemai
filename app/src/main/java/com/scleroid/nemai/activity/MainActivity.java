@@ -60,11 +60,11 @@ public class MainActivity extends AppCompatActivity {
     // index to identify current nav menu item
     public static int navItemIndex = 0;
     public static String CURRENT_TAG = TAG_HOME;
-    protected static SessionManager session;
+    public static SessionManager session;
+    public Context mContext;
     ImageButton btn_search;
     int[] totalParcels;
     private List<PinCode> mResultPinList;
-    private Context mContext;
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private View navHeader;
@@ -81,6 +81,12 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private List<Parcel> parcels;
 
+    public static Intent newIntent(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        return intent;
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
 */
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
-// TODO add after development complet Rollbar.init(this, "fe4fb1ae0576446eb3b4b7b082aa25bf", "development");
+// TODO add after development complet
+        Rollbar.init(this, "fe4fb1ae0576446eb3b4b7b082aa25bf", "development");
         session = new SessionManager(getApplicationContext());
 
         Rollbar.reportMessage("Test message", "debug");

@@ -19,11 +19,15 @@ import com.scleroid.nemai.R;
 public class PartnerActivity extends AppCompatActivity {
 
 
+    public static Intent newIntent(Context context) {
+        Intent intent = new Intent(context, PartnerActivity.class);
+        return intent;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_partner);
-        LinearLayout parent = (LinearLayout) findViewById(R.id.linearExpand);
+        LinearLayout parent = findViewById(R.id.linearExpand);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = inflater.inflate(R.layout.insert_partner, null);
         parent.addView(child);
