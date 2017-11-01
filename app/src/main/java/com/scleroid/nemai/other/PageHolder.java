@@ -33,11 +33,12 @@ public class PageHolder extends RecyclerView.ViewHolder {
     RadioButton mDomesticRadioButton, mInternationalRadioButton;
     LinearLayout mParcelLinearLayout, mDocumentLinearLayout;
     Context context;
+    Parcel parcel;
 
     boolean toggleDocParcel = false;//false == doc, true == parcel
     boolean toggleDomInternational = false;//Domestic false , International = true
 
-    TextView mWeightUnitTextView, mCurrencyUnitTextView;
+    TextView mWeightUnitTextView, mCurrencyUnitTextView, courierCount;
     ImageView mAddressImageView;
 
     TextInputLayout mWeightTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mDescriptionTIL, /*mDescDocTIL,*/
@@ -95,6 +96,8 @@ public class PageHolder extends RecyclerView.ViewHolder {
 
         pinSourceAutoCompleteTextView.setLoadingIndicator(
                 (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator));
+
+        courierCount = v.findViewById(R.id.courier_number_text_view);
 
     }
 
@@ -257,14 +260,14 @@ public class PageHolder extends RecyclerView.ViewHolder {
 
 
             if (!noSubmit)
-                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescriptionEditText.getText().toString(), delivery, toggleMultiple);
+                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), Integer.parseInt(mPackageWidthParcelEditText.getText().toString()), Integer.parseInt(mHeightParcelEditText.getText().toString()), Integer.parseInt(mPackageLengthParcelEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery, toggleMultiple);
 
 
         } else {
 
 
             if (!noSubmit) {
-                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mDescriptionEditText.getText().toString(), delivery, toggleMultiple);
+                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery, toggleMultiple);
 
             }
         }
@@ -278,16 +281,56 @@ public class PageHolder extends RecyclerView.ViewHolder {
         return TextUtils.isEmpty(text.getText());
     }
 
-    public void nextScreenParcel(String source, String destination, String weight, String invoice, String width, String height, String length, String description, String deliveryType, boolean toggleMultiple) {
+    public void nextScreenParcel(String source, String destination, int weight, int invoice, int width, int height, int length, String description, String deliveryType, boolean toggleMultiple) {
         Parcel parcel = new Parcel(source, destination, deliveryType, "Parcel", weight, invoice, length, width, height, description);
         submitCouriers(context, parcel, toggleMultiple);
 
     }
 
-    public void nextScreenDocument(String source, String destination, String weight, String invoice, String description, String deliveryType, boolean toggleMultiple) {
+    public void nextScreenDocument(String source, String destination, int weight, int invoice, String description, String deliveryType, boolean toggleMultiple) {
 
-        Parcel parcel = new Parcel(source, destination, deliveryType, "Parcel", weight, invoice, null, null, null, description);
+        Parcel parcel = new Parcel(source, destination, deliveryType, "Document", weight, invoice, 0, 0, 0, description);
         submitCouriers(context, parcel, toggleMultiple);
+    }
+
+    public void bindParcels(Parcel parcel) {
+        this.parcel = parcel;
+        if (parcel != null) {
+            int invoice = parcel.getInvoice();
+            int weight = parcel.getWeight();
+            String source = parcel.getSourcePin();
+            String destination = parcel.getDestinationPin();
+            String deliveryType = parcel.getDeliveryType();
+            String packageType = parcel.getPackageType();
+            String description = parcel.getDescription();
+
+            if (packageType.equals("Parcel")) {
+                int width = parcel.getWidth(),
+                        height = parcel.getHeight(),
+                        length = parcel.getLength();
+                mPackageLengthParcelEditText.setText(length == 0 ? null : Integer.toString(length));
+                mPackageWidthParcelEditText.setText(width == 0 ? null : Integer.toString(width));
+                mHeightParcelEditText.setText(height == 0 ? null : Integer.toString(height));
+                mParcelRadioButton.setChecked(true);
+            }
+            if (deliveryType.equals("International")) {
+                mInternationalRadioButton.setChecked(true);
+            }
+            mDescriptionEditText.setText(description.equals("0") ? null : description);
+            mWeightEditText.setText(weight == 0 ? null : Integer.toString(weight));
+            mInvoiceValueEditText.setText(invoice == 0 ? null : Integer.toString(invoice));
+
+            //TODO use pincode class instead of this strings, to get more control over this.
+            pinSourceAutoCompleteTextView.setText(source.equals("0") ? null : source);
+            pinDestinationAutoCompleteTextView.setText(destination.equals("0") ? null : destination);
+
+        }
+
+    }
+
+    public void bindNumber(int position, int size) {
+        if (size == 1) courierCount.setVisibility(View.GONE);
+        courierCount.setText(String.format("Courier %d of %d", position, size));
     }
 
         /*void setText(String text) {

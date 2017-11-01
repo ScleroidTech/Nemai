@@ -15,13 +15,13 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
  */
 @Dao
 public interface ParcelDao {
-    @Query("SELECT * FROM Parcel")
+    @Query("SELECT * FROM parcel")
     List<Parcel> getAll();
 
-    @Query("SELECT * FROM Parcel where serialNo = :serialNo ")
+    @Query("SELECT * FROM parcel where serialNo = :serialNo ")
     Parcel findById(int serialNo);
 
-    @Query("SELECT COUNT(*) from Parcel")
+    @Query("SELECT COUNT(*) from parcel")
     int countParcels();
 
     @Insert(onConflict = REPLACE)

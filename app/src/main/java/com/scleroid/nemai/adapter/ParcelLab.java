@@ -15,8 +15,10 @@ public class ParcelLab {
     private Parcel parcel;
     private Context context;
 
+
     public ParcelLab(Context context) {
         this.context = context.getApplicationContext();
+
 
     }
 
@@ -46,7 +48,7 @@ public class ParcelLab {
     }
 
 
-    public void updateParcel(AppDatabase db, Parcel parcel) {
+    public static void updateParcel(AppDatabase db, Parcel parcel) {
         db.parcelDao().updateParcel(parcel);
     }
 

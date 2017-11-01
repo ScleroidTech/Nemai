@@ -1,12 +1,11 @@
 package com.scleroid.nemai.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
+import android.os.HandlerThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -27,7 +26,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.rollbar.android.Rollbar;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.AppDatabase;
 import com.scleroid.nemai.adapter.ParcelLab;
@@ -38,10 +36,13 @@ import com.scleroid.nemai.fragment.PhotosFragment;
 import com.scleroid.nemai.fragment.SettingsFragment;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.network.backgroundTasks;
 import com.scleroid.nemai.other.CircleTransform;
 import com.scleroid.nemai.other.SessionManager;
 
 import java.util.List;
+
+import static com.scleroid.nemai.network.backgroundTasks.handler;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] activityTitles;
     // flag to load home fragment when user presses back key
     private boolean shouldLoadHomeFragOnBackPress = true;
-    private Handler mHandler;
+
     private ParcelLab parcelLab;
     private ViewPager mViewPager;
     private List<Parcel> parcels;
@@ -98,12 +99,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
 // TODO add after development complet
-        Rollbar.init(this, "fe4fb1ae0576446eb3b4b7b082aa25bf", "development");
+       /*// Rollbar.init(this, "fe4fb1ae0576446eb3b4b7b082aa25bf", "development");
+        Rollbar.reportMessage("Test message", "debug");
+        Rollbar.reportException(new Exception("Test exception"));*/
         session = new SessionManager(getApplicationContext());
 
-        Rollbar.reportMessage("Test message", "debug");
-        Rollbar.reportException(new Exception("Test exception"));
-        session.setLogin(true);
+
+        session.setLogin(false);
         session.setVerified(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -115,7 +117,9 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mHandler = new Handler();
+        HandlerThread thread = new HandlerThread("MyHandlerThread");
+        thread.start();
+        handler = new Handler(thread.getLooper());
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -149,13 +153,15 @@ public class MainActivity extends AppCompatActivity {
         // initializing navigation menu
         setUpNavigationView();
         //findPins(getApplicationContext());
-
+        backgroundTasks.newParcel(getApplicationContext());
 
         if (savedInstanceState == null) {
             navItemIndex = 0;
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+
+
     }
 
     /***
@@ -341,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
 
         // If mPendingRunnable is not null, then add to the message queue
         if (mPendingRunnable != null) {
-            mHandler.post(mPendingRunnable);
+            handler.post(mPendingRunnable);
         }
 
         // show or hide the fab button
@@ -429,45 +435,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void newParcel(final Parcel parcel, final Context applicationContext) {
-
-        totalParcels = new int[1];
-
-        parcelLab = new ParcelLab(applicationContext);
-        Runnable mPendingRunnable = new Runnable() {
-            @SuppressLint("HandlerLeak")
-            @Override
-            public void run() {
-                // update the main content by replacing fragments
-
-                new Handler() {
-                    @Override
-                    public void handleMessage(Message msg) {
-                        super.handleMessage(msg);
-
-                        ParcelLab.addParcel(AppDatabase.getAppDatabase(applicationContext), parcel);
-                        //ParcelLab.addParcel(AppDatabase.getAppDatabase(applicationContext), new Parcel());
-                        totalParcels[0] = ParcelLab.getCount(AppDatabase.getAppDatabase(applicationContext));
-                        //wrong idea    HomeFragment.parcelCount = ParcelLab.getCount(AppDatabase.getAppDatabase(applicationContext));
-                        HomeFragment.parcelCount++;
-                        parcels = ParcelLab.getAllParcels(AppDatabase.getAppDatabase(applicationContext));
-
-                    }
-                };
-                Fragment fragment = HomeFragment.newInstance(HomeFragment.parcelCount);
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right);
-                fragmentTransaction.add(R.id.frame, fragment, TAG_HOME)
-                        .addToBackStack(TAG_HOME);
-                fragmentTransaction.commit();
-
-            }
-        };
-
-
-        mHandler.post(mPendingRunnable);
-    }
 
     @Override
     protected void onDestroy() {
