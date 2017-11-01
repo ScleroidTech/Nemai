@@ -79,6 +79,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
     private static final int RC_SIGN_IN = 9001;
+    private static View mProgressView;
+    private static View mLoginFormView;
     @Nullable
     String firstName, lastName, email, gender, userId, password;
     private Context context;
@@ -87,13 +89,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private boolean mAuthTask = false;
     private boolean isUserExists = false;
-
     // UI references.
     private AutoCompleteTextView mEmailView;
     private TextInputLayout mPasswordTextInputLayout, mEmailTextInputLayout;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
     private View focusView;
     private boolean cancel;
     private GoogleApiClient mGoogleApiClient;
@@ -104,7 +103,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public void showProgress(final Context context, final boolean show) {
+    public static void showProgress(final Context context, final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -510,7 +509,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             String googleID = acct.getId();
             Log.d(TAG, acct.toString());
             Toast.makeText(this, "firstname " + firstName + "  " + lastName + "  " + email, Toast.LENGTH_LONG).show();
-            if (isAlreadyUser(email)) {
+            if (isAlreadyUser(this, email)) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -562,7 +561,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         gender = object.getString("gender");
                     }
 
-                    if (isAlreadyUser(email)) {
+                    if (isAlreadyUser(getApplicationContext(), email)) {
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

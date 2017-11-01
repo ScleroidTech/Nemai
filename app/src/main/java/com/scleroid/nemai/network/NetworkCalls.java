@@ -40,7 +40,7 @@ public class NetworkCalls {
             String tag_string_req = "req_parcel";
 
 
-            showProgress(true);
+            showProgress(context, true);
 
             JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
                     ServerConstants.serverUrl.POST_COURIER, null, new Response.Listener<JSONObject>() {
@@ -49,7 +49,7 @@ public class NetworkCalls {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     Log.d(TAG, "Parcel Response: " + jsonObject.toString());
-                    showProgress(false);
+                    showProgress(context, false);
                     if (true) {
 
                         PartnerActivity.newIntent(context);
@@ -89,11 +89,11 @@ public class NetworkCalls {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("source", parcel.getSourcePin());
                     params.put("destination", parcel.getDestinationPin());
-                    params.put("weight", parcel.getWeight());
-                    params.put("invoice", parcel.getInvoice());
-                    params.put("width", parcel.getWidth());
-                    params.put("length", parcel.getLength());
-                    params.put("height", parcel.getHeight());
+                    params.put("weight", Integer.toString(parcel.getWeight()));
+                    params.put("invoice", Integer.toString(parcel.getInvoice()));
+                    params.put("width", Integer.toString(parcel.getWidth()));
+                    params.put("length", Integer.toString(parcel.getLength()));
+                    params.put("height", Integer.toString(parcel.getHeight()));
                     params.put("description", parcel.getDescription());
                     params.put("delivery_type", parcel.getDeliveryType());
                     params.put("package_type", parcel.getPackageType());
@@ -112,7 +112,7 @@ public class NetworkCalls {
         }
     }
 
-    public static boolean isAlreadyUser(final String userName) {
+    public static boolean isAlreadyUser(final Context context, final String userName) {
 
         final boolean[] isUserExists = new boolean[1];
 //        return false;
@@ -123,7 +123,7 @@ public class NetworkCalls {
             isUserExists[0] = false;
 
 
-            showProgress(true);
+            showProgress(context, true);
 
             JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
                     ServerConstants.serverUrl.POST_VALID_USER, null, new Response.Listener<JSONObject>() {
@@ -132,7 +132,7 @@ public class NetworkCalls {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     //Log.d(TAG, "Login Response: " + jsonObject.toString());
-                    showProgress(false);
+                    showProgress(context, false);
 
                     try {
 
@@ -173,7 +173,7 @@ public class NetworkCalls {
                     Log.e(TAG, "Registration Error: " + error.getMessage());
                     Toast.makeText(getApplicationContext(),
                             error.getMessage(), Toast.LENGTH_LONG).show();
-                    showProgress(false);
+                    showProgress(context, false);
                 }
             }) {
 
@@ -212,7 +212,7 @@ public class NetworkCalls {
             String tag_string_req = "req_login";
 
 
-            showProgress(true);
+            showProgress(context, true);
 
             JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
                     ServerConstants.serverUrl.POST_LOGIN, null, new Response.Listener<JSONObject>() {
@@ -221,7 +221,7 @@ public class NetworkCalls {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     Log.d(TAG, "Login Response: " + jsonObject.toString());
-                    showProgress(false);
+                    showProgress(context, false);
 
                     try {
 
@@ -266,7 +266,7 @@ public class NetworkCalls {
                     Log.e(TAG, "Registration Error: " + error.getMessage());
                     Toast.makeText(context,
                             error.getMessage(), Toast.LENGTH_LONG).show();
-                    showProgress(false);
+                    showProgress(context, false);
                 }
             }) {
 

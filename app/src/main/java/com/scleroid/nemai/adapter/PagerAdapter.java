@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.other.PageHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ganesh on 31-10-2017.
@@ -21,12 +23,13 @@ public class PagerAdapter extends RecyclerView.Adapter<PageHolder> {
     private final RecyclerViewPager pager;
     private final LayoutInflater inflater;
     private final Context context;
+    private List<Parcel> parcels;
     private ArrayList<String> buffers = new ArrayList<>();
 
-    public PagerAdapter(RecyclerViewPager pager, LayoutInflater inflater, Context context) {
+    public PagerAdapter(RecyclerViewPager pager, LayoutInflater inflater, Context context, List<Parcel> parcels) {
         this.pager = pager;
         this.inflater = inflater;
-
+        this.parcels = parcels;
 
         this.context = context;
     }
@@ -39,11 +42,18 @@ public class PagerAdapter extends RecyclerView.Adapter<PageHolder> {
     @Override
     public void onBindViewHolder(PageHolder holder, int position) {
         holder.setListeners();
+        if (parcels != null) {
+            Parcel parcel = parcels.get(position);
+            holder.bindParcels(parcel);
+            holder.bindNumber(position, parcels.size());
+        } else holder.bindNumber(1, 1);
+
     }
 
     @Override
     public int getItemCount() {
-        return (PAGE_COUNT);
+        if (parcels == null) return 1;
+        return parcels.size();
     }
 
     @Override
@@ -51,6 +61,11 @@ public class PagerAdapter extends RecyclerView.Adapter<PageHolder> {
         super.onViewDetachedFromWindow(holder);
 
         //buffers.set(holder.getAdapterPosition(), holder.getText());
+    }
+
+    public void setParcels(List<Parcel> crimes) {
+        parcels = crimes;
+
     }
 
 
