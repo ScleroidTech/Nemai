@@ -2,10 +2,12 @@ package com.scleroid.nemai.fragment;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +22,11 @@ import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.PagerAdapter;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.network.backgroundTasks;
 
 import java.util.ArrayList;
 import java.util.List;
+
 //TODO CHange most activities to fragment if performance becomes a bottleneck
 //TODO implement ROOm
 //TODO implement this http://droidmentor.com/credit-card-form/
@@ -65,24 +69,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     boolean toggleDomInternational = false;//Domestic false , International = true*/
 
     Parcel parcel;
-    PagerAdapter adapter;
-
-
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
-    public static HomeFragment newInstance(int parcel_id) {
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ARG_PARCEL_ID, parcel_id);
-
-
-        HomeFragment fragment = new HomeFragment();
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
+    PagerAdapter recycleViewPagerAdapter;
    /* @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +92,22 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         } else parcel = new Parcel();
 
     }*/
+   RecyclerViewPager recyclerViewPager;
+
+    public HomeFragment() {
+        // Required empty public constructor
+    }
+
+    public static HomeFragment newInstance(int parcel_id) {
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_PARCEL_ID, parcel_id);
+
+
+        HomeFragment fragment = new HomeFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,12 +117,11 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         v.clearFocus();
 
-        RecyclerViewPager pager = v.findViewById(R.id.pager);
+        recyclerViewPager = v.findViewById(R.id.pager);
 
-        pager.setLayoutManager(new LinearLayoutManager(getContext(),
+        recyclerViewPager.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false));
-        adapter = new PagerAdapter(pager, getLayoutInflater(), getContext());
-        pager.setAdapter(adapter);
+        updateUI(getContext());
 
        /* mWeightTIL = v.findViewById(R.id.textWeight);
         mInvoiceTIL = v.findViewById(R.id.textInvoice);
@@ -159,6 +161,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
             public void onClick(View v) {
 //TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data before sending it to server.& send all data to server at once
                 //TODO IMP https://android.jlelse.eu/android-architecture-components-room-livedata-and-viewmodel-fca5da39e26b
+
 
                 //validateFields(false);
                 //submitRequest(null, false);
@@ -330,72 +333,6 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         return v;
     }
 
-   /* private void validateFields(boolean toggleMultiple) {
-        boolean noSubmit = false;
-        String delivery;
-
-        if (isEmpty(pinSourceAutoCompleteTextView)) {
-            mPinSourceTIL.setErrorEnabled(true);
-            mPinSourceTIL.setError("Enter the Source first");
-            noSubmit = true;
-        } else mPinSourceTIL.setErrorEnabled(false);
-
-        if (isEmpty(pinDestinationAutoCompleteTextView)) {
-            mPinDestTIL.setErrorEnabled(true);
-            mPinDestTIL.setError("Enter the Destination too");
-            noSubmit = true;
-        } else mPinDestTIL.setErrorEnabled(false);
-
-        if (isEmpty(mWeightEditText)) {
-            mWeightTIL.setErrorEnabled(true);
-            mWeightTIL.setError("Enter the Weight");
-            noSubmit = true;
-        } else mWeightTIL.setErrorEnabled(false);
-
-        if (isEmpty(mInvoiceValueEditText)) {
-            mInvoiceTIL.setErrorEnabled(true);
-            mInvoiceTIL.setError("Enter the Invoice Value");
-        } else mInvoiceTIL.setErrorEnabled(false);
-
-
-        if (toggleDomInternational) delivery = "International";
-        else delivery = "Domestic";
-        if (toggleDocParcel) {
-
-
-            if (isEmpty(mPackageWidthParcelEditText)) {
-                mWidthTIL.setErrorEnabled(true);
-                mWidthTIL.setError("Enter the Width");
-                noSubmit = true;
-            } else mWidthTIL.setErrorEnabled(false);
-
-            if (isEmpty(mHeightParcelEditText)) {
-                mHeightTIL.setErrorEnabled(true);
-                mHeightTIL.setError("Enter the Height");
-                noSubmit = true;
-            } else mHeightTIL.setErrorEnabled(false);
-
-            if (isEmpty(mPackageLengthParcelEditText)) {
-                mLengthTIL.setErrorEnabled(true);
-                mLengthTIL.setError("Enter the Length");
-                noSubmit = true;
-            } else mLengthTIL.setErrorEnabled(false);
-
-
-            if (!noSubmit)
-                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mPackageWidthParcelEditText.getText().toString(), mHeightParcelEditText.getText().toString(), mPackageLengthParcelEditText.getText().toString(), mDescriptionEditText.getText().toString(), delivery, toggleMultiple);
-
-
-        } else {
-
-
-            if (!noSubmit) {
-                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), mWeightEditText.getText().toString(), mInvoiceValueEditText.getText().toString(), mDescriptionEditText.getText().toString(), delivery, toggleMultiple);
-
-            }
-        }
-    }
-*/
 
 
     private void showRadioButtonDialog() {
@@ -432,6 +369,28 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
         dialog.show();
 
+    }
+
+
+    public void updateUI(Context context) {
+        List<Parcel> crimes = backgroundTasks.getAllParcels(context);
+        if (crimes == null) {
+            backgroundTasks.newParcel(context);
+            crimes = backgroundTasks.getAllParcels(context);
+        }
+        if (recycleViewPagerAdapter == null) {
+            recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, getLayoutInflater(), getContext(), crimes);
+            recyclerViewPager.setAdapter(recycleViewPagerAdapter);
+        } else {
+            int pos = RecyclerView.generateViewId();
+            recycleViewPagerAdapter.setParcels(crimes);
+            recycleViewPagerAdapter.notifyItemChanged(pos);
+        }
+
+        updateSubtitle();
+    }
+
+    private void updateSubtitle() {
     }
 
 
