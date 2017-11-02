@@ -150,7 +150,7 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
         }
         List<PinCode> list;
         try (SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
-             Cursor cursor = db.rawQuery(query, new String[]{data + "%", data + "%"})) {
+             Cursor cursor = db.rawQuery(query, new String[]{data + "%"})) {
             list = new ArrayList<PinCode>();
             while (cursor.moveToNext()) {
                 // Log.d(TAG,cursor.getString(0)+" " +  cursor.getString(1) + " " + cursor.getString(2)+ " " + cursor.getString(3));

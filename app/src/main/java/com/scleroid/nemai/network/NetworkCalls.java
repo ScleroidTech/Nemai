@@ -35,14 +35,14 @@ import static com.scleroid.nemai.activity.RegisterActivity.isNetworkAvailable;
 
 public class NetworkCalls {
 
-    public static void submitCouriers(final Context context, final Parcel parcel, boolean toggleMultiple) {
+    public static void submitCouriers(final Context context, final Parcel parcel) {
 
-        if (toggleMultiple) {
+
             // Tag used to cancel the request
             String tag_string_req = "req_parcel";
 
 
-            showProgress(context, true);
+//            showProgress(context, true);
 
             JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
                     ServerConstants.serverUrl.POST_COURIER, null, new Response.Listener<JSONObject>() {
@@ -51,7 +51,7 @@ public class NetworkCalls {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     Log.d(TAG, "Parcel Response: " + jsonObject.toString());
-                    showProgress(context, false);
+                    // showProgress(context, false);
                     if (true) {
 
                         PartnerActivity.newIntent(context);
@@ -107,11 +107,7 @@ public class NetworkCalls {
 
             // Adding request to request queue
             AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-        } else {
-           /* MainActivity activity = (MainActivity) getActivity();
-            activity.newParcel(parcel, getApplicationContext());*/
 
-        }
     }
 
     public static boolean isAlreadyUser(final Context context, final String userName) {
