@@ -23,6 +23,7 @@ public class PagerAdapter extends RecyclerView.Adapter<PageHolder> {
     private final RecyclerViewPager pager;
     private final LayoutInflater inflater;
     private final Context context;
+    public PageHolder holder;
     private List<Parcel> parcels;
     private ArrayList<String> buffers = new ArrayList<>();
 
@@ -36,11 +37,14 @@ public class PagerAdapter extends RecyclerView.Adapter<PageHolder> {
 
     @Override
     public PageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return (new PageHolder(inflater.inflate(R.layout.list_parcel_recyclerview, parent, false), context));
+        holder = new PageHolder(inflater.inflate(R.layout.list_parcel_recyclerview, parent, false), context);
+        return holder;
     }
+
 
     @Override
     public void onBindViewHolder(PageHolder holder, int position) {
+        if (this.holder == null) this.holder = holder;
         holder.setListeners();
         if (parcels != null) {
             Parcel parcel = parcels.get(position);
