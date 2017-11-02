@@ -36,14 +36,12 @@ import com.scleroid.nemai.fragment.PhotosFragment;
 import com.scleroid.nemai.fragment.SettingsFragment;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
-import com.scleroid.nemai.network.backgroundTasks;
 import com.scleroid.nemai.other.CircleTransform;
 import com.scleroid.nemai.other.SessionManager;
 
 import java.util.List;
 
-import static com.scleroid.nemai.network.backgroundTasks.handler;
-
+import static com.scleroid.nemai.adapter.ParcelLab.handler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -98,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 */
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
+
 // TODO add after development complet
        /*// Rollbar.init(this, "fe4fb1ae0576446eb3b4b7b082aa25bf", "development");
         Rollbar.reportMessage("Test message", "debug");
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         session = new SessionManager(getApplicationContext());
 
 
-        session.setLogin(false);
+        session.setLogin(true);
         session.setVerified(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -120,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         HandlerThread thread = new HandlerThread("MyHandlerThread");
         thread.start();
         handler = new Handler(thread.getLooper());
+
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         // initializing navigation menu
         setUpNavigationView();
         //findPins(getApplicationContext());
-        backgroundTasks.newParcel(getApplicationContext());
+        //backgroundTasks.newParcel(getApplicationContext());
 
         if (savedInstanceState == null) {
             navItemIndex = 0;
@@ -438,6 +438,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        ParcelLab.boomTable(mContext);
         AppDatabase.destroyInstance();
         super.onDestroy();
     }

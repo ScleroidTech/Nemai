@@ -20,9 +20,9 @@ import android.widget.Toast;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.PagerAdapter;
+import com.scleroid.nemai.adapter.ParcelLab;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
-import com.scleroid.nemai.network.backgroundTasks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -168,7 +168,6 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
                 //validateFields(false);
                 //submitRequest(null, false);
                 submitData(true);
-
 
 
             }
@@ -341,10 +340,14 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     private void submitData(boolean b) {
         Parcel parcel = recycleViewPagerAdapter.holder.validateFields();
         if (parcel == null) return;
-        backgroundTasks.addParcel(parcel, context);
+        ParcelLab.addParcel(parcel, context);
         List<Parcel> parcels = updateParcelList(context);
-        for (Parcel parcelTemp : parcels) {
-            submitCouriers(context, parcelTemp, b);
+        if (!b) {
+            for (Parcel parcelTemp : parcels) {
+                submitCouriers(context, parcelTemp);
+            }
+        } else {
+            updateUI(context);
         }
     }
 
@@ -401,10 +404,10 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     }
 
     private List<Parcel> updateParcelList(Context context) {
-        List<Parcel> crimes = backgroundTasks.getAllParcels(context);
+        List<Parcel> crimes = ParcelLab.getAllParcels(context);
         if (crimes == null) {
-            backgroundTasks.newParcel(context);
-            crimes = backgroundTasks.getAllParcels(context);
+            ParcelLab.newParcel(context);
+            crimes = ParcelLab.getAllParcels(context);
         }
         return crimes;
     }

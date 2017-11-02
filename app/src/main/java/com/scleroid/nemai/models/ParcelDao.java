@@ -15,13 +15,13 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
  */
 @Dao
 public interface ParcelDao {
-    @Query("SELECT * FROM parcel")
+    @Query("SELECT * FROM Parcel")
     List<Parcel> getAll();
 
     @Query("SELECT * FROM parcel where serialNo = :serialNo ")
     Parcel findById(int serialNo);
 
-    @Query("SELECT COUNT(*) from parcel")
+    @Query("SELECT COUNT(*) from Parcel")
     int countParcels();
 
     @Insert(onConflict = REPLACE)
@@ -36,6 +36,6 @@ public interface ParcelDao {
     @Delete
     void delete(Parcel parcel);
 
-    @Delete
-    void deleteAll(Parcel... parcels);
+    @Query("DELETE FROM Parcel")
+    void nukeTable();
 }
