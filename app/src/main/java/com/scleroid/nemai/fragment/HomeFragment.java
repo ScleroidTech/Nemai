@@ -27,6 +27,8 @@ import com.scleroid.nemai.network.backgroundTasks;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.scleroid.nemai.network.NetworkCalls.submitCouriers;
+
 //TODO CHange most activities to fragment if performance becomes a bottleneck
 //TODO implement ROOm
 //TODO implement this http://droidmentor.com/credit-card-form/
@@ -38,6 +40,10 @@ public class HomeFragment extends Fragment {
     public static int parcelCount = 1;
     static String select;
     final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
+    /*RadioButton mParcelRadioButton, mDocumentRadioButton;
+    RadioButton mDomesticRadioButton, mInternationalRadioButton;
+    LinearLayout mParcelLinearLayout, mDocumentLinearLayout;
+    */ Button mSubmitButton;
 /*https://try.kotlinlang.org/
 https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     //TODO read this https://medium.com/square-corner-blog/advocating-against-android-fragments-81fd0b462c97
@@ -51,11 +57,6 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     https://android.jlelse.eu/demystifying-the-jvmoverloads-in-kotlin-10dd098e6f72
 */
 //TODO https://uk.linkedin.com/in/chrisbanes/
-
-    /*RadioButton mParcelRadioButton, mDocumentRadioButton;
-    RadioButton mDomesticRadioButton, mInternationalRadioButton;
-    LinearLayout mParcelLinearLayout, mDocumentLinearLayout;
-    */ Button mSubmitButton;
     FloatingActionButton fabNewCourier;/*
     TextView mWeightUnitTextView, mCurrencyUnitTextView;
     ImageView mAddressImageView;
@@ -65,10 +66,9 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     DelayedAutoCompleteTextView pinSourceAutoCompleteTextView, pinDestinationAutoCompleteTextView;
     EditText mWeightEditText,// mDescDocEditText,
             mInvoiceValueEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescriptionEditText;*/
+    Parcel parcel;
    /* boolean toggleDocParcel = false;//false == doc, true == parcel
     boolean toggleDomInternational = false;//Domestic false , International = true*/
-
-    Parcel parcel;
     PagerAdapter recycleViewPagerAdapter;
    /* @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,6 +93,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
     }*/
    RecyclerViewPager recyclerViewPager;
+    private Context context;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -114,14 +115,15 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
                              Bundle savedInstanceState) {
 
 
+        context = getActivity().getApplicationContext();
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         v.clearFocus();
 
         recyclerViewPager = v.findViewById(R.id.pager);
 
-        recyclerViewPager.setLayoutManager(new LinearLayoutManager(getContext(),
+        recyclerViewPager.setLayoutManager(new LinearLayoutManager(context,
                 LinearLayoutManager.HORIZONTAL, false));
-        updateUI(getContext());
+        updateUI(context);
 
        /* mWeightTIL = v.findViewById(R.id.textWeight);
         mInvoiceTIL = v.findViewById(R.id.textInvoice);
@@ -165,6 +167,8 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
                 //validateFields(false);
                 //submitRequest(null, false);
+                submitData(true);
+
 
 
             }
@@ -269,7 +273,8 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // validateFields(true);
+                submitData(false);
+
 
                 // Intent i = new Intent(getActivity(), PartnerActivity.class);
                 //startActivity(i);
@@ -333,6 +338,15 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         return v;
     }
 
+    private void submitData(boolean b) {
+        Parcel parcel = recycleViewPagerAdapter.holder.validateFields();
+        if (parcel == null) return;
+        backgroundTasks.addParcel(parcel, context);
+        List<Parcel> parcels = updateParcelList(context);
+        for (Parcel parcelTemp : parcels) {
+            submitCouriers(context, parcelTemp, b);
+        }
+    }
 
 
     private void showRadioButtonDialog() {
@@ -373,11 +387,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
 
     public void updateUI(Context context) {
-        List<Parcel> crimes = backgroundTasks.getAllParcels(context);
-        if (crimes == null) {
-            backgroundTasks.newParcel(context);
-            crimes = backgroundTasks.getAllParcels(context);
-        }
+        List<Parcel> crimes = updateParcelList(context);
         if (recycleViewPagerAdapter == null) {
             recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, getLayoutInflater(), getContext(), crimes);
             recyclerViewPager.setAdapter(recycleViewPagerAdapter);
@@ -388,6 +398,15 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         }
 
         updateSubtitle();
+    }
+
+    private List<Parcel> updateParcelList(Context context) {
+        List<Parcel> crimes = backgroundTasks.getAllParcels(context);
+        if (crimes == null) {
+            backgroundTasks.newParcel(context);
+            crimes = backgroundTasks.getAllParcels(context);
+        }
+        return crimes;
     }
 
     private void updateSubtitle() {

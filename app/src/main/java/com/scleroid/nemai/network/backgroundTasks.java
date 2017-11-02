@@ -50,7 +50,7 @@ public class backgroundTasks extends Handler {
         return parcels;
     }
 
-    public void addParcel(final Parcel parcel, final Context applicationContext) {
+    public static void addParcel(final Parcel parcel, final Context applicationContext) {
 
 
         final Runnable mPendingRunnable = new Runnable() {
