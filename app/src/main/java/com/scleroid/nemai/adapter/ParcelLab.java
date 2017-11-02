@@ -1,7 +1,9 @@
 package com.scleroid.nemai.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
 
 import com.scleroid.nemai.models.Parcel;
 
@@ -10,11 +12,11 @@ import java.util.List;
 
 public class ParcelLab {
     private static final String TAG = ParcelLab.class.getName();
+    public static Handler handler;
+    public static List<Parcel> parcels;
     private static ParcelLab parcelLab;
-    private List<Parcel> parcels;
     private Parcel parcel;
     private Context context;
-
 
     public ParcelLab(Context context) {
         this.context = context.getApplicationContext();
@@ -47,11 +49,92 @@ public class ParcelLab {
 
     }
 
+    public static void deleteAllParcel(final AppDatabase db) {
+        db.parcelDao().nukeTable();
+
+    }
 
     public static void updateParcel(AppDatabase db, Parcel parcel) {
         db.parcelDao().updateParcel(parcel);
     }
 
+    public static void newParcel(final Context context) {
+
+        final Runnable mPendingRunnable = new Runnable() {
+            @SuppressLint("HandlerLeak")
+            @Override
+            public void run() {
+                // update the main content by replacing fragments
+
+                addParcel(AppDatabase.getAppDatabase(context), new Parcel());
+            }
+        };
+        // new Thread(mPendingRunnable).start();
+        handler.post(mPendingRunnable);
+    }
+
+    public static List<Parcel> getAllParcels(final Context context) {
+
+
+        final Runnable mPendingRunnable = new Runnable() {
+            @SuppressLint("HandlerLeak")
+            @Override
+            public void run() {
+                // update the main content by replacing fragments
+
+                parcels = getAllParcels(AppDatabase.getAppDatabase(context));
+            }
+        };
+        //new Thread(mPendingRunnable).start();
+        handler.post(mPendingRunnable);
+        return parcels;
+    }
+
+    public static void addParcel(final Parcel parcel, final Context applicationContext) {
+
+
+        final Runnable mPendingRunnable = new Runnable() {
+            @SuppressLint("HandlerLeak")
+            @Override
+            public void run() {
+                // update the main content by replacing fragments
+
+
+                updateParcel(AppDatabase.getAppDatabase(applicationContext), parcel);
+                //ParcelLab.addParcel(AppDatabase.getAppDatabase(applicationContext), new Parcel());
+                //wrong idea    HomeFragment.parcelCount = ParcelLab.getCount(AppDatabase.getAppDatabase(applicationContext));
+
+
+                /*Fragment fragment = HomeFragment.newInstance(HomeFragment.parcelCount);
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right);
+                fragmentTransaction.add(R.id.frame, fragment, TAG_HOME)
+                        .addToBackStack(TAG_HOME);
+                fragmentTransaction.commit();*/
+
+            }
+        };
+
+
+        //new Thread(mPendingRunnable).start();
+        handler.post(mPendingRunnable);
+    }
+
+    public static void boomTable(final Context context) {
+
+        final Runnable mPendingRunnable = new Runnable() {
+            @SuppressLint("HandlerLeak")
+            @Override
+            public void run() {
+                // update the main content by replacing fragments
+
+                deleteAllParcel(AppDatabase.getAppDatabase(context));
+            }
+        };
+        // new Thread(mPendingRunnable).start();
+        handler.post(mPendingRunnable);
+    }
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
@@ -67,6 +150,7 @@ public class ParcelLab {
         }
 
     }
+
 /*
 
     public static void populateAsync(@NonNull final AppDatabase db) {

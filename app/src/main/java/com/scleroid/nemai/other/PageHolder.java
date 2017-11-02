@@ -315,21 +315,21 @@ public class PageHolder extends RecyclerView.ViewHolder {
             if (deliveryType.equals("International")) {
                 mInternationalRadioButton.setChecked(true);
             }
-            mDescriptionEditText.setText(description.equals("0") ? null : description);
+            mDescriptionEditText.setText(description.equals("null") ? null : description);
             mWeightEditText.setText(weight == 0 ? null : Integer.toString(weight));
             mInvoiceValueEditText.setText(invoice == 0 ? null : Integer.toString(invoice));
 
             //TODO use pincode class instead of this strings, to get more control over this.
-            pinSourceAutoCompleteTextView.setText(source.equals("0") ? null : source);
-            pinDestinationAutoCompleteTextView.setText(destination.equals("0") ? null : destination);
+            pinSourceAutoCompleteTextView.setText(source.equals("null") ? null : source);
+            pinDestinationAutoCompleteTextView.setText(destination.equals("null") ? null : destination);
 
         }
 
     }
 
     public void bindNumber(int position, int size) {
-        if (size == 1) courierCount.setVisibility(View.GONE);
-        courierCount.setText(String.format("Courier %d of %d", position, size));
+        courierCount.setVisibility(View.VISIBLE);
+        courierCount.setText(String.format("Courier %d of %d", position + 1, size));
     }
 
         /*void setText(String text) {

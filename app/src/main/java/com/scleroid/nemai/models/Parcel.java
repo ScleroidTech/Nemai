@@ -41,8 +41,8 @@ public class Parcel {
     public Parcel() {
         this.sourcePin = "null";
         this.destinationPin = "null";
-        this.deliveryType = "null";
-        this.packageType = "null";
+        this.deliveryType = "Domestic";
+        this.packageType = "Document";
         this.description = "null";
 
     }

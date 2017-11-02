@@ -50,7 +50,7 @@ public class PagerAdapter extends RecyclerView.Adapter<PageHolder> {
             Parcel parcel = parcels.get(position);
             holder.bindParcels(parcel);
             holder.bindNumber(position, parcels.size());
-        } else holder.bindNumber(1, 1);
+        }
 
     }
 
