@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
      * name, website, notifications action view (dot)
      */
     private void loadNavHeader() {
-        // TODO
+        // TODO add model for registration & then change data here
         txtName.setText("Ravi Tamada");
         txtWebsite.setText("www.androidhive.info");
 

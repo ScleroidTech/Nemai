@@ -22,7 +22,6 @@ import com.scleroid.nemai.models.PinCode;
 import static com.scleroid.nemai.fragment.HomeFragment.THRESHOLD;
 import static com.scleroid.nemai.fragment.HomeFragment.mPinCodeDestination;
 import static com.scleroid.nemai.fragment.HomeFragment.mPinCodeSource;
-import static com.scleroid.nemai.network.NetworkCalls.submitCouriers;
 
 /**
  * Created by Ganesh on 31-10-2017.
@@ -207,7 +206,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    private void validateFields(boolean toggleMultiple) {
+    public Parcel validateFields() {
         boolean noSubmit = false;
         String delivery;
 
@@ -260,17 +259,17 @@ public class PageHolder extends RecyclerView.ViewHolder {
 
 
             if (!noSubmit)
-                nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), Integer.parseInt(mPackageWidthParcelEditText.getText().toString()), Integer.parseInt(mHeightParcelEditText.getText().toString()), Integer.parseInt(mPackageLengthParcelEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery, toggleMultiple);
+                return nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), Integer.parseInt(mPackageWidthParcelEditText.getText().toString()), Integer.parseInt(mHeightParcelEditText.getText().toString()), Integer.parseInt(mPackageLengthParcelEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery);
 
 
         } else {
 
-
             if (!noSubmit) {
-                nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery, toggleMultiple);
+                return nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery);
 
             }
         }
+        return null;
     }
 
     private boolean isEmpty(DelayedAutoCompleteTextView text) {
@@ -281,16 +280,16 @@ public class PageHolder extends RecyclerView.ViewHolder {
         return TextUtils.isEmpty(text.getText());
     }
 
-    public void nextScreenParcel(String source, String destination, int weight, int invoice, int width, int height, int length, String description, String deliveryType, boolean toggleMultiple) {
-        Parcel parcel = new Parcel(source, destination, deliveryType, "Parcel", weight, invoice, length, width, height, description);
-        submitCouriers(context, parcel, toggleMultiple);
+    public Parcel nextScreenParcel(String source, String destination, int weight, int invoice, int width, int height, int length, String description, String deliveryType) {
+        return new Parcel(source, destination, deliveryType, "Parcel", weight, invoice, length, width, height, description);
+        // submitCouriers(context, parcel, toggleMultiple);
 
     }
 
-    public void nextScreenDocument(String source, String destination, int weight, int invoice, String description, String deliveryType, boolean toggleMultiple) {
+    public Parcel nextScreenDocument(String source, String destination, int weight, int invoice, String description, String deliveryType) {
 
-        Parcel parcel = new Parcel(source, destination, deliveryType, "Document", weight, invoice, 0, 0, 0, description);
-        submitCouriers(context, parcel, toggleMultiple);
+        return new Parcel(source, destination, deliveryType, "Document", weight, invoice, 0, 0, 0, description);
+
     }
 
     public void bindParcels(Parcel parcel) {

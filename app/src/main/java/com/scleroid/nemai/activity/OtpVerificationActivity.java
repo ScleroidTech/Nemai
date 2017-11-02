@@ -24,6 +24,8 @@ import com.msg91.sendotp.library.VerificationListener;
 import com.scleroid.nemai.R;
 
 import static com.scleroid.nemai.activity.MainActivity.session;
+import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_COUNTRY_CODE;
+import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_PHONENUMBER;
 
 //TODO Add multiple parcel options
 public class OtpVerificationActivity extends AppCompatActivity implements
@@ -35,6 +37,15 @@ public class OtpVerificationActivity extends AppCompatActivity implements
     private String phoneNumber;
     private boolean reason;
     private Verification mVerification;
+
+    public static Intent newIntent(Context context, String phone, String countryCode) {
+        Intent verification = new Intent(context, OtpVerificationActivity.class);
+
+        verification.putExtra(INTENT_PHONENUMBER, phone);
+        verification.putExtra(INTENT_COUNTRY_CODE, countryCode);
+        return verification;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
