@@ -24,16 +24,20 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/pager"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            app:rvp_singlePageFling="true"
-            app:rvp_triggerOffset="0.1" />
+            android:layout_height="match_parent">
 
+            <com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                app:rvp_singlePageFling="true"
+                app:rvp_triggerOffset="0.1" />
 
+        </FrameLayout>
 
     <Button
         android:id="@+id/btn_submit"

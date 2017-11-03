@@ -44,19 +44,18 @@ public class PagerAdapter extends RecyclerView.Adapter<PageHolder> {
 
     @Override
     public void onBindViewHolder(PageHolder holder, int position) {
-        if (this.holder == null) this.holder = holder;
+        this.holder = holder;
         holder.setListeners();
-        if (parcels != null) {
-            Parcel parcel = parcels.get(position);
+
+        Parcel parcel = parcels.get(position);
             holder.bindParcels(parcel);
             holder.bindNumber(position, parcels.size());
-        }
+
 
     }
 
     @Override
     public int getItemCount() {
-        if (parcels == null) return 1;
         return parcels.size();
     }
 

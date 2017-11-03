@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 
 import com.scleroid.nemai.models.Parcel;
 
@@ -75,18 +77,27 @@ public class ParcelLab {
 
     public static List<Parcel> getAllParcels(final Context context) {
 
-
-        final Runnable mPendingRunnable = new Runnable() {
+        new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                parcels = getAllParcels(AppDatabase.getAppDatabase(context));
+                Log.d(TAG, "parcels " + getAllParcels(AppDatabase.getAppDatabase(context)));
+            }
+        };
+        /*final Runnable mPendingRunnable = new Runnable() {
             @SuppressLint("HandlerLeak")
             @Override
             public void run() {
                 // update the main content by replacing fragments
 
                 parcels = getAllParcels(AppDatabase.getAppDatabase(context));
+                Log.d(TAG,"parcels " +getAllParcels(AppDatabase.getAppDatabase(context)));
             }
         };
         //new Thread(mPendingRunnable).start();
-        handler.post(mPendingRunnable);
+        handler.post(mPendingRunnable);*/
+        Log.d(TAG, "parcels " + parcels);
         return parcels;
     }
 

@@ -95,6 +95,7 @@
             android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.PasswordChangeActivity" />
+        <activity android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity" />
 
     </application>
 

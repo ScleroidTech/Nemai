@@ -7,14 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.ServerConstants;
-import com.scleroid.nemai.volley_support.MyVolleyPostMethod1;
-import com.scleroid.nemai.volley_support.VolleyCompleteListener;
-
-import java.util.HashMap;
 
 
 /**
@@ -28,8 +22,8 @@ public class TrackingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tracking);
-        final LinearLayout trackLinear = (LinearLayout) findViewById(R.id.trackLinear);
-        Button btn_scan = (Button) findViewById(R.id.btn_scan);
+        final LinearLayout trackLinear = findViewById(R.id.trackLinear);
+        Button btn_scan = findViewById(R.id.btn_scan);
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -39,13 +33,13 @@ public class TrackingActivity extends AppCompatActivity {
             }
         });
 
-        LinearLayout parent = (LinearLayout) findViewById(R.id.linearExpand);
+        LinearLayout parent = findViewById(R.id.linearExpand);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = inflater.inflate(R.layout.insert_updates, null);
         parent.addView(child);
     }
     private void previouseWebService() {
-        VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
+       /* VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
             @Override
             public void onTaskCompleted(String response, int serviceCode) {
                 Toast.makeText(TrackingActivity.this,response,Toast.LENGTH_LONG);
@@ -71,8 +65,9 @@ public class TrackingActivity extends AppCompatActivity {
         map.put("monileno","6576576");
         map.put("emailid","tyututuj");
         map.put("dob","rghfh");
-        new MyVolleyPostMethod1(this,volleyCompleteListener,map,ServerConstants.ServiceCode.POST_COURIER,true);
+        new VolleyPostJSONMethod(this, volleyCompleteListener, map, ServerConstants.ServiceCode.POST_COURIER, true);
         //new MyVolleyGetMethod(this,volleyCompleteListener,map,ServerConstants.ServiceCode.POST_COURIER,true);
+   */
     }
 
 }
