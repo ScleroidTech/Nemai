@@ -8,13 +8,13 @@ public class ServerConstants {
 
     public static final String URL = "url";
     public class serverUrl {
-        public static final String BASE_URL = "http://ec2-34-201-39-122.compute-1.amazonaws.com:3010";
+        public static final String BASE_URL = "http://ec2-54-175-203-103.compute-1.amazonaws.com:8080";
         public static final String POST_COURIER = BASE_URL + "/insert";
         public static final String POST_PINCODE = BASE_URL + "/insertQuery";
         public static final String POST_PINCODE_LIST = BASE_URL + "/customer";
 
-        public static final String POST_REGISTER = BASE_URL + "/register";
-        public static final String POST_SOCIAL_REGISTER = BASE_URL + "/insertuser";
+        public static final String POST_REGISTER = "http://ec2-54-175-203-103.compute-1.amazonaws.com:8080/employees";
+        public static final String POST_SOCIAL_REGISTER = BASE_URL + "/employess";
         public static final String POST_LOGIN = BASE_URL + "/insert";
         public static final String POST_VALID_USER = BASE_URL + "/alreadyexists";
         public static final String POST_RESET_PASS = "abcd  ";

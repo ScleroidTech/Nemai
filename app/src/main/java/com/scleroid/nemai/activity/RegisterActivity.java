@@ -533,7 +533,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         //if this becomes true that means validation is successful
         mAwesomeValidation.clear();
         if (mAwesomeValidation.validate()) {
-            Toast.makeText(this, "Validation Successful", Toast.LENGTH_LONG).show();
+            // Toast.makeText(this, "Validation Successful", Toast.LENGTH_LONG).show();
 
             //process the data further
 
@@ -558,6 +558,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
             session.setLoggedInMethod("email");
             registerUser(getApplicationContext(), firstName, lastName, email, mobile, gender, password, ccp.getDefaultCountryCode());
+            showProgress(false);
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);
         }
