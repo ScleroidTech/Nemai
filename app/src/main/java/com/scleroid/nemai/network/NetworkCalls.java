@@ -40,12 +40,24 @@ public class NetworkCalls {
 
             // Tag used to cancel the request
             String tag_string_req = "req_parcel";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("source", parcel.getSourcePin());
+        params.put("destination", parcel.getDestinationPin());
+        params.put("weight", Integer.toString(parcel.getWeight()));
+        params.put("invoice", Integer.toString(parcel.getInvoice()));
+        params.put("width", Integer.toString(parcel.getWidth()));
+        params.put("length", Integer.toString(parcel.getLength()));
+        params.put("height", Integer.toString(parcel.getHeight()));
+        params.put("description", parcel.getDescription());
+        params.put("delivery_type", parcel.getDeliveryType());
+        params.put("package_type", parcel.getPackageType());
+
 
 
 //            showProgress(context, true);
 
             JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_COURIER, null, new Response.Listener<JSONObject>() {
+                    ServerConstants.serverUrl.POST_COURIER, new JSONObject(params), new Response.Listener<JSONObject>() {
                 @SuppressLint("LongLogTag")
 
                 @Override
@@ -85,23 +97,17 @@ public class NetworkCalls {
                 }
             }) {
 
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting params to register url
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("source", parcel.getSourcePin());
-                    params.put("destination", parcel.getDestinationPin());
-                    params.put("weight", Integer.toString(parcel.getWeight()));
-                    params.put("invoice", Integer.toString(parcel.getInvoice()));
-                    params.put("width", Integer.toString(parcel.getWidth()));
-                    params.put("length", Integer.toString(parcel.getLength()));
-                    params.put("height", Integer.toString(parcel.getHeight()));
-                    params.put("description", parcel.getDescription());
-                    params.put("delivery_type", parcel.getDeliveryType());
-                    params.put("package_type", parcel.getPackageType());
 
-                    return params;
-                }
+         /*       @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Content-Type", "application/json");
+                    Log.d(TAG, "Headers " + headers);
+
+                    //MyApp.get().addSessionCookie(headers);
+
+                    return headers;
+                }*/
 
             };
 
@@ -122,9 +128,12 @@ public class NetworkCalls {
 
 
             showProgress(context, true);
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("email_id", userName);
+
 
             JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_VALID_USER, null, new Response.Listener<JSONObject>() {
+                    ServerConstants.serverUrl.POST_VALID_USER, new JSONObject(params), new Response.Listener<JSONObject>() {
                 @SuppressLint("LongLogTag")
 
                 @Override
@@ -175,14 +184,7 @@ public class NetworkCalls {
                 }
             }) {
 
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting params to register url
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("email_id", userName);
 
-                    return params;
-                }
 
             };
 
@@ -211,9 +213,14 @@ public class NetworkCalls {
 
 
             showProgress(context, true);
+            // Posting params to register url
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("email_id", userName);
+            params.put("pwd", pass);
+
 
             JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_LOGIN, null, new Response.Listener<JSONObject>() {
+                    ServerConstants.serverUrl.POST_LOGIN, new JSONObject(params), new Response.Listener<JSONObject>() {
                 @SuppressLint("LongLogTag")
 
                 @Override
@@ -268,15 +275,6 @@ public class NetworkCalls {
                 }
             }) {
 
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting params to register url
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("email_id", userName);
-                    params.put("pwd", pass);
-
-                    return params;
-                }
 
             };
 
@@ -310,9 +308,17 @@ public class NetworkCalls {
 
             showProgress(context, true);
 
+            Map<String, String> params = new HashMap<String, String>();
+            params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_REGISTER);
+            params.put("employee_name", firstName);
+            params.put("employee_salary", lastName);
+            params.put("employee_age", gender);
+                   /* params.put("email_id", email);
+                    params.put("phone", phone);
+                    params.put("pwd", password);*/
 
             JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_REGISTER, null, new Response.Listener<JSONObject>() {
+                    ServerConstants.serverUrl.POST_REGISTER, new JSONObject(params), new Response.Listener<JSONObject>() {
                 @SuppressLint("LongLogTag")
 
                 @Override
@@ -374,31 +380,52 @@ public class NetworkCalls {
             }) {
 
 
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting params to register url
-                    Log.d(TAG, "RegisterParams " + firstName + lastName + gender + email + phone + password);
 
+      /*          @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Content-Type", "application/json");
+                    Log.d(TAG, "Headers " + headers);
 
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_REGISTER);
-                    params.put("first_name", firstName);
-                    params.put("last_name", lastName);
-                    params.put("gender", gender);
-                    params.put("email_id", email);
-                    params.put("phone", phone);
-                    params.put("pwd", password);
+                    //MyApp.get().addSessionCookie(headers);
 
-                    return params;
+                    return headers;
                 }
+
+                @Override
+                public String getBodyContentType() {
+                    return super.getBodyContentType();
+                }*/
+               /* @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+
+                }*/
+    /*            @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+
+                    return super.getHeaders();
+                }
+
+*/
+               /* *//**
+                 * Passing some request headers
+                 * *//*
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Content-Type", "application/json;");
+                    return headers;
+                }*/
 
             };
 
 
             int socketTimeout = 10000000;//10 seconds - change to what you want
             strReq.setRetryPolicy(new DefaultRetryPolicy(socketTimeout,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    10,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            Log.d(TAG, "JSON " + strReq.getBodyContentType() + strReq.toString());
 
             // Adding request to request queue
             AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
