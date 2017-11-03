@@ -6,10 +6,12 @@ android {
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId 'com.scleroid.nemai'
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        // Enabling multidex support.
+        multiDexEnabled true
 
     }
     buildTypes {
@@ -41,7 +43,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:11.4.2'
     compile 'com.basgeekball:awesome-validation:2.0'
     compile files('libs/volley.jar')
-    compile 'com.facebook.android:facebook-android-sdk:4.26.0'
+
+    compile 'com.facebook.android:facebook-android-sdk:4.27.0'
     compile 'com.msg91.sendotp.library:library:3.1'
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:26.1.0'

@@ -1,3 +1,4 @@
+/*
 package com.scleroid.nemai.volley_support;
 
 import android.content.Context;
@@ -12,11 +13,13 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.scleroid.nemai.volley_support.MyVolleyPostMethod1.isNetworkAvailable;
+import static com.scleroid.nemai.volley_support.VolleyPostJSONMethod.isNetworkAvailable;
 
+*/
 /**
  * Created by Nanostuffs on 14-12-2015.
- */
+ *//*
+
 public class MyVolleyPostMethod {
 
     Context context;
@@ -89,3 +92,4 @@ public class MyVolleyPostMethod {
     }
 
 }
+*/

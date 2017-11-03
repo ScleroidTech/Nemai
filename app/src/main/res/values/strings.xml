@@ -78,8 +78,8 @@
     <string name="mobileerror">Enter a valid Mobile</string>
     <string name="title_activity_password">Register</string>
 
-    <string name="facebook_app_id">1912010522393928</string>
-    <string name="fb_login_protocol_scheme">fb1912010522393928</string>
+    <string name="facebook_app_id">981447468661996</string>
+    <string name="fb_login_protocol_scheme">fb981447468661996</string>
 
     <string name="server_client_id">881661126317-k3hrrp3skmuji51cm9a3ioqj22p066if.apps.googleusercontent.com</string>
     <string name="sendotp_key">128096AMsirlZWi7ig59c651b6</string>

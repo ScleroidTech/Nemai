@@ -9,7 +9,9 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,24 +19,27 @@ import java.util.Map;
 /**
  * Created by Nanostuffs on 14-12-2015.
  */
-public class MyVolleyPostMethod1 {
+public class VolleyPostJSONMethod {
 
     Context context;
     VolleyCompleteListener mVolleylistener;
+    String tag;
     private int serviceCode;
     private Map<String, String> map;
     // ShowLoader showLoader;
 
-    public MyVolleyPostMethod1(Context context, VolleyCompleteListener volleyCompleteListener, HashMap<String, String> map, int serviceCode, boolean isDialog) {
+    public VolleyPostJSONMethod(Context context, VolleyCompleteListener volleyCompleteListener, HashMap<String, String> map, boolean isDialog, String tag) {
         this.map = map;
-        this.serviceCode = serviceCode;
+        this.tag = tag;
+
+
         this.context = context;
         if (isDialog){
             //      showLoader = new ShowLoader(context);
         }
         if (isNetworkAvailable(context)) {
             mVolleylistener = volleyCompleteListener;
-            myBackgroundGetClass(context, volleyCompleteListener, serviceCode, map, isDialog);
+            myBackgroundGetClass(context, volleyCompleteListener, map, isDialog, tag);
         } else {
             showToast(context, "No Internet Connection");
         }
@@ -53,29 +58,27 @@ public class MyVolleyPostMethod1 {
         return false;
     }
 
-    private void myBackgroundGetClass(final Context context, VolleyCompleteListener volleyCompleteListener, int serviceCode, final Map<String, String> map, final boolean isDialog) {
+    private void myBackgroundGetClass(final Context context, VolleyCompleteListener volleyCompleteListener, final Map<String, String> map, final boolean isDialog, String tag) {
 
-        final int code = serviceCode;
         String url = map.get("url");
         map.remove("url");
         if (isDialog){
             //    showLoader.showDialog();
         }
         mVolleylistener = volleyCompleteListener;
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST,
+                url, new JSONObject(map), new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
-                        mVolleylistener.onTaskCompleted(response, code);
-                        if (isDialog){
-                            //                  showLoader.dismissDialog();
-                        }
+                    public void onResponse(JSONObject jsonObject) {
+                        mVolleylistener.onTaskCompleted(jsonObject);
                     }
+
+
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        mVolleylistener.onTaskFailed(error.toString(), code);
+                        mVolleylistener.onTaskFailed(error.toString());
                         if (isDialog){
                             //                showLoader.dismissDialog();
                         }
@@ -93,7 +96,7 @@ public class MyVolleyPostMethod1 {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         //RequestQueue requestQueue = Volley.newRequestQueue(context);
         //requestQueue.add(stringRequest);
-        AppController.getInstance().addToRequestQueue(stringRequest);
+        AppController.getInstance().addToRequestQueue(stringRequest, tag);
     }
 
     private void showToast(Context context, String text){
