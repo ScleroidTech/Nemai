@@ -52,7 +52,6 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.network.NetworkCalls;
-import com.scleroid.nemai.other.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -507,21 +506,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             lastName = acct.getFamilyName();
             email = acct.getEmail();
             String googleID = acct.getId();
+            session.setLoggedInMethod("google");
             Log.d(TAG, acct.toString());
             Toast.makeText(this, "firstname " + firstName + "  " + lastName + "  " + email, Toast.LENGTH_LONG).show();
             if (isAlreadyUser(this, email)) {
+                Log.d(TAG, "already a user");
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             } else {
 
-                registerUser(firstName, lastName, email, null);
+                Log.d(TAG, "Not a user, registering");
+                registerUser(firstName, lastName, email, null, session.getLoggedInMethod());
             }
 
             // mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             showProgress(context, false);
 
-            session.setLoggedInMethod("google");
+            //    session.setLoggedInMethod("google");
             // updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
@@ -561,12 +563,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         gender = object.getString("gender");
                     }
 
+                    session.setLoggedInMethod("facebook");
                     if (isAlreadyUser(getApplicationContext(), email)) {
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
 
-                    } else registerUser(firstName, lastName, email, gender);
+                    } else
+                        registerUser(firstName, lastName, email, gender, session.getLoggedInMethod());
 //TODO submit to review first
              /*   if (object.has("location")) {
                     String location = object.getJSONObject("location").getString("name");
@@ -581,7 +585,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
 
 
-                session.setLoggedInMethod("facebook");
+
                 Toast.makeText(LoginActivity.this, object.toString(), Toast.LENGTH_LONG).show();
 
             }
@@ -636,8 +640,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
-
-    protected void registerUser(final String firstName, final String lastName, final String email, final String gender) {
+    protected void registerUser(final String firstName, final String lastName, final String email, final String gender, final String loginMethod) {
 
         if (isNetworkAvailable(context)) {
             Intent intent;
@@ -647,7 +650,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             extras.putString(SocialRegisterActivity.INTENT_LAST_NAME, lastName);
             extras.putString(SocialRegisterActivity.INTENT_EMAIL, email);
             extras.putString(SocialRegisterActivity.INTENT_GENDER, gender);
-            extras.putString(SocialRegisterActivity.INTENT_METHOD, SessionManager.getLoggedInMethod());
+            extras.putString(SocialRegisterActivity.INTENT_METHOD, loginMethod);
             intent.putExtras(extras);
             startActivity(intent);
             finish();

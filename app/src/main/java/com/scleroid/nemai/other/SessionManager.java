@@ -19,7 +19,7 @@ public class SessionManager {
     // LogCat tag
     private static String TAG = SessionManager.class.getSimpleName();
     // Shared Preferences
-    private SharedPreferences pref;
+    private static SharedPreferences pref;
     private SharedPreferences.Editor editor;
     // Shared pref mode
     private int PRIVATE_MODE = 0;
@@ -31,8 +31,8 @@ public class SessionManager {
         editor.apply();
     }
 
-    public static String getLoggedInMethod() {
-        return LOGGED_IN_METHOD;
+    public String getLoggedInMethod() {
+        return pref.getString(KEY_IS_LOGGEDIN, "email");
     }
 
     public void setLoggedInMethod(String isLoggedIn) {

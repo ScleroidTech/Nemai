@@ -52,7 +52,6 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.hbb20.CountryCodePicker;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.other.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -391,7 +390,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 extras.putString(SocialRegisterActivity.INTENT_FIRST_NAME, firstName);
                 extras.putString(SocialRegisterActivity.INTENT_LAST_NAME, lastName);
                 extras.putString(SocialRegisterActivity.INTENT_EMAIL, email);
-                extras.putString(SocialRegisterActivity.INTENT_METHOD, SessionManager.getLoggedInMethod());
+                extras.putString(SocialRegisterActivity.INTENT_METHOD, session.getLoggedInMethod());
                 intent.putExtras(extras);
             }
 
@@ -452,7 +451,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                         extras.putString(SocialRegisterActivity.INTENT_LAST_NAME, lastName);
                         extras.putString(SocialRegisterActivity.INTENT_EMAIL, email);
                         extras.putString(SocialRegisterActivity.INTENT_GENDER, gender);
-                        extras.putString(SocialRegisterActivity.INTENT_METHOD, SessionManager.getLoggedInMethod());
+                        extras.putString(SocialRegisterActivity.INTENT_METHOD, session.getLoggedInMethod());
                         intent.putExtras(extras);
                     }
                     startActivity(intent);
@@ -532,7 +531,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         //first validate the form then move ahead
         //if this becomes true that means validation is successful
         mAwesomeValidation.clear();
-        if (mAwesomeValidation.validate()) {
+        if (true) {
             // Toast.makeText(this, "Validation Successful", Toast.LENGTH_LONG).show();
 
             //process the data further
@@ -557,7 +556,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
 
             session.setLoggedInMethod("email");
-            registerUser(getApplicationContext(), firstName, lastName, email, mobile, gender, password, ccp.getDefaultCountryCode());
+            Log.d(TAG, "session " + session.getLoggedInMethod());
+            registerUser(getApplicationContext(), firstName, lastName, email, mobile, gender, password, session.getLoggedInMethod(), ccp.getDefaultCountryCode());
             showProgress(false);
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);

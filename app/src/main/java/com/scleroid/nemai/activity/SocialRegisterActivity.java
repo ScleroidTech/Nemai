@@ -3,7 +3,6 @@ package com.scleroid.nemai.activity;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -22,27 +21,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.hbb20.CountryCodePicker;
 import com.msg91.sendotp.library.PhoneNumberFormattingTextWatcher;
 import com.msg91.sendotp.library.PhoneNumberUtils;
 import com.msg91.sendotp.library.internal.Iso2Phone;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.ServerConstants;
-import com.scleroid.nemai.volley_support.AppController;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
-import static com.scleroid.nemai.activity.MainActivity.session;
-import static com.scleroid.nemai.activity.RegisterActivity.isNetworkAvailable;
+import static com.scleroid.nemai.network.NetworkCalls.registerUser;
 
 
 /**
@@ -157,7 +144,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
 
     private void attemptSignup() {
         String mobile = getE164Number();
-        registerSocialUser(mFirstName, mLastName, mEmail, mobile, mGender, mLoginMethod);
+        registerUser(getApplicationContext(), mFirstName, mLastName, mEmail, mobile, mGender, null, mLoginMethod, ccp.getDefaultCountryCode());
 
     }
 
@@ -231,115 +218,6 @@ public class SocialRegisterActivity extends AppCompatActivity {
                 mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
-    }
-
-    /**
-     * Function to store user in MySQL database will post params(tag, name,
-     * email, password) to register url
-     */
-    protected void registerSocialUser(final String firstName, final String lastName, final String email,
-                                      final String phone, final String gender, final String loginMethod) {
-
-        openActivity(phone);
-
-
-        if (isNetworkAvailable(getApplicationContext())) {
-
-            // Tag used to cancel the request
-            String tag_string_req = "req_register";
-
-
-            showProgress(true);
-
-
-            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_REGISTER, null, new Response.Listener<JSONObject>() {
-                @SuppressLint("LongLogTag")
-
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    Log.d(TAG, "Register Response: " + jsonObject.toString());
-                    showProgress(false);
-
-                    try {
-
-                        // user successfully logged in
-                        // Create login session
-
-
-                        //JSONObject jObj = new JSONObject(jsonObject);
-
-                        boolean error = jsonObject.getBoolean("status");
-                        if (error) {
-
-                            Toast.makeText(getApplicationContext(), "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
-
-                            //session.setLogin(true);
-
-                            openActivity(phone);
-                            // Launch login activity
-                        /*Intent intent = new Intent(
-                                RegisterActivity.this,
-                                LoginActivity.class);
-                        startActivity(intent);
-                            //finish(); */
-                        } else {
-
-                            // Error occurred in registration. Get the error
-                            // message
-                            session.setLogin(false);
-                            String errorMsg = jsonObject.getString("message");
-                            Toast.makeText(getApplicationContext(),
-                                    errorMsg, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Error in data parsing " + e.getMessage());
-                        //e.printStackTrace();
-                        Toast.makeText(getApplicationContext(),
-                                "" + e, Toast.LENGTH_LONG).show();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-
-                @SuppressLint("LongLogTag")
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Registration Error: " + error.getMessage());
-                    Toast.makeText(getApplicationContext(),
-                            error.getMessage(), Toast.LENGTH_LONG).show();
-                    showProgress(false);
-                }
-            }) {
-
-
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting params to register url
-
-
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_REGISTER);
-
-                    params.put("first_name", firstName);
-                    params.put("last_name", lastName);
-                    params.put("gender", gender);
-                    params.put("email_id", email);
-                    params.put("phone", phone);
-                    params.put("method",loginMethod);
-
-                    return params;
-                }
-
-            };
-
-
-
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-
-        } else
-            Toast.makeText(getApplicationContext(), "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();
     }
 
 

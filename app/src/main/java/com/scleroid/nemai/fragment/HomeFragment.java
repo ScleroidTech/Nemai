@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,11 +120,9 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         v.clearFocus();
 
-        recyclerViewPager = v.findViewById(R.id.pager);
+        setupRecyclerView(v);
 
-        recyclerViewPager.setLayoutManager(new LinearLayoutManager(context,
-                LinearLayoutManager.HORIZONTAL, false));
-        updateUI(context);
+        // updateUI(context);
 
        /* mWeightTIL = v.findViewById(R.id.textWeight);
         mInvoiceTIL = v.findViewById(R.id.textInvoice);
@@ -337,6 +336,89 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         return v;
     }
 
+    private void setupRecyclerView(View v) {
+        recyclerViewPager = v.findViewById(R.id.pager);
+        recyclerViewPager.setLayoutManager(new LinearLayoutManager(context,
+                LinearLayoutManager.HORIZONTAL, false));
+        updateUI(context);
+        recyclerViewPager.setTriggerOffset(0.15f);
+        recyclerViewPager.setFlingFactor(0.25f);
+        recyclerViewPager.setHasFixedSize(false);
+
+
+        recyclerViewPager.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int scrollState) {
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+//                mPositionText.setText("First: " + mRecyclerViewPager.getFirstVisiblePosition());
+                int childCount = recyclerViewPager.getChildCount();
+                int width = recyclerViewPager.getChildAt(0).getWidth();
+                int padding = (recyclerViewPager.getWidth() - width) / 2;
+
+                for (int j = 0; j < childCount; j++) {
+                    View v = recyclerView.getChildAt(j);
+                    //往左 从 padding 到 -(v.getWidth()-padding) 的过程中，由大到小
+                    float rate = 0;
+                    if (v.getLeft() <= padding) {
+                        if (v.getLeft() >= padding - v.getWidth()) {
+                            rate = (padding - v.getLeft()) * 1f / v.getWidth();
+                        } else {
+                            rate = 1;
+                        }
+                        v.setScaleY(1 - rate * 0.1f);
+                    } else {
+                        //往右 从 padding 到 recyclerView.getWidth()-padding 的过程中，由大到小
+                        if (v.getLeft() <= recyclerView.getWidth() - padding) {
+                            rate = (recyclerView.getWidth() - padding - v.getLeft()) * 1f / v.getWidth();
+                        }
+                        v.setScaleY(0.9f + rate * 0.1f);
+                    }
+                }
+            }
+        });
+        recyclerViewPager.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
+            @Override
+            public void OnPageChanged(int oldPosition, int newPosition) {
+                Log.d("test", "oldPosition:" + oldPosition + " newPosition:" + newPosition);
+            }
+        });
+
+        recyclerViewPager.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (recyclerViewPager.getChildCount() < 3) {
+                    if (recyclerViewPager.getChildAt(1) != null) {
+                        if (recyclerViewPager.getCurrentPosition() == 0) {
+                            View v1 = recyclerViewPager.getChildAt(1);
+                            v1.setScaleY(0.9f);
+                            v1.setScaleX(0.9f);
+                        } else {
+                            View v1 = recyclerViewPager.getChildAt(0);
+                            v1.setScaleY(0.9f);
+                            v1.setScaleX(0.9f);
+                        }
+                    }
+                } else {
+                    if (recyclerViewPager.getChildAt(0) != null) {
+                        View v0 = recyclerViewPager.getChildAt(0);
+                        v0.setScaleY(0.9f);
+                        v0.setScaleX(0.9f);
+                    }
+                    if (recyclerViewPager.getChildAt(2) != null) {
+                        View v2 = recyclerViewPager.getChildAt(2);
+                        v2.setScaleY(0.9f);
+                        v2.setScaleX(0.9f);
+                    }
+                }
+
+            }
+        });
+    }
+
     private void submitData(boolean b) {
         Parcel parcel = recycleViewPagerAdapter.holder.validateFields();
         if (parcel == null) return;
@@ -391,6 +473,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
     public void updateUI(Context context) {
         List<Parcel> crimes = updateParcelList(context);
+
         if (recycleViewPagerAdapter == null) {
             recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, getLayoutInflater(), getContext(), crimes);
             recyclerViewPager.setAdapter(recycleViewPagerAdapter);
@@ -405,9 +488,11 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
     private List<Parcel> updateParcelList(Context context) {
         List<Parcel> crimes = ParcelLab.getAllParcels(context);
+        Log.d(TAG, "crimes" + crimes);
         if (crimes == null) {
             ParcelLab.newParcel(context);
             crimes = ParcelLab.getAllParcels(context);
+            Log.d(TAG, "crimes2" + crimes);
         }
         return crimes;
     }

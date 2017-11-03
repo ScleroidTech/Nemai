@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.ServerConstants;
 import com.scleroid.nemai.models.PinCode;
-import com.scleroid.nemai.volley_support.MyVolleyPostMethod1;
 import com.scleroid.nemai.volley_support.VolleyCompleteListener;
+import com.scleroid.nemai.volley_support.VolleyPostJSONMethod;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -144,11 +144,9 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
             @Override
-            public void onTaskCompleted(String response, int serviceCode) {
+            public void onTaskCompleted(JSONObject response) {
                 mResultPinList = new ArrayList<PinCode>();
-                Log.i(TAG,response);
-                switch (serviceCode) {
-                    case ServerConstants.ServiceCode.POST_PINCODE:
+                Log.i(TAG, response.toString());
 
                         try {
                             JSONArray json = new JSONArray(response);
@@ -170,20 +168,18 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                             Log.e(TAG, "JSONException " + e.getMessage());
                         }
 
-                        break;
-                }
             }
 
             @Override
-            public void onTaskFailed(String response, int serviceCode) {
-                Log.i(TAG,response);
+            public void onTaskFailed(String response) {
+                Log.i(TAG, response.toString());
             }
         };
         HashMap<String, String> map = new HashMap<String, String>();
         map.put(ServerConstants.URL, ServerConstants.serverUrl.POST_PINCODE);
         map.put("origins", userInput);
 
-        new MyVolleyPostMethod1(mContext,volleyCompleteListener,map,ServerConstants.ServiceCode.POST_PINCODE,true);
+        new VolleyPostJSONMethod(mContext, volleyCompleteListener, map, true, "pincode");
 
         return mResultPinList;
     }
