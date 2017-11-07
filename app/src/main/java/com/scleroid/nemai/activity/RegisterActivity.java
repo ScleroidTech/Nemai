@@ -133,10 +133,12 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         mPasswordAgain = findViewById(R.id.passwordAgain);
         mEmailTIL = findViewById(R.id.email_login_text_input_layout);
         ccp = findViewById(R.id.ccp);
-        ccp.registerCarrierNumberEditText(mMobileNumberview);
-        ccp.setCcpClickable(false);
+        ccp.setDefaultCountryUsingNameCode("IN");
+        //  ccp.registerCarrierNumberEditText(mMobileNumberview);
         ccp.setNumberAutoFormattingEnabled(false);
-        countryCode = ccp.getSelectedCountryCode();
+        ccp.setCcpClickable(false);
+        ccp.setArrowSize(0);
+        countryCode = ccp.getDefaultCountryCode();
         Log.d(TAG, "Country Code " + countryCode);
 
 
@@ -557,7 +559,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
             session.setLoggedInMethod("email");
             Log.d(TAG, "session " + session.getLoggedInMethod());
-            registerUser(getApplicationContext(), firstName, lastName, email, mobile, gender, password, session.getLoggedInMethod(), ccp.getDefaultCountryCode());
+            registerUser(getApplicationContext(), firstName, lastName, email, mobile, gender, password, session.getLoggedInMethod(), countryCode);
             showProgress(false);
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);

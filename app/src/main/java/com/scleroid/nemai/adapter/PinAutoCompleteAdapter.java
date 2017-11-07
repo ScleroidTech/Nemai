@@ -172,7 +172,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
             @Override
             public void onTaskFailed(String response) {
-                Log.i(TAG, response.toString());
+                Log.i(TAG, response);
             }
         };
         HashMap<String, String> map = new HashMap<String, String>();

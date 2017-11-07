@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -40,8 +39,6 @@ import com.scleroid.nemai.other.CircleTransform;
 import com.scleroid.nemai.other.SessionManager;
 
 import java.util.List;
-
-import static com.scleroid.nemai.adapter.ParcelLab.handler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     private ParcelLab parcelLab;
     private ViewPager mViewPager;
     private List<Parcel> parcels;
+    private Handler handler;
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -104,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         session = new SessionManager(getApplicationContext());
 
 
-        session.setLogin(false);
+        session.setLogin(true);
         session.setVerified(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -116,10 +114,9 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        HandlerThread thread = new HandlerThread("MyHandlerThread");
-        thread.start();
-        handler = new Handler(thread.getLooper());
-
+        /*HandlerThread thread = new HandlerThread("MyHandlerThread");
+        thread.start();*/
+        handler = new Handler();
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -347,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
 
         // If mPendingRunnable is not null, then add to the message queue
         if (mPendingRunnable != null) {
-            handler.post(mPendingRunnable);
+            boolean post = handler.post(mPendingRunnable);
         }
 
         // show or hide the fab button

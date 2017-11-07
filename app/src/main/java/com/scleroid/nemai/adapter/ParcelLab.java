@@ -1,20 +1,19 @@
 package com.scleroid.nemai.adapter;
 
-import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.scleroid.nemai.models.Parcel;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class ParcelLab {
     private static final String TAG = ParcelLab.class.getName();
-    public static Handler handler;
     public static List<Parcel> parcels;
     private static ParcelLab parcelLab;
     private Parcel parcel;
@@ -26,153 +25,205 @@ public class ParcelLab {
 
     }
 
-    public static Parcel addParcel(final AppDatabase db, Parcel parcel) {
+    private static Parcel addParcel(final AppDatabase db, Parcel parcel) {
         db.parcelDao().insert(parcel);
         return parcel;
     }
 
-    public static List<Parcel> getAllParcels(final AppDatabase db) {
+    private static List<Parcel> getAllParcels(final AppDatabase db) {
         List<Parcel> parcels = db.parcelDao().getAll();
         return parcels;
     }
 
-    public static Parcel getParcel(final AppDatabase db, int serialNo) {
+    private static Parcel getParcel(final AppDatabase db, int serialNo) {
         Parcel parcel = db.parcelDao().findById(serialNo);
         return parcel;
     }
 
-    public static int getCount(final AppDatabase db) {
+    private static int getCount(final AppDatabase db) {
         int count = db.parcelDao().countParcels();
         return count;
     }
 
-    public static void deleteParcel(final AppDatabase db, Parcel parcel) {
+    private static void deleteParcel(final AppDatabase db, Parcel parcel) {
         db.parcelDao().delete(parcel);
 
     }
 
-    public static void deleteAllParcel(final AppDatabase db) {
+    private static void deleteAllParcel(final AppDatabase db) {
         db.parcelDao().nukeTable();
 
     }
 
-    public static void updateParcel(AppDatabase db, Parcel parcel) {
+    private static void updateParcel(AppDatabase db, Parcel parcel) {
         db.parcelDao().updateParcel(parcel);
     }
 
-    public static void newParcel(final Context context) {
+    public static Void newParcel(final Context context) {
 
-        final Runnable mPendingRunnable = new Runnable() {
-            @SuppressLint("HandlerLeak")
-            @Override
-            public void run() {
-                // update the main content by replacing fragments
+        AddNewParcelAsync task = new AddNewParcelAsync(AppDatabase.getAppDatabase(context), new Parcel());
 
-                addParcel(AppDatabase.getAppDatabase(context), new Parcel());
-            }
-        };
-        // new Thread(mPendingRunnable).start();
-        handler.post(mPendingRunnable);
+        try {
+            return task.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static List<Parcel> getAllParcels(final Context context) {
 
-        new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                parcels = getAllParcels(AppDatabase.getAppDatabase(context));
-                Log.d(TAG, "parcels " + getAllParcels(AppDatabase.getAppDatabase(context)));
-            }
-        };
-        /*final Runnable mPendingRunnable = new Runnable() {
-            @SuppressLint("HandlerLeak")
-            @Override
-            public void run() {
-                // update the main content by replacing fragments
+        GetAllAsync task = new GetAllAsync(AppDatabase.getAppDatabase(context), context);
 
-                parcels = getAllParcels(AppDatabase.getAppDatabase(context));
-                Log.d(TAG,"parcels " +getAllParcels(AppDatabase.getAppDatabase(context)));
-            }
-        };
-        //new Thread(mPendingRunnable).start();
-        handler.post(mPendingRunnable);*/
-        Log.d(TAG, "parcels " + parcels);
-        return parcels;
+        Log.d(TAG, "parcels getAllParcels " + parcels);
+
+        try {
+            return task.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public static void addParcel(final Parcel parcel, final Context applicationContext) {
+    public static void addParcel(final Parcel parcel, final AppDatabase appDatabase) {
 
 
-        final Runnable mPendingRunnable = new Runnable() {
-            @SuppressLint("HandlerLeak")
-            @Override
-            public void run() {
-                // update the main content by replacing fragments
+        AddUserAsync task = new AddUserAsync(appDatabase, parcel);
+        task.execute();
 
-
-                updateParcel(AppDatabase.getAppDatabase(applicationContext), parcel);
-                //ParcelLab.addParcel(AppDatabase.getAppDatabase(applicationContext), new Parcel());
-                //wrong idea    HomeFragment.parcelCount = ParcelLab.getCount(AppDatabase.getAppDatabase(applicationContext));
-
-
-                /*Fragment fragment = HomeFragment.newInstance(HomeFragment.parcelCount);
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right);
-                fragmentTransaction.add(R.id.frame, fragment, TAG_HOME)
-                        .addToBackStack(TAG_HOME);
-                fragmentTransaction.commit();*/
-
-            }
-        };
-
-
-        //new Thread(mPendingRunnable).start();
-        handler.post(mPendingRunnable);
     }
 
     public static void boomTable(final Context context) {
 
-        final Runnable mPendingRunnable = new Runnable() {
-            @SuppressLint("HandlerLeak")
-            @Override
-            public void run() {
-                // update the main content by replacing fragments
-
-                deleteAllParcel(AppDatabase.getAppDatabase(context));
-            }
-        };
-        // new Thread(mPendingRunnable).start();
-        handler.post(mPendingRunnable);
+        DeleteAllAsync task = new DeleteAllAsync(AppDatabase.getAppDatabase(context));
+        task.execute();
     }
 
-    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+    public static void DeleteUserAsync(@NonNull final AppDatabase db, Parcel parcel) {
+        DeleteUserAsync task = new DeleteUserAsync(db, parcel);
+        task.execute();
+    }
+
+    public static class GetAllAsync extends AsyncTask<Void, Void, List<Parcel>> {
 
         private final AppDatabase mDb;
 
-        PopulateDbAsync(AppDatabase db) {
+        ProgressDialog dialog;
+        Context context;
+        private List<Parcel> parcels;
+
+        public GetAllAsync(AppDatabase db, Context context) {
             mDb = db;
+            this.context = context;
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(context);
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.setCancelable(false);
+            dialog.setMessage("Retrieving...");
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(List<Parcel> parcels) {
+            //    listener.onResultsReceived(parcels);
+            super.onPostExecute(parcels);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
+
+        @Override
+        protected List<Parcel> doInBackground(final Void... params) {
+            parcels = getAllParcels(mDb);
+            Log.d(TAG, "parcels asynctask " + getAllParcels(mDb));
+            return parcels;
+        }
+
+
+    }
+
+    private static class DeleteAllAsync extends AsyncTask<Void, Void, Void> {
+
+        private final AppDatabase mDb;
+
+
+        DeleteAllAsync(AppDatabase db) {
+            mDb = db;
+
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
+            deleteAllParcel(mDb);
             return null;
         }
 
     }
 
-/*
+    private static class DeleteUserAsync extends AsyncTask<Void, Void, Void> {
 
-    public static void populateAsync(@NonNull final AppDatabase db) {
-        PopulateDbAsync task = new PopulateDbAsync(db);
-        task.execute();
+        private final AppDatabase mDb;
+        private final Parcel parcel;
+
+        DeleteUserAsync(AppDatabase db, Parcel parcel) {
+            mDb = db;
+            this.parcel = parcel;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            deleteParcel(mDb, parcel);
+            return null;
+        }
+
     }
 
-    public static void populateSync(@NonNull final AppDatabase db) {
+
+    private static class AddUserAsync extends AsyncTask<Void, Void, Void> {
+
+        private final AppDatabase mDb;
+        private final Parcel parcel;
+
+        AddUserAsync(AppDatabase db, Parcel parcel) {
+            mDb = db;
+            this.parcel = parcel;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            updateParcel(mDb, parcel);
+            return null;
+        }
 
     }
-*/
+
+
+    private static class AddNewParcelAsync extends AsyncTask<Void, Void, Void> {
+
+        private final AppDatabase mDb;
+        private final Parcel parcel;
+
+        AddNewParcelAsync(AppDatabase db, Parcel parcel) {
+            mDb = db;
+            this.parcel = parcel;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            addParcel(mDb, parcel);
+
+            return null;
+        }
+
+    }
 
 
 }
