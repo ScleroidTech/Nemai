@@ -54,7 +54,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
     private Button mSmsButton;
     private String mCountryIso;
     private TextWatcher mNumberTextWatcher;
-    private CountryCodePicker ccp;
+    private CountryCodePicker countryCodePicker;
     private View mLoginFormView, mProgressView;
 
     @Override
@@ -82,11 +82,12 @@ public class SocialRegisterActivity extends AppCompatActivity {
         mCountryIso = PhoneNumberUtils.getDefaultCountryIso(this);
         Log.d(TAG, "default country " + mCountryIso);
         final String defaultCountryName = new Locale("", mCountryIso).getDisplayName();
-        Log.d(TAG, "default country " + Iso2Phone.getPhone(mCountryIso));
-        ccp = findViewById(R.id.ccp2);
-        ccp.registerCarrierNumberEditText(mPhoneNumber);
-        ccp.setCcpClickable(false);
-        ccp.setNumberAutoFormattingEnabled(false);
+
+        countryCodePicker = findViewById(R.id.ccp2);
+        //countryCodePicker.registerCarrierNumberEditText(mPhoneNumber);
+        countryCodePicker.setNumberAutoFormattingEnabled(false);
+
+        Log.d(TAG, "default country " + Iso2Phone.getPhone(mCountryIso) + "countryCodePicker " + countryCodePicker.getDefaultCountryCode() + "non countryCodePicker countyr " + defaultCountryName + " countryCodePicker ");
 
 
 
@@ -94,10 +95,10 @@ public class SocialRegisterActivity extends AppCompatActivity {
         PhoneNumber = getIntent().getStringExtra(INTENT_PHONENUMBER);
 //        CountryCode = getIntent().getStringExtra(INTENT_COUNTRY_CODE);
 
-        Log.d(TAG, "default country " + ccp.getSelectedCountryCode());
-//        if (CountryCode != null) ccp.getCountryForNameCode(CountryCode);
+        Log.d(TAG, "default country " + countryCodePicker.getDefaultCountryCode());
+//        if (CountryCode != null) countryCodePicker.getCountryForNameCode(CountryCode);
 
-        resetNumberTextWatcher(mCountryIso);
+        //  resetNumberTextWatcher(mCountryIso);
 
 
         tryAndPrefillPhoneNumber(PhoneNumber);
@@ -108,7 +109,11 @@ public class SocialRegisterActivity extends AppCompatActivity {
         else {
             if (checkCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                 TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                mPhoneNumber.setText(manager.getLine1Number());
+                String st = manager.getLine1Number();/*
+                Log.d(TAG, "phone numbr  " + st );
+                st = st.replaceAll("\\s","");
+                Log.d(TAG, "phone numbr trimmmed  " + st );*/
+                mPhoneNumber.setText(st);
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 0);
             }
@@ -144,7 +149,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
 
     private void attemptSignup() {
         String mobile = getE164Number();
-        registerUser(getApplicationContext(), mFirstName, mLastName, mEmail, mobile, mGender, null, mLoginMethod, ccp.getDefaultCountryCode());
+        registerUser(getApplicationContext(), mFirstName, mLastName, mEmail, mobile, mGender, null, mLoginMethod, countryCodePicker.getDefaultCountryCode());
 
     }
 

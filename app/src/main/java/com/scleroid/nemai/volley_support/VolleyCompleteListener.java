@@ -9,6 +9,6 @@ public interface VolleyCompleteListener {
 
     void onTaskCompleted(JSONObject response);
 
-    void onTaskFailed(String response);
+    void onTaskFailed(String error);
 
 }

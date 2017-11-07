@@ -26,7 +26,7 @@
 
         <LinearLayout
             android:id="@+id/numberInputLayout"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:orientation="vertical"
@@ -53,6 +53,12 @@
                     android:id="@+id/ccp2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:ccp_autoDetectCountry="false"
+                    app:ccp_autoFormatNumber="false"
+                    app:ccp_clickable="false"
+                    app:ccp_countryPreference="IN"
+                    app:ccp_customMasterCountries="IN"
+                    app:ccp_defaultNameCode="IN"
                     app:ccp_showFullName="true"
                     app:ccp_textSize="32dp" />
 
@@ -69,6 +75,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_phone_only"
                         android:inputType="phone"
+                        android:textAlignment="center"
                         android:textColor="@color/colorPrimary"
                         android:textSize="32sp">
 
