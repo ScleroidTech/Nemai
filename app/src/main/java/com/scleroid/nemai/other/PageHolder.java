@@ -153,6 +153,9 @@ public class PageHolder extends RecyclerView.ViewHolder {
             }
         });
 
+        mDescriptionEditText.setMinLines(6);
+        mDocumentRadioButton.setTypeface(null, Typeface.BOLD);
+        mParcelRadioButton.setTypeface(null, Typeface.NORMAL);
 
         mDocumentRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

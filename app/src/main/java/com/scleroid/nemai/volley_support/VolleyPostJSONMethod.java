@@ -13,7 +13,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,7 +27,7 @@ public class VolleyPostJSONMethod {
     private Map<String, String> map;
     // ShowLoader showLoader;
 
-    public VolleyPostJSONMethod(Context context, VolleyCompleteListener volleyCompleteListener, HashMap<String, String> map, boolean isDialog, String tag) {
+    public VolleyPostJSONMethod(Context context, VolleyCompleteListener volleyCompleteListener, Map<String, String> map, boolean isDialog, String tag) {
         this.map = map;
         this.tag = tag;
 
