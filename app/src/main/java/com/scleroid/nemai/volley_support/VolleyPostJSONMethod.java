@@ -1,8 +1,6 @@
 package com.scleroid.nemai.volley_support;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -23,9 +21,9 @@ public class VolleyPostJSONMethod {
     Context context;
     VolleyCompleteListener mVolleylistener;
     String tag;
+    ShowLoader showLoader;
     private int serviceCode;
     private Map<String, String> map;
-    // ShowLoader showLoader;
 
     public VolleyPostJSONMethod(Context context, VolleyCompleteListener volleyCompleteListener, Map<String, String> map, boolean isDialog, String tag) {
         this.map = map;
@@ -34,35 +32,27 @@ public class VolleyPostJSONMethod {
 
         this.context = context;
         if (isDialog){
-            //      showLoader = new ShowLoader(context);
+            showLoader = new ShowLoader(context);
         }
-        if (isNetworkAvailable(context)) {
+        networkCheck(context, volleyCompleteListener, map, isDialog, tag);
+    }
+
+    private void networkCheck(Context context, VolleyCompleteListener volleyCompleteListener, Map<String, String> map, boolean isDialog, String tag) {
+        ShowNetworkErrorDialog showNetworkErrorDialogDialog = new ShowNetworkErrorDialog(context);
+        if (showNetworkErrorDialogDialog.showDialog()) {
             mVolleylistener = volleyCompleteListener;
             myBackgroundGetClass(context, volleyCompleteListener, map, isDialog, tag);
-        } else {
-            showToast(context, "No Internet Connection");
+
         }
     }
 
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null)
-                for (int i = 0; i < info.length; i++)
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
-                    }
-        }
-        return false;
-    }
 
     private void myBackgroundGetClass(final Context context, VolleyCompleteListener volleyCompleteListener, final Map<String, String> map, final boolean isDialog, String tag) {
 
         String url = map.get("url");
         map.remove("url");
         if (isDialog){
-            //    showLoader.showDialog();
+            showLoader.showDialog();
         }
         mVolleylistener = volleyCompleteListener;
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST,
@@ -79,7 +69,7 @@ public class VolleyPostJSONMethod {
                     public void onErrorResponse(VolleyError error) {
                         mVolleylistener.onTaskFailed(error.toString());
                         if (isDialog){
-                            //                showLoader.dismissDialog();
+                            showLoader.dismissDialog();
                         }
                     }
                 }) {

@@ -58,7 +58,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements LoaderMa
         mResetEmail = findViewById(R.id.email_reset);
         mResetEmailTIL = findViewById(R.id.reset_email_text_input_layout);
         mLoginFormView = findViewById(R.id.reset_form);
-        mProgressView = findViewById(R.id.reset_progress);
+        //     mProgressView = findViewById(R.id.reset_progress);
 
         populateAutoComplete();
         Button mResetPassword = findViewById(R.id.reset_password_button);
