@@ -1,7 +1,5 @@
 package com.scleroid.nemai.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.content.Context;
@@ -10,8 +8,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,6 +48,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.hbb20.CountryCodePicker;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.volley_support.ShowLoader;
+import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -94,34 +92,29 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     private boolean mAuthTask = false;
     private boolean isUserExists = false;
     private View mLoginFormView;
+    private Context context;
     private RadioGroup mGenderGroup;
     private Button mFBcloneButton;
     private GoogleApiClient mGoogleApiClient;
     private CallbackManager mCallbackManager;
     private String countryCode;
-
+    private ShowNetworkErrorDialog networkError;
+    private ShowLoader loader;
     //defining AwesomeValidation object
     private AwesomeValidation mAwesomeValidation;
 
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null)
-                for (int i = 0; i < info.length; i++)
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
-                    }
-        }
-        return false;
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        loader = new ShowLoader(context);
+        networkError = new ShowNetworkErrorDialog(context);
 
         mAwesomeValidation = new AwesomeValidation(TEXT_INPUT_LAYOUT);
+
+
         // Set up the login form.
         mEmailView = findViewById(R.id.email);
         mFirstNameView = findViewById(R.id.first_name);
@@ -131,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
         mPasswordView = findViewById(R.id.password);
         mPasswordAgain = findViewById(R.id.passwordAgain);
-        mEmailTIL = findViewById(R.id.email_login_text_input_layout);
+        mEmailTIL = findViewById(R.id.email_text_input_layout);
         ccp = findViewById(R.id.ccp);
         ccp.setDefaultCountryUsingNameCode("IN");
         //  ccp.registerCarrierNumberEditText(mMobileNumberview);
@@ -156,13 +149,12 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         mGoogleSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isNetworkAvailable(getApplicationContext())) {
+                if (networkError.showDialog()) {
 
 
-                    showProgress(true);
+                    loader.showDialog();
                     signIn();
-                } else
-                    Toast.makeText(getApplicationContext(), "No Internet Available, try again later", Toast.LENGTH_LONG).show();
+                }
 
             }
         });
@@ -182,7 +174,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         mCallbackManager = CallbackManager.Factory.create();
 
         mLoginFormView = findViewById(R.id.register_form);
-        mProgressView = findViewById(R.id.register_progress);
+        //       mProgressView = findViewById(R.id.register_progress);
         mFBcloneButton = findViewById(R.id.fb_custom);
         final LoginButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
         mFBcloneButton.setOnClickListener(new OnClickListener() {
@@ -197,14 +189,14 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                showProgress(true);
+                loader.showDialog();
 
                 Log.i(TAG, "Hello" + loginResult.getAccessToken().getToken());
                 Toast.makeText(RegisterActivity.this, "Token:" + loginResult.getAccessToken(), Toast.LENGTH_SHORT).show();
 
                 handleFacebookAccessToken(loginResult.getAccessToken());
 
-                showProgress(false);
+                loader.dismissDialog();
             }
 
             @Override
@@ -400,12 +392,12 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             finish();
 
             // mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-            showProgress(false);
+            loader.dismissDialog();
             // updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
             // updateUI(false);
-            showProgress(false);
+            loader.dismissDialog();
             Toast.makeText(this, "Google Authentication wasn't successful, Try another way", Toast.LENGTH_LONG).show();
         }
     }
@@ -514,14 +506,14 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     @Override
     protected void onResume() {
         super.onResume();
-        showProgress(false);
+        //   showProgress(false);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         if (mProgressView != null) {
-            showProgress(false);
+            //   showProgress(false);
         }
     }
     /**
@@ -532,10 +524,10 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     private void attemptLogin() {
         //first validate the form then move ahead
         //if this becomes true that means validation is successful
-        mAwesomeValidation.clear();
-        if (true) {
-            // Toast.makeText(this, "Validation Successful", Toast.LENGTH_LONG).show();
 
+        if (mAwesomeValidation.validate()) {
+            // Toast.makeText(this, "Validation Successful", Toast.LENGTH_LONG).show();
+            mAwesomeValidation.clear();
             //process the data further
 
             if (mAuthTask) {
@@ -554,45 +546,15 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
 
 
             session.setLoggedInMethod("email");
             Log.d(TAG, "session " + session.getLoggedInMethod());
             registerUser(getApplicationContext(), firstName, lastName, email, mobile, gender, password, session.getLoggedInMethod(), countryCode);
-            showProgress(false);
+
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);
         }
-    }
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            }
-        });
-
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mProgressView.animate().setDuration(shortAnimTime).alpha(
-                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            }
-        });
     }
 
 

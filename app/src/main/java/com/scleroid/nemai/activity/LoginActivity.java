@@ -1,7 +1,5 @@
 package com.scleroid.nemai.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
@@ -52,6 +50,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.network.NetworkCalls;
+import com.scleroid.nemai.volley_support.ShowLoader;
+import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,7 +63,6 @@ import java.util.regex.Pattern;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static com.scleroid.nemai.activity.MainActivity.session;
-import static com.scleroid.nemai.activity.RegisterActivity.isNetworkAvailable;
 import static com.scleroid.nemai.network.NetworkCalls.isAlreadyUser;
 
 
@@ -82,6 +81,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static View mLoginFormView;
     @Nullable
     String firstName, lastName, email, gender, userId, password;
+    ShowLoader loader;
+    ShowNetworkErrorDialog networkErrorDialog;
     private Context context;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -100,7 +101,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     /**
      * Shows the progress UI and hides the login form.
-     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public static void showProgress(final Context context, final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -125,15 +125,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getApplicationContext();
+        context = LoginActivity.this;
         FacebookSdk.sdkInitialize(context);
         // Session manager
         setContentView(R.layout.activity_login);
+        loader = new ShowLoader(context);
+        networkErrorDialog = new ShowNetworkErrorDialog(context);
 
 
         // Set up the login form.
@@ -159,7 +161,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
         mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+//        mProgressView = findViewById(R.id.login_progress);
 
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -195,14 +197,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mGoogleSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isNetworkAvailable(context)) {
+                if (networkErrorDialog.showDialog()) {
 
 
-                    showProgress(context, true);
+                    loader.showDialog();
                     signIn();
-                } else
-                    Toast.makeText(context, "No Internet Available, try again later", Toast.LENGTH_LONG).show();
-
+                }
             }
         });
 
@@ -254,14 +254,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                showProgress(context, true);
-
+                loader.showDialog();
                 Log.i(TAG, "Hello" + loginResult.getAccessToken().getToken());
                 Toast.makeText(LoginActivity.this, "Token:" + loginResult.getAccessToken(), Toast.LENGTH_SHORT).show();
 
                 handleFacebookAccessToken(loginResult.getAccessToken());
 
-                showProgress(context, false);
+                loader.dismissDialog();
             }
 
             @Override
@@ -278,7 +277,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         AppEventsLogger.activateApp(this);
-        showProgress(context, true);
+        loader.showDialog();
     }
 
     private void signIn() {
@@ -398,7 +397,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // perform the user login attempt.
             Toast.makeText(this, "Validation Successful", Toast.LENGTH_LONG).show();
 
-            showProgress(context, true);
+            loader.showDialog();
             mAuthTask = true;
 
             session.setLoggedInMethod("email");
@@ -521,14 +520,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             // mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-            showProgress(context, false);
+            loader.dismissDialog();
 
             //    session.setLoggedInMethod("google");
             // updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
             // updateUI(false);
-            showProgress(context, false);
+            loader.dismissDialog();
             Toast.makeText(this, "Google Authentication wasn't successful, Try another way", Toast.LENGTH_LONG).show();
         }
     }
@@ -628,21 +627,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onResume() {
         super.onResume();
-        showProgress(context, false);
+        loader.dismissDialog();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (mProgressView != null) {
-            showProgress(context, false);
+        if (loader != null) {
+            loader.dismissDialog();
         }
     }
 
 
     protected void registerUser(final String firstName, final String lastName, final String email, final String gender, final String loginMethod) {
 
-        if (isNetworkAvailable(context)) {
+        if (networkErrorDialog.showDialog()) {
             Intent intent;
             intent = new Intent(LoginActivity.this, SocialRegisterActivity.class);
             Bundle extras = new Bundle();
@@ -655,10 +654,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             startActivity(intent);
             finish();
 
-        } else
-            Toast.makeText(context, "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();
 
-
+        }
     }
 
     protected interface ProfileQuery {

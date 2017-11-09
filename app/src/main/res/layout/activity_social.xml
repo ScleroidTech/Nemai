@@ -6,14 +6,6 @@
 
     tools:context="com.scleroid.nemai.activity.SocialRegisterActivity">
 
-    <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/register_social_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
 
     <!--<ScrollView
 
@@ -59,6 +51,8 @@
                     app:ccp_countryPreference="IN"
                     app:ccp_customMasterCountries="IN"
                     app:ccp_defaultNameCode="IN"
+                    app:ccp_defaultPhoneCode="91"
+                    app:ccp_showArrow="false"
                     app:ccp_showFullName="true"
                     app:ccp_textSize="32dp" />
 

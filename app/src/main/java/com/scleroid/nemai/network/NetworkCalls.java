@@ -20,7 +20,6 @@ import java.util.Map;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.scleroid.nemai.activity.LoginActivity.TAG;
-import static com.scleroid.nemai.activity.LoginActivity.showProgress;
 import static com.scleroid.nemai.activity.MainActivity.session;
 
 /**
@@ -227,7 +226,7 @@ public class NetworkCalls {
                 Log.e(TAG, "Registration Error: " + error);
                 Toast.makeText(getApplicationContext(),
                         error, Toast.LENGTH_LONG).show();
-                showProgress(context, false);
+
 
             }
         };
@@ -340,7 +339,6 @@ public class NetworkCalls {
             @Override
             public void onTaskCompleted(JSONObject response) {
                 Log.d(TAG, "Login Response: " + response.toString());
-                showProgress(context, false);
 
                 try {
 
@@ -383,7 +381,6 @@ public class NetworkCalls {
                 Log.e(TAG, "Registration Error: " + error);
                 Toast.makeText(context,
                         error, Toast.LENGTH_LONG).show();
-                showProgress(context, false);
 
             }
         };
@@ -499,7 +496,6 @@ public class NetworkCalls {
             public void onTaskCompleted(JSONObject response) {
 
                 Log.d(TAG, "Register Response: " + response.toString());
-                showProgress(context, false);
 
                 try {
 
@@ -549,7 +545,7 @@ public class NetworkCalls {
                 Log.e(TAG, "Registration Error: " + error);
                 Toast.makeText(context,
                         error, Toast.LENGTH_LONG).show();
-                showProgress(context, false);
+
 
             }
         };

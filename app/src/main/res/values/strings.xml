@@ -184,6 +184,7 @@
     <string name="search_icon">Search Icon</string>
     <string name="hint">Editor #%d</string>
     <string name="courier_count">Courier %1d of %2d</string>
+    <string name="no_internet_here">No Internet here</string>
 
 
 </resources>

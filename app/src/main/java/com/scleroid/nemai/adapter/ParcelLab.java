@@ -135,6 +135,7 @@ public class ParcelLab {
         protected void onPostExecute(List<Parcel> parcels) {
             //    listener.onResultsReceived(parcels);
             super.onPostExecute(parcels);
+
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
