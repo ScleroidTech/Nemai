@@ -25,6 +25,7 @@ import com.scleroid.nemai.adapter.PagerAdapter;
 import com.scleroid.nemai.adapter.ParcelLab;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.volley_support.ShowLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,6 +123,32 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         context = getActivity();
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         v.clearFocus();
+        ShowLoader showNetworkErrorDialogDialog = new ShowLoader(context);
+        showNetworkErrorDialogDialog.showDialog();
+
+        //  showNetworkErrorDialogDialog.showDialog();
+        /*try {
+            View view = inflater.inflate(R.layout.no_internet_dialog_view,container, false);
+            AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+            alertDialog.setView(view);
+          //  alertDialog.setMessage("Internet not available, Cross check your internet connectivity and try again");
+            alertDialog.setCancelable(false);
+            //TODO fix this, inflate it first, then add it.
+           // View view = inflater.inflate(R.layout.no_internet_dialog_view,container, false);
+
+            *//*alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+
+                }
+            });*//*
+
+            alertDialog.show();
+        }
+        catch(Exception e)
+        {
+            Log.d(TAG, "Show Dialog: "+e.getMessage());
+        }*/
 
         setupRecyclerView(v);
 
@@ -360,7 +387,9 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 //                mPositionText.setText("First: " + mRecyclerViewPager.getFirstVisiblePosition());
                 int childCount = recyclerViewPager.getChildCount();
                 int width = recyclerViewPager.getChildAt(0).getWidth();
-                int padding = (recyclerViewPager.getWidth() - width) / 2;
+                int padding = (recyclerViewPager.getWidth() - width) / 4;
+                Log.d(TAG, "childCount " + childCount + " width " + width + " padding " + padding + " widthMain " + recyclerViewPager.getWidth());
+
 
                 for (int j = 0; j < childCount; j++) {
                     View v = recyclerView.getChildAt(j);
@@ -398,23 +427,23 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
                         if (recyclerViewPager.getCurrentPosition() == 0) {
                             View v1 = recyclerViewPager.getChildAt(1);
                             v1.setScaleY(0.9f);
-                            v1.setScaleX(0.9f);
+                            //    v1.setScaleX(0.9f);
                         } else {
                             View v1 = recyclerViewPager.getChildAt(0);
                             v1.setScaleY(0.9f);
-                            v1.setScaleX(0.9f);
+                            //   v1.setScaleX(0.9f);
                         }
                     }
                 } else {
                     if (recyclerViewPager.getChildAt(0) != null) {
                         View v0 = recyclerViewPager.getChildAt(0);
                         v0.setScaleY(0.9f);
-                        v0.setScaleX(0.9f);
+                        // v0.setScaleX(0.9f);
                     }
                     if (recyclerViewPager.getChildAt(2) != null) {
                         View v2 = recyclerViewPager.getChildAt(2);
                         v2.setScaleY(0.9f);
-                        v2.setScaleX(0.9f);
+                        //  v2.setScaleX(0.9f);
                     }
                 }
 
