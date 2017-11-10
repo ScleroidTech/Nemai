@@ -22,7 +22,7 @@ public class ShowLoader {
     }
 
 
-    public ShowLoader showDialog() {
+    public void showDialog() {
 
         if (dialogBuilder != null) dialogBuilder = null;
         dialogBuilder = new AlertDialog.Builder(context, R.style.CustomDialogTheme);
@@ -48,7 +48,6 @@ public class ShowLoader {
                 .customView(R.layout.progress, true)
                 .cancelable(false)
                 .show();*/
-        return null;
     }
 
     public void dismissDialog() {

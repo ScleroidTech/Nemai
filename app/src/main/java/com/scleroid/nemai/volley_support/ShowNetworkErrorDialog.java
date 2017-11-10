@@ -23,7 +23,7 @@ public class ShowNetworkErrorDialog {
     }
 
     public boolean showDialog() {
-        if (true) {
+        if (!isNetworkAvailable()) {
             if (dialog != null) {
                 dialog = null;
             }

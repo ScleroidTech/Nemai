@@ -59,6 +59,7 @@ public class VolleyPostJSONMethod {
                 url, new JSONObject(map), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
+                        showLoader.dismissDialog();
                         mVolleylistener.onTaskCompleted(jsonObject);
                     }
 
@@ -67,10 +68,11 @@ public class VolleyPostJSONMethod {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        mVolleylistener.onTaskFailed(error.toString());
-                        if (isDialog){
+                        if (isDialog) {
                             showLoader.dismissDialog();
                         }
+                        mVolleylistener.onTaskFailed(error.toString());
+
                     }
                 }) {
             @Override
