@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -53,6 +54,20 @@ public class SocialRegisterActivity extends AppCompatActivity {
     private CountryCodePicker countryCodePicker;
     private View mLoginFormView, mProgressView;
 
+
+    @NonNull
+    public static Intent newIntent(String firstName, String lastName, String email, String gender, String loginMethod, Context activity) {
+        Intent intent;
+        intent = new Intent(activity, SocialRegisterActivity.class);
+        Bundle extras = new Bundle();
+        extras.putString(SocialRegisterActivity.INTENT_FIRST_NAME, firstName);
+        extras.putString(SocialRegisterActivity.INTENT_LAST_NAME, lastName);
+        extras.putString(SocialRegisterActivity.INTENT_EMAIL, email);
+        extras.putString(SocialRegisterActivity.INTENT_GENDER, gender);
+        extras.putString(SocialRegisterActivity.INTENT_METHOD, loginMethod);
+        intent.putExtras(extras);
+        return intent;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +160,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
 
     private void attemptSignup() {
         String mobile = getE164Number();
-        registerUser(getApplicationContext(), mFirstName, mLastName, mEmail, mobile, mGender, null, mLoginMethod, countryCodePicker.getDefaultCountryCode());
+        registerUser(SocialRegisterActivity.this, mFirstName, mLastName, mEmail, mobile, mGender, null, mLoginMethod, countryCodePicker.getDefaultCountryCode());
 
     }
 

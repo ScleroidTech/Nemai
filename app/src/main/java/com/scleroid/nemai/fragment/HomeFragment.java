@@ -25,11 +25,12 @@ import com.scleroid.nemai.adapter.PagerAdapter;
 import com.scleroid.nemai.adapter.ParcelLab;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
-import com.scleroid.nemai.volley_support.ShowLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import es.dmoral.toasty.Toasty;
 
 import static com.scleroid.nemai.network.NetworkCalls.submitCouriers;
 
@@ -123,8 +124,9 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         context = getActivity();
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         v.clearFocus();
-        ShowLoader showNetworkErrorDialogDialog = new ShowLoader(context);
-        showNetworkErrorDialogDialog.showDialog();
+        /*ShowLoader showNetworkErrorDialogDialog = new ShowLoader(context);
+        showNetworkErrorDialogDialog.showDialog();*/
+        Toasty.error(context, "stupid", Toast.LENGTH_LONG, true).show();
 
         //  showNetworkErrorDialogDialog.showDialog();
         /*try {
@@ -133,7 +135,6 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
             alertDialog.setView(view);
           //  alertDialog.setMessage("Internet not available, Cross check your internet connectivity and try again");
             alertDialog.setCancelable(false);
-            //TODO fix this, inflate it first, then add it.
            // View view = inflater.inflate(R.layout.no_internet_dialog_view,container, false);
 
             *//*alertDialog.setButton("OK", new DialogInterface.OnClickListener() {

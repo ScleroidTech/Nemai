@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -78,9 +79,10 @@ public class MainActivity extends AppCompatActivity {
     private List<Parcel> parcels;
     private Handler handler;
 
-    public static Intent newIntent(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
-        return intent;
+
+    @NonNull
+    public static Intent newIntent(Context activity) {
+        return new Intent(activity, MainActivity.class);
     }
 
 
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         session = new SessionManager(getApplicationContext());
 
 
-        session.setLogin(true);
+        session.setLogin(false);
         session.setVerified(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
