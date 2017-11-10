@@ -3,42 +3,28 @@ package com.scleroid.nemai.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.scleroid.nemai.R;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
-import static android.Manifest.permission.READ_CONTACTS;
-
-public class ResetPasswordActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ResetPasswordActivity extends EmailAutoCompleteActivity {
 
     private static final int REQUEST_READ_CONTACTS = 0;
     //TODO add Open Email App option here
     TextInputLayout mResetEmailTIL;
-    AutoCompleteTextView mResetEmail;
+
     private View focusView, mLoginFormView, mProgressView;
     private boolean cancel;
 
@@ -55,7 +41,8 @@ public class ResetPasswordActivity extends AppCompatActivity implements LoaderMa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
-        mResetEmail = findViewById(R.id.email_reset);
+        super.mEmailView = findViewById(R.id.email_reset);
+        addListenerToEmailView();
         mResetEmailTIL = findViewById(R.id.reset_email_text_input_layout);
         mLoginFormView = findViewById(R.id.reset_form);
         //     mProgressView = findViewById(R.id.reset_progress);
@@ -70,91 +57,6 @@ public class ResetPasswordActivity extends AppCompatActivity implements LoaderMa
         });
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mResetEmailTIL, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (REQUEST_READ_CONTACTS == requestCode) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), LoginActivity.ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(LoginActivity.ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(ResetPasswordActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mResetEmail.setAdapter(adapter);
-    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -169,17 +71,17 @@ public class ResetPasswordActivity extends AppCompatActivity implements LoaderMa
         mResetEmailTIL.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mResetEmail.getText().toString();
+        String email = mEmailView.getText().toString();
 
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mResetEmailTIL.setError(getString(R.string.error_field_required_email));
-            focusView = mResetEmail;
+            focusView = mEmailView;
             cancel = true;
         } else if (!isValidField(email)) {
             mResetEmailTIL.setError(getString(R.string.error_invalid_email_only));
-            focusView = mResetEmail;
+            focusView = mEmailView;
             cancel = true;
         }
 

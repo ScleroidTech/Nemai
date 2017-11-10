@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:dropDownListViewStyle">@style/MyListViewStyle</item>
-        <item name="android:dialogTheme">@style/CustomDialogTheme</item>
+
         <item name="android:colorBackground">@color/colorBackground</item>
         <!--<item name="colorBackground">@color/colorBackground</item>-->
     </style>
@@ -39,7 +39,7 @@
         <item name="android:layout_height">56dp</item>
     </style>
 
-    <style name="CustomDialogTheme" parent="@android:style/Theme.Dialog">
+    <style name="CustomDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
 
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowIsFloating">true</item>
