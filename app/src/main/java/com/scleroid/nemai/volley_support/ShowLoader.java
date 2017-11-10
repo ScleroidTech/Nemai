@@ -13,7 +13,8 @@ import com.scleroid.nemai.R;
 
 public class ShowLoader {
 
-    AlertDialog.Builder dialogBuilder;
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog alertDialog;
     private ProgressDialog dialog;
     private Context context;
 
@@ -30,15 +31,15 @@ public class ShowLoader {
         dialogBuilder.setView(dialogView);
 
         dialogBuilder.setCancelable(false);
-        AlertDialog b = dialogBuilder
+        alertDialog = dialogBuilder
                 .create();
 
 
-        b.requestWindowFeature(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        b.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        b.setCancelable(false);
-        b.setCanceledOnTouchOutside(false);
-        b.show();
+        alertDialog.requestWindowFeature(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
         /*if (dialog != null) {
             dialog = null;
         }
