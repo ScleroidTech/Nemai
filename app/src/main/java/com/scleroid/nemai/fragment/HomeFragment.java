@@ -41,6 +41,7 @@ public class HomeFragment extends Fragment {
     public static final int THRESHOLD = 3;
     private static final String ARG_PARCEL_ID = "parcel_id";
     private static final String TAG = HomeFragment.class.getSimpleName();
+    private static final String TAG_COURIERS = "req_couriers";
     public static PinCode mPinCodeDestination, mPinCodeSource;
     public static int parcelCount = 1;
     static String select;
@@ -461,7 +462,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         parcels = updateParcelList(context);
         if (!b) {
             for (Parcel parcelTemp : parcels) {
-                submitCouriers(context, parcelTemp);
+                submitCouriers(context, parcelTemp, TAG_COURIERS);
             }
         } else {
             updateUI(context);

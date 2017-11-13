@@ -18,7 +18,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
+import es.dmoral.toasty.Toasty;
+
 import static com.scleroid.nemai.activity.LoginActivity.TAG;
 import static com.scleroid.nemai.activity.MainActivity.session;
 
@@ -29,11 +30,11 @@ import static com.scleroid.nemai.activity.MainActivity.session;
 public class NetworkCalls {
 
 
-    public static void submitCouriers(final Context context, final Parcel parcel) {
+    public static void submitCouriers(final Context context, final Parcel parcel, String tag) {
 
         VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
             @Override
-            public void onTaskCompleted(JSONObject jsonObject) {
+            public void onTaskCompleted(JSONObject jsonObject, int statusCode) {
 
                 Log.d(TAG, "Parcel Response: " + jsonObject.toString());
                 // showProgress(context, false);
@@ -44,7 +45,8 @@ public class NetworkCalls {
                     if (error) {
                         String success = jsonObject.getString("success");
                         Log.d(TAG, "Succcess Login " + success);
-                        Toast.makeText(context, success, Toast.LENGTH_LONG).show();
+                        // Toast.makeText(context, success, Toast.LENGTH_LONG).show();
+                        Toasty.info(context, "Fetching Information, Hang on", Toast.LENGTH_LONG, true).show();
                         PartnerActivity.newIntent(context);
 
                         // Launch login activity
@@ -59,21 +61,18 @@ public class NetworkCalls {
                         // message
 
                         //String errorMsg = jsonObject.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                "An Error occurred", Toast.LENGTH_LONG).show();
+                        Toasty.error(context, "Something is wrong at our end. Sorry", Toast.LENGTH_LONG, true).show();
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "JSONException + " + e.getMessage());
+                    jsonErrorToast(e, context);
                 }
 
             }
 
             @Override
-            public void onTaskFailed(String error) {
-                Log.e(TAG, "Server Error on Parcel: " + error);
-                Toast.makeText(getApplicationContext(),
-                        error, Toast.LENGTH_LONG).show();
+            public void onTaskFailed(String error, int statusCode) {
+                //   Log.e(TAG, "Server Error on Parcel: " + error);
+                taskErrorToast(error, context, statusCode);
 
             }
 
@@ -97,7 +96,7 @@ public class NetworkCalls {
         params.put("package_type", parcel.getPackageType());
 
 
-        new VolleyPostJSONMethod(context, volleyCompleteListener, params, true, "parcel");
+        new VolleyPostJSONMethod(context, volleyCompleteListener, params, true, tag);
 
 
 //            showProgress(context, true);
@@ -176,14 +175,14 @@ public class NetworkCalls {
 
     }
 
-    public static boolean isAlreadyUser(final Context context, final String userName) {
+    public static boolean isAlreadyUser(final Context context, final String userName, String requestTag) {
 //TODO add volley complete listener instead of this, & change all of this code because the Main thread is not waiting for the response
         final boolean[] isUserExists = new boolean[1];
 //        return false;
 
         VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
             @Override
-            public void onTaskCompleted(JSONObject jsonObject) {
+            public void onTaskCompleted(JSONObject jsonObject, int statusCode) {
 
                 Log.d(TAG, "Login Response: " + jsonObject.toString());
 
@@ -201,7 +200,7 @@ public class NetworkCalls {
                         isUserExists[0] = jsonObject.getBoolean("status");
 
 
-                        Toast.makeText(getApplicationContext(), "User authentication successful", Toast.LENGTH_LONG).show();
+                        //                      Toast.makeText(getApplicationContext(), "User authentication successful", Toast.LENGTH_LONG).show();
                     } else {
 
                         // Error occurred in login. Get the error
@@ -213,19 +212,16 @@ public class NetworkCalls {
                                     errorMsg, Toast.LENGTH_LONG).show();*/
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),
-                            "" + e, Toast.LENGTH_LONG).show();
+                    jsonErrorToast(e, context);
                 }
 
 
             }
 
             @Override
-            public void onTaskFailed(String error) {
-                Log.e(TAG, "Registration Error: " + error);
-                Toast.makeText(getApplicationContext(),
-                        error, Toast.LENGTH_LONG).show();
+            public void onTaskFailed(String error, int statusCode) {
+
+                taskErrorToast(error, context, statusCode);
 
 
             }
@@ -234,7 +230,7 @@ public class NetworkCalls {
         params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_VALID_USER);
         params.put("email_id", userName);
 
-        new VolleyPostJSONMethod(context, volleyCompleteListener, params, true, "isValidUser");
+        new VolleyPostJSONMethod(context, volleyCompleteListener, params, true, requestTag);
 
 
 
@@ -323,13 +319,19 @@ public class NetworkCalls {
         return isUserExists[0];
     }
 
+    private static void jsonErrorToast(JSONException e, Context context) {
+        e.printStackTrace();
+        Log.e(TAG, "jsonException " + e.getMessage());
+        Toasty.error(context,
+                "There's an error on our side, We're sorry", Toast.LENGTH_LONG, true).show();
+    }
 
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public static void loginUser(final Context context, final String userName, final String pass) {
+    public static void loginUser(final Context context, final String userName, final String pass, String tag) {
         // Tag used to cancel the request
        /* Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
@@ -337,7 +339,7 @@ public class NetworkCalls {
 
         VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
             @Override
-            public void onTaskCompleted(JSONObject response) {
+            public void onTaskCompleted(JSONObject response, int statusCode) {
                 Log.d(TAG, "Login Response: " + response.toString());
 
                 try {
@@ -352,7 +354,7 @@ public class NetworkCalls {
                     if (error) {
 
 
-                        Toast.makeText(context, "User successfully logged in", Toast.LENGTH_LONG).show();
+                        Toasty.success(context, "Login Successful", Toast.LENGTH_LONG, true).show();
 
                         session.setLogin(true);
 
@@ -362,25 +364,21 @@ public class NetworkCalls {
 
                         // Error occurred in login. Get the error
                         // message
-
+                        //TODO define error codes
                         session.setLogin(false);
                         String errorMsg = response.getString("message");
-                        Toast.makeText(context,
-                                errorMsg, Toast.LENGTH_LONG).show();
+                        taskErrorToast("There's an error on our side, We're sorry", context, statusCode);
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(context,
-                            "" + e, Toast.LENGTH_LONG).show();
+                    jsonErrorToast(e, context);
                 }
 
             }
 
             @Override
-            public void onTaskFailed(String error) {
-                Log.e(TAG, "Registration Error: " + error);
-                Toast.makeText(context,
-                        error, Toast.LENGTH_LONG).show();
+            public void onTaskFailed(String error, int statusCode) {
+                //   Log.e(TAG, "Registration Error: " + error);
+                taskErrorToast(error, context, statusCode);
 
             }
         };
@@ -391,7 +389,7 @@ public class NetworkCalls {
         params.put("email_id", userName);
         params.put("pwd", pass);
 
-        new VolleyPostJSONMethod(context, volleyCompleteListener, params, true, "req_login");
+        new VolleyPostJSONMethod(context, volleyCompleteListener, params, true, tag);
 
         /*if (isNetworkAvailable(context)) {
             String tag_string_req = "req_login";
@@ -480,7 +478,7 @@ public class NetworkCalls {
      * email, password) to register url
      */
     public static void registerUser(final Context context, final String firstName, final String lastName, final String email,
-                                    final String phone, final String gender, final String password, final String loginMethod, final String countryCode) {
+                                    final String phone, final String gender, final String password, final String loginMethod, final String countryCode, String tag_string_req) {
 
        /* Intent verification = new Intent(getBaseContext(), OtpVerificationActivity.class);
 
@@ -493,7 +491,7 @@ public class NetworkCalls {
         Log.d(TAG, "data  method" + loginMethod);
         VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
             @Override
-            public void onTaskCompleted(JSONObject response) {
+            public void onTaskCompleted(JSONObject response, int statusCode) {
 
                 Log.d(TAG, "Register Response: " + response.toString());
 
@@ -508,7 +506,7 @@ public class NetworkCalls {
                     boolean error = response.getBoolean("status");
                     if (error) {
 
-                        Toast.makeText(context, "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
+                        Toasty.success(context, "Registered successfully, let's verify you", Toast.LENGTH_LONG, true).show();
 
                         //session.setLogin(true);
 
@@ -527,24 +525,20 @@ public class NetworkCalls {
                         // message
                         session.setLogin(false);
                         String errorMsg = response.getString("message");
-                        Toast.makeText(context,
-                                errorMsg, Toast.LENGTH_LONG).show();
+                        Toasty.error(context,
+                                errorMsg, Toast.LENGTH_LONG, true).show();
                     }
                 } catch (JSONException e) {
-                    Log.e(TAG, "Error in data parsing " + e.getMessage());
-                    //e.printStackTrace();
-                    Toast.makeText(context,
-                            "" + e, Toast.LENGTH_LONG).show();
+                    jsonErrorToast(e, context);
                 }
 
 
             }
 
             @Override
-            public void onTaskFailed(String error) {
-                Log.e(TAG, "Registration Error: " + error);
-                Toast.makeText(context,
-                        error, Toast.LENGTH_LONG).show();
+            public void onTaskFailed(String error, int statusCode) {
+                // Log.e(TAG, "Registration Error: " + error);
+                taskErrorToast(error, context, statusCode);
 
 
             }
@@ -562,7 +556,7 @@ public class NetworkCalls {
 
         // params.put("method",loginMethod);
 
-        String tag_string_req = "req_register";
+
 
         new VolleyPostJSONMethod(context, volleyCompleteListener, params, true, tag_string_req);
 
@@ -692,6 +686,12 @@ public class NetworkCalls {
 
         } else
             Toast.makeText(context, "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();*/
+    }
+
+    private static void taskErrorToast(String error, Context context, int statusCode) {
+        Log.e(TAG, "APi Error: " + error + " statusCode " + statusCode);
+        Toasty.error(context,
+                error, Toast.LENGTH_LONG).show();
     }
     /**
      * Function to store user in MySQL database will post params(tag, name,

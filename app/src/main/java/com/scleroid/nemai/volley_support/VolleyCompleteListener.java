@@ -7,8 +7,10 @@ import org.json.JSONObject;
  */
 public interface VolleyCompleteListener {
 
-    void onTaskCompleted(JSONObject response);
 
-    void onTaskFailed(String error);
+    void onTaskCompleted(JSONObject response, int statusCode);
+
+    void onTaskFailed(String error, int statusCode);
+
 
 }
