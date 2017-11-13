@@ -35,37 +35,35 @@ public class VolleyPostJSONMethod {
     private int serviceCode;
     private Map<String, String> map;
 
-    public VolleyPostJSONMethod(Context context, VolleyCompleteListener volleyCompleteListener, Map<String, String> map, boolean isDialog, String tag) {
+    public VolleyPostJSONMethod(Context context, VolleyCompleteListener volleyCompleteListener, Map<String, String> map, ShowLoader loader, String tag) {
         this.map = map;
 
         this.tag = tag;
+        showLoader = loader;
         showNetworkErrorDialogDialog = new ShowNetworkErrorDialog(context);
 
         this.context = context;
-        if (isDialog){
-            showLoader = new ShowLoader(context);
-        }
-        networkCheck(context, volleyCompleteListener, map, isDialog, tag);
+
+        networkCheck(context, volleyCompleteListener, map, tag);
     }
 
-    private void networkCheck(Context context, VolleyCompleteListener volleyCompleteListener, Map<String, String> map, boolean isDialog, String tag) {
+    private void networkCheck(Context context, VolleyCompleteListener volleyCompleteListener, Map<String, String> map, String tag) {
 
         if (showNetworkErrorDialogDialog.showDialog()) {
             mVolleylistener = volleyCompleteListener;
-            myBackgroundGetClass(context, volleyCompleteListener, map, isDialog, tag);
+            myBackgroundGetClass(context, volleyCompleteListener, map, tag);
 
         }
     }
 
 
-    private void myBackgroundGetClass(final Context context, final VolleyCompleteListener volleyCompleteListener, final Map<String, String> map, final boolean isDialog, String tag) {
+    private void myBackgroundGetClass(final Context context, final VolleyCompleteListener volleyCompleteListener, final Map<String, String> map, String tag) {
 
         String url = map.get("url");
         final int[] statusCode = {0};
         map.remove("url");
-        if (isDialog){
             showLoader.showDialog();
-        }
+
         mVolleylistener = volleyCompleteListener;
 
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST,

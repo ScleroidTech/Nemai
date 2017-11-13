@@ -25,6 +25,7 @@ import com.scleroid.nemai.adapter.PagerAdapter;
 import com.scleroid.nemai.adapter.ParcelLab;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.volley_support.ShowLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +102,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
    RecyclerViewPager recyclerViewPager;
     List<Parcel> crimes;
     private Context context;
+    private ShowLoader loader;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -123,6 +125,8 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
 
         context = getActivity();
+        loader = new ShowLoader(context);
+
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         v.clearFocus();
         /*ShowLoader showNetworkErrorDialogDialog = new ShowLoader(context);
@@ -462,7 +466,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         parcels = updateParcelList(context);
         if (!b) {
             for (Parcel parcelTemp : parcels) {
-                submitCouriers(context, parcelTemp, TAG_COURIERS);
+                submitCouriers(context, parcelTemp, TAG_COURIERS, loader);
             }
         } else {
             updateUI(context);
@@ -552,6 +556,19 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     private void updateSubtitle() {
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loader.dismissDialog();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (loader != null) {
+            loader.dismissDialog();
+        }
+    }
 
 }
 

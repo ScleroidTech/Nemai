@@ -6,7 +6,6 @@ import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -46,7 +45,7 @@ public class RegisterActivity extends SocialLoginActivity {
     CountryCodePicker ccp;
     // UI references.
     private EditText mFirstNameView, mLastNameView, mMobileNumberview, mPasswordView, mPasswordAgain;
-    private AutoCompleteTextView mEmailView;
+    //private AutoCompleteTextView mEmailView;
     private TextInputLayout mEmailTIL;
     private View mProgressView;
     /**
@@ -205,7 +204,7 @@ public class RegisterActivity extends SocialLoginActivity {
 
             session.setLoggedInMethod("email");
             Log.d(TAG, "session " + session.getLoggedInMethod());
-            registerUser(getApplicationContext(), firstName, lastName, email, mobile, gender, password, session.getLoggedInMethod(), countryCode, TAG_REGISTER_USER);
+            registerUser(getApplicationContext(), firstName, lastName, email, mobile, gender, password, session.getLoggedInMethod(), countryCode, TAG_REGISTER_USER, loader);
 
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);
