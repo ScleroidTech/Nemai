@@ -44,6 +44,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
     public static final String INTENT_METHOD = "login_method";
 
     public static final String INTENT_REASON = "reason";
+    public static final String TAG_REGISTER_USER = "req_register_user";
     private static String TAG = SocialRegisterActivity.class.getSimpleName();
     private String mFirstName, mLastName, mEmail, mGender, mLoginMethod;
     private EditText mPhoneNumber;
@@ -160,7 +161,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
 
     private void attemptSignup() {
         String mobile = getE164Number();
-        registerUser(SocialRegisterActivity.this, mFirstName, mLastName, mEmail, mobile, mGender, null, mLoginMethod, countryCodePicker.getDefaultCountryCode());
+        registerUser(SocialRegisterActivity.this, mFirstName, mLastName, mEmail, mobile, mGender, null, mLoginMethod, countryCodePicker.getDefaultCountryCode(), TAG_REGISTER_USER);
 
     }
 

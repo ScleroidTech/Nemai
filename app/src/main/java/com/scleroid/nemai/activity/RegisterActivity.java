@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
 import static com.scleroid.nemai.activity.MainActivity.session;
+import static com.scleroid.nemai.activity.SocialRegisterActivity.TAG_REGISTER_USER;
 import static com.scleroid.nemai.network.NetworkCalls.registerUser;
 
 /**
@@ -91,19 +92,6 @@ public class RegisterActivity extends SocialLoginActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loader.dismissDialog();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (loader != null) {
-            loader.dismissDialog();
-        }
-    }
 
     private void setupValidation() {
         //adding validation to edit-texts
@@ -217,7 +205,7 @@ public class RegisterActivity extends SocialLoginActivity {
 
             session.setLoggedInMethod("email");
             Log.d(TAG, "session " + session.getLoggedInMethod());
-            registerUser(getApplicationContext(), firstName, lastName, email, mobile, gender, password, session.getLoggedInMethod(), countryCode);
+            registerUser(getApplicationContext(), firstName, lastName, email, mobile, gender, password, session.getLoggedInMethod(), countryCode, TAG_REGISTER_USER);
 
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);

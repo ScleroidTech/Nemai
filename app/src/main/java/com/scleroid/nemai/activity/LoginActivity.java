@@ -30,6 +30,7 @@ import static com.scleroid.nemai.activity.MainActivity.session;
 public class LoginActivity extends SocialLoginActivity {
 
     public static final String TAG = "LoginActivity";
+    private static final String TAG_USER_LOGIN = "req_login";
     private static View mProgressView;
     private static View mLoginFormView;
 
@@ -207,24 +208,11 @@ public class LoginActivity extends SocialLoginActivity {
             mAuthTask = true;
 
             session.setLoggedInMethod("email");
-            NetworkCalls.loginUser(context, email, password);
+            NetworkCalls.loginUser(context, email, password, TAG_USER_LOGIN);
         }
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loader.dismissDialog();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (loader != null) {
-            loader.dismissDialog();
-        }
-    }
 
 
     private boolean isValidField(String input) {
