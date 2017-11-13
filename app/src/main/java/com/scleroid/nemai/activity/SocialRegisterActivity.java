@@ -23,6 +23,9 @@ import com.msg91.sendotp.library.PhoneNumberFormattingTextWatcher;
 import com.msg91.sendotp.library.PhoneNumberUtils;
 import com.msg91.sendotp.library.internal.Iso2Phone;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.volley_support.AppController;
+import com.scleroid.nemai.volley_support.ShowLoader;
+import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
 
 import java.util.Locale;
 
@@ -46,6 +49,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
     public static final String INTENT_REASON = "reason";
     public static final String TAG_REGISTER_USER = "req_register_user";
     private static String TAG = SocialRegisterActivity.class.getSimpleName();
+    Context context;
     private String mFirstName, mLastName, mEmail, mGender, mLoginMethod;
     private EditText mPhoneNumber;
     private String PhoneNumber, CountryCode;
@@ -54,6 +58,8 @@ public class SocialRegisterActivity extends AppCompatActivity {
     private TextWatcher mNumberTextWatcher;
     private CountryCodePicker countryCodePicker;
     private View mLoginFormView, mProgressView;
+    private ShowLoader loader;
+    private ShowNetworkErrorDialog networkErrorDialog;
 
 
     @NonNull
@@ -72,8 +78,12 @@ public class SocialRegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = SocialRegisterActivity.this;
+        loader = new ShowLoader(context);
+        networkErrorDialog = new ShowNetworkErrorDialog(context);
 
         setContentView(R.layout.activity_social);
+
 
         mPhoneNumber = findViewById(R.id.phoneNumber);
         mSmsButton = findViewById(R.id.smsVerificationButton);
@@ -161,7 +171,7 @@ public class SocialRegisterActivity extends AppCompatActivity {
 
     private void attemptSignup() {
         String mobile = getE164Number();
-        registerUser(SocialRegisterActivity.this, mFirstName, mLastName, mEmail, mobile, mGender, null, mLoginMethod, countryCodePicker.getDefaultCountryCode(), TAG_REGISTER_USER);
+        registerUser(SocialRegisterActivity.this, mFirstName, mLastName, mEmail, mobile, mGender, null, mLoginMethod, countryCodePicker.getDefaultCountryCode(), TAG_REGISTER_USER, loader);
 
     }
 
@@ -208,6 +218,28 @@ public class SocialRegisterActivity extends AppCompatActivity {
         // return PhoneNumberUtils.formatNumberToE164(mPhoneNumber.getText().toString(), mCountryIso);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loader.dismissDialog();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (loader != null) {
+            loader.dismissDialog();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //  AppController.getInstance().cancelPendingRequests(TAG_USER_EXISTS);
+        AppController.getInstance().cancelPendingRequests(TAG_REGISTER_USER);
+        loader.dismissDialog();
+        networkErrorDialog.dismissDialog();
+    }
 
 
 

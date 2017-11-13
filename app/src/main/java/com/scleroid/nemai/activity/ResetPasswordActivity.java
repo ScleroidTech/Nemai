@@ -76,11 +76,11 @@ public class ResetPasswordActivity extends EmailAutoCompleteActivity {
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mResetEmailTIL.setError(getString(R.string.error_field_required_email));
+            mResetEmailTIL.setError(getString(R.string.error_field_required_mobile));
             focusView = mEmailView;
             cancel = true;
         } else if (!isValidField(email)) {
-            mResetEmailTIL.setError(getString(R.string.error_invalid_email_only));
+            mResetEmailTIL.setError(getString(R.string.error_invalid_mobile_only));
             focusView = mEmailView;
             cancel = true;
         }
@@ -217,16 +217,16 @@ public class ResetPasswordActivity extends EmailAutoCompleteActivity {
 
     private boolean isValidField(String input) {
 
-        if (input.contains("@")) {
+       /* if (input.contains("@")) {
             Pattern regex = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
             return regex.matcher(input).matches();
-        } else {
+        } else {*/
             Pattern regex = Pattern.compile("^[789]\\d{9}$");
 
             return regex.matcher(input).matches();
 
-        }
+//        }
 
     }
 
