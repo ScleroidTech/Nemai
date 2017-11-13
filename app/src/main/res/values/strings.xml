@@ -37,6 +37,7 @@
 
 
     <string name="prompt_email">Email or Mobile</string>
+    <string name="prompt_mobile">Mobile</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_new_password">New Password</string>
     <string name="prompt_password_again">Retype Password</string>
@@ -56,12 +57,12 @@
     <string name="action_register_redirect">Already a user? Log in here </string>
     <string name="action_sign_in_short">Done</string>
     <string name="error_invalid_email">This email address or Mobile Number is invalid</string>
-    <string name="error_invalid_email_only">This email address is invalid</string>
+    <string name="error_invalid_mobile_only">This Mobile Number is invalid</string>
     <string name="error_invalid_password">Password should be minimum 8 characters</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_empty_password">Please enter the password</string>
     <string name="error_field_required">You forgot to enter Email or Mobile here</string>
-    <string name="error_field_required_email">You forgot to enter Email Address here</string>
+    <string name="error_field_required_mobile">You forgot to enter Mobile here</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>

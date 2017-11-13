@@ -208,7 +208,7 @@ public class LoginActivity extends SocialLoginActivity {
             mAuthTask = true;
 
             session.setLoggedInMethod("email");
-            NetworkCalls.loginUser(context, email, password, TAG_USER_LOGIN);
+            NetworkCalls.loginUser(context, email, password, TAG_USER_LOGIN, mEmailTextInputLayout, mPasswordTextInputLayout, loader);
         }
 
     }

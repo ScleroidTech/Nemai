@@ -1,6 +1,5 @@
 package com.scleroid.nemai.volley_support;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -14,8 +13,8 @@ import com.scleroid.nemai.R;
 public class ShowLoader {
 
     private AlertDialog.Builder dialogBuilder;
-    private AlertDialog alertDialog;
-    private ProgressDialog dialog;
+    private AlertDialog dialog;
+    //  private ProgressDialog dialog;
     private Context context;
 
     public ShowLoader(Context context) {
@@ -31,15 +30,15 @@ public class ShowLoader {
         dialogBuilder.setView(dialogView);
 
         dialogBuilder.setCancelable(false);
-        alertDialog = dialogBuilder
+        dialog = dialogBuilder
                 .create();
 
 
-        alertDialog.requestWindowFeature(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //     alertDialog.setCancelable(false);
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
+        dialog.requestWindowFeature(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //     dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
         /*if (dialog != null) {
             dialog = null;
         }

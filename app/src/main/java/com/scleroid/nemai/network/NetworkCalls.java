@@ -1,6 +1,7 @@
 package com.scleroid.nemai.network;
 
 import android.content.Context;
+import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -9,6 +10,7 @@ import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.activity.OtpVerificationActivity;
 import com.scleroid.nemai.activity.PartnerActivity;
 import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.volley_support.ShowLoader;
 import com.scleroid.nemai.volley_support.VolleyCompleteListener;
 import com.scleroid.nemai.volley_support.VolleyPostJSONMethod;
 
@@ -30,7 +32,7 @@ import static com.scleroid.nemai.activity.MainActivity.session;
 public class NetworkCalls {
 
 
-    public static void submitCouriers(final Context context, final Parcel parcel, String tag) {
+    public static void submitCouriers(final Context context, final Parcel parcel, String tag, ShowLoader loader) {
 
         VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
             @Override
@@ -96,7 +98,7 @@ public class NetworkCalls {
         params.put("package_type", parcel.getPackageType());
 
 
-        new VolleyPostJSONMethod(context, volleyCompleteListener, params, true, tag);
+        new VolleyPostJSONMethod(context, volleyCompleteListener, params, loader, tag);
 
 
 //            showProgress(context, true);
@@ -175,7 +177,7 @@ public class NetworkCalls {
 
     }
 
-    public static boolean isAlreadyUser(final Context context, final String userName, String requestTag) {
+    public static boolean isAlreadyUser(final Context context, final String userName, String requestTag, ShowLoader loader) {
 //TODO add volley complete listener instead of this, & change all of this code because the Main thread is not waiting for the response
         final boolean[] isUserExists = new boolean[1];
 //        return false;
@@ -207,9 +209,7 @@ public class NetworkCalls {
                         // message
 
                         //session.setLogin(false);
-                            /*String errorMsg = jsonObject.getString("error_msg");
-                            Toast.makeText(getApplicationContext(),
-                                    errorMsg, Toast.LENGTH_LONG).show();*/
+
                     }
                 } catch (JSONException e) {
                     jsonErrorToast(e, context);
@@ -229,94 +229,54 @@ public class NetworkCalls {
         Map<String, String> params = new HashMap<String, String>();
         params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_VALID_USER);
         params.put("email_id", userName);
+        new VolleyPostJSONMethod(context, volleyCompleteListener, params, loader, requestTag);
 
-        new VolleyPostJSONMethod(context, volleyCompleteListener, params, true, requestTag);
+  /*      RequestFuture<JSONObject> future = RequestFuture.newFuture();
 
+        Map<String, String> params = new HashMap<String, String>();
+     //   params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_VALID_USER);
+        params.put("email_id", userName);
+*/
+       /*     JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
+                    ServerConstants.serverUrl.POST_VALID_USER, new JSONObject(params),future,future);*//* new Response.Listener<JSONObject>() {
+                */
+      /*      AppController.getInstance().addToRequestQueue(strReq, requestTag);
+        JSONObject response;
 
+        ShowLoader loader = new ShowLoader(context);
+      //  loader.showDialog();
+        try {
+           response = future.get(10, TimeUnit.SECONDS );
+          // loader.dismissDialog();
+            return response.getBoolean("status");
+        } catch (InterruptedException e) {
+            // exception handling
 
-        /*if (isNetworkAvailable(getApplicationContext())) {
+            loader.dismissDialog();
+            Log.e(TAG, "InterruptedException " + e.getMessage());
+            return false;
+            //return buildErrorMessage(e.getMessage());
+        } catch (ExecutionException e) {
+            // exception handling
+            loader.dismissDialog();
+            Log.e(TAG, "ExecutionException " + e.getMessage());
+            return false;
+          //  return buildErrorMessage(e.getMessage());
+        } catch (TimeoutException e) {
+            // exception handling
+            loader.dismissDialog();
+            Log.e(TAG, "TimeoutException " + e.getMessage());
+            return false;
+          //  return buildErrorMessage(e.getMessage());
+        } catch (JSONException e) {
+            loader.dismissDialog();
+            jsonErrorToast(e,context);
+            return false;
+        }*/
 
-            // Tag used to cancel the request
-            String tag_string_req = "req_check_user";
-            isUserExists[0] = false;
-
-
-            showProgress(context, true);
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("email_id", userName);
-
-
-            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_VALID_USER, new JSONObject(params), new Response.Listener<JSONObject>() {
-                @SuppressLint("LongLogTag")
-
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    Log.d(TAG, "Login Response: " + jsonObject.toString());
-
-
-                    try {
-
-                        // user successfully logged in
-                        // Create login session
-
-
-                        //JSONObject jObj = new JSONObject(jsonObject);
-
-                        boolean error = jsonObject.getBoolean("status");
-                        if (error) {
-                            isUserExists[0] = jsonObject.getBoolean("status");
-
-
-                            Toast.makeText(getApplicationContext(), "User authentication successful", Toast.LENGTH_LONG).show();
-                        } else {
-
-                            // Error occurred in login. Get the error
-                            // message
-
-                            //session.setLogin(false);
-                            *//*String errorMsg = jsonObject.getString("error_msg");
-                            Toast.makeText(getApplicationContext(),
-                                    errorMsg, Toast.LENGTH_LONG).show();*//*
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(),
-                                "" + e, Toast.LENGTH_LONG).show();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-
-                @SuppressLint("LongLogTag")
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Registration Error: " + error.getMessage());
-                    Toast.makeText(getApplicationContext(),
-                            error.getMessage(), Toast.LENGTH_LONG).show();
-                    showProgress(context, false);
-                }
-            }) {
-
-
-
-            };
-
-         *//*   int socketTimeout = 10000000;//10 seconds - change to what you want
-            strReq.setRetryPolicy(new DefaultRetryPolicy(socketTimeout,
-                    10,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*//*
-            Log.d(TAG, "JSON " + strReq.getBodyContentType() + strReq.getBody().toString());
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-            showProgress(context, false);
-
-            return isUserExists[0];
-        } else
-            Toast.makeText(getApplicationContext(), "Network is not available , try again later", Toast.LENGTH_LONG).show();
-        return false;*/
 
         return isUserExists[0];
+
     }
 
     private static void jsonErrorToast(JSONException e, Context context) {
@@ -331,7 +291,7 @@ public class NetworkCalls {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public static void loginUser(final Context context, final String userName, final String pass, String tag) {
+    public static void loginUser(final Context context, final String userName, final String pass, String tag, final TextInputLayout mEmailTextInputLayout, final TextInputLayout mPasswordTextInputLayout, ShowLoader loader) {
         // Tag used to cancel the request
        /* Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
@@ -350,18 +310,29 @@ public class NetworkCalls {
 
                     //JSONObject jObj = new JSONObject(jsonObject);
 
-                    boolean error = response.getBoolean("status");
-                    if (error) {
-
+                    String error = response.getString("statusCode");
+                    switch (error) {
+                        case "200":
 
                         Toasty.success(context, "Login Successful", Toast.LENGTH_LONG, true).show();
 
                         session.setLogin(true);
 
                         MainActivity.newIntent(context);
+                            break;
                         //finish();
-                    } else {
+                        case "201":
+                            session.setLogin(false);
+                            Toasty.warning(context, "Email/Mobile isn't registered with us", Toast.LENGTH_LONG, true).show();
+                            mEmailTextInputLayout.setError("Email/Mobile isn't registered with us");
+                            break;
 
+                        case "202":
+                            session.setLogin(false);
+                            Toasty.warning(context, "Password is incorrect", Toast.LENGTH_LONG, true).show();
+                            mPasswordTextInputLayout.setError("Password is incorrect");
+                            break;
+                        default:
                         // Error occurred in login. Get the error
                         // message
                         //TODO define error codes
@@ -389,7 +360,7 @@ public class NetworkCalls {
         params.put("email_id", userName);
         params.put("pwd", pass);
 
-        new VolleyPostJSONMethod(context, volleyCompleteListener, params, true, tag);
+        new VolleyPostJSONMethod(context, volleyCompleteListener, params, loader, tag);
 
         /*if (isNetworkAvailable(context)) {
             String tag_string_req = "req_login";
@@ -478,7 +449,7 @@ public class NetworkCalls {
      * email, password) to register url
      */
     public static void registerUser(final Context context, final String firstName, final String lastName, final String email,
-                                    final String phone, final String gender, final String password, final String loginMethod, final String countryCode, String tag_string_req) {
+                                    final String phone, final String gender, final String password, final String loginMethod, final String countryCode, String tag_string_req, ShowLoader loader) {
 
        /* Intent verification = new Intent(getBaseContext(), OtpVerificationActivity.class);
 
@@ -503,31 +474,39 @@ public class NetworkCalls {
 
                     //JSONObject jObj = new JSONObject(jsonObject);
 
-                    boolean error = response.getBoolean("status");
-                    if (error) {
 
-                        Toasty.success(context, "Registered successfully, let's verify you", Toast.LENGTH_LONG, true).show();
 
-                        //session.setLogin(true);
-
-                        context.startActivity(OtpVerificationActivity.newIntent(context, phone, countryCode));
                         //finish();
+                    String error = response.getString("statusCode");
+                    switch (error) {
+                        case "200":
 
-                        // Launch login activity
-                        /*Intent intent = new Intent(
-                                RegisterActivity.this,
-                                LoginActivity.class);
-                        startActivity(intent);
-                            //finish(); */
-                    } else {
 
-                        // Error occurred in registration. Get the error
-                        // message
-                        session.setLogin(false);
-                        String errorMsg = response.getString("message");
-                        Toasty.error(context,
-                                errorMsg, Toast.LENGTH_LONG, true).show();
+                            Toasty.success(context, "Registered successfully, let's verify you", Toast.LENGTH_LONG, true).show();
+
+                            //session.setLogin(true);
+                            session.setLogin(true);
+
+                            context.startActivity(OtpVerificationActivity.newIntent(context, phone, countryCode));
+                            break;
+                        //finish();
+                        case "201":
+                            session.setLogin(false);
+                            Toasty.warning(context, "Already Registered, Try loggin in", Toast.LENGTH_LONG, true).show();
+                            //   mEmailTextInputLayout.setError("Email/Mobile isn't registered with us");
+                            break;
+
+
+                        default:
+                            // Error occurred in login. Get the error
+                            // message
+                            //TODO define error codes
+                            session.setLogin(false);
+                            String errorMsg = response.getString("message");
+                            taskErrorToast("There's an error on our side, We're sorry", context, statusCode);
                     }
+
+
                 } catch (JSONException e) {
                     jsonErrorToast(e, context);
                 }
@@ -557,8 +536,7 @@ public class NetworkCalls {
         // params.put("method",loginMethod);
 
 
-
-        new VolleyPostJSONMethod(context, volleyCompleteListener, params, true, tag_string_req);
+        new VolleyPostJSONMethod(context, volleyCompleteListener, params, loader, tag_string_req);
 
 
 /*
@@ -662,9 +640,7 @@ public class NetworkCalls {
                 }
 
 *//*
-               *//* *//**//**
-                 * Passing some request headers
-         * *//**//*
+               *//* *//**//**//*
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<String, String>();

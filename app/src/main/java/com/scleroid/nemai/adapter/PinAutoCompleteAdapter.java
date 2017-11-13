@@ -14,7 +14,6 @@ import com.scleroid.nemai.R;
 import com.scleroid.nemai.ServerConstants;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.volley_support.VolleyCompleteListener;
-import com.scleroid.nemai.volley_support.VolleyPostJSONMethod;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -179,7 +178,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
         map.put(ServerConstants.URL, ServerConstants.serverUrl.POST_PINCODE);
         map.put("origins", userInput);
 
-        new VolleyPostJSONMethod(mContext, volleyCompleteListener, map, true, "pincode");
+        // new VolleyPostJSONMethod(mContext, volleyCompleteListener, map, loader, "pincode");
 
         return mResultPinList;
     }

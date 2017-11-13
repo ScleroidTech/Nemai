@@ -221,22 +221,25 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
     }
 
     private void checkUser(Context context) {
-        if (isAlreadyUser(this, email, TAG_USER_EXISTS)) {
+        loader.showDialog();
+        if (isAlreadyUser(this, email, TAG_USER_EXISTS, loader)) {
             Log.d(LoginActivity.TAG, "already a user");
             Toasty.info(context, "Welcome Back!", Toast.LENGTH_SHORT, true).show();
-            loader.dismissDialog();
+
             Intent intent = MainActivity.newIntent(this);
             startActivity(intent);
+            loader.dismissDialog();
             finish();
         } else {
             Toasty.info(context, "It's your first time, Let's register first", Toast.LENGTH_SHORT, true).show();
             Log.d(LoginActivity.TAG, "Not a user, registering");
+            loader.dismissDialog();
             socialRegisterUser(firstName, lastName, email, null, session.getLoggedInMethod());
         }
     }
 
     private void checkUser() {
-        if (isAlreadyUser(this, email, TAG_USER_EXISTS)) {
+        if (isAlreadyUser(this, email, TAG_USER_EXISTS, loader)) {
             Log.d(LoginActivity.TAG, "already a user");
             Toasty.info(context, "Welcome Back!", Toast.LENGTH_SHORT, true).show();
             loader.dismissDialog();
