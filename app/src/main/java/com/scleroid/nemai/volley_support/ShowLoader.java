@@ -37,7 +37,7 @@ public class ShowLoader {
 
         alertDialog.requestWindowFeature(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        alertDialog.setCancelable(false);
+        //     alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
         /*if (dialog != null) {

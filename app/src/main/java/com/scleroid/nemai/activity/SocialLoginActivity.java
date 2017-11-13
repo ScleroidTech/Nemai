@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.volley_support.AppController;
 import com.scleroid.nemai.volley_support.ShowLoader;
 import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
 
@@ -47,6 +48,7 @@ import static com.scleroid.nemai.network.NetworkCalls.isAlreadyUser;
 
 abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements GoogleApiClient.OnConnectionFailedListener {
     protected static final int RC_SIGN_IN = 9001;
+    private static final String TAG_USER_EXISTS = "req_user_exists";
     public Context context;
     protected CallbackManager mCallbackManager;
     @Nullable
@@ -201,17 +203,7 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
             session.setLoggedInMethod("google");
             Log.d(LoginActivity.TAG, acct.toString());
             // Toast.makeText(this, "firstname " + firstName + "  " + lastName + "  " + email, Toast.LENGTH_LONG).show();
-            if (isAlreadyUser(this, email)) {
-                Log.d(LoginActivity.TAG, "already a user");
-                Toasty.info(context, "Welcome Back!", Toast.LENGTH_SHORT, true);
-                Intent intent = MainActivity.newIntent(this);
-                startActivity(intent);
-                finish();
-            } else {
-                Toasty.info(context, "It's your first time, Let's register first", Toast.LENGTH_SHORT, true);
-                Log.d(LoginActivity.TAG, "Not a user, registering");
-                socialRegisterUser(firstName, lastName, email, null, session.getLoggedInMethod());
-            }
+            checkUser(context);
 
             // mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             loader.dismissDialog();
@@ -227,6 +219,37 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
 
         }
     }
+
+    private void checkUser(Context context) {
+        if (isAlreadyUser(this, email, TAG_USER_EXISTS)) {
+            Log.d(LoginActivity.TAG, "already a user");
+            Toasty.info(context, "Welcome Back!", Toast.LENGTH_SHORT, true).show();
+            loader.dismissDialog();
+            Intent intent = MainActivity.newIntent(this);
+            startActivity(intent);
+            finish();
+        } else {
+            Toasty.info(context, "It's your first time, Let's register first", Toast.LENGTH_SHORT, true).show();
+            Log.d(LoginActivity.TAG, "Not a user, registering");
+            socialRegisterUser(firstName, lastName, email, null, session.getLoggedInMethod());
+        }
+    }
+
+    private void checkUser() {
+        if (isAlreadyUser(this, email, TAG_USER_EXISTS)) {
+            Log.d(LoginActivity.TAG, "already a user");
+            Toasty.info(context, "Welcome Back!", Toast.LENGTH_SHORT, true).show();
+            loader.dismissDialog();
+            Intent intent = MainActivity.newIntent(this);
+            startActivity(intent);
+            finish();
+        } else {
+            Toasty.info(context, "It's your first time, Let's register first", Toast.LENGTH_SHORT, true).show();
+            Log.d(LoginActivity.TAG, "Not a user, registering");
+            socialRegisterUser(firstName, lastName, email, gender, session.getLoggedInMethod());
+        }
+    }
+
 
     private void singInFailedGoogle(Context context) {
         Toasty.error(context, "There's an error with Google Sign-in, Try another way", Toast.LENGTH_SHORT, true).show();
@@ -328,13 +351,8 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
                     }
 
                     session.setLoggedInMethod("facebook");
-                    if (isAlreadyUser(getApplicationContext(), email)) {
-                        Intent intent = MainActivity.newIntent(SocialLoginActivity.this);
-                        startActivity(intent);
-                        finish();
 
-                    } else
-                        socialRegisterUser(firstName, lastName, email, gender, session.getLoggedInMethod());
+                    checkUser();
 //TODO submit to review first
              /*   if (object.has("location")) {
                     String location = object.getJSONObject("location").getString("name");
@@ -364,14 +382,24 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
 
     protected void socialRegisterUser(final String firstName, final String lastName, final String email, final String gender, final String loginMethod) {
 
+
         if (networkErrorDialog.showDialog()) {
             Intent intent;
             intent = SocialRegisterActivity.newIntent(firstName, lastName, email, gender, loginMethod, this);
             startActivity(intent);
+            loader.dismissDialog();
             finish();
 
 
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        AppController.getInstance().cancelPendingRequests(TAG_USER_EXISTS);
+        // AppController.getInstance().cancelPendingRequests(TAG_REGISTER_USER);
+        loader.dismissDialog();
+        networkErrorDialog.dismissDialog();
+    }
 }

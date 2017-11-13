@@ -144,7 +144,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
             @Override
-            public void onTaskCompleted(JSONObject response) {
+            public void onTaskCompleted(JSONObject response, int statusCode) {
                 mResultPinList = new ArrayList<PinCode>();
                 Log.i(TAG, response.toString());
 
@@ -171,7 +171,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
             }
 
             @Override
-            public void onTaskFailed(String response) {
+            public void onTaskFailed(String response, int statusCode) {
                 Log.i(TAG, response);
             }
         };
