@@ -19,7 +19,7 @@ public interface ParcelDao {
     List<Parcel> getAll();
 
     @Query("SELECT * FROM parcel where serialNo = :serialNo ")
-    Parcel findById(int serialNo);
+    Parcel findById(long serialNo);
 
     @Query("SELECT COUNT(*) from Parcel")
     int countParcels();

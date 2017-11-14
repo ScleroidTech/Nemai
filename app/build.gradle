@@ -58,9 +58,10 @@ dependencies {
     compile 'com.rollbar:rollbar-android:0+'
     compile 'com.github.javiersantos:MaterialStyledDialogs:2.1'
     compile 'com.github.GrenderG:Toasty:1.2.5'
+  //  testCompile 'org.junit.jupiter:junit-jupiter-api'
 }
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'findbugs'
+//apply plugin: 'findbugs'
 
 task findbugs(type: FindBugs) {
     ignoreFailures = false
