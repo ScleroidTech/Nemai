@@ -59,7 +59,7 @@ public class ParcelLab {
         db.parcelDao().updateParcel(parcel);
     }
 
-    public static Void newParcel(final Context context) {
+    public static Parcel newParcel(final Context context) {
 
         AddNewParcelAsync task = new AddNewParcelAsync(AppDatabase.getAppDatabase(context), new Parcel());
 
@@ -207,7 +207,7 @@ public class ParcelLab {
     }
 
 
-    private static class AddNewParcelAsync extends AsyncTask<Void, Void, Void> {
+    private static class AddNewParcelAsync extends AsyncTask<Void, Void, Parcel> {
 
         private final AppDatabase mDb;
         private final Parcel parcel;
@@ -218,10 +218,10 @@ public class ParcelLab {
         }
 
         @Override
-        protected Void doInBackground(final Void... params) {
+        protected Parcel doInBackground(final Void... params) {
             addParcel(mDb, parcel);
 
-            return null;
+            return parcel;
         }
 
     }
