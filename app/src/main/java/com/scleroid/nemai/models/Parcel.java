@@ -11,7 +11,7 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity
 public class Parcel {
     @PrimaryKey(autoGenerate = true)
-    private int serialNo;
+    private long serialNo;
 
     private String sourcePin;
     private String destinationPin;
@@ -25,6 +25,29 @@ public class Parcel {
     private String description;
 
     public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description) {
+        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description);
+
+    }
+
+    @Ignore
+    public Parcel() {
+        /*this.sourcePin = "null";
+        this.destinationPin = "null";
+        this.deliveryType = "Domestic";
+        this.packageType = "Document";
+        this.description = "null";
+        this.serialNo = UUID.randomUUID();*/
+        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null");
+
+    }
+
+    public Parcel updateInstance(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description) {
+        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description);
+        return this;
+
+    }
+
+    private void initializeObject(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description) {
         this.sourcePin = sourcePin;
         this.destinationPin = destinationPin;
         this.deliveryType = deliveryType;
@@ -37,21 +60,11 @@ public class Parcel {
         this.description = description;
     }
 
-    @Ignore
-    public Parcel() {
-        this.sourcePin = "null";
-        this.destinationPin = "null";
-        this.deliveryType = "Domestic";
-        this.packageType = "Document";
-        this.description = "null";
-
-    }
-
-    int getSerialNo() {
+    public long getSerialNo() {
         return serialNo;
     }
 
-    void setSerialNo(int pSerialNo) {
+    void setSerialNo(long pSerialNo) {
         serialNo = pSerialNo;
     }
 

@@ -209,7 +209,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public Parcel validateFields() {
+    public Parcel validateFields(Parcel parcel) {
         boolean noSubmit = false;
         String delivery;
 
@@ -262,13 +262,13 @@ public class PageHolder extends RecyclerView.ViewHolder {
 
 
             if (!noSubmit)
-                return nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), Integer.parseInt(mPackageWidthParcelEditText.getText().toString()), Integer.parseInt(mHeightParcelEditText.getText().toString()), Integer.parseInt(mPackageLengthParcelEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery);
+                return nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), Integer.parseInt(mPackageWidthParcelEditText.getText().toString()), Integer.parseInt(mHeightParcelEditText.getText().toString()), Integer.parseInt(mPackageLengthParcelEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery, parcel);
 
 
         } else {
 
             if (!noSubmit) {
-                return nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery);
+                return nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery, parcel);
 
             }
         }
@@ -283,15 +283,14 @@ public class PageHolder extends RecyclerView.ViewHolder {
         return TextUtils.isEmpty(text.getText());
     }
 
-    public Parcel nextScreenParcel(String source, String destination, int weight, int invoice, int width, int height, int length, String description, String deliveryType) {
-        return new Parcel(source, destination, deliveryType, "Parcel", weight, invoice, length, width, height, description);
-        // submitCouriers(context, parcel, toggleMultiple);
-
+    public Parcel nextScreenParcel(String source, String destination, int weight, int invoice, int width, int height, int length, String description, String deliveryType, Parcel parcel) {
+        return parcel.updateInstance(source, destination, deliveryType, "Parcel", weight, invoice, width, height, length, description);
     }
 
-    public Parcel nextScreenDocument(String source, String destination, int weight, int invoice, String description, String deliveryType) {
 
-        return new Parcel(source, destination, deliveryType, "Document", weight, invoice, 0, 0, 0, description);
+    public Parcel nextScreenDocument(String source, String destination, int weight, int invoice, String description, String deliveryType, Parcel parcel) {
+
+        return parcel.updateInstance(source, destination, deliveryType, "Document", weight, invoice, 0, 0, 0, description);
 
     }
 

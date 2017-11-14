@@ -101,6 +101,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     }*/
    RecyclerViewPager recyclerViewPager;
     List<Parcel> crimes;
+    Parcel parcelCurrent;
     private Context context;
     private ShowLoader loader;
 
@@ -458,11 +459,12 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     }
 
     private void submitData(boolean b) {
-        Parcel parcel = recycleViewPagerAdapter.holder.validateFields();
+        Parcel parcel = recycleViewPagerAdapter.holder.validateFields(parcelCurrent);
         if (parcel == null) return;
         //  ParcelLab.addParcel(parcel, context);
         List<Parcel> parcels = null;
-        ParcelLab.newParcel(context);
+
+        parcelCurrent = ParcelLab.newParcel(context);
         parcels = updateParcelList(context);
         if (!b) {
             for (Parcel parcelTemp : parcels) {
