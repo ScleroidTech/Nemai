@@ -45,4 +45,10 @@
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+
+    //checkbox
+
+    <style name="my_checkbox_style">
+        <item name="buttonTint">#fff</item>
+    </style>
 </resources>

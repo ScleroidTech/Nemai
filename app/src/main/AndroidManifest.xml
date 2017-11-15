@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
-        android:name=".volley_support.AppController"
+        android:name=".GarlandApp"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
@@ -45,7 +45,9 @@
             android:name=".activity.PrivacyPolicyActivity"
             android:label="@string/activity_title_privacy_policy" />
         <activity android:name=".activity.PartnerActivity" />
-        <activity android:name=".activity.CheckoutActivity" />
+        <activity
+            android:name=".activity.CheckoutActivity"
+            android:exported="true" />
         <activity android:name=".activity.TrackingActivity" />
         <activity
             android:name=".activity.LoginActivity"
@@ -63,6 +65,10 @@
             android:name=".activity.TestDBActivity"
             android:exported="true"
             android:label="@string/title_activity_password" />
+        <activity
+            android:name=".viewpager.MainActivityPager"
+            android:exported="true"
+            android:label="@string/activity_title_about_us" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

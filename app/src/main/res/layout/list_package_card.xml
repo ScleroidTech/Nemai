@@ -1,0 +1,152 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:layout_marginBottom="3dp"
+    android:layout_marginTop="2dp">
+    //card_view:cardCornerRadius="4dp"
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/borderleft">    <!--  //  android:layout_alignParentLeft="true"-->
+        <TextView
+            android:id="@+id/txtPackage1"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center_vertical"
+            android:text="Package"
+            android:textSize="20dp" />
+        <!--  android:background="@color/bkg_card"
+            android:textColor="@color/colorWhite"-->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtPackage1"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="contact det"
+            android:textSize="16dp"
+
+
+            />
+        <!--CheckBox
+            android:id="@+id/checkBox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            style="@style/my_checkbox_style"
+         /-->
+        <!--TextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:gravity="center_vertical"
+            android:textSize="16dp"
+            android:layout_below="@id/title"
+
+            android:layout_marginLeft="5dp"
+
+            /-->
+        <TextView
+            android:id="@+id/txtAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_marginLeft="10dp"
+            android:minLines="2"
+            android:text="Address"
+            android:textSize="16dp" />
+        <!--RadioButton android:id="@+id/radio_pirates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:layout_alignParentRight="true"
+            android:layout_alignBaseline="@id/txtAdd"
+        /-->
+
+        <TextView
+            android:id="@+id/txtDistrict"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtAdd"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="District"
+            android:textSize="16dp"
+
+            />
+
+        <TextView
+            android:id="@+id/txtState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtDistrict"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="State"
+            android:textSize="16dp"
+
+            />
+
+        <TextView
+            android:id="@+id/txtPincode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtState"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="Pincode"
+            android:textSize="16dp"
+
+            />
+
+        <!--TextView
+            android:id="@+id/txtSurname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Surname"
+            android:gravity="center_vertical"
+            android:textSize="16dp"
+            android:layout_below="@id/txtPincode"
+            android:layout_marginLeft="5dp"
+         /-->
+        <TextView
+            android:id="@+id/txtEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtPincode"
+            android:layout_marginLeft="10dp"
+            android:text="Email"
+            android:textSize="16dp"
+
+            />
+
+        <Button
+            android:id="@+id/button_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtEmail"
+            android:layout_centerHorizontal="true"
+            android:text="Deliver Here"
+            android:textColor="@color/bkg_blue" />
+
+        <!--    <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/house"
+                    android:layout_marginTop="70dp"/>
+
+            </RelativeLayout>-->
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
