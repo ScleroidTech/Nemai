@@ -1,0 +1,113 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".viewpager.MainActivityPager"
+
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Package Details"
+                android:textSize="26sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:id="@+id/textView3"
+                android:padding="10dp"
+                android:layout_marginLeft="20dp"
+
+                />
+            <Button
+                android:id="@+id/button_id"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Next"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/bkg_blue"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+
+
+
+                />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_below="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="750dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="22dp"
+                android:elevation="4dp"
+
+                >
+
+
+            </android.support.v4.view.ViewPager>
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:src="@drawable/arrowl"
+                android:layout_marginTop="180dp"
+
+                />
+            <!-- android:layout_marginLeft="30dp"
+             android:layout_marginRight="30dp"-->
+            <ImageView
+                android:id="@+id/back_arrow1"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:src="@drawable/arrowr"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="180dp"
+
+                />
+            <!--RelativeLayout
+                android:layout_below="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+
+                >
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/cardList"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </RelativeLayout-->
+
+
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
+<!--RelativeLayout
+android:layout_below="@+id/viewpager"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+
+
+    >
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/cardList"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    />
+
+</RelativeLayout-->
+
