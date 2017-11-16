@@ -29,7 +29,8 @@
     <integer name="fab_duration">100</integer>
 
     <dimen name="inner_item_offset">16dp</dimen>
-    <dimen name="inner_item_height">300dp</dimen>
+    <dimen name="inner_item_height">210dp</dimen>
+    <dimen name="inner_item_height_decoration">210dp</dimen>
 
     <dimen name="dp10">10dp</dimen>
     <dimen name="dp120">120dp</dimen>
@@ -43,7 +44,7 @@
     <dimen name="header_avatar_size">45dp</dimen>
     <dimen name="header_icon_size">14dp</dimen>
 
-    <dimen name="item_title_text_size">18sp</dimen>
+    <dimen name="item_title_text_size">22sp</dimen>
     <dimen name="item_name_text_size">@dimen/header_name_text_size</dimen>
     <dimen name="item_info_text_size">@dimen/header_info_text_size</dimen>
     <dimen name="item_footer_text_size">@dimen/header_footer_text_size</dimen>

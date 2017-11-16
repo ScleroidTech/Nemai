@@ -83,7 +83,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         return new InnerModel(
                 faker.name.name(),
                 faker.address.streetAddress(),
-                faker.address.buildingNumber(),
+                faker.address.streetName(),
                 faker.address.state(),
                 faker.address.city(),
                 faker.number.between(111111, 999999),
