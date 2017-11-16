@@ -12,6 +12,7 @@ import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.inner.InnerItem;
 import com.scleroid.nemai.inner.InnerModel;
+import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.outer.OuterAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,35 +54,55 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
     @Override
     public void onFakerReady(Faker faker) {
+        final List<com.scleroid.nemai.models.Parcel> parcels = new ArrayList<>();
         final List<List<InnerModel>> outerData = new ArrayList<>();
         for (int i = 0; i < OUTER_COUNT; i++) {
             final List<InnerModel> innerData = new ArrayList<>();
             for (int j = 0; j < INNER_COUNT; j++) {
                 innerData.add(createInnerData(faker));
+
             }
             outerData.add(innerData);
+            parcels.add(createParcelData(faker));
         }
 
-        initRecyclerView(outerData);
+        initRecyclerView(outerData, parcels);
     }
 
-    private void initRecyclerView(List<List<InnerModel>> data) {
+    private void initRecyclerView(List<List<InnerModel>> data, List<Parcel> parcels) {
         findViewById(R.id.progressBar).setVisibility(View.GONE);
 
         final TailRecyclerView rv = findViewById(R.id.recycler_view);
         ((TailLayoutManager) rv.getLayoutManager()).setPageTransformer(new HeaderTransformer());
-        rv.setAdapter(new OuterAdapter(data));
+        rv.setAdapter(new OuterAdapter(data, parcels));
 
         new TailSnapHelper().attachToRecyclerView(rv);
     }
 
     private InnerModel createInnerData(Faker faker) {
         return new InnerModel(
-                faker.book.title(),
                 faker.name.name(),
-                faker.address.city() + ", " + faker.address.stateAbbr(),
-                faker.number.between(20, 50),
-                faker.phoneNumber.cellPhone()
+                faker.address.streetAddress(),
+                faker.address.buildingNumber(),
+                faker.address.state(),
+                faker.address.city(),
+                faker.number.between(111111, 999999),
+                faker.phoneNumber.phoneNumber()
+        );
+    }
+
+    private com.scleroid.nemai.models.Parcel createParcelData(Faker faker) {
+        return new com.scleroid.nemai.models.Parcel(
+                faker.address.city(),
+                faker.address.city(),
+                "Domestic",
+                "Parcel",
+                faker.number.positive(0, 10),
+                faker.number.positive(0, 1000),
+                faker.number.positive(),
+                faker.number.positive(),
+                faker.number.positive(),
+                faker.company.catchPhrase()
         );
     }
 

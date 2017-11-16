@@ -17,7 +17,9 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
     public final TextView name;
     public final TextView pincode;
     public final TextView city;
-    public final TextView address;
+    public final TextView address_line_1;
+    public final TextView address_line_2;
+    public final TextView state;
     public final View mLine;
     private final View innerLayout;
     private InnerModel mInnerData;
@@ -26,11 +28,13 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         super(itemView);
         innerLayout = ((ViewGroup) itemView).getChildAt(0);
         mLine = itemView.findViewById(R.id.line);
-        address = itemView.findViewById(R.id.tv_address);
+        address_line_1 = itemView.findViewById(R.id.tv_address_line_1);
+        address_line_2 = itemView.findViewById(R.id.tv_address_line_2);
         name = itemView.findViewById(R.id.tv_name);
         city = itemView.findViewById(R.id.tv_city);
         pincode = itemView.findViewById(R.id.tv_pincode);
         mobile = itemView.findViewById(R.id.tv_mobile);
+        state = itemView.findViewById(R.id.tv_state);
 
         innerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,11 +61,13 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
     void setContent(InnerModel data) {
         mInnerData = data;
 
-        name.setText(data.name);
-        mobile.setText(data.mobileNo);
-        address.setText(data.address);
-        city.setText(data.city);
-        pincode.setText(data.pincode + "");
+        name.setText(data.getName());
+        mobile.setText(data.getMobileNo());
+        address_line_1.setText(data.getAddress_line_1());
+        address_line_2.setText(data.getAddress_line_2());
+        state.setText(data.getState());
+        city.setText(data.getCity());
+        pincode.setText(Integer.toString(data.getPincode()));
 
      /*   Glide.with(itemView.getContext())
                 .load(data.avatarUrl)

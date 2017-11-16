@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.ramotion.garlandview.TailAdapter;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.inner.InnerModel;
+import com.scleroid.nemai.models.Parcel;
 
 import java.util.List;
 
@@ -20,10 +21,12 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     private final int POOL_SIZE = 16;
 
     private final List<List<InnerModel>> mData;
+    private final List<Parcel> parcels;
     private final RecyclerView.RecycledViewPool mPool;
 
-    public OuterAdapter(List<List<InnerModel>> mData) {
+    public OuterAdapter(List<List<InnerModel>> mData, List<Parcel> parcels) {
         this.mData = mData;
+        this.parcels = parcels;
         mPool = new RecyclerView.RecycledViewPool();
         mPool.setMaxRecycledViews(0, POOL_SIZE);
     }
@@ -36,7 +39,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
 
     @Override
     public void onBindViewHolder(OuterItem holder, int position) {
-        holder.setContent(mData.get(position));
+        holder.setContent(mData.get(position), parcels.get(position), position, parcels.size());
     }
 
     @Override

@@ -331,7 +331,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
 
     public void bindNumber(int position, int size) {
         courierCount.setVisibility(View.VISIBLE);
-        courierCount.setText(String.format("Courier %d of %d", position + 1, size));
+        courierCount.setText(String.format("Shipment %d of %d", position + 1, size));
     }
 
         /*void setText(String text) {
