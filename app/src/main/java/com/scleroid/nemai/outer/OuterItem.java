@@ -204,7 +204,7 @@ public class OuterItem extends HeaderItem {
         ViewCompat.setAlpha(mHeaderCaption1, answerRatio);
         ViewCompat.setAlpha(mHeaderCaption2, 1f - answerRatio);
 
-        final View mc2 = mMiddleCollapsible.get(1);
+        final View mc2 = mMiddleCollapsible.get(0);
         ViewCompat.setPivotX(mc2, 0);
         ViewCompat.setPivotY(mc2, mc2.getHeight() / 2);
 

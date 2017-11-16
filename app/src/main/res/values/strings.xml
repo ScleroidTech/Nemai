@@ -194,8 +194,8 @@
 
 
     <string name="title_activity_details">DetailsActivity</string>
-    <string name="answer">ANSWER</string>
-    <string name="answer_low">answer</string>
+    <string name="answer">Edit</string>
+    <string name="answer_low">edit</string>
     <string name="connect">Select</string>
     <string name="years">years</string>
     <string name="asked">asked</string>

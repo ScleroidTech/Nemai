@@ -10,9 +10,6 @@
             android:id="@+id/header_middle"
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="0dp"
             android:background="@drawable/green_corners_top"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -23,14 +20,13 @@
             android:id="@+id/header_text_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:gravity="start"
             android:maxLines="1"
+            android:text="@string/mobileerror"
             android:textColor="@android:color/white"
             android:textSize="@dimen/header_title1_text_size"
             app:font='@{"SF-UI-Display-Semibold.ttf"}'
@@ -39,16 +35,16 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/header_middle" />
 
+
         <TextView
             android:id="@+id/header_text_2"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:alpha="0"
+            android:text="@string/action_mark_all_read"
             android:textColor="@android:color/white"
             app:font='@{"SF-UI-Display-Medium.ttf"}'
             app:layout_constraintHorizontal_bias="0.0"
@@ -56,18 +52,22 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/header_middle" />
 
-
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-
-            android:layout_marginRight="0dp"
-
+            android:layout_marginBottom="18dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="60dp"
             android:orientation="vertical"
-            app:layout_constraintRight_toRightOf="@+id/header_text_2">
+            app:layout_constraintBottom_toTopOf="@+id/header_footer"
+            app:layout_constraintEnd_toEndOf="@+id/header_text_1"
+            app:layout_constraintRight_toRightOf="@+id/header_text_2"
+            app:layout_constraintStart_toStartOf="@+id/header_text_1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread_inside">
 
             <TextView
                 android:id="@+id/tv_name"
@@ -76,6 +76,7 @@
                 android:alpha="0.8"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:text="@string/saved_address"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/header_name_text_size"
                 app:font='@{"SF-UI-Display-Medium.ttf"}' />
@@ -87,6 +88,7 @@
                 android:alpha="0.5"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:text="@string/prompt_mobile"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/header_info_text_size"
                 app:font='@{"SF-UI-Display-Regular.ttf"}' />
@@ -99,7 +101,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
             android:alpha="0"
             android:text="@string/answer"
             android:textColor="@android:color/white"
@@ -111,14 +112,13 @@
         <FrameLayout
             android:id="@+id/header_footer"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="341dp"
             android:background="@drawable/white_corners_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/header_middle"
             app:layout_constraintRight_toRightOf="@+id/header_middle"
-            app:layout_constraintTop_toBottomOf="@+id/header_middle">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <TextView
                 android:layout_width="wrap_content"
