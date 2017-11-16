@@ -3,7 +3,6 @@ package com.scleroid.nemai.outer;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -22,6 +21,7 @@ import com.ramotion.garlandview.inner.InnerRecyclerView;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.inner.InnerAdapter;
 import com.scleroid.nemai.inner.InnerModel;
+import com.scleroid.nemai.models.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +60,7 @@ public class OuterItem extends HeaderItem {
     private final TextView mHeaderCaption2;
     private final TextView source;
     private final TextView destination;
+    private final TextView cost;
 
     private final View mMiddle;
     private final View mMiddleAnswer;
@@ -86,14 +87,15 @@ public class OuterItem extends HeaderItem {
         mHeader = itemView.findViewById(R.id.header);
         mHeaderAlpha = itemView.findViewById(R.id.header_alpha);
 
-        mHeaderCaption1 = itemView.findViewById(R.id.header_text_1);
-        mHeaderCaption2 = itemView.findViewById(R.id.header_text_2);
-        source = itemView.findViewById(R.id.tv_name);
-        destination = itemView.findViewById(R.id.tv_info);
+        mHeaderCaption1 = itemView.findViewById(R.id.header_shipment_title_1);
+        mHeaderCaption2 = itemView.findViewById(R.id.header_shipment_title_2);
+        source = itemView.findViewById(R.id.tv_source);
+        destination = itemView.findViewById(R.id.tv_destination);
+        cost = itemView.findViewById(R.id.tv_cost);
 
 
         mMiddle = itemView.findViewById(R.id.header_middle);
-        mMiddleAnswer = itemView.findViewById(R.id.header_middle_answer);
+        mMiddleAnswer = itemView.findViewById(R.id.header_middle_edit);
         mFooter = itemView.findViewById(R.id.header_footer);
 
         //  mMiddleCollapsible.add((View)mAvatar.getParent());
@@ -144,19 +146,19 @@ public class OuterItem extends HeaderItem {
         return mRecyclerView;
     }
 
-    void setContent(@NonNull List<InnerModel> innerDataList) {
+    void setContent(List<InnerModel> innerDataList, Parcel parcel, int position, int size) {
         final Context context = itemView.getContext();
 
-        final InnerModel header = innerDataList.subList(0, 1).get(0);
+        final Parcel header = parcel; //TODO add parcel object here ;
         final List<InnerModel> tail = innerDataList.subList(1, innerDataList.size());
 
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
         ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail);
 
 
-        final String title1 = header.name + "?";
+        final String title1 = bindNumber(position, size);
 
-        final Spannable title2 = new SpannableString(header.name + "? - " + header.mobileNo);
+        final Spannable title2 = new SpannableString(title1 + " - Rs. " + parcel.getInvoice());
         title2.setSpan(new AbsoluteSizeSpan(mTitleSize1), 0, title1.length(), SPAN_INCLUSIVE_INCLUSIVE);
         title2.setSpan(new AbsoluteSizeSpan(mTitleSize2), title1.length(), title2.length(), SPAN_INCLUSIVE_INCLUSIVE);
         title2.setSpan(new ForegroundColorSpan(Color.argb(204, 255, 255, 255)), title1.length(), title2.length(), SPAN_INCLUSIVE_INCLUSIVE);
@@ -164,8 +166,13 @@ public class OuterItem extends HeaderItem {
         mHeaderCaption1.setText(title1);
         mHeaderCaption2.setText(title2);
 
-        source.setText(String.format("%s %s", header.name, context.getString(R.string.asked)));
-        destination.setText(String.format("%s %s", header.address, header.address));
+        source.setText(parcel.getSourcePin());//TODO COnvert Pincode to room , get source city instead of pincod,e & store selected object instead of text
+        destination.setText(parcel.getDestinationPin());
+        cost.setText("Rs. " + parcel.getInvoice());//TODO get delivery price, not invoice
+    }
+
+    public String bindNumber(int position, int size) {
+        return (String.format("Shipment %d of %d", position + 1, size));
     }
 
     void clearContent() {
@@ -189,7 +196,7 @@ public class OuterItem extends HeaderItem {
         final float ratio = computeRatio(recyclerView);
 
         final float footerRatio = Math.max(0, Math.min(FOOTER_RATIO_START, ratio) - FOOTER_RATIO_DIFF) / FOOTER_RATIO_MAX;
-        final float avatarRatio = Math.max(0, Math.min(AVATAR_RATIO_START, ratio) - AVATAR_RATIO_DIFF) / AVATAR_RATIO_MAX;
+        //final float avatarRatio = Math.max(0, Math.min(AVATAR_RATIO_START, ratio) - AVATAR_RATIO_DIFF) / AVATAR_RATIO_MAX;
         final float answerRatio = Math.max(0, Math.min(ANSWER_RATIO_START, ratio) - ANSWER_RATIO_DIFF) / ANSWER_RATIO_MAX;
         final float middleRatio = Math.max(0, Math.min(MIDDLE_RATIO_START, ratio) - MIDDLE_RATIO_DIFF) / MIDDLE_RATIO_MAX;
 
@@ -209,9 +216,9 @@ public class OuterItem extends HeaderItem {
         ViewCompat.setPivotY(mc2, mc2.getHeight() / 2);
 
         for (final View view : mMiddleCollapsible) {
-            ViewCompat.setScaleX(view, avatarRatio);
-            ViewCompat.setScaleY(view, avatarRatio);
-            ViewCompat.setAlpha(view, avatarRatio);
+            ViewCompat.setScaleX(view, middleRatio);
+            ViewCompat.setScaleY(view, middleRatio);
+            ViewCompat.setAlpha(view, middleRatio);
         }
 
         final ViewGroup.LayoutParams lp = mMiddle.getLayoutParams();

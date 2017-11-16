@@ -29,7 +29,7 @@
     <integer name="fab_duration">100</integer>
 
     <dimen name="inner_item_offset">16dp</dimen>
-    <dimen name="inner_item_height">170dp</dimen>
+    <dimen name="inner_item_height">300dp</dimen>
 
     <dimen name="dp10">10dp</dimen>
     <dimen name="dp120">120dp</dimen>

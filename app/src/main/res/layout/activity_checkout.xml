@@ -35,7 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ProgressBar
             style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"

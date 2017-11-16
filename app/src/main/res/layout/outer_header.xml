@@ -17,7 +17,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/header_text_1"
+            android:id="@+id/header_shipment_title_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -26,7 +26,7 @@
             android:ellipsize="end"
             android:gravity="start"
             android:maxLines="1"
-            android:text="@string/mobileerror"
+            android:text="@string/shipment_title"
             android:textColor="@android:color/white"
             android:textSize="@dimen/header_title1_text_size"
             app:font='@{"SF-UI-Display-Semibold.ttf"}'
@@ -37,14 +37,14 @@
 
 
         <TextView
-            android:id="@+id/header_text_2"
+            android:id="@+id/header_shipment_title_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:alpha="0"
-            android:text="@string/action_mark_all_read"
+            android:text="@string/shipment_title"
             android:textColor="@android:color/white"
             app:font='@{"SF-UI-Display-Medium.ttf"}'
             app:layout_constraintHorizontal_bias="0.0"
@@ -63,32 +63,50 @@
             android:layout_marginTop="60dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/header_footer"
-            app:layout_constraintEnd_toEndOf="@+id/header_text_1"
-            app:layout_constraintRight_toRightOf="@+id/header_text_2"
-            app:layout_constraintStart_toStartOf="@+id/header_text_1"
+            app:layout_constraintEnd_toEndOf="@+id/header_shipment_title_1"
+            app:layout_constraintRight_toRightOf="@+id/header_shipment_title_1"
+            app:layout_constraintStart_toStartOf="@+id/header_shipment_title_1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="spread_inside">
 
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.8"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/saved_address"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/header_name_text_size"
-                app:font='@{"SF-UI-Display-Medium.ttf"}' />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+                <TextView
+                    android:id="@+id/tv_source"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:alpha="0.8"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Pune"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/header_name_text_size"
+                    app:font='@{"SF-UI-Display-Medium.ttf"}' />
+
+                <TextView
+                    android:id="@+id/tv_destination"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:alpha="0.8"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Hyderabad"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/header_name_text_size"
+                    app:font='@{"SF-UI-Display-Medium.ttf"}' />
+            </LinearLayout>
             <TextView
-                android:id="@+id/tv_info"
+                android:id="@+id/tv_cost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.5"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@string/prompt_mobile"
+                android:text="$200 rs"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/header_info_text_size"
                 app:font='@{"SF-UI-Display-Regular.ttf"}' />
@@ -96,7 +114,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/header_middle_answer"
+            android:id="@+id/header_middle_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -121,10 +139,12 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/edit_text_view"
+                android:layout_width="53dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="end|center_vertical"
                 android:layout_marginStart="16dp"
+
                 android:text="@string/answer"
                 android:textColor="@color/header_green"
                 android:textSize="@dimen/header_footer_text_size"
