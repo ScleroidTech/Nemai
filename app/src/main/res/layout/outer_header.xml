@@ -64,8 +64,10 @@
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/header_footer"
             app:layout_constraintEnd_toEndOf="@+id/header_shipment_title_1"
+            app:layout_constraintLeft_toLeftOf="@+id/header_middle"
             app:layout_constraintRight_toRightOf="@+id/header_shipment_title_1"
             app:layout_constraintStart_toStartOf="@+id/header_shipment_title_1"
+
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="spread_inside">
 
@@ -99,6 +101,7 @@
                     android:textSize="@dimen/header_name_text_size"
                     app:font='@{"SF-UI-Display-Medium.ttf"}' />
             </LinearLayout>
+
             <TextView
                 android:id="@+id/tv_cost"
                 android:layout_width="wrap_content"
@@ -118,25 +121,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="8dp"
             android:alpha="0"
             android:text="@string/answer"
             android:textColor="@android:color/white"
             android:textSize="@dimen/header_footer_text_size"
             app:font='@{"SF-UI-Display-Semibold.ttf"}'
             app:layout_constraintBottom_toTopOf="@+id/header_footer"
-            app:layout_constraintLeft_toLeftOf="@+id/header_middle" />
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout" />
 
         <FrameLayout
             android:id="@+id/header_footer"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="341dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
             android:background="@drawable/white_corners_bottom"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="@+id/header_middle"
-            app:layout_constraintRight_toRightOf="@+id/header_middle"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+            app:layout_constraintEnd_toEndOf="@+id/header_middle"
+            app:layout_constraintStart_toStartOf="@+id/header_middle"
+            app:layout_constraintTop_toBottomOf="@+id/header_middle">
 
             <TextView
                 android:id="@+id/edit_text_view"

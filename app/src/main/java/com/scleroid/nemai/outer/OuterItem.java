@@ -10,7 +10,6 @@ import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -46,9 +45,9 @@ public class OuterItem extends HeaderItem {
     private final static float ANSWER_RATIO_MAX = 0.35f;
     private final static float ANSWER_RATIO_DIFF = ANSWER_RATIO_START - ANSWER_RATIO_MAX;
 
-    private final static float AVATAR_RATIO_START = 1f;
+ /*   private final static float AVATAR_RATIO_START = 1f;
     private final static float AVATAR_RATIO_MAX = 0.25f;
-    private final static float AVATAR_RATIO_DIFF = AVATAR_RATIO_START - AVATAR_RATIO_MAX;
+    private final static float AVATAR_RATIO_DIFF = AVATAR_RATIO_START - AVATAR_RATIO_MAX;*/
 
 
     private final View mHeader;
@@ -61,9 +60,10 @@ public class OuterItem extends HeaderItem {
     private final TextView source;
     private final TextView destination;
     private final TextView cost;
+    private final TextView edit;
 
     private final View mMiddle;
-    private final View mMiddleAnswer;
+    private final View mMiddleEdit;
     private final View mFooter;
 
     private final List<View> mMiddleCollapsible = new ArrayList<>(2);
@@ -92,14 +92,15 @@ public class OuterItem extends HeaderItem {
         source = itemView.findViewById(R.id.tv_source);
         destination = itemView.findViewById(R.id.tv_destination);
         cost = itemView.findViewById(R.id.tv_cost);
+        edit = itemView.findViewById(R.id.edit_text_view);
 
 
         mMiddle = itemView.findViewById(R.id.header_middle);
-        mMiddleAnswer = itemView.findViewById(R.id.header_middle_edit);
+        mMiddleEdit = itemView.findViewById(R.id.header_middle_edit);
         mFooter = itemView.findViewById(R.id.header_footer);
 
         //  mMiddleCollapsible.add((View)mAvatar.getParent());
-        mMiddleCollapsible.add((View) source.getParent());
+        mMiddleCollapsible.add((View) cost.getParent());
 
         // Init RecyclerView
         mRecyclerView = itemView.findViewById(R.id.recycler_view);
@@ -119,9 +120,8 @@ public class OuterItem extends HeaderItem {
         });
 
         mRecyclerView.addItemDecoration(new HeaderDecorator(
-                itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_height),
+                itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_height_decoration),
                 itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_offset)));
-
         // Init fonts
         DataBindingUtil.bind(((FrameLayout) mHeader).getChildAt(0));
     }
@@ -204,9 +204,9 @@ public class OuterItem extends HeaderItem {
         ViewCompat.setScaleY(mFooter, footerRatio);
         ViewCompat.setAlpha(mFooter, footerRatio);
 
-        ViewCompat.setPivotY(mMiddleAnswer, mMiddleAnswer.getHeight());
-        //   ViewCompat.setScaleY(mMiddleAnswer, 1f - answerRatio);
-        //     ViewCompat.setAlpha(mMiddleAnswer, 0.5f - answerRatio);
+        ViewCompat.setPivotY(mMiddleEdit, mMiddleEdit.getHeight());
+        ViewCompat.setScaleY(mMiddleEdit, 1f - answerRatio);
+        ViewCompat.setAlpha(mMiddleEdit, 0.5f - answerRatio);
 
         ViewCompat.setAlpha(mHeaderCaption1, answerRatio);
         ViewCompat.setAlpha(mHeaderCaption2, 1f - answerRatio);
@@ -220,11 +220,10 @@ public class OuterItem extends HeaderItem {
             ViewCompat.setScaleY(view, middleRatio);
             ViewCompat.setAlpha(view, middleRatio);
         }
-
+/*
         final ViewGroup.LayoutParams lp = mMiddle.getLayoutParams();
         lp.height = m120dp - (int) (m10dp * (1f - middleRatio));
-        mMiddle.setLayoutParams(lp);
+        mMiddle.setLayoutParams(lp);*/
     }
-
 
 }

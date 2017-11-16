@@ -7,7 +7,7 @@
         android:layout_height="@dimen/inner_item_height"
         android:layout_gravity="center"
         android:clickable="true"
-        android:padding="20dp"
+        android:padding="10dp"
         app:cardCornerRadius="5dp">
 
         <android.support.constraint.ConstraintLayout
@@ -23,7 +23,7 @@
                 android:ellipsize="end"
                 android:gravity="start"
                 android:maxLines="2"
-                android:paddingLeft="10dp"
+                android:paddingLeft="5dp"
                 android:text="Ganesh Kaple"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/item_title_text_size"
@@ -36,17 +36,17 @@
 
             <LinearLayout
                 android:id="@+id/linearLayout2"
-                android:layout_width="294dp"
-                android:layout_height="208dp"
+                android:layout_width="277dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-
                 android:orientation="vertical"
-                android:paddingLeft="10dp"
+                android:padding="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_select"
                 app:layout_constraintEnd_toEndOf="@+id/tv_name"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/tv_name">
+                app:layout_constraintStart_toStartOf="@+id/tv_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_name">
 
                 <TextView
                     android:id="@+id/tv_mobile"
@@ -62,11 +62,11 @@
                 <TextView
                     android:id="@+id/tv_address_line_1"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+
                     android:ellipsize="end"
 
-                    android:minLines="1"
+                    android:maxLines="1"
                     android:text="p1 ,plot hawali galli,"
                     android:textColor="@color/item_info_color"
                     android:textSize="@dimen/item_info_text_size"
@@ -75,12 +75,10 @@
                 <TextView
                     android:id="@+id/tv_address_line_2"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+
                     android:ellipsize="end"
 
-
-                    android:minLines="1"
                     android:text="Chandni chowk Dehli 6"
                     android:textColor="@color/item_info_color"
                     android:textSize="@dimen/item_info_text_size"
