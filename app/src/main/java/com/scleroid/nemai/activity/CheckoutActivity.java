@@ -29,8 +29,8 @@ import io.bloco.faker.Faker;
  */
 
 public class CheckoutActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
-    private final static int OUTER_COUNT = 1;
-    private final static int INNER_COUNT = 5;
+    private final static int OUTER_COUNT = 5;
+    private final static int INNER_COUNT = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
