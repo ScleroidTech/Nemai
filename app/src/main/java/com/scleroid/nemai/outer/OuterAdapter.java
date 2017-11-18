@@ -18,8 +18,8 @@ import java.util.List;
 
 public class OuterAdapter extends TailAdapter<OuterItem> {
 
+    private static final int EMPTY_VIEW = 10;
     private final int POOL_SIZE = 16;
-
     private final List<List<InnerModel>> mData;
     private final List<Parcel> parcels;
     private final RecyclerView.RecycledViewPool mPool;
@@ -39,7 +39,9 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
 
     @Override
     public void onBindViewHolder(OuterItem holder, int position) {
-        holder.setContent(mData.get(position), parcels.get(position), position, parcels.size());
+        if (mData.size() == 0) holder.setContent(parcels.get(position), position, parcels.size());
+        else
+            holder.setContent(mData.get(position), parcels.get(position), position, parcels.size());
     }
 
     @Override
@@ -49,11 +51,12 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return parcels.size();
     }
 
     @Override
     public int getItemViewType(int position) {
+
         return R.layout.item_outer;
     }
 

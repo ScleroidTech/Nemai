@@ -1,32 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:transitionGroup="false">
+<layout>
 
-    <data>
-
-        <import type="android.view.View" />
-
-        <variable
-            name="dataset"
-            type="java.util.List&lt;com.scleroid.nemai.inner.InnerModel&gt;" />
-    </data>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/inner_item_height"
-        android:layout_gravity="center">
-
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="@dimen/inner_item_height"
         android:layout_gravity="center"
         android:clickable="true"
         android:padding="10dp"
-            app:cardCornerRadius="5dp"
-            tools:showIn="@layout/item_inner_address_card">
+        app:cardCornerRadius="5dp"
+        tools:ignore="MissingPrefix"
+        tools:showIn="@layout/item_inner_address_card">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,7 +34,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingPrefix" />
 
 
             <LinearLayout
@@ -75,7 +61,8 @@
                     android:text="7588800282"
                     android:textColor="@color/item_name_color"
                     android:textSize="@dimen/item_name_text_size"
-                    app:font='@{"SF-UI-Display-Medium.ttf"}' />
+                    app:font='@{"SF-UI-Display-Medium.ttf"}'
+                    tools:ignore="MissingPrefix" />
 
                 <TextView
                     android:id="@+id/tv_address_line_1"
@@ -165,64 +152,4 @@
 
     </android.support.v7.widget.CardView>
 
-
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/inner_item_height"
-            android:layout_gravity="center"
-            android:clickable="true"
-            android:padding="10dp"
-            android:visibility="@{dataset.size() == 0 ? View.VISIBLE : View.VISIBLE}"
-            app:cardCornerRadius="5dp">
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/tv_new_address"
-                    android:layout_width="277dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="8dp"
-                    android:alpha="0.68"
-                    android:ellipsize="end"
-                    android:gravity="start"
-                    android:maxLines="2"
-                    android:paddingLeft="5dp"
-                    android:text="Add a new address"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/item_title_text_size"
-                    app:font='@{"SF-UI-Display-Regular.ttf"}'
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/image_no_address"
-                    tools:ignore="MissingPrefix" />
-
-
-                <ImageView
-                    android:id="@+id/image_no_address"
-
-                    android:layout_width="134dp"
-                    android:layout_height="132dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:alpha="0.5"
-                    android:background="@mipmap/ic_new_address"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_new_address"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-
-            </android.support.constraint.ConstraintLayout>
-
-        </android.support.v7.widget.CardView>
-
-    </FrameLayout>
 </layout>

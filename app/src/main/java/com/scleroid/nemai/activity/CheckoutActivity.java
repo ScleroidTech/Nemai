@@ -55,17 +55,17 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     @Override
     public void onFakerReady(Faker faker) {
         final List<com.scleroid.nemai.models.Parcel> parcels = new ArrayList<>();
-        final List<List<InnerModel>> outerData = new ArrayList<>();
+        List<List<InnerModel>> outerData = new ArrayList<>();
         for (int i = 0; i < OUTER_COUNT; i++) {
             final List<InnerModel> innerData = new ArrayList<>();
             for (int j = 0; j < INNER_COUNT; j++) {
                 innerData.add(createInnerData(faker));
 
             }
-            outerData.add(innerData);
+            // outerData.add(innerData);
             parcels.add(createParcelData(faker));
         }
-
+        // outerData = Collections.emptyList();
         initRecyclerView(outerData, parcels);
     }
 
