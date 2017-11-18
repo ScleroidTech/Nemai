@@ -3,6 +3,7 @@ package com.scleroid.nemai.outer;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -74,6 +75,8 @@ public class OuterItem extends HeaderItem {
     private final int mTitleSize2;
 
     private boolean mIsScrolling;
+    private View mEmptyView;
+
 
     public OuterItem(View itemView, RecyclerView.RecycledViewPool pool) {
         super(itemView);
@@ -86,6 +89,7 @@ public class OuterItem extends HeaderItem {
 
         mHeader = itemView.findViewById(R.id.header);
         mHeaderAlpha = itemView.findViewById(R.id.header_alpha);
+
 
         mHeaderCaption1 = itemView.findViewById(R.id.header_shipment_title_1);
         mHeaderCaption2 = itemView.findViewById(R.id.header_shipment_title_2);
@@ -106,7 +110,6 @@ public class OuterItem extends HeaderItem {
         mRecyclerView = itemView.findViewById(R.id.recycler_view);
         mRecyclerView.setRecycledViewPool(pool);
         mRecyclerView.setAdapter(new InnerAdapter());
-
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -125,6 +128,7 @@ public class OuterItem extends HeaderItem {
         // Init fonts
         DataBindingUtil.bind(((FrameLayout) mHeader).getChildAt(0));
     }
+
 
     @Override
     public View getHeader() {
@@ -146,11 +150,12 @@ public class OuterItem extends HeaderItem {
         return mRecyclerView;
     }
 
-    void setContent(List<InnerModel> innerDataList, Parcel parcel, int position, int size) {
+    void setContent(@NonNull List<InnerModel> innerDataList, Parcel parcel, int position, int size) {
         final Context context = itemView.getContext();
 
-        final Parcel header = parcel; //TODO add parcel object here ;
-        final List<InnerModel> tail = innerDataList.subList(1, innerDataList.size());
+        final Parcel header = parcel;
+        final List<InnerModel> tail = innerDataList;
+
 
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
         ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail);
@@ -226,4 +231,7 @@ public class OuterItem extends HeaderItem {
         mMiddle.setLayoutParams(lp);*/
     }
 
+    public void setContent(Parcel parcel, int position, int size) {
+        setContent(new ArrayList<InnerModel>(), parcel, position, size);
+    }
 }

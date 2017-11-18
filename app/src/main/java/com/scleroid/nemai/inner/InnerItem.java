@@ -1,5 +1,7 @@
 package com.scleroid.nemai.inner;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
 
     public InnerItem(View itemView) {
         super(itemView);
+        Log.d("inneritem", "view " + itemView.toString());
         innerLayout = ((ViewGroup) itemView).getChildAt(0);
         mLine = itemView.findViewById(R.id.line);
         address_line_1 = itemView.findViewById(R.id.tv_address_line_1);
@@ -58,7 +61,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         mInnerData = null;
     }
 
-    void setContent(InnerModel data) {
+    void setContent(@NonNull InnerModel data) {
         mInnerData = data;
 
         name.setText(data.getName());
