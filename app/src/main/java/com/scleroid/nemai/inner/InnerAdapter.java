@@ -20,6 +20,7 @@ import java.util.List;
 public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<InnerItem> {
 
     private static final int EMPTY_VIEW = 10;
+    ItemInnerAddressCardBinding binding;
     private List<InnerModel> mData = new ArrayList<>();
     private View mEmptyView;
     private View innerLayout;
@@ -43,47 +44,54 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
             return new EmptyViewHolder(binding.getRoot());
         }*/
         //    mData = new ArrayList<>();
-        final ItemInnerAddressCardBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), viewType, parent, false);
-        Log.d("innerItem", "data " + mData.size());
-        binding.setDataset(mData);
-        Log.d("innerItem", "is it here? onCreateViewHolder" + mData.size());
+        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), viewType, parent, false);
+        //    Log.d("innerItem", "data " + mData.size());
+
+        //    Log.d("innerItem", "is it here? onCreateViewHolder" + mData.size());
         return new InnerItem(binding.getRoot());
     }
 
     @Override
     public void onBindViewHolder(InnerItem holder, int position) {
-        if (!mData.isEmpty())
+
+        holder.setIsRecyclable(false);
+        Log.d("innerItem", "is it here? onBindViewHolder" + mData.size() + "  position " + position);
+        if (position < mData.size() && !mData.isEmpty())
             holder.setContent(mData.get(position));
-        Log.d("innerItem", "is it here? onBindViewHolder" + mData.size());
+
+        binding.setDiff(position >= mData.size() || mData.isEmpty() ? 1 : 0);
+        // bindViewHolder(holder,position);
+
 
     }
 
     @Override
     public void onViewRecycled(InnerItem holder) {
-        Log.d("innerItem", " onVIewRecycled" + mData.size());
+        // Log.d("innerItem", " onVIewRecycled" + mData.size());
         holder.clearContent();
     }
 
     @Override
     public int getItemCount() {
-        Log.d("innerItem", "is it here? getItemCOunt" + mData.size());
-        return mData.size();
+
+        //       Log.d("innerItem", "is it here? getItemCOunt" + mData.size());
+        return mData.size() + 1;
     }
 
     //TODO getItemCOunt, onBindViewHolder, & onCreateViewHolder doesn'tget called at all.
     @Override
     public int getItemViewType(int position) {
-        Log.d("innerItem", "is it here? getItemViewType" + mData.size());
+        //     Log.d("innerItem", "is it here? getItemViewType" + mData.size());
         return R.layout.item_inner_address_card;
     }
 
     public void addData(@Nullable List<InnerModel> innerDataList) {
-        //final int size = mData.size();
+        final int size = mData.size();
         mData = innerDataList;
-        Log.d("innerItem", "is it here? addData" + mData.size());
+        //      Log.d("innerItem", "is it here? addData" + mData.size());
 
-        notifyDataSetChanged();
-        //notifyItemRangeInserted(size, innerDataList.size());
+        // notifyDataSetChanged();
+        notifyItemRangeInserted(size, innerDataList.size());
     }
 
     public void clearData() {
