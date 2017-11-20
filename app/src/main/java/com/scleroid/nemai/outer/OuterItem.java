@@ -118,7 +118,7 @@ public class OuterItem extends HeaderItem {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                onItemScrolled(recyclerView, dx, dy);
+                //     onItemScrolled(recyclerView, dx, dy);
             }
         });
 
@@ -126,6 +126,8 @@ public class OuterItem extends HeaderItem {
                 itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_height_decoration),
                 itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_offset)));
         // Init fonts
+
+
         DataBindingUtil.bind(((FrameLayout) mHeader).getChildAt(0));
     }
 

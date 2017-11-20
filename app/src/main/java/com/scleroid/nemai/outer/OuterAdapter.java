@@ -1,12 +1,15 @@
 package com.scleroid.nemai.outer;
 
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ramotion.garlandview.TailAdapter;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.databinding.ItemOuterBinding;
 import com.scleroid.nemai.inner.InnerModel;
 import com.scleroid.nemai.models.Parcel;
 
@@ -23,6 +26,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     private final List<List<InnerModel>> mData;
     private final List<Parcel> parcels;
     private final RecyclerView.RecycledViewPool mPool;
+    ItemOuterBinding binding;
 
     public OuterAdapter(List<List<InnerModel>> mData, List<Parcel> parcels) {
         this.mData = mData;
@@ -34,11 +38,17 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     @Override
     public OuterItem onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
+        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), viewType, parent, false);
+        Log.d("innerItem", "data " + mData.size());
+        //  binding.setDataset(mData);
+
         return new OuterItem(view, mPool);
     }
 
     @Override
     public void onBindViewHolder(OuterItem holder, int position) {
+
+
         if (mData.size() == 0) holder.setContent(parcels.get(position), position, parcels.size());
         else
             holder.setContent(mData.get(position), parcels.get(position), position, parcels.size());

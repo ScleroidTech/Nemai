@@ -1,7 +1,6 @@
 package com.scleroid.nemai.inner;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -9,6 +8,8 @@ import android.widget.TextView;
 import com.scleroid.nemai.R;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by Ganesh on 15-11-2017.
@@ -28,7 +29,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
 
     public InnerItem(View itemView) {
         super(itemView);
-        Log.d("inneritem", "view " + itemView.toString());
+        //     Log.d("inneritem", "view " + itemView.toString());
         innerLayout = ((ViewGroup) itemView).getChildAt(0);
         mLine = itemView.findViewById(R.id.line);
         address_line_1 = itemView.findViewById(R.id.tv_address_line_1);
@@ -77,5 +78,10 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
                 .placeholder(R.drawable.avatar_placeholder)
                 .bitmapTransform(new CropCircleTransformation(itemView.getContext()))
                 .into(mAvatar);*/
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(InnerItem event) {
+        event.getItemData();
     }
 }

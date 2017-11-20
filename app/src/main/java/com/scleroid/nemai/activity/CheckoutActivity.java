@@ -31,7 +31,7 @@ import io.bloco.faker.Faker;
 
 public class CheckoutActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
     private final static int OUTER_COUNT = 5;
-    private final static int INNER_COUNT = 15;
+    private final static int INNER_COUNT = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +58,11 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         List<List<InnerModel>> outerData = new ArrayList<>();
         for (int i = 0; i < OUTER_COUNT; i++) {
             final List<InnerModel> innerData = new ArrayList<>();
-            for (int j = 0; j < INNER_COUNT; j++) {
+            for (int j = 0; j < INNER_COUNT - i; j++) {
                 innerData.add(createInnerData(faker));
 
             }
-            // outerData.add(innerData);
+            outerData.add(innerData);
             parcels.add(createParcelData(faker));
         }
         // outerData = Collections.emptyList();
