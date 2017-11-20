@@ -1,11 +1,15 @@
 package com.scleroid.nemai.inner;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.fragment.AddressFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,7 +38,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         mLine = itemView.findViewById(R.id.line);
         address_line_1 = itemView.findViewById(R.id.tv_address_line_1);
         address_line_2 = itemView.findViewById(R.id.tv_address_line_2);
-        name = itemView.findViewById(R.id.tv_name);
+        name = itemView.findViewById(R.id.name_TIL);
         city = itemView.findViewById(R.id.tv_city);
         pincode = itemView.findViewById(R.id.tv_pincode);
         mobile = itemView.findViewById(R.id.tv_mobile);
@@ -44,6 +48,11 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
             @Override
             public void onClick(View view) {
                 EventBus.getDefault().post(InnerItem.this);
+                FragmentManager fm = ((FragmentActivity) getInnerLayout().getContext()).getFragmentManager();
+                DialogFragment dialog = AddressFragment.newInstance();
+                dialog.show(fm, "adad");
+
+
             }
         });
     }
