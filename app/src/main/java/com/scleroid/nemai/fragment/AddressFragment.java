@@ -13,6 +13,7 @@ import android.view.View;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.scleroid.nemai.R;
 
 /**
@@ -41,7 +42,7 @@ public class AddressFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_address, null);
-        MaterialStyledDialog dialog = new MaterialStyledDialog.Builder(getActivity()).setTitle("Add Address").setCustomView(v).onPositive(new MaterialDialog.SingleButtonCallback() {
+        MaterialStyledDialog dialog = new MaterialStyledDialog.Builder(getActivity()).setTitle("Add Address").setStyle(Style.HEADER_WITH_TITLE).setCustomView(v).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 sendResult(Activity.RESULT_OK, "bcds");
@@ -53,7 +54,7 @@ public class AddressFragment extends DialogFragment {
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
             }
-        }).setScrollable(true).setNegativeText(android.R.string.cancel).build();
+        }).setScrollable(true).setNegativeText(android.R.string.cancel).setPositiveText(android.R.string.ok).build();
         return dialog;
     }
 
