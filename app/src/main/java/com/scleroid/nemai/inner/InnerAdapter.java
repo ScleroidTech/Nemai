@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.databinding.ItemInnerAddressCardBinding;
+import com.scleroid.nemai.models.Address;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
 
     private static final int EMPTY_VIEW = 10;
     ItemInnerAddressCardBinding binding;
-    private List<InnerModel> mData = new ArrayList<>();
+    private List<Address> mData = new ArrayList<>();
     private View mEmptyView;
     private View innerLayout;
 
@@ -85,7 +86,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         return R.layout.item_inner_address_card;
     }
 
-    public void addData(@Nullable List<InnerModel> innerDataList) {
+    public void addData(@Nullable List<Address> innerDataList) {
         final int size = mData.size();
         mData = innerDataList;
         //      Log.d("innerItem", "is it here? addData" + mData.size());

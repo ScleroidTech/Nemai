@@ -108,7 +108,7 @@ public class ParcelLab {
         task.execute();
     }
 
-    public static class GetAllAsync extends AsyncTask<Void, Void, List<Parcel>> {
+    private static class GetAllAsync extends AsyncTask<Void, Void, List<Parcel>> {
 
         private final AppDatabase mDb;
 

@@ -6,7 +6,7 @@
 
            <variable
                name="dataset"
-               type="java.util.List&lt;java.util.List&lt;com.scleroid.nemai.inner.InnerModel&gt;&gt;" />
+               type="java.util.List&lt;java.util.Listcom.scleroid.nemai.inner.Addressl&gt;&gt;" />
        </data>-->
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
