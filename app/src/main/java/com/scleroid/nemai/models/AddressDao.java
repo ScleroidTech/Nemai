@@ -11,31 +11,32 @@ import java.util.List;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 /**
- * Created by Ganesh on 27/10/17.
+ * Created by Ganesh on 22-11-2017.
  */
 @Dao
-public interface ParcelDao {
-    @Query("SELECT * FROM Parcel")
-    List<Parcel> getAll();
+public interface AddressDao {
+    @Query("SELECT * FROM Address")
+    List<Address> getAll();
 
-    @Query("SELECT * FROM parcel where serialNo = :serialNo ")
-    Parcel findById(long serialNo);
+    @Query("SELECT * FROM Address where serialNo = :serialNo ")
+    Address findById(long serialNo);
 
-    @Query("SELECT COUNT(*) from Parcel")
-    int countParcels();
+    @Query("SELECT COUNT(*) from Address")
+    int countAddresss();
 
     @Insert(onConflict = REPLACE)
-    void insert(Parcel parcel);
+    void insert(Address address);
 
     @Insert
-    void insertAll(Parcel... parcels);
+    void insertAll(Address... addresss);
 
     @Update(onConflict = REPLACE)
-    void updateParcel(Parcel parcel);
+    void updateAddress(Address address);
 
     @Delete
-    void delete(Parcel parcel);
+    void delete(Address address);
 
-    @Query("DELETE FROM Parcel")
+    @Query("DELETE FROM Address")
     void nukeTable();
+
 }

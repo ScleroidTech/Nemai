@@ -20,7 +20,7 @@ import com.ramotion.garlandview.inner.InnerLayoutManager;
 import com.ramotion.garlandview.inner.InnerRecyclerView;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.inner.InnerAdapter;
-import com.scleroid.nemai.inner.InnerModel;
+import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.Parcel;
 
 import java.util.ArrayList;
@@ -152,11 +152,11 @@ public class OuterItem extends HeaderItem {
         return mRecyclerView;
     }
 
-    void setContent(@NonNull List<InnerModel> innerDataList, Parcel parcel, int position, int size) {
+    void setContent(@NonNull List<Address> innerDataList, Parcel parcel, int position, int size) {
         final Context context = itemView.getContext();
 
         final Parcel header = parcel;
-        final List<InnerModel> tail = innerDataList;
+        final List<Address> tail = innerDataList;
 
 
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
@@ -234,6 +234,6 @@ public class OuterItem extends HeaderItem {
     }
 
     public void setContent(Parcel parcel, int position, int size) {
-        setContent(new ArrayList<InnerModel>(), parcel, position, size);
+        setContent(new ArrayList<Address>(), parcel, position, size);
     }
 }

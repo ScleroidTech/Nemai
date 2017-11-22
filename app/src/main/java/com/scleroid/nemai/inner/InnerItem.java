@@ -10,10 +10,9 @@ import android.widget.TextView;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.fragment.AddressFragment;
+import com.scleroid.nemai.models.Address;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by Ganesh on 15-11-2017.
@@ -24,33 +23,44 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
     public final TextView name;
     public final TextView pincode;
     public final TextView city;
+    public final TextView editTextView;
     public final TextView address_line_1;
     public final TextView address_line_2;
     public final TextView state;
     public final View mLine;
     private final View innerLayout;
-    private InnerModel mInnerData;
+    private Address mInnerData;
 
     public InnerItem(View itemView) {
         super(itemView);
         //     Log.d("inneritem", "view " + itemView.toString());
         innerLayout = ((ViewGroup) itemView).getChildAt(0);
         mLine = itemView.findViewById(R.id.line);
+
         address_line_1 = itemView.findViewById(R.id.tv_address_line_1);
         address_line_2 = itemView.findViewById(R.id.tv_address_line_2);
-        name = itemView.findViewById(R.id.name_TIL);
+        name = itemView.findViewById(R.id.name_text_view);
         city = itemView.findViewById(R.id.tv_city);
         pincode = itemView.findViewById(R.id.tv_pincode);
         mobile = itemView.findViewById(R.id.tv_mobile);
         state = itemView.findViewById(R.id.tv_state);
+        editTextView = itemView.findViewById(R.id.edit_text_view);
+        editTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = ((FragmentActivity) getInnerLayout().getContext()).getFragmentManager();
+                DialogFragment dialog = AddressFragment.newInstance(mInnerData);
+                //  dialog.setTargetFragment(getInnerLayout().getContext(),REQUEST_ADDRESS);
+                //  dialog.setListener()
+                dialog.show(fm, "adad");
+            }
+        });
 
         innerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EventBus.getDefault().post(InnerItem.this);
-                FragmentManager fm = ((FragmentActivity) getInnerLayout().getContext()).getFragmentManager();
-                DialogFragment dialog = AddressFragment.newInstance();
-                dialog.show(fm, "adad");
+
 
 
             }
@@ -62,7 +72,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         return innerLayout;
     }
 
-    public InnerModel getItemData() {
+    public Address getItemData() {
         return mInnerData;
     }
 
@@ -71,7 +81,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         mInnerData = null;
     }
 
-    void setContent(@NonNull InnerModel data) {
+    public void setContent(@NonNull Address data) {
         mInnerData = data;
 
         name.setText(data.getName());
@@ -80,7 +90,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         address_line_2.setText(data.getAddress_line_2());
         state.setText(data.getState());
         city.setText(data.getCity());
-        pincode.setText(Integer.toString(data.getPincode()));
+        pincode.setText(data.getPincode());
 
      /*   Glide.with(itemView.getContext())
                 .load(data.avatarUrl)
@@ -89,8 +99,4 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
                 .into(mAvatar);*/
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(InnerItem event) {
-        event.getItemData();
-    }
 }
