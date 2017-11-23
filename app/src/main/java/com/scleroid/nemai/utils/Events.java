@@ -73,4 +73,18 @@ public class Events {
             return message;
         }
     }
+
+    // Event used to send message from activity to activity.
+    public static class populateData {
+        private boolean message;
+
+        public populateData(boolean bundle) {
+            this.message = bundle;
+        }
+
+        public boolean getMessage() {
+            return message;
+        }
+    }
+
 }

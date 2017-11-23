@@ -77,8 +77,8 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     public void onFakerReady(Faker faker) {
         List<com.scleroid.nemai.models.Parcel> parcels = new ArrayList<>();
 
-
-        List<Address> innerData = populateData(faker);
+        populateData(faker);
+        List<Address> innerData;
         innerData = AddressLab.getAllAddresss(context);
         parcels = ParcelLab.getAllParcels(context);
 
@@ -102,7 +102,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     }
 
     @NonNull
-    private List<Address> populateData(Faker faker) {
+    private void populateData(Faker faker) {
         List<Address> innerData = new ArrayList<>();
         List<Address> tempList = new ArrayList<>();
         for (int i = 0; i < OUTER_COUNT; i++) {
@@ -122,7 +122,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
             //  parcels.add(createParcelData(faker));
 
         }
-        return innerData;
+
     }
 
     private void initRecyclerView(List<List<Address>> data, List<Parcel> parcels) {
