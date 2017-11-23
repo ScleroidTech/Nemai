@@ -1,6 +1,7 @@
 package com.scleroid.nemai.models;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.util.Random;
@@ -27,6 +28,7 @@ public class Address {
 
     }
 
+    @Ignore
     public Address(String name, String address_line_1, String address_line_2, String state, String city, String pincode, String mobileNo, long serialNo) {
 
         this.name = name;

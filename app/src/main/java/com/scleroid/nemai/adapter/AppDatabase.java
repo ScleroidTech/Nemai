@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.AddressDao;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.ParcelDao;
@@ -12,7 +13,7 @@ import com.scleroid.nemai.models.ParcelDao;
 /**
  * Created by scleroid on 27/10/17.
  */
-@Database(entities = {Parcel.class}, version = 1)
+@Database(entities = {Parcel.class, Address.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;

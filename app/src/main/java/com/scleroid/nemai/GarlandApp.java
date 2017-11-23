@@ -1,7 +1,8 @@
 package com.scleroid.nemai;
 
-import android.app.Application;
 import android.support.annotation.NonNull;
+
+import com.scleroid.nemai.volley_support.AppController;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class GarlandApp extends Application {
+public class GarlandApp extends AppController {
 
     private final List<WeakReference<FakerReadyListener>> mListeners = new ArrayList<>();
     private Faker mFaker;
