@@ -1,8 +1,14 @@
 package com.scleroid.nemai.activity;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +24,7 @@ import com.scleroid.nemai.adapter.AppDatabase;
 import com.scleroid.nemai.adapter.ParcelLab;
 import com.scleroid.nemai.inner.InnerItem;
 import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.models.CheckoutViewModel;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.outer.OuterAdapter;
 import com.scleroid.nemai.utils.Events;
@@ -48,10 +55,11 @@ import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_STATE;
 public class CheckoutActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
     private final static int OUTER_COUNT = 5;
     private final static int INNER_COUNT = 5;
-
-
     Context context;
     List<List<Address>> outerData = new ArrayList<>();
+    private CheckoutViewModel viewModel;
+    private OuterAdapter outerAdapter;
+    private FloatingActionButton mNewAddressButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,39 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         setContentView(R.layout.activity_checkout);
         context = CheckoutActivity.this;
         ((GarlandApp) getApplication()).addListener(this);
+        initRecyclerView(new ArrayList<Address>(), new ArrayList<Parcel>());
+
+        viewModel = ViewModelProviders.of(CheckoutActivity.this).get(CheckoutViewModel.class);
+
+        viewModel.getParcelList().observe(CheckoutActivity.this, new Observer<List<Parcel>>() {
+            @Override
+            public void onChanged(@Nullable List<Parcel> parcels) {
+
+                outerAdapter.updateParcelList(parcels);
+
+            }
+        });
+        viewModel.getAddressList().observe(CheckoutActivity.this, new Observer<List<Address>>() {
+            @Override
+            public void onChanged(@Nullable List<Address> addresses) {
+                outerAdapter.updateAddressList(addresses);
+            }
+        });
+        mNewAddressButton = findViewById(R.id.new_address_button);
+        mNewAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = CheckoutActivity.this.getFragmentManager();
+                DialogFragment dialog;
+                //TODO City & other values  DialogFragment dialog = AddressFragment.newInstance(parcel.getDestinationPin().toString());
+                //  dialog.setTargetFragment(getInnerLayout().getContext(),REQUEST_ADDRESS);
+                //  dialog.setListener()
+                //TODO enable after implementing the above dialog.show(fm, "adad");
+
+                //TODO update dataset of room, which will update this too
+            }
+        });
+
     }
 
     @Override
@@ -75,30 +116,17 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
     @Override
     public void onFakerReady(Faker faker) {
-        List<com.scleroid.nemai.models.Parcel> parcels = new ArrayList<>();
+        //  List<com.scleroid.nemai.models.Parcel> parcels = new ArrayList<>();
 
-        populateData(faker);
-        List<Address> innerData;
-        innerData = AddressLab.getAllAddresss(context);
-        parcels = ParcelLab.getAllParcels(context);
+        //populateData(faker);
+        // List<Address> innerData;
+        // innerData = AddressLab.getAllAddresss(context);
+        //  parcels = ParcelLab.getAllParcels(context);
 
-        outerData = sortAddresses(parcels, innerData);
+        // outerData = outerAdapter.sortAddresses(parcels, innerData);
 
         // outerData = Collections.emptyList();
-        initRecyclerView(outerData, parcels);
-    }
-
-    private List<List<Address>> sortAddresses(List<Parcel> parcels, List<Address> innerData) {
-        List<Address> tempList = new ArrayList<>();
-        for (Parcel parcel : parcels) {
-            for (Address address : innerData) {
-                if (parcel.getDestinationPin().equals(address.getPincode())) {
-                    tempList.add(address);
-                }
-            }
-            outerData.add(innerData);
-        }
-        return outerData;
+        //  initRecyclerView(outerData, parcels);
     }
 
     @NonNull
@@ -106,15 +134,14 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         List<Address> innerData = new ArrayList<>();
         List<Address> tempList = new ArrayList<>();
         for (int i = 0; i < OUTER_COUNT; i++) {
-            Parcel parcel = createParcelData(faker);
-            ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(context));
+            ParcelLab.addParcel(createParcelData(faker), AppDatabase.getAppDatabase(context));
         }
 
         for (int i = 0; i < OUTER_COUNT; i++) {
 
             for (int j = 0; j < INNER_COUNT - i; j++) {
                 //innerData.add(createInnerData(faker));
-                AddressLab.addAddress(createInnerData(faker), AppDatabase.getAppDatabase(context));
+                AddressLab.updateAddressAsync(createInnerData(faker), AppDatabase.getAppDatabase(context));
 
             }
 
@@ -125,13 +152,14 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
     }
 
-    private void initRecyclerView(List<List<Address>> data, List<Parcel> parcels) {
+    private void initRecyclerView(List<Address> data, List<Parcel> parcels) {
         findViewById(R.id.progressBar).setVisibility(View.GONE);
 
         final TailRecyclerView rv = findViewById(R.id.recycler_view);
         ((TailLayoutManager) rv.getLayoutManager()).setPageTransformer(new HeaderTransformer());
-        rv.setAdapter(new OuterAdapter(data, parcels));
-
+        outerAdapter = new OuterAdapter(data, parcels);
+        rv.setAdapter(outerAdapter);
+        rv.setOnFlingListener(null);
         new TailSnapHelper().attachToRecyclerView(rv);
     }
 
@@ -180,7 +208,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         Address model = new Address(bundle.getString(EXTRA_NAME), bundle.getString(EXTRA_ADDRESS_LINE_1),
                 bundle.getString(EXTRA_ADDRESS_LINE_2), bundle.getString(EXTRA_STATE), bundle.getString(EXTRA_CITY), bundle.getString(EXTRA_PIN), bundle.getString(EXTRA_MOBILE), bundle.getLong(EXTRA_SERIAL_NO));
         Log.d("CHeckout", "onAddress Eventbus");
-        AddressLab.addAddress(model, AppDatabase.getAppDatabase(context));
+        AddressLab.updateAddressAsync(model, AppDatabase.getAppDatabase(context));
 
         //   setContent(model);
 

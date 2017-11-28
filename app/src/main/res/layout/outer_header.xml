@@ -141,7 +141,7 @@
             app:layout_constraintTop_toBottomOf="@+id/header_middle">
 
             <TextView
-                android:id="@+id/edit_text_view"
+                android:id="@+id/edit_image_button"
                 android:layout_width="53dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"

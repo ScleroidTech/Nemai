@@ -21,6 +21,7 @@ import java.util.List;
 public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<InnerItem> {
 
     private static final int EMPTY_VIEW = 10;
+    public static int lastSelectedPosition = -1;
     ItemInnerAddressCardBinding binding;
     private List<Address> mData = new ArrayList<>();
     private View mEmptyView;
@@ -53,18 +54,33 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     }
 
     @Override
-    public void onBindViewHolder(InnerItem holder, int position) {
+    public void onBindViewHolder(InnerItem holder, final int position) {
 
         holder.setIsRecyclable(false);
         Log.d("innerItem", "is it here? onBindViewHolder" + mData.size() + "  position " + position);
         if (position < mData.size() && !mData.isEmpty())
             holder.setContent(mData.get(position));
 
-        binding.setDiff(position >= mData.size() || mData.isEmpty() ? 1 : 0);
+        binding.setDiff((position >= mData.size() || mData.isEmpty()) ? 1 : 0);
         // bindViewHolder(holder,position);
+        holder.radioButton.setChecked(lastSelectedPosition == position);
+        holder.innerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRadioSelected(position);
+            }
+        });
 
 
     }
+
+
+    public void setRadioSelected(int position) {
+        lastSelectedPosition = position;
+        notifyDataSetChanged();
+
+    }
+
 
     @Override
     public void onViewRecycled(InnerItem holder) {
@@ -91,8 +107,8 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         mData = innerDataList;
         //      Log.d("innerItem", "is it here? addData" + mData.size());
 
-        // notifyDataSetChanged();
-        notifyItemRangeInserted(size, innerDataList.size());
+        notifyDataSetChanged();
+        // notifyItemRangeInserted(size, innerDataList.size());
     }
 
     public void clearData() {
@@ -110,5 +126,9 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         }
     }*/
 
+    public void changeOfDataset() {
+        notifyDataSetChanged();
+
+    }
 
 }

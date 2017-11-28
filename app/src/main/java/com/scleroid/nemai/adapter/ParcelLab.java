@@ -61,7 +61,7 @@ public class ParcelLab {
 
     public static Parcel newParcel(final Context context) {
 
-        AddNewParcelAsync task = new AddNewParcelAsync(AppDatabase.getAppDatabase(context), new Parcel());
+        AddParcelAsync task = new AddParcelAsync(AppDatabase.getAppDatabase(context), new Parcel());
 
         try {
             return task.execute().get();
@@ -92,7 +92,7 @@ public class ParcelLab {
     public static void addParcel(final Parcel parcel, final AppDatabase appDatabase) {
 
 
-        AddUserAsync task = new AddUserAsync(appDatabase, parcel);
+        AddParcelAsync task = new AddParcelAsync(appDatabase, parcel);
         task.execute();
 
     }
@@ -188,31 +188,12 @@ public class ParcelLab {
     }
 
 
-    private static class AddUserAsync extends AsyncTask<Void, Void, Void> {
+    private static class AddParcelAsync extends AsyncTask<Void, Void, Parcel> {
 
         private final AppDatabase mDb;
         private final Parcel parcel;
 
-        AddUserAsync(AppDatabase db, Parcel parcel) {
-            mDb = db;
-            this.parcel = parcel;
-        }
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            updateParcel(mDb, parcel);
-            return null;
-        }
-
-    }
-
-
-    private static class AddNewParcelAsync extends AsyncTask<Void, Void, Parcel> {
-
-        private final AppDatabase mDb;
-        private final Parcel parcel;
-
-        AddNewParcelAsync(AppDatabase db, Parcel parcel) {
+        AddParcelAsync(AppDatabase db, Parcel parcel) {
             mDb = db;
             this.parcel = parcel;
         }

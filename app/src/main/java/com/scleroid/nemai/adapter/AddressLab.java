@@ -29,7 +29,7 @@ public class AddressLab {
 
     }
 
-    private static Address addAddress(final AppDatabase db, Address address) {
+    private static Address updateAddress(final AppDatabase db, Address address) {
         db.addressDao().insert(address);
         return address;
     }
@@ -59,9 +59,9 @@ public class AddressLab {
 
     }
 
-    private static void updateAddress(AppDatabase db, Address address) {
+   /* private static void updateAddressAsync(AppDatabase db, Address address) {
         db.addressDao().updateAddress(address);
-    }
+    }*/
 
     /* public static Address newAddress(final Context context) {
 
@@ -93,7 +93,7 @@ public class AddressLab {
         return null;
     }
 
-    public static void addAddress(final Address address, final AppDatabase appDatabase) {
+    public static void updateAddressAsync(final Address address, final AppDatabase appDatabase) {
 
 
         AddressLab.AddUserAsync task = new AddressLab.AddUserAsync(appDatabase, address);
@@ -223,7 +223,7 @@ public class AddressLab {
 
         @Override
         protected Address doInBackground(final Void... params) {
-            addAddress(mDb, address);
+            updateAddress(mDb, address);
 
             return address;
         }
