@@ -6,13 +6,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.fragment.AddressFragment;
 import com.scleroid.nemai.models.Address;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by Ganesh on 15-11-2017.
@@ -23,12 +23,13 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
     public final TextView name;
     public final TextView pincode;
     public final TextView city;
-    public final TextView editTextView;
+    public final ImageButton editTextView;
     public final TextView address_line_1;
     public final TextView address_line_2;
     public final TextView state;
     public final View mLine;
-    private final View innerLayout;
+    public final View innerLayout;
+    public RadioButton radioButton;
     private Address mInnerData;
 
     public InnerItem(View itemView) {
@@ -36,7 +37,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         //     Log.d("inneritem", "view " + itemView.toString());
         innerLayout = ((ViewGroup) itemView).getChildAt(0);
         mLine = itemView.findViewById(R.id.line);
-
+        radioButton = itemView.findViewById(R.id.select_address_radio);
         address_line_1 = itemView.findViewById(R.id.tv_address_line_1);
         address_line_2 = itemView.findViewById(R.id.tv_address_line_2);
         name = itemView.findViewById(R.id.name_text_view);
@@ -44,7 +45,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         pincode = itemView.findViewById(R.id.tv_pincode);
         mobile = itemView.findViewById(R.id.tv_mobile);
         state = itemView.findViewById(R.id.tv_state);
-        editTextView = itemView.findViewById(R.id.edit_text_view);
+        editTextView = itemView.findViewById(R.id.edit_image_button);
         editTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +60,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         innerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBus.getDefault().post(InnerItem.this);
+                //EventBus.getDefault().post(InnerItem.this);
 
 
 

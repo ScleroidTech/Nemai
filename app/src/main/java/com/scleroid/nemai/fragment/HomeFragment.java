@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import es.dmoral.toasty.Toasty;
-
 import static com.scleroid.nemai.network.NetworkCalls.submitCouriers;
 
 //TODO CHange most activities to fragment if performance becomes a bottleneck
@@ -132,7 +130,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         v.clearFocus();
         /*ShowLoader showNetworkErrorDialogDialog = new ShowLoader(context);
         showNetworkErrorDialogDialog.showDialog();*/
-        Toasty.error(context, "stupid", Toast.LENGTH_LONG, true).show();
+        // Toasty.error(context, "stupid", Toast.LENGTH_LONG, true).show();
 
         //  showNetworkErrorDialogDialog.showDialog();
         /*try {

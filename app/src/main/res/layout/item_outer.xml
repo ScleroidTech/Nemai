@@ -14,11 +14,13 @@
     android:layout_height="match_parent"
     android:clipChildren="false">
 
-    <com.ramotion.garlandview.inner.InnerRecyclerView
+        <com.ramotion.garlandview.inner.InnerRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
         android:clipChildren="false" />
+
 
     <FrameLayout
         android:id="@+id/header"
@@ -33,6 +35,7 @@
             android:layout_height="match_parent"
             android:alpha="0"
             android:background="@drawable/white_corners" />
+
 
     </FrameLayout>
 

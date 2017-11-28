@@ -60,13 +60,13 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/edit_text_view"
-                        android:layout_width="64dp"
-                        android:layout_height="38dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginTop="8dp"
+                    <ImageButton
+                        android:id="@+id/edit_image_button"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+
                         android:clickable="true"
+                        android:src="@drawable/ic_edit_location_black_24dp"
                         android:text="Edit"
                         android:textAlignment="center"
                         android:textColor="#00f"
@@ -74,6 +74,16 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <RadioButton
+                        android:id="@+id/select_address_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <LinearLayout
                         android:id="@+id/linearLayout2"

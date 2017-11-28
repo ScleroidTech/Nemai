@@ -13,6 +13,7 @@ import com.scleroid.nemai.databinding.ItemOuterBinding;
 import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.Parcel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,14 +24,16 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
 
     private static final int EMPTY_VIEW = 10;
     private final int POOL_SIZE = 16;
-    private final List<List<Address>> mData;
-    private final List<Parcel> parcels;
     private final RecyclerView.RecycledViewPool mPool;
     ItemOuterBinding binding;
+    private List<List<Address>> addressesList;
+    private List<Address> addresses;
+    private List<Parcel> parcels;
 
-    public OuterAdapter(List<List<Address>> mData, List<Parcel> parcels) {
-        this.mData = mData;
+    public OuterAdapter(List<Address> addresses, List<Parcel> parcels) {
+        this.addresses = addresses;
         this.parcels = parcels;
+        addressesList = sortAddresses(parcels, addresses);
         mPool = new RecyclerView.RecycledViewPool();
         mPool.setMaxRecycledViews(0, POOL_SIZE);
     }
@@ -39,8 +42,8 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     public OuterItem onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
         binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), viewType, parent, false);
-        Log.d("innerItem", "data " + mData.size());
-        //  binding.setDataset(mData);
+        Log.d("innerItem", "data " + addresses.size());
+        //  binding.setDataset(addresses);
 
         return new OuterItem(view, mPool);
     }
@@ -49,9 +52,10 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     public void onBindViewHolder(OuterItem holder, int position) {
 
 
-        if (mData.size() == 0) holder.setContent(parcels.get(position), position, parcels.size());
+        if (addressesList.size() == 0)
+            holder.setContent(parcels.get(position), position, parcels.size());
         else
-            holder.setContent(mData.get(position), parcels.get(position), position, parcels.size());
+            holder.setContent(addressesList.get(position), parcels.get(position), position, parcels.size());
     }
 
     @Override
@@ -70,7 +74,33 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
         return R.layout.item_outer;
     }
 
+    public void updateParcelList(List<Parcel> parcels) {
+        this.parcels = parcels;
+        //   updateAddressList(addresses);
+        notifyDataSetChanged();
 
+    }
+
+    public void updateAddressList(List<Address> addresses) {
+
+        this.addressesList = sortAddresses(this.parcels, addresses);
+        notifyDataSetChanged();
+
+    }
+
+    public List<List<Address>> sortAddresses(List<Parcel> parcels, List<Address> innerData) {
+        List<Address> tempList = new ArrayList<>();
+        List<List<Address>> outerData = new ArrayList<>();
+        for (Parcel parcel : parcels) {
+            for (Address address : innerData) {
+                if (parcel.getDestinationPin().equals(address.getPincode())) {
+                    tempList.add(address);
+                }
+            }
+            outerData.add(innerData);
+        }
+        return outerData;
+    }
 }
 
 

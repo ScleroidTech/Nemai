@@ -66,6 +66,7 @@ public class OuterItem extends HeaderItem {
     private final View mMiddle;
     private final View mMiddleEdit;
     private final View mFooter;
+    private final View mNewAddressButton;
 
     private final List<View> mMiddleCollapsible = new ArrayList<>(2);
 
@@ -89,6 +90,7 @@ public class OuterItem extends HeaderItem {
 
         mHeader = itemView.findViewById(R.id.header);
         mHeaderAlpha = itemView.findViewById(R.id.header_alpha);
+        mNewAddressButton = itemView.findViewById(R.id.new_address_button);
 
 
         mHeaderCaption1 = itemView.findViewById(R.id.header_shipment_title_1);
@@ -96,7 +98,7 @@ public class OuterItem extends HeaderItem {
         source = itemView.findViewById(R.id.tv_source);
         destination = itemView.findViewById(R.id.tv_destination);
         cost = itemView.findViewById(R.id.tv_cost);
-        edit = itemView.findViewById(R.id.edit_text_view);
+        edit = itemView.findViewById(R.id.edit_image_button);
 
 
         mMiddle = itemView.findViewById(R.id.header_middle);
@@ -118,7 +120,7 @@ public class OuterItem extends HeaderItem {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                //     onItemScrolled(recyclerView, dx, dy);
+                onItemScrolled(recyclerView, dx, dy);
             }
         });
 
@@ -152,7 +154,7 @@ public class OuterItem extends HeaderItem {
         return mRecyclerView;
     }
 
-    void setContent(@NonNull List<Address> innerDataList, Parcel parcel, int position, int size) {
+    void setContent(@NonNull List<Address> innerDataList, final Parcel parcel, int position, int size) {
         final Context context = itemView.getContext();
 
         final Parcel header = parcel;
@@ -176,6 +178,8 @@ public class OuterItem extends HeaderItem {
         source.setText(parcel.getSourcePin());//TODO COnvert Pincode to room , get source city instead of pincod,e & store selected object instead of text
         destination.setText(parcel.getDestinationPin());
         cost.setText("Rs. " + parcel.getInvoice());//TODO get delivery price, not invoice
+
+
     }
 
     public String bindNumber(int position, int size) {

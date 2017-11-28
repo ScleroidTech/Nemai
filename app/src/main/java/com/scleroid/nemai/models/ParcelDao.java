@@ -1,5 +1,6 @@
 package com.scleroid.nemai.models;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -17,6 +18,9 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 public interface ParcelDao {
     @Query("SELECT * FROM Parcel")
     List<Parcel> getAll();
+
+    @Query("select * from Parcel")
+    LiveData<List<Parcel>> getAllParcelsLive();
 
     @Query("SELECT * FROM parcel where serialNo = :serialNo ")
     Parcel findById(long serialNo);
