@@ -55,6 +55,6 @@ public class CheckoutViewModel extends AndroidViewModel {
     }
 
     public void editItem(Address address) {
-        AddressLab.updateAddressAsync(address, appDatabase);
+        AddressLab.updateAddress(address, appDatabase);
     }
 }

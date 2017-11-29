@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -33,8 +34,8 @@ public interface AddressDao {
     @Insert
     void insertAll(Address... addresss);
 
-   /* @Update(onConflict = REPLACE)
-    void updateAddress(Address address);*/
+    @Update(onConflict = REPLACE)
+    void update(Address address);
 
     @Delete
     void delete(Address address);
