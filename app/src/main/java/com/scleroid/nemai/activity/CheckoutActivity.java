@@ -118,7 +118,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     public void onFakerReady(Faker faker) {
         //  List<com.scleroid.nemai.models.Parcel> parcels = new ArrayList<>();
 
-        //populateData(faker);
+        populateData(faker);
         // List<Address> innerData;
         // innerData = AddressLab.getAllAddresss(context);
         //  parcels = ParcelLab.getAllParcels(context);
@@ -141,7 +141,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
             for (int j = 0; j < INNER_COUNT - i; j++) {
                 //innerData.add(createInnerData(faker));
-                AddressLab.updateAddressAsync(createInnerData(faker), AppDatabase.getAppDatabase(context));
+                AddressLab.addAddress(createInnerData(faker), AppDatabase.getAppDatabase(context));
 
             }
 
@@ -208,7 +208,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         Address model = new Address(bundle.getString(EXTRA_NAME), bundle.getString(EXTRA_ADDRESS_LINE_1),
                 bundle.getString(EXTRA_ADDRESS_LINE_2), bundle.getString(EXTRA_STATE), bundle.getString(EXTRA_CITY), bundle.getString(EXTRA_PIN), bundle.getString(EXTRA_MOBILE), bundle.getLong(EXTRA_SERIAL_NO));
         Log.d("CHeckout", "onAddress Eventbus");
-        AddressLab.updateAddressAsync(model, AppDatabase.getAppDatabase(context));
+        AddressLab.updateAddress(model, AppDatabase.getAppDatabase(context));
 
         //   setContent(model);
 

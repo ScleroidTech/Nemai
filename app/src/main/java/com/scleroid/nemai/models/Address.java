@@ -23,6 +23,7 @@ public class Address {
     private String pincode;
     private String mobileNo;
 
+
     public Address(String name, String address_line_1, String address_line_2, String state, String city, String pincode, String mobileNo) {
         this(name, address_line_1, address_line_2, state, city, pincode, mobileNo, new Random().nextLong());
 

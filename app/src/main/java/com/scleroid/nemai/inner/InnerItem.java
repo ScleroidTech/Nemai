@@ -5,7 +5,7 @@ import android.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -30,12 +30,13 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
     public final View mLine;
     public final View innerLayout;
     public RadioButton radioButton;
+    public Button deliverButtton;
     private Address mInnerData;
 
     public InnerItem(View itemView) {
         super(itemView);
         //     Log.d("inneritem", "view " + itemView.toString());
-        innerLayout = ((ViewGroup) itemView).getChildAt(0);
+        innerLayout = itemView;
         mLine = itemView.findViewById(R.id.line);
         radioButton = itemView.findViewById(R.id.select_address_radio);
         address_line_1 = itemView.findViewById(R.id.tv_address_line_1);
@@ -46,6 +47,8 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         mobile = itemView.findViewById(R.id.tv_mobile);
         state = itemView.findViewById(R.id.tv_state);
         editTextView = itemView.findViewById(R.id.edit_image_button);
+        deliverButtton = itemView.findViewById(R.id.deliver_button);
+        deliverButtton.setVisibility(View.GONE);
         editTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +60,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
             }
         });
 
-        innerLayout.setOnClickListener(new View.OnClickListener() {
+        /*innerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //EventBus.getDefault().post(InnerItem.this);
@@ -65,7 +68,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
 
 
             }
-        });
+        });*/
     }
 
     @Override

@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RadioButton;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.databinding.ItemInnerAddressCardBinding;
@@ -26,6 +28,8 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     private List<Address> mData = new ArrayList<>();
     private View mEmptyView;
     private View innerLayout;
+    private RadioButton lastChecked = null;
+    private Button deliverButton = null;
 
     /*public class EmptyViewHolder extends InnerItem {
         public EmptyViewHolder(View itemView) {
@@ -54,29 +58,41 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     }
 
     @Override
-    public void onBindViewHolder(InnerItem holder, final int position) {
+    public void onBindViewHolder(final InnerItem holder, final int position) {
 
         holder.setIsRecyclable(false);
         Log.d("innerItem", "is it here? onBindViewHolder" + mData.size() + "  position " + position);
-        if (position < mData.size() && !mData.isEmpty())
+        // if (position < mData.size() && !mData.isEmpty())
             holder.setContent(mData.get(position));
 
-        binding.setDiff((position >= mData.size() || mData.isEmpty()) ? 1 : 0);
+        // binding.setDiff((position >= mData.size() || mData.isEmpty()) ? 1 : 0);
         // bindViewHolder(holder,position);
-        holder.radioButton.setChecked(lastSelectedPosition == position);
-        holder.innerLayout.setOnClickListener(new View.OnClickListener() {
+
+      /*  holder.innerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setRadioSelected(position);
+                setRadioSelected(holder, position);
             }
         });
-
+*/
 
     }
 
 
-    public void setRadioSelected(int position) {
+    public void setRadioSelected(InnerItem holder, int position) {
         lastSelectedPosition = position;
+        RadioButton tempRadio = holder.radioButton;
+        Button tempButton = holder.deliverButtton;
+        if (lastChecked != null) {
+            lastChecked.setChecked(false);
+            tempButton.setVisibility(View.INVISIBLE);
+        }
+        lastChecked = tempRadio;
+        deliverButton = tempButton;
+        tempRadio.setChecked(true);
+        tempButton.setVisibility(View.VISIBLE);
+        //holder.radioButton.setChecked(lastSelectedPosition == position);
+        //holder.radioButton.setChecked(lastSelectedPosition == position);
         notifyDataSetChanged();
 
     }
@@ -92,7 +108,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     public int getItemCount() {
 
         //       Log.d("innerItem", "is it here? getItemCOunt" + mData.size());
-        return mData.size() + 1;
+        return mData.size();
     }
 
     //TODO getItemCOunt, onBindViewHolder, & onCreateViewHolder doesn'tget called at all.
@@ -107,8 +123,8 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         mData = innerDataList;
         //      Log.d("innerItem", "is it here? addData" + mData.size());
 
-        notifyDataSetChanged();
-        // notifyItemRangeInserted(size, innerDataList.size());
+        //notifyDataSetChanged();
+        notifyItemRangeInserted(size, innerDataList.size());
     }
 
     public void clearData() {

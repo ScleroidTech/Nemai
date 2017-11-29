@@ -29,7 +29,7 @@ public class AddressLab {
 
     }
 
-    private static Address updateAddress(final AppDatabase db, Address address) {
+    private static Address insertAddress(final AppDatabase db, Address address) {
         db.addressDao().insert(address);
         return address;
     }
@@ -59,13 +59,13 @@ public class AddressLab {
 
     }
 
-   /* private static void updateAddressAsync(AppDatabase db, Address address) {
-        db.addressDao().updateAddress(address);
-    }*/
+    private static void updateAddress(AppDatabase db, Address address) {
+        db.addressDao().update(address);
+    }
 
     /* public static Address newAddress(final Context context) {
 
-         AddressLab.AddNewAddressAsync task = new AddressLab.AddNewAddressAsync(AppDatabase.getAppDatabase(context), new Address());
+         AddressLab.addNewAddressAsync task = new AddressLab.addNewAddressAsync(AppDatabase.getAppDatabase(context), new Address());
 
          try {
              return task.execute().get();
@@ -77,7 +77,7 @@ public class AddressLab {
          return null;
      }
  */
-    public static List<Address> getAllAddresss(final Context context) {
+    private static List<Address> getAllAddresssAsync(final Context context) {
 
         AddressLab.GetAllAsync task = new AddressLab.GetAllAsync(AppDatabase.getAppDatabase(context), context);
 
@@ -93,10 +93,18 @@ public class AddressLab {
         return null;
     }
 
-    public static void updateAddressAsync(final Address address, final AppDatabase appDatabase) {
+    public static void addAddress(final Address address, final AppDatabase appDatabase) {
 
 
-        AddressLab.AddUserAsync task = new AddressLab.AddUserAsync(appDatabase, address);
+        addNewAddressAsync task = new addNewAddressAsync(appDatabase, address);
+        task.execute();
+
+    }
+
+    public static void updateAddress(final Address address, final AppDatabase appDatabase) {
+
+
+        updateAddressAsync task = new updateAddressAsync(appDatabase, address);
         task.execute();
 
     }
@@ -107,12 +115,12 @@ public class AddressLab {
         task.execute();
     }
 
-    public static void DeleteUserAsync(@NonNull final AppDatabase db, Address address) {
+    public static void DeleteUser(@NonNull final AppDatabase db, Address address) {
         AddressLab.DeleteUserAsync task = new AddressLab.DeleteUserAsync(db, address);
         task.execute();
     }
 
-    public static class GetAllAsync extends AsyncTask<Void, Void, List<Address>> {
+    private static class GetAllAsync extends AsyncTask<Void, Void, List<Address>> {
 
         private final AppDatabase mDb;
 
@@ -192,31 +200,31 @@ public class AddressLab {
     }
 
 
-    private static class AddUserAsync extends AsyncTask<Void, Void, Void> {
+    private static class addNewAddressAsync extends AsyncTask<Void, Void, Address> {
 
         private final AppDatabase mDb;
         private final Address address;
 
-        AddUserAsync(AppDatabase db, Address address) {
+        addNewAddressAsync(AppDatabase db, Address address) {
             mDb = db;
             this.address = address;
         }
 
         @Override
-        protected Void doInBackground(final Void... params) {
-            updateAddress(mDb, address);
-            return null;
+        protected Address doInBackground(final Void... params) {
+            insertAddress(mDb, address);
+
+            return address;
         }
 
     }
 
-
-    private static class AddNewAddressAsync extends AsyncTask<Void, Void, Address> {
+    private static class updateAddressAsync extends AsyncTask<Void, Void, Address> {
 
         private final AppDatabase mDb;
         private final Address address;
 
-        AddNewAddressAsync(AppDatabase db, Address address) {
+        updateAddressAsync(AppDatabase db, Address address) {
             mDb = db;
             this.address = address;
         }

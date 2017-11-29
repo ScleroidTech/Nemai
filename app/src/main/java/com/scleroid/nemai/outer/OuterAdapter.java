@@ -93,11 +93,11 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
         List<List<Address>> outerData = new ArrayList<>();
         for (Parcel parcel : parcels) {
             for (Address address : innerData) {
-                if (parcel.getDestinationPin().equals(address.getPincode())) {
+                //  if (parcel.getDestinationPin().equals(address.getPincode()))
                     tempList.add(address);
-                }
+
             }
-            outerData.add(innerData);
+            outerData.add(tempList);
         }
         return outerData;
     }

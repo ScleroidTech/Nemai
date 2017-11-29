@@ -120,7 +120,7 @@ public class OuterItem extends HeaderItem {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                onItemScrolled(recyclerView, dx, dy);
+                // onItemScrolled(recyclerView, dx, dy);
             }
         });
 
