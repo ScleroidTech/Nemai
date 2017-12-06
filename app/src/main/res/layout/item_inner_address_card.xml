@@ -25,9 +25,11 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/inner_item_height"
             android:layout_gravity="center"
+            android:background="@drawable/statelist_item_background"
             android:clickable="true"
             android:visibility="@{diff == 1 ? View.GONE : View.VISIBLE}"
             app:cardCornerRadius="5dp"
+
             tools:showIn="@layout/item_inner_address_card">
 
 
