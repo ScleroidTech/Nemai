@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -19,6 +20,7 @@ import com.scleroid.nemai.models.Address;
  */
 
 public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
+    private static DialogFragment dialog;
     public final TextView mobile;
     public final TextView name;
     public final TextView pincode;
@@ -29,14 +31,17 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
     public final TextView state;
     public final View mLine;
     public final View innerLayout;
+    public final View innerItemView;
     public RadioButton radioButton;
     public Button deliverButtton;
     private Address mInnerData;
 
+
     public InnerItem(View itemView) {
         super(itemView);
+        innerItemView = itemView;
         //     Log.d("inneritem", "view " + itemView.toString());
-        innerLayout = itemView;
+        innerLayout = ((ViewGroup) itemView).getChildAt(0);
         mLine = itemView.findViewById(R.id.line);
         radioButton = itemView.findViewById(R.id.select_address_radio);
         address_line_1 = itemView.findViewById(R.id.tv_address_line_1);
@@ -53,7 +58,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = ((FragmentActivity) getInnerLayout().getContext()).getFragmentManager();
-                DialogFragment dialog = AddressFragment.newInstance(mInnerData);
+                dialog = AddressFragment.newInstance(mInnerData);
                 //  dialog.setTargetFragment(getInnerLayout().getContext(),REQUEST_ADDRESS);
                 //  dialog.setListener()
                 dialog.show(fm, "adad");
