@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "881661126317-qlp30fr4sg8dvbcadl51gfhiudv63i1q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scleroid.nemai",
+            "certificate_hash": "e6133e26895421945ccf94b18eaea0d0381e5eb1"
+          }
+        },
+        {
           "client_id": "881661126317-1u2vfraf778s1rsqgdrmfldqoeikijsq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

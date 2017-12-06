@@ -64,4 +64,6 @@
     <dimen name="profile_texts_h_offset">32dp</dimen>
     <dimen name="profile_texts_v_max_offset">66dp</dimen>
     <dimen name="profile_texts_v_min_offset">8dp</dimen>
+    <dimen name="button_elevation">2dp</dimen>
+    <dimen name="button_press_elevation">4dp</dimen>
 </resources>

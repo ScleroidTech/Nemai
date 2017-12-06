@@ -211,6 +211,8 @@
     <string name="details_details">DETAILS</string>
     <string name="initializing_faker">Initializing Faker...</string>
     <string name="shipment_title">Shipment %1d of %2d</string>
+    <string name="selected_count">%1$s selected</string>
+    <string name="action_remove">Remove</string>
 
 
 </resources>

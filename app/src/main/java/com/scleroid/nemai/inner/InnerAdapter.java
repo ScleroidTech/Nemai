@@ -30,7 +30,33 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     private View innerLayout;
     private RadioButton lastChecked = null;
     private Button deliverButton = null;
+    // ...
+    private List<Address> selectedItems = new ArrayList<>();
 
+    public void toggleSelection(int pos) {
+
+        selectedItems.add(mData.get(pos));
+
+        notifyItemChanged(pos);
+    }
+
+    public void clearSelections() {
+        selectedItems.clear();
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }
+
+    public List<Integer> getSelectedItems() {
+        List<Integer> items =
+                new ArrayList<Integer>(selectedItems.size());
+        for (int i = 0; i < selectedItems.size(); i++) {
+            // items.add(selectedItems.keyAt(i));
+        }
+        return items;
+    }
     /*public class EmptyViewHolder extends InnerItem {
         public EmptyViewHolder(View itemView) {
             super(itemView);
@@ -65,16 +91,18 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         // if (position < mData.size() && !mData.isEmpty())
             holder.setContent(mData.get(position));
 
+        holder.itemView.setActivated(true);
+
         // binding.setDiff((position >= mData.size() || mData.isEmpty()) ? 1 : 0);
         // bindViewHolder(holder,position);
 
-        holder.innerItemView.setOnClickListener(new View.OnClickListener() {
+       /* holder.innerItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setRadioSelected(holder, position);
             }
         });
-
+*/
     }
 
 
@@ -92,7 +120,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         deliverButton.setVisibility(View.VISIBLE);
         //holder.radioButton.setChecked(lastSelectedPosition == position);
         //holder.radioButton.setChecked(lastSelectedPosition == position);
-        notifyDataSetChanged();
+        notifyItemChanged(lastSelectedPosition);
 
     }
 
@@ -145,5 +173,30 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         notifyDataSetChanged();
 
     }
+
+
+/*
+    public void onLongPress(MotionEvent e) {
+        View view =
+                recyclerView.findChildViewUnder(e.getX(), e.getY());
+        if (actionMode != null) {
+            return;
+        }
+        actionMode =
+                startActionMode(RecyclerViewDemoActivity.this);
+        int idx = recyclerView.getChildPosition(view);
+        myToggleSelection(idx);
+        super.onLongPress(e);
+    }
+
+    private void myToggleSelection(int idx) {
+        adapter.toggleSelection(idx);
+        String title = getString(
+                R.string.selected_count,
+                adapter.getSelectedItemCount());
+        actionMode.setTitle(title);
+    }
+
+*/
 
 }

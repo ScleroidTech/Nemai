@@ -4,12 +4,19 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -32,7 +39,7 @@ import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
  * Created by Ganesh on 15-11-2017.
  */
 
-public class OuterItem extends HeaderItem {
+public class OuterItem extends HeaderItem implements RecyclerView.OnItemTouchListener, View.OnClickListener, ActionMode.Callback {
 
     private final static float MIDDLE_RATIO_START = 0.7f;
     private final static float MIDDLE_RATIO_MAX = 0.1f;
@@ -74,9 +81,11 @@ public class OuterItem extends HeaderItem {
     private final int m120dp;
     private final int mTitleSize1;
     private final int mTitleSize2;
-
+    GestureDetectorCompat gestureDetector;
+    android.view.ActionMode actionMode;
     private boolean mIsScrolling;
     private View mEmptyView;
+    private InnerAdapter adapter;
 
 
     public OuterItem(View itemView, RecyclerView.RecycledViewPool pool) {
@@ -112,6 +121,7 @@ public class OuterItem extends HeaderItem {
         mRecyclerView = itemView.findViewById(R.id.recycler_view);
         mRecyclerView.setRecycledViewPool(pool);
         mRecyclerView.setAdapter(new InnerAdapter());
+
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -124,6 +134,12 @@ public class OuterItem extends HeaderItem {
             }
         });
 
+        mRecyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         mRecyclerView.addItemDecoration(new HeaderDecorator(
                 itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_height_decoration),
                 itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_offset)));
@@ -159,11 +175,17 @@ public class OuterItem extends HeaderItem {
 
         final Parcel header = parcel;
         final List<Address> tail = innerDataList;
+        //  Crashlytics.getInstance().crash(); // Force a crash
+
 
 
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
+        adapter = (InnerAdapter) mRecyclerView.getAdapter();
         ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail);
 
+        mRecyclerView.addOnItemTouchListener(this);
+        gestureDetector =
+                new GestureDetectorCompat(this.getHeader().getContext(), new RecyclerViewDemoOnGestureListener());
 
         final String title1 = bindNumber(position, size);
 
@@ -239,5 +261,85 @@ public class OuterItem extends HeaderItem {
 
     public void setContent(Parcel parcel, int position, int size) {
         setContent(new ArrayList<Address>(), parcel, position, size);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+        gestureDetector.onTouchEvent(e);
+        return false;
+    }
+
+    @Override
+    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        // Inflate a menu resource providing context menu items
+        MenuInflater inflater = actionMode.getMenuInflater();
+        inflater.inflate(R.menu.menu_cab_recyclerviewdemoactivity, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        return false;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+
+        this.actionMode = null;
+        adapter.clearSelections();
+    }
+
+    @Override
+    public void onClick(View view) {
+        // item click
+        int idx = mRecyclerView.getChildPosition(view);
+        if (actionMode != null) {
+            myToggleSelection(idx);
+            return;
+        }
+
+
+    }
+
+    private void myToggleSelection(int idx) {
+        adapter.toggleSelection(idx);
+        String title = getHeader().getContext().getString(R.string.selected_count, adapter.getSelectedItemCount());
+        //actionMode.setTitle(title);
+    }
+
+    private class RecyclerViewDemoOnGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            View view = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
+            int idx = mRecyclerView.getChildPosition(view);
+            myToggleSelection(idx);
+            return super.onSingleTapConfirmed(e);
+        }
+
+        public void onLongPress(MotionEvent e) {
+            View view = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
+
+            // Start the CAB using the ActionMode.Callback defined above
+            // actionMode = getHeader().startActionMode((android.view.ActionMode.Callback) getHeader().getContext()); */
+            int idx = mRecyclerView.getChildPosition(view);
+            myToggleSelection(idx);
+            super.onLongPress(e);
+        }
     }
 }
