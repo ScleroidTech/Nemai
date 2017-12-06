@@ -5,13 +5,11 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -26,7 +24,8 @@ import com.scleroid.nemai.utils.GlobalBus;
  * Created by Ganesh on 20-11-2017.
  */
 
-public class AddressFragment extends DialogFragment {
+public class
+AddressFragment extends DialogFragment {
     public static final String EXTRA_PIN = "pincode";
     public static final String EXTRA_CITY = "city";
     public static final String EXTRA_STATE = "state";
@@ -95,12 +94,12 @@ public class AddressFragment extends DialogFragment {
         mListener = listener;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    /* @Override
+     public void onStart() {
+         super.onStart();
 
-    }
-
+     }
+ */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         long serialNo = 0;
@@ -148,7 +147,7 @@ public class AddressFragment extends DialogFragment {
         }).withDialogAnimation(true).onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
+                getDialog().dismiss();
             }
         }).setScrollable(true).setNegativeText(android.R.string.cancel).setPositiveText(android.R.string.ok).build();
         return dialog;
@@ -166,20 +165,20 @@ public class AddressFragment extends DialogFragment {
         getTargetFragment().onActivityResult(getTargetRequestCode(), ResultCode, intent);
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    /*  @Nullable
+      @Override
+      public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
 
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
+          return super.onCreateView(inflater, container, savedInstanceState);
+      }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+      @Override
+      public void onDestroyView() {
+          super.onDestroyView();
 
-    }
-
+      }
+  */
     interface AddressListener {
         void returnData(int result);
     }

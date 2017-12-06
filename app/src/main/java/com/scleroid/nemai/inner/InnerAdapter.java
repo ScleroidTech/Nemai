@@ -68,13 +68,12 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         // binding.setDiff((position >= mData.size() || mData.isEmpty()) ? 1 : 0);
         // bindViewHolder(holder,position);
 
-      /*  holder.innerLayout.setOnClickListener(new View.OnClickListener() {
+        holder.innerItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setRadioSelected(holder, position);
             }
         });
-*/
 
     }
 
@@ -89,8 +88,8 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         }
         lastChecked = tempRadio;
         deliverButton = tempButton;
-        tempRadio.setChecked(true);
-        tempButton.setVisibility(View.VISIBLE);
+        lastChecked.setChecked(true);
+        deliverButton.setVisibility(View.VISIBLE);
         //holder.radioButton.setChecked(lastSelectedPosition == position);
         //holder.radioButton.setChecked(lastSelectedPosition == position);
         notifyDataSetChanged();
