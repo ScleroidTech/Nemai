@@ -51,7 +51,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     @Override
     public void onBindViewHolder(OuterItem holder, int position) {
 
-
+        holder.itemView.setTag(parcels.get(position));
         if (addressesList.size() == 0)
             holder.setContent(parcels.get(position), position, parcels.size());
         else

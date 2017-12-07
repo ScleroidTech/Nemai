@@ -40,6 +40,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
     public InnerItem(View itemView) {
         super(itemView);
         innerItemView = itemView;
+
         //     Log.d("inneritem", "view " + itemView.toString());
         innerLayout = ((ViewGroup) itemView).getChildAt(0);
         mLine = itemView.findViewById(R.id.line);
@@ -100,6 +101,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         state.setText(data.getState());
         city.setText(data.getCity());
         pincode.setText(data.getPincode());
+
 
      /*   Glide.with(itemView.getContext())
                 .load(data.avatarUrl)
