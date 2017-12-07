@@ -87,9 +87,11 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     public void onBindViewHolder(final InnerItem holder, final int position) {
 
         holder.setIsRecyclable(false);
+        Address address = mData.get(position);
         Log.d("innerItem", "is it here? onBindViewHolder" + mData.size() + "  position " + position);
         // if (position < mData.size() && !mData.isEmpty())
-            holder.setContent(mData.get(position));
+        holder.setContent(address);
+        holder.itemView.setTag(address);
 
         holder.itemView.setActivated(true);
 

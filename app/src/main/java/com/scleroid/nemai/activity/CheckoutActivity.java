@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.crashlytics.android.Crashlytics;
 import com.ramotion.garlandview.TailLayoutManager;
 import com.ramotion.garlandview.TailRecyclerView;
 import com.ramotion.garlandview.TailSnapHelper;
@@ -37,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.bloco.faker.Faker;
-import io.fabric.sdk.android.Fabric;
 
 import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_ADDRESS_LINE_1;
 import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_ADDRESS_LINE_2;
@@ -65,11 +63,11 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Fabric fabric = new Fabric.Builder(this)
+        /*final Fabric fabric = new Fabric.Builder(this)
                 .kits(new Crashlytics())
                 .debuggable(true)           // Enables Crashlytics debugger
                 .build();
-        Fabric.with(fabric);
+        Fabric.with(fabric);*/
         setContentView(R.layout.activity_checkout);
         context = CheckoutActivity.this;
         ((GarlandApp) getApplication()).addListener(this);
