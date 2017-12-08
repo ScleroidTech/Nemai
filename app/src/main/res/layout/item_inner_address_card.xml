@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/inner_item_height"
             android:layout_gravity="center"
-            android:background="@drawable/statelist_item_background"
+
             android:clickable="true"
             android:visibility="@{diff == 1 ? View.GONE : View.VISIBLE}"
             app:cardCornerRadius="5dp"
@@ -33,15 +33,16 @@
             tools:showIn="@layout/item_inner_address_card">
 
 
-            <LinearLayout
+            <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/statelist_item_background"
                 android:orientation="vertical">
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+
                     android:padding="10dp">
 
                     <TextView
@@ -185,21 +186,22 @@
 
                 <Button
                     android:id="@+id/deliver_button"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
 
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@color/colorPrimary"
-                    android:paddingBottom="6dp"
-                    android:paddingTop="6dp"
+                    android:padding="6dp"
                     android:text="@string/connect"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
-                    app:font='@{"SF-UI-Display-Semibold.ttf"}'
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/line" />
 
-            </LinearLayout>
+                    android:textSize="15sp"
+                    app:layout_anchorGravity="bottom|end" />
+
+            </android.support.design.widget.CoordinatorLayout>
         </android.support.v7.widget.CardView>
         <!--
 

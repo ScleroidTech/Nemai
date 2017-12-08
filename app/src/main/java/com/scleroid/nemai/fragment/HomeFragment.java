@@ -25,12 +25,19 @@ import com.scleroid.nemai.adapter.PagerAdapter;
 import com.scleroid.nemai.adapter.ParcelLab;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.utils.Events;
+import com.scleroid.nemai.utils.GlobalBus;
 import com.scleroid.nemai.volley_support.ShowLoader;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_DATE;
+import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_SERIAL;
 import static com.scleroid.nemai.network.NetworkCalls.submitCouriers;
 
 //TODO CHange most activities to fragment if performance becomes a bottleneck
@@ -559,16 +566,33 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     @Override
     public void onResume() {
         super.onResume();
+        GlobalBus.getBus().register(this);
         loader.dismissDialog();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        GlobalBus.getBus().unregister(this);
         if (loader != null) {
             loader.dismissDialog();
         }
     }
+
+    @Subscribe
+    public void onDateMessage(Events.DateMessage fragmentActivityMessage) {
+        Bundle bundle = fragmentActivityMessage.getMessage();
+
+        Date date = (Date) bundle.getSerializable(EXTRA_DATE);
+        long lonely = bundle.getLong(EXTRA_SERIAL);
+        Log.d("CHeckout", "onDate Eventbus");
+        ParcelLab.updateParcel(context, date, lonely);
+
+        //   setContent(model);
+
+
+    }
+
 
 }
 

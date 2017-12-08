@@ -1,10 +1,14 @@
 package com.scleroid.nemai.other;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
@@ -16,9 +20,13 @@ import android.widget.TextView;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
+import com.scleroid.nemai.fragment.DatePickerFragment;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 
+import java.util.Date;
+
+import static com.scleroid.nemai.activity.MainActivity.CURRENT_TAG;
 import static com.scleroid.nemai.fragment.HomeFragment.THRESHOLD;
 import static com.scleroid.nemai.fragment.HomeFragment.mPinCodeDestination;
 import static com.scleroid.nemai.fragment.HomeFragment.mPinCodeSource;
@@ -28,20 +36,20 @@ import static com.scleroid.nemai.fragment.HomeFragment.mPinCodeSource;
  */
 
 public class PageHolder extends RecyclerView.ViewHolder {
+    private static final String DIALOG_DATE = "DIALOG_DATE";
+    private static final int REQUEST_DATE = 0;
+    TextView textClockDate;
     RadioButton mParcelRadioButton, mDocumentRadioButton;
     RadioButton mDomesticRadioButton, mInternationalRadioButton;
     LinearLayout mParcelLinearLayout, mDocumentLinearLayout;
     Context context;
     Parcel parcel;
-
     boolean toggleDocParcel = false;//false == doc, true == parcel
     boolean toggleDomInternational = false;//Domestic false , International = true
-
     TextView mWeightUnitTextView, mCurrencyUnitTextView, courierCount;
     ImageView mAddressImageView;
-
     TextInputLayout mWeightTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mDescriptionTIL, /*mDescDocTIL,*/
-            mPinSourceTIL, mPinDestTIL;
+            mPinSourceTIL, mPinDestTIL, mDateTIL;
     DelayedAutoCompleteTextView pinSourceAutoCompleteTextView, pinDestinationAutoCompleteTextView;
     EditText mWeightEditText,/* mDescDocEditText,*/
             mInvoiceValueEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescriptionEditText;
@@ -64,6 +72,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
         mWidthTIL = v.findViewById(R.id.textWidth);
         mHeightTIL = v.findViewById(R.id.textHeight);
         mDescriptionTIL = v.findViewById(R.id.textDescription);
+        mDateTIL = v.findViewById(R.id.date_TIL);
         //mDescDocTIL = v.findViewById(R.id.textPckDescDoc);
         mWeightEditText = v.findViewById(R.id.editWeight);
 
@@ -97,6 +106,8 @@ public class PageHolder extends RecyclerView.ViewHolder {
                 (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator));
 
         courierCount = v.findViewById(R.id.courier_number_text_view);
+
+        textClockDate = v.findViewById(R.id.parcel_date);
 
     }
 
@@ -207,11 +218,27 @@ public class PageHolder extends RecyclerView.ViewHolder {
                 }
             }
         });
+
+        textClockDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo textClockDate.setText(updateDate());
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getFragmentManager();
+                DialogFragment dialogFragment = DatePickerFragment.newInstance(parcel.getParcelDate(), parcel.getSerialNo());
+                dialogFragment.setTargetFragment(fragmentManager.findFragmentByTag(CURRENT_TAG), REQUEST_DATE);
+                dialogFragment.show(fragmentManager, DIALOG_DATE);
+            }
+        });
     }
 
     public Parcel validateFields(Parcel parcel) {
         boolean noSubmit = false;
         String delivery;
+        if (isEmpty(textClockDate)) {
+            mDateTIL.setErrorEnabled(true);
+            mDateTIL.setError("You forgot the date ");
+            noSubmit = true;
+        } else mDateTIL.setErrorEnabled(false);
 
         if (isEmpty(pinSourceAutoCompleteTextView)) {
             mPinSourceTIL.setErrorEnabled(true);
@@ -262,17 +289,21 @@ public class PageHolder extends RecyclerView.ViewHolder {
 
 
             if (!noSubmit)
-                return nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), Integer.parseInt(mPackageWidthParcelEditText.getText().toString()), Integer.parseInt(mHeightParcelEditText.getText().toString()), Integer.parseInt(mPackageLengthParcelEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery, parcel);
+                return nextScreenParcel(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), Integer.parseInt(mPackageWidthParcelEditText.getText().toString()), Integer.parseInt(mHeightParcelEditText.getText().toString()), Integer.parseInt(mPackageLengthParcelEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery, parcel, parcel.getParcelDate());
 
 
         } else {
 
             if (!noSubmit) {
-                return nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery, parcel);
+                return nextScreenDocument(pinSourceAutoCompleteTextView.getText().toString(), pinDestinationAutoCompleteTextView.getText().toString(), Integer.parseInt(mWeightEditText.getText().toString()), Integer.parseInt(mInvoiceValueEditText.getText().toString()), mDescriptionEditText.getText().toString(), delivery, parcel, parcel.getParcelDate());
 
             }
         }
         return null;
+    }
+
+    private boolean isEmpty(TextView text) {
+        return TextUtils.isEmpty(text.getText());
     }
 
     private boolean isEmpty(DelayedAutoCompleteTextView text) {
@@ -283,14 +314,14 @@ public class PageHolder extends RecyclerView.ViewHolder {
         return TextUtils.isEmpty(text.getText());
     }
 
-    public Parcel nextScreenParcel(String source, String destination, int weight, int invoice, int width, int height, int length, String description, String deliveryType, Parcel parcel) {
-        return parcel.updateInstance(source, destination, deliveryType, "Parcel", weight, invoice, width, height, length, description);
+    public Parcel nextScreenParcel(String source, String destination, int weight, int invoice, int width, int height, int length, String description, String deliveryType, Parcel parcel, Date parcelDate) {
+        return parcel.updateInstance(source, destination, deliveryType, "Parcel", weight, invoice, width, height, length, description, parcelDate);
     }
 
 
-    public Parcel nextScreenDocument(String source, String destination, int weight, int invoice, String description, String deliveryType, Parcel parcel) {
+    public Parcel nextScreenDocument(String source, String destination, int weight, int invoice, String description, String deliveryType, Parcel parcel, Date parcelDate) {
 
-        return parcel.updateInstance(source, destination, deliveryType, "Document", weight, invoice, 0, 0, 0, description);
+        return parcel.updateInstance(source, destination, deliveryType, "Document", weight, invoice, 0, 0, 0, description, parcelDate);
 
     }
 
@@ -304,6 +335,8 @@ public class PageHolder extends RecyclerView.ViewHolder {
             String deliveryType = parcel.getDeliveryType();
             String packageType = parcel.getPackageType();
             String description = parcel.getDescription();
+            DateFormat dt = new DateFormat();
+            String dm = DateFormat.format("EEE, MMM dd, yyyy ", parcel.getParcelDate()).toString();
 
             if (packageType.equals("Parcel")) {
                 int width = parcel.getWidth(),
@@ -325,6 +358,9 @@ public class PageHolder extends RecyclerView.ViewHolder {
             pinSourceAutoCompleteTextView.setText(source.equals("null") ? null : source);
             pinDestinationAutoCompleteTextView.setText(destination.equals("null") ? null : destination);
 
+            textClockDate.setText(dm);
+
+
         }
 
     }
@@ -343,4 +379,14 @@ public class PageHolder extends RecyclerView.ViewHolder {
         String getText() {
             return(editor.getText().toString());
         }*/
+
+    private String updateDate() {
+
+        //mCrimeDate.setText(dm);
+        String dm = "avasfsd;";
+        return dm;
+        //mCrimeDate.setText(mCrime.getDate().toString());
+    }
+
+
 }

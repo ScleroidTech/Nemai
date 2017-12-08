@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.scleroid.nemai.models.Parcel;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -62,6 +63,20 @@ public class ParcelLab {
     public static Parcel newParcel(final Context context) {
 
         AddParcelAsync task = new AddParcelAsync(AppDatabase.getAppDatabase(context), new Parcel());
+
+        try {
+            return task.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Parcel updateParcel(final Context context, Date date, long lonely) {
+
+        UpdateParcelAsync task = new UpdateParcelAsync(AppDatabase.getAppDatabase(context), date, lonely);
 
         try {
             return task.execute().get();
@@ -201,6 +216,27 @@ public class ParcelLab {
         @Override
         protected Parcel doInBackground(final Void... params) {
             addParcel(mDb, parcel);
+
+            return parcel;
+        }
+
+    }
+
+    private static class UpdateParcelAsync extends AsyncTask<Void, Void, Parcel> {
+
+        private final AppDatabase mDb;
+        private final Parcel parcel;
+
+        UpdateParcelAsync(AppDatabase db, Date date, long serialNo) {
+
+            //Make Changes here TODO
+            mDb = db;
+            this.parcel = parcel;
+        }
+
+        @Override
+        protected Parcel doInBackground(final Void... params) {
+            updateParcel(mDb, parcel);
 
             return parcel;
         }

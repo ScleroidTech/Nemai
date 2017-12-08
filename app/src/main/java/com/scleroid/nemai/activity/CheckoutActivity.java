@@ -121,7 +121,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     public void onFakerReady(Faker faker) {
         //  List<com.scleroid.nemai.models.Parcel> parcels = new ArrayList<>();
 
-        populateData(faker);
+        // populateData(faker);
         // List<Address> innerData;
         // innerData = AddressLab.getAllAddresss(context);
         //  parcels = ParcelLab.getAllParcels(context);
@@ -189,7 +189,8 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
                 faker.number.positive(),
                 faker.number.positive(),
                 faker.number.positive(),
-                faker.company.catchPhrase()
+                faker.company.catchPhrase(),
+                faker.date.birthday()
         );
     }
 
