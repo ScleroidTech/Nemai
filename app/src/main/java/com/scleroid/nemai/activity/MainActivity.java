@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         session.setLogin(true);
-        session.setVerified(false);
+        session.setVerified(true);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();

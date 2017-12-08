@@ -7,10 +7,16 @@ package com.scleroid.nemai.models;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
+
+import com.scleroid.nemai.utils.DateConverter;
+
+import java.util.Date;
+import java.util.Random;
 
 @Entity
 public class Parcel {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private long serialNo;
 
     private String sourcePin;
@@ -23,12 +29,15 @@ public class Parcel {
     private int width;
     private int height;
     private String description;
+    @TypeConverters(DateConverter.class)
+    private Date parcelDate;
 
-    public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description) {
-        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description);
+    public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo) {
+        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo);
 
     }
 
+    //TODO handle data through serial no, implement viewmodel if things doesn't work. & Make changes(whatever that means)
     @Ignore
     public Parcel() {
         /*this.sourcePin = "null";
@@ -37,17 +46,17 @@ public class Parcel {
         this.packageType = "Document";
         this.description = "null";
         this.serialNo = UUID.randomUUID();*/
-        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null");
+        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", new Date(), new Random().nextLong());
 
     }
 
-    public Parcel updateInstance(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description) {
-        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description);
+    public Parcel updateInstance(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo) {
+        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo);
         return this;
 
     }
 
-    private void initializeObject(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description) {
+    private void initializeObject(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo) {
         this.sourcePin = sourcePin;
         this.destinationPin = destinationPin;
         this.deliveryType = deliveryType;
@@ -58,6 +67,8 @@ public class Parcel {
         this.width = width;
         this.height = height;
         this.description = description;
+        this.parcelDate = parcelDate;
+        this.serialNo = serialNo;
     }
 
     public long getSerialNo() {
@@ -146,5 +157,13 @@ public class Parcel {
 
     public void setDescription(String pkgDesc) {
         this.description = pkgDesc;
+    }
+
+    public Date getParcelDate() {
+        return parcelDate;
+    }
+
+    public void setParcelDate(Date parcelDate) {
+        this.parcelDate = parcelDate;
     }
 }

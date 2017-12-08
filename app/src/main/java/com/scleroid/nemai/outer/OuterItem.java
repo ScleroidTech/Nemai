@@ -39,7 +39,7 @@ import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
  * Created by Ganesh on 15-11-2017.
  */
 
-public class OuterItem extends HeaderItem implements RecyclerView.OnItemTouchListener, View.OnClickListener, ActionMode.Callback {
+public class OuterItem extends HeaderItem implements RecyclerView.OnItemTouchListener, ActionMode.Callback {
 
     private final static float MIDDLE_RATIO_START = 0.7f;
     private final static float MIDDLE_RATIO_MAX = 0.1f;
@@ -305,21 +305,28 @@ public class OuterItem extends HeaderItem implements RecyclerView.OnItemTouchLis
         adapter.clearSelections();
     }
 
-    @Override
+   /* @Override
     public void onClick(View view) {
         // item click
         int idx = mRecyclerView.getChildPosition(view);
+
         if (actionMode != null) {
-            myToggleSelection(idx);
             return;
         }
+        // Start the CAB using the ActionMode.Callback defined above
+     //   actionMode = startActionMode(RecyclerViewDemoActivity.this);
+            myToggleSelection(idx);
+            adapter.activateButtons(true);
+            return;
 
 
-    }
+
+    }*/
 
     private void myToggleSelection(int idx) {
         adapter.toggleSelection(idx);
-        String title = getHeader().getContext().getString(R.string.selected_count, adapter.getSelectedItemCount());
+        // adapter.setRadioSelected();
+        String title = getHeader().getContext().getString(R.string.selected_count, adapter.getSelectedItemCount() + "");
         //actionMode.setTitle(title);
     }
 
