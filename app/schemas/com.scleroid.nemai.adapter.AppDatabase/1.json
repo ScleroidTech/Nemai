@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e0ae2d61007c029a272f4c914da72884",
+    "identityHash": "a972f5804309ca5a0b83ad8878bf84b0",
     "entities": [
       {
         "tableName": "Parcel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serialNo` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `sourcePin` TEXT, `destinationPin` TEXT, `deliveryType` TEXT, `packageType` TEXT, `weight` INTEGER NOT NULL, `invoice` INTEGER NOT NULL, `length` INTEGER NOT NULL, `width` INTEGER NOT NULL, `height` INTEGER NOT NULL, `description` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serialNo` INTEGER NOT NULL, `sourcePin` TEXT, `destinationPin` TEXT, `deliveryType` TEXT, `packageType` TEXT, `weight` INTEGER NOT NULL, `invoice` INTEGER NOT NULL, `length` INTEGER NOT NULL, `width` INTEGER NOT NULL, `height` INTEGER NOT NULL, `description` TEXT, `parcelDate` INTEGER, PRIMARY KEY(`serialNo`))",
         "fields": [
           {
             "fieldPath": "serialNo",
@@ -73,13 +73,19 @@
             "columnName": "description",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "parcelDate",
+            "columnName": "parcelDate",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
           "columnNames": [
             "serialNo"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -149,7 +155,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"e0ae2d61007c029a272f4c914da72884\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"a972f5804309ca5a0b83ad8878bf84b0\")"
     ]
   }
 }
