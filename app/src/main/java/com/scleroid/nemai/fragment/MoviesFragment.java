@@ -11,11 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.viewpager.PackageInfo;
-import com.scleroid.nemai.viewpager.PackageInfoAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -82,8 +77,7 @@ public class MoviesFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-        PackageInfoAdapter ca = new PackageInfoAdapter(createList(2));
-        recList.setAdapter(ca);
+
 
 
         //list package
@@ -92,29 +86,31 @@ public class MoviesFragment extends Fragment {
         return v;
     }
 
-    private List<PackageInfo> createList(int size) {
-        List<PackageInfo> result = new ArrayList<PackageInfo>();
-        for (int i = 1; i <= size; i++) {
-            PackageInfo ci = new PackageInfo();
-            ci.package1 = PackageInfo.PACKAGE1_PREFIX + i;
-            ci.name = PackageInfo.NAME_PREFIX + i;
-            ci.surname = PackageInfo.SURNAME_PREFIX + i;
-            ci.address = PackageInfo.ADDRESS_PREFIX + i;
-            ci.pincode = PackageInfo.PINCODE_PREFIX + i;
-            ci.district = PackageInfo.DISTRICT_PREFIX + i;
-            ci.state = PackageInfo.STATE_PREFIX + i;
-            ci.email = PackageInfo.EMAIL_PREFIX + i + "@gmail.com";
+    /*
+      /*  private List<PackageInfo> createList(int size) {
+            List<PackageInfo> result = new ArrayList<PackageInfo>();
+            for (int i = 1; i <= size; i++) {
+                PackageInfo ci = new PackageInfo();
+                ci.package1 = PackageInfo.PACKAGE1_PREFIX + i;
+                ci.name = PackageInfo.NAME_PREFIX + i;
+                ci.surname = PackageInfo.SURNAME_PREFIX + i;
+                ci.address = PackageInfo.ADDRESS_PREFIX + i;
+                ci.pincode = PackageInfo.PINCODE_PREFIX + i;
+                ci.district = PackageInfo.DISTRICT_PREFIX + i;
+                ci.state = PackageInfo.STATE_PREFIX + i;
+                ci.email = PackageInfo.EMAIL_PREFIX + i + "@gmail.com";
 
-            result.add(ci);
+                result.add(ci);
 
+            }
+
+            return result;
         }
+        //end list package
 
-        return result;
-    }
-    //end list package
+    *//*
 
-
-
+*/
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

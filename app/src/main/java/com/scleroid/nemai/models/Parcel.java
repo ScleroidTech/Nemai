@@ -46,8 +46,25 @@ public class Parcel {
         this.packageType = "Document";
         this.description = "null";
         this.serialNo = UUID.randomUUID();*/
-        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", new Date(), new Random().nextLong());
+        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", null, new Random().nextLong());
 
+    }
+
+    @Ignore
+    public Parcel(Date date, long serialNo) {
+        /*this.sourcePin = "null";
+        this.destinationPin = "null";
+        this.deliveryType = "Domestic";
+        this.packageType = "Document";
+        this.description = "null";
+        this.serialNo = UUID.randomUUID();*/
+        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", date, serialNo);
+
+    }
+
+    @Ignore
+    public Parcel(String city, String city1, String domestic, String parcel, int positive, int positive1, int positive2, int positive3, int positive4, String s, Date birthday) {
+        this(city, city1, domestic, parcel, positive, positive1, positive2, positive3, positive4, s, birthday, new Random().nextLong());
     }
 
     public Parcel updateInstance(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo) {

@@ -230,8 +230,8 @@ public class ParcelLab {
         UpdateParcelAsync(AppDatabase db, Date date, long serialNo) {
 
             //Make Changes here TODO
-            mDb = db;
-            this.parcel = parcel;
+            this.mDb = db;
+            this.parcel = new Parcel(date, serialNo);
         }
 
         @Override
