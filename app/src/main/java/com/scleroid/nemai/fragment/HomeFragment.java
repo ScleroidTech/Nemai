@@ -135,69 +135,10 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         v.clearFocus();
-        /*ShowLoader showNetworkErrorDialogDialog = new ShowLoader(context);
-        showNetworkErrorDialogDialog.showDialog();*/
-        // Toasty.error(context, "stupid", Toast.LENGTH_LONG, true).show();
-
-        //  showNetworkErrorDialogDialog.showDialog();
-        /*try {
-            View view = inflater.inflate(R.layout.no_internet_dialog_view,container, false);
-            AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-            alertDialog.setView(view);
-          //  alertDialog.setMessage("Internet not available, Cross check your internet connectivity and try again");
-            alertDialog.setCancelable(false);
-           // View view = inflater.inflate(R.layout.no_internet_dialog_view,container, false);
-
-            *//*alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-
-
-                }
-            });*//*
-
-            alertDialog.show();
-        }
-        catch(Exception e)
-        {
-            Log.d(TAG, "Show Dialog: "+e.getMessage());
-        }*/
 
         setupRecyclerView(v);
 
-        // updateUI(context);
 
-       /* mWeightTIL = v.findViewById(R.id.textWeight);
-        mInvoiceTIL = v.findViewById(R.id.textInvoice);
-        mPinSourceTIL = v.findViewById(R.id.pin_source_TIL);
-        mPinDestTIL = v.findViewById(R.id.pin_dest_TIL);
-        mLengthTIL = v.findViewById(R.id.textLength);
-        mWidthTIL = v.findViewById(R.id.textWidth);
-        mHeightTIL = v.findViewById(R.id.textHeight);
-        mDescriptionTIL = v.findViewById(R.id.textDescription);
-        //mDescDocTIL = v.findViewById(R.id.textPckDescDoc);
-        mWeightEditText = v.findViewById(R.id.editWeight);
-
-        mInvoiceValueEditText = v.findViewById(R.id.editInvoice);
-
-        mPackageLengthParcelEditText = v.findViewById(R.id.editLength);
-
-        mPackageWidthParcelEditText = v.findViewById(R.id.editWidth);
-
-        mHeightParcelEditText = v.findViewById(R.id.editHeight);
-
-        mDescriptionEditText = v.findViewById(R.id.editDescription);*/
-       /* if (parcel != null) {
-            mWeightEditText.setText(parcel.getWeight());
-            mInvoiceValueEditText.setText(parcel.getInvoice());
-            mPackageLengthParcelEditText.setText(parcel.getLength());
-            mPackageWidthParcelEditText.setText(parcel.getWidth());
-            mHeightParcelEditText.setText(parcel.getHeight());
-            mDescriptionEditText.setText(parcel.getDescription());
-        }*/
-//        mDescDocEditText = v.findViewById(R.id.editPckDescDoc);
-       /* mParcelRadioButton = v.findViewById(R.id.rParcel);
-        mDocumentRadioButton = v.findViewById(R.id.rDocument);
-*/
         fabNewCourier = v.findViewById(R.id.fab_new_data);
         fabNewCourier.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,99 +154,6 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
             }
         });
-//        mParcelLinearLayout = v.findViewById(R.id.linearExpandedParcelView);
-//        mDocumentLinearLayout = v.findViewById(R.id.linearExpandedDocumentView);
-//        mDocumentLinearLayout.setVisibility(View.VISIBLE);
-
-
-        //img_address =  v.findViewById(R.id.img_address);
-
-
-      /*  pinDestinationAutoCompleteTextView = v.findViewById(R.id.pin_dest_autocompletetextview);
-        pinDestinationAutoCompleteTextView.setText(parcel.getDestinationPin());
-        pinDestinationAutoCompleteTextView.setThreshold(THRESHOLD);
-        PinAutoCompleteAdapter pinAutoCompleteAdapter1 = new PinAutoCompleteAdapter(getApplicationContext());
-        //pinAutoCompleteAdapter1.notifyDataSetChanged();
-        pinDestinationAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter1);*/
-
-/*
-
-        pinDestinationAutoCompleteTextView.setLoadingIndicator(
-                (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator2));
-        pinDestinationAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                mPinCodeDestination = (PinCode) adapterView.getItemAtPosition(position);
-                pinDestinationAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeDestination.getLocation(), mPinCodeDestination.getPincode(), mPinCodeDestination.getState()));
-            }
-        });
-*/
-
-
-     /*   pinSourceAutoCompleteTextView = v.findViewById(R.id.pin_source_autocompletetextview);
-        pinSourceAutoCompleteTextView.setText(parcel.getSourcePin());
-        pinSourceAutoCompleteTextView.setThreshold(THRESHOLD);
-        PinAutoCompleteAdapter pinAutoCompleteAdapter = new PinAutoCompleteAdapter(getApplicationContext());
-        //pinAutoCompleteAdapter.notifyDataSetChanged();
-        *//*PinAutoCompleteAdapter pinAutoCompleteAdapter2 = new PinAutoCompleteAdapter(getApplicationContext());
-        pinAutoCompleteAdapter1.notifyDataSetChanged();*//*
-        pinSourceAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter); // 'this' is Activity instance
-        pinSourceAutoCompleteTextView.setLoadingIndicator(
-                (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator));
-        pinSourceAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                mPinCodeSource = (PinCode) adapterView.getItemAtPosition(position);
-                pinSourceAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeSource.getLocation(), mPinCodeSource.getPincode(), mPinCodeSource.getState()));
-            }
-        });
-*/
-
-       /* mWeightUnitTextView = v.findViewById(R.id.weight_unit_kg_textView);
-
-        mWeightEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus)
-                    mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
-                else mWeightUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
-            }
-        });
-*/
-       /* mCurrencyUnitTextView = v.findViewById(R.id.currency_unit_text_view);*/
-       /* mInvoiceValueEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus)
-                    mCurrencyUnitTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
-                else mCurrencyUnitTextView.setTextColor(getResources().getColor(R.color.colorHint));
-            }
-        });*/
-
-        //    editAddress = v.findViewById(R.id.editAddressDoc);
-
-/*img_address.setOnClickListener(new View.OnClickListener() {
-
-    @Override
-    public void onClick(View view) {
-        AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity())
-                .setTitle("Select an Address")
-                .setSingleChoiceItems(day_radio, -1, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        Toast.makeText(getActivity(), "The selected Day is " + day_radio[which], Toast.LENGTH_LONG).show();
-                        select= day_radio[which].toString();
-                        dialog.dismiss();
-                        editAddress.setText(select);
-                    }
-                });
-        AlertDialog alertdialog2 = builder2.create();
-        alertdialog2.show();
-
-    }
-});*/
 
 //TODO https://uk.linkedin.com/in/chrisbanes/
         mSubmitButton = v.findViewById(R.id.btn_submit);
@@ -320,60 +168,6 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
                 //startActivity(i);
             }
         });
-     /*   mDocumentRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    //mDocumentLinearLayout.setVisibility(View.VISIBLE);
-                    toggleDocParcel = false;
-                    mParcelLinearLayout.setVisibility(View.GONE);
-
-                    mDescriptionEditText.setMinLines(6);
-                    mDocumentRadioButton.setTypeface(null, Typeface.BOLD);
-                    mParcelRadioButton.setTypeface(null, Typeface.NORMAL);
-                }
-            }
-        });
-
-        mParcelRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    mParcelLinearLayout.setVisibility(View.VISIBLE);
-                    // mDocumentLinearLayout.setVisibility(View.GONE);
-                    mDescriptionEditText.setMinLines(1);
-                    toggleDocParcel = true;
-                    mParcelRadioButton.setTypeface(null, Typeface.BOLD);
-                    mDocumentRadioButton.setTypeface(null, Typeface.NORMAL);
-                }
-            }
-        });
-
-*/
-       /* mDomesticRadioButton = v.findViewById(R.id.rDomestic);
-        mInternationalRadioButton = v.findViewById(R.id.rInternational);*/
-
-        /*mInternationalRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    mInternationalRadioButton.setTypeface(null, Typeface.BOLD);
-                    mDomesticRadioButton.setTypeface(null, Typeface.NORMAL);
-                    toggleDomInternational = true;
-                }
-            }
-        });
-
-        mDomesticRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    mDomesticRadioButton.setTypeface(null, Typeface.BOLD);
-                    mDomesticRadioButton.setTypeface(null, Typeface.NORMAL);
-                    toggleDomInternational = false;
-                }
-            }
-        });*/
 
         return v;
     }
@@ -464,6 +258,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     }
 
     private void submitData(boolean b) {
+        if (parcelCurrent == null) parcelCurrent = recycleViewPagerAdapter.holder.getParcel();
         Parcel parcel = recycleViewPagerAdapter.holder.validateFields(parcelCurrent);
         if (parcel == null) return;
         //  ParcelLab.addParcel(parcel, context);
@@ -587,8 +382,8 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         long lonely = bundle.getLong(EXTRA_SERIAL);
         Log.d("CHeckout", "onDate Eventbus");
         ParcelLab.updateParcel(context, date, lonely);
-
-        //   setContent(model);
+        recycleViewPagerAdapter.notifyDataSetChanged();
+        // setContent(model);
 
 
     }
