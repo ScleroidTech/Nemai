@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
@@ -27,16 +28,16 @@ import java.util.GregorianCalendar;
 public class DatePickerFragment extends DialogFragment {
     public static final String EXTRA_DATE = "com.example.ganesh.criminalintent.date";
     public static final String EXTRA_SERIAL = "serial_no";
-    private static final String ARG_DATE = "crime_date";
-    private static final String ARG_SERIAL_NO = "SERIAL_NO";
+
+    private static final String TAG = "DatePickerFragment";
     Date tempDate = new Date();
     long serialNo;
     private DatePicker mDatePicker;
 
     public static DatePickerFragment newInstance(Date parcel, long id) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ARG_DATE, parcel);
-        bundle.putLong(ARG_SERIAL_NO, id);
+        bundle.putSerializable(EXTRA_DATE, parcel);
+        bundle.putLong(EXTRA_SERIAL, id);
 
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.setArguments(bundle);
@@ -65,11 +66,13 @@ public class DatePickerFragment extends DialogFragment {
 
         final Bundle bundle = getArguments();
         if (bundle != null) {
-            tempDate = (Date) getArguments().getSerializable(ARG_DATE);
-            serialNo = getArguments().getLong(ARG_SERIAL_NO);
+            tempDate = (Date) getArguments().getSerializable(EXTRA_DATE);
+            serialNo = getArguments().getLong(EXTRA_SERIAL);
         }
 
         Calendar calendar = Calendar.getInstance();
+        Log.d(TAG, calendar.toString());
+        Log.d(TAG, tempDate + "THis should not be empty ");
         calendar.setTime(tempDate);
 
 

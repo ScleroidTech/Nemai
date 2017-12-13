@@ -24,6 +24,7 @@ import com.scleroid.nemai.fragment.DatePickerFragment;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import static com.scleroid.nemai.activity.MainActivity.CURRENT_TAG;
@@ -238,6 +239,10 @@ public class PageHolder extends RecyclerView.ViewHolder {
             mDateTIL.setErrorEnabled(true);
             mDateTIL.setError("You forgot the date ");
             noSubmit = true;
+        } else if (!textClockDate.getText().equals(getFormattedDate(Calendar.getInstance().getTime()))) {
+            mDateTIL.setErrorEnabled(true);
+            mDateTIL.setError("Dude, That's in the past. !!!!!!!");
+            noSubmit = true;
         } else mDateTIL.setErrorEnabled(false);
 
         if (isEmpty(pinSourceAutoCompleteTextView)) {
@@ -336,7 +341,8 @@ public class PageHolder extends RecyclerView.ViewHolder {
             String packageType = parcel.getPackageType();
             String description = parcel.getDescription();
             DateFormat dt = new DateFormat();
-            String dm = DateFormat.format("EEE, MMM dd, yyyy ", parcel.getParcelDate()).toString();
+            Date parcelDate = parcel.getParcelDate();
+
 
             if (packageType.equals("Parcel")) {
                 int width = parcel.getWidth(),
@@ -357,12 +363,19 @@ public class PageHolder extends RecyclerView.ViewHolder {
             //TODO use pincode class instead of this strings, to get more control over this.
             pinSourceAutoCompleteTextView.setText(source.equals("null") ? null : source);
             pinDestinationAutoCompleteTextView.setText(destination.equals("null") ? null : destination);
-
+            String dm = "";
+            if (parcelDate != null) {
+                dm = getFormattedDate(parcelDate).toString();
+            }
             textClockDate.setText(dm);
 
 
         }
 
+    }
+
+    public CharSequence getFormattedDate(Date parcelDate) {
+        return DateFormat.format("EEE, MMM dd, yyyy ", parcelDate);
     }
 
     public void bindNumber(int position, int size) {
@@ -388,5 +401,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
         //mCrimeDate.setText(mCrime.getDate().toString());
     }
 
-
+    public Parcel getParcel() {
+        return parcel;
+    }
 }
