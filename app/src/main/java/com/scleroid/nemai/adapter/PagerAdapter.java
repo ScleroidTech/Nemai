@@ -67,10 +67,9 @@ public class PagerAdapter extends RecyclerView.Adapter<PageHolder> {
         //buffers.set(holder.getAdapterPosition(), holder.getText());
     }
 
-    public void setParcels(List<Parcel> crimes) {
-        parcels = crimes;
 
+    public void updateParcelList(List<Parcel> parcels) {
+        this.parcels = parcels;
+        notifyDataSetChanged();
     }
-
-
 }
