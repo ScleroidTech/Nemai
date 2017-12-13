@@ -13,7 +13,7 @@ import com.scleroid.nemai.models.ParcelDao;
 /**
  * Created by scleroid on 27/10/17.
  */
-@Database(entities = {Parcel.class, Address.class}, version = 1)
+@Database(entities = {Parcel.class, Address.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;
@@ -25,6 +25,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             // allow queries on the main thread.
                             // Don't do this on a real app! See PersistenceBasicSample for an example.
                             //.allowMainThreadQueries()
+                            .fallbackToDestructiveMigration()
                             .build();
         }
         return instance;
