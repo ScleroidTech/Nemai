@@ -46,7 +46,7 @@ public class Parcel {
         this.packageType = "Document";
         this.description = "null";
         this.serialNo = UUID.randomUUID();*/
-        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", null, new Random().nextLong());
+        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", new Date(), new Random().nextLong());
 
     }
 
