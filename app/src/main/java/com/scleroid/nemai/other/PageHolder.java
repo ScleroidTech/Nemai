@@ -225,7 +225,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
             public void onClick(View v) {
                 //todo textClockDate.setText(updateDate());
                 FragmentManager fragmentManager = ((AppCompatActivity) context).getFragmentManager();
-                DialogFragment dialogFragment = DatePickerFragment.newInstance(parcel.getParcelDate(), parcel.getSerialNo());
+                DialogFragment dialogFragment = DatePickerFragment.newInstance(parcel);
                 dialogFragment.setTargetFragment(fragmentManager.findFragmentByTag(CURRENT_TAG), REQUEST_DATE);
                 dialogFragment.show(fragmentManager, DIALOG_DATE);
             }

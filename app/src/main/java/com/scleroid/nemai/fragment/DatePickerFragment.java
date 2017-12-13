@@ -6,13 +6,13 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
 
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
 
@@ -30,14 +30,25 @@ public class DatePickerFragment extends DialogFragment {
     public static final String EXTRA_SERIAL = "serial_no";
 
     private static final String TAG = "DatePickerFragment";
+    private static final String EXTRA_SOURCE_PIN = "source";
+    private static final String EXTRA_PACKAGE = "packageType";
+    private static final String EXTRA_DELIVERY_TYPE = "delivery";
+    private static final String EXTRA_DEST_PIN = "destination";
+    private static final String EXTRA_DESC = "description";
+    private static final String EXTRA_INVOICE = "invoice";
+    private static final String EXTRA_WEIGHT = "weight";
+    private static final String EXTRA_HEIGHT = "height";
+    private static final String EXTRA_WIDTH = "width";
+    private static final String EXTRA_LENGTH = "length";
+
     Date tempDate = new Date();
     long serialNo;
+    String source, destination, deliveryType, packageType, desc;
+    int height, weight, width, length, invoice;
     private DatePicker mDatePicker;
 
-    public static DatePickerFragment newInstance(Date parcel, long id) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(EXTRA_DATE, parcel);
-        bundle.putLong(EXTRA_SERIAL, id);
+    public static DatePickerFragment newInstance(Parcel parcel) {
+        Bundle bundle = createBundle(parcel);
 
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.setArguments(bundle);
@@ -46,13 +57,23 @@ public class DatePickerFragment extends DialogFragment {
 
     }
 
-    @NonNull
-    private static Bundle createBundle(Date date, long serialNo) {
+    public static Bundle createBundle(Parcel parcel) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(EXTRA_DATE, date);
-        bundle.putLong(EXTRA_SERIAL, serialNo);
+        bundle.putSerializable(EXTRA_DATE, parcel.getParcelDate());
+        bundle.putLong(EXTRA_SERIAL, parcel.getSerialNo());
+        bundle.putString(EXTRA_SOURCE_PIN, parcel.getSourcePin());
+        bundle.putString(EXTRA_DELIVERY_TYPE, parcel.getDeliveryType());
+        bundle.putString(EXTRA_DESC, parcel.getDescription());
+        bundle.putString(EXTRA_DEST_PIN, parcel.getDestinationPin());
+        bundle.putString(EXTRA_PACKAGE, parcel.getPackageType());
+        bundle.putInt(EXTRA_INVOICE, parcel.getInvoice());
+        bundle.putInt(EXTRA_WEIGHT, parcel.getWeight());
+        bundle.putInt(EXTRA_WIDTH, parcel.getWidth());
+        bundle.putInt(EXTRA_LENGTH, parcel.getLength());
+        bundle.putInt(EXTRA_HEIGHT, parcel.getHeight());
         return bundle;
     }
+
 
     private void sendResult(int ResultCode, Date date) {
         if (getTargetFragment() == null) return;
@@ -66,8 +87,19 @@ public class DatePickerFragment extends DialogFragment {
 
         final Bundle bundle = getArguments();
         if (bundle != null) {
-            tempDate = (Date) getArguments().getSerializable(EXTRA_DATE);
-            serialNo = getArguments().getLong(EXTRA_SERIAL);
+            tempDate = (Date) bundle.getSerializable(EXTRA_DATE);
+            serialNo = bundle.getLong(EXTRA_SERIAL);
+            source = bundle.getString(EXTRA_SOURCE_PIN);
+            destination = bundle.getString(EXTRA_DEST_PIN);
+            deliveryType = bundle.getString(EXTRA_DELIVERY_TYPE);
+            packageType = bundle.getString(EXTRA_PACKAGE);
+            desc = bundle.getString(EXTRA_DESC);
+            weight = bundle.getInt(EXTRA_WEIGHT);
+            height = bundle.getInt(EXTRA_HEIGHT);
+            width = bundle.getInt(EXTRA_WIDTH);
+            length = bundle.getInt(EXTRA_LENGTH);
+            invoice = bundle.getInt(EXTRA_INVOICE);
+
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -110,7 +142,8 @@ public class DatePickerFragment extends DialogFragment {
                 int month = mDatePicker.getMonth();
                 int day = mDatePicker.getDayOfMonth();
                 Date date = new GregorianCalendar(year, month, day).getTime();
-                Bundle bundle = createBundle(date, serialNo);
+                Parcel parcel = new Parcel(source, destination, deliveryType, packageType, weight, invoice, length, width, height, desc, date, serialNo);
+                Bundle bundle = createBundle(parcel);
                 //sendResult(Activity.RESULT_OK,date);
                 Events.DateMessage addressMessage = new Events.DateMessage(bundle);
                 GlobalBus.getBus().post(addressMessage);

@@ -18,7 +18,6 @@ import java.util.Random;
 public class Parcel {
     @PrimaryKey
     private long serialNo;
-
     private String sourcePin;
     private String destinationPin;
     private String deliveryType;

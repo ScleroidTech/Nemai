@@ -1,9 +1,26 @@
 package com.scleroid.nemai.fragment;
-
+/*https://try.kotlinlang.org/
+https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
+    //TODO read this https://medium.com/square-corner-blog/advocating-against-android-fragments-81fd0b462c97
+    //TODo & this too http://smarterer.com/tests/android-developer https://www.buzzingandroid.com/ http://www.jbrugge.com/glean/index.html
+    //TODO 7 this too https://www.infoq.com/presentations/Android-Design/ https://antonioleiva.com/free-guide/
+    //TODO this too www.codacy.com https://possiblemobile.com/ http://www.andreamaglie.com/dont-waste-time-coding-2/
+    //TODO https://androidbycode.wordpress.com/2015/02/13/static-code-analysis-automation-using-findbugs-android-studio/
+    //TODO read this https://www.bignerdranch.com/blog/categories/android/ https://www.bignerdranch.com/blog/building-interfaces-with-constraintlayout/ https://www.bignerdranch.com/blog/the-rxjava-repository-pattern/ https://www.bignerdranch.com/blog/room-data-storage-for-everyone/ https://www.bignerdranch.com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/ https://www.bignerdranch.com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/ https://www.bignerdranch.com/blog/frame-animations-in-android/ https://www.bignerdranch.com/blog/building-animations-android-transition-framework-part-2/ https://www.bignerdranch.com/blog/testing-the-android-way/
+    https://blog.mindorks.com/a-complete-guide-to-learn-kotlin-for-android-development-b1e5d23cc2d8
+    https://developer.android.com/topic/libraries/architecture/room.html https://medium.com/google-developers/7-steps-to-room-27a5fe5f99b2 https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9 https://android.jlelse.eu/room-store-your-data-c6d49b4d53a3 http://www.vogella.com/tutorials/AndroidSQLite/article.html
+    https://android.jlelse.eu/demystifying-the-jvmoverloads-in-kotlin-10dd098e6f72
+     //TODO IMP https://android.jlelse.eu/android-architecture-components-room-livedata-and-viewmodel-fca5da39e26b
+     //TODO https://uk.linkedin.com/in/chrisbanes/
+*/
+//TODO https://uk.linkedin.com/in/chrisbanes/
 
 import android.app.Dialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +41,7 @@ import com.scleroid.nemai.adapter.AppDatabase;
 import com.scleroid.nemai.adapter.PagerAdapter;
 import com.scleroid.nemai.adapter.ParcelLab;
 import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.models.ParcelViewModel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
@@ -40,9 +58,12 @@ import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_DATE;
 import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_SERIAL;
 import static com.scleroid.nemai.network.NetworkCalls.submitCouriers;
 
+
 //TODO CHange most activities to fragment if performance becomes a bottleneck
 //TODO implement ROOm
 //TODO implement this http://droidmentor.com/credit-card-form/
+
+
 public class HomeFragment extends Fragment {
     public static final int THRESHOLD = 3;
     private static final String ARG_PARCEL_ID = "parcel_id";
@@ -52,58 +73,15 @@ public class HomeFragment extends Fragment {
     public static int parcelCount = 1;
     static String select;
     final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
-    /*RadioButton mParcelRadioButton, mDocumentRadioButton;
-    RadioButton mDomesticRadioButton, mInternationalRadioButton;
-    LinearLayout mParcelLinearLayout, mDocumentLinearLayout;
-    */ Button mSubmitButton;
-/*https://try.kotlinlang.org/
-https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
-    //TODO read this https://medium.com/square-corner-blog/advocating-against-android-fragments-81fd0b462c97
-    //TODo & this too http://smarterer.com/tests/android-developer https://www.buzzingandroid.com/ http://www.jbrugge.com/glean/index.html
-    //TODO 7 this too https://www.infoq.com/presentations/Android-Design/ https://antonioleiva.com/free-guide/
-    //TODO this too www.codacy.com https://possiblemobile.com/ http://www.andreamaglie.com/dont-waste-time-coding-2/
-    //TODO https://androidbycode.wordpress.com/2015/02/13/static-code-analysis-automation-using-findbugs-android-studio/
-    //TODO read this https://www.bignerdranch.com/blog/categories/android/ https://www.bignerdranch.com/blog/building-interfaces-with-constraintlayout/ https://www.bignerdranch.com/blog/the-rxjava-repository-pattern/ https://www.bignerdranch.com/blog/room-data-storage-for-everyone/ https://www.bignerdranch.com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/ https://www.bignerdranch.com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/ https://www.bignerdranch.com/blog/frame-animations-in-android/ https://www.bignerdranch.com/blog/building-animations-android-transition-framework-part-2/ https://www.bignerdranch.com/blog/testing-the-android-way/
-    https://blog.mindorks.com/a-complete-guide-to-learn-kotlin-for-android-development-b1e5d23cc2d8
-    https://developer.android.com/topic/libraries/architecture/room.html https://medium.com/google-developers/7-steps-to-room-27a5fe5f99b2 https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9 https://android.jlelse.eu/room-store-your-data-c6d49b4d53a3 http://www.vogella.com/tutorials/AndroidSQLite/article.html
-    https://android.jlelse.eu/demystifying-the-jvmoverloads-in-kotlin-10dd098e6f72
-*/
-//TODO https://uk.linkedin.com/in/chrisbanes/
-    FloatingActionButton fabNewCourier;/*
-    TextView mWeightUnitTextView, mCurrencyUnitTextView;
-    ImageView mAddressImageView;
+    ParcelViewModel parcelViewModel;
+    Button mSubmitButton;
 
-    TextInputLayout mWeightTIL, mInvoiceTIL, mLengthTIL, mWidthTIL, mHeightTIL, mDescriptionTIL,
-            mPinSourceTIL, mPinDestTIL;
-    DelayedAutoCompleteTextView pinSourceAutoCompleteTextView, pinDestinationAutoCompleteTextView;
-    EditText mWeightEditText,// mDescDocEditText,
-            mInvoiceValueEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescriptionEditText;*/
+    FloatingActionButton fabNewCourier;
+
     Parcel parcel;
-   /* boolean toggleDocParcel = false;//false == doc, true == parcel
-    boolean toggleDomInternational = false;//Domestic false , International = true*/
+
     PagerAdapter recycleViewPagerAdapter;
-   /* @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        final int serialNo;
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            serialNo = (int) getArguments().getSerializable(ARG_PARCEL_ID);
-
-            new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    super.handleMessage(msg);
-                    if (ParcelLab.getCount(AppDatabase.getAppDatabase(getApplicationContext())) > 0)
-
-                        parcel = ParcelLab.getParcel(AppDatabase.getAppDatabase(getApplicationContext()), serialNo);
-
-                }
-            };
-        } else parcel = new Parcel();
-
-    }*/
    RecyclerViewPager recyclerViewPager;
     List<Parcel> crimes;
     Parcel parcelCurrent;
@@ -138,13 +116,26 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 
         setupRecyclerView(v);
 
+        parcelViewModel = ViewModelProviders.of(HomeFragment.this).get(ParcelViewModel.class);
+
+        parcelViewModel.getParcelList().observe(HomeFragment.this, new Observer<List<Parcel>>() {
+            @Override
+            public void onChanged(@Nullable List<Parcel> parcels) {
+
+                recycleViewPagerAdapter.updateParcelList(parcels);
+                crimes = parcels;
+
+
+            }
+        });
+
 
         fabNewCourier = v.findViewById(R.id.fab_new_data);
         fabNewCourier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data before sending it to server.& send all data to server at once
-                //TODO IMP https://android.jlelse.eu/android-architecture-components-room-livedata-and-viewmodel-fca5da39e26b
+
 
 
                 //validateFields(false);
@@ -155,7 +146,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
             }
         });
 
-//TODO https://uk.linkedin.com/in/chrisbanes/
+
         mSubmitButton = v.findViewById(R.id.btn_submit);
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +168,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         recyclerViewPager.setLayoutManager(new LinearLayoutManager(context,
                 LinearLayoutManager.HORIZONTAL, false));
         updateUI(context);
+        //  updateUIviaViewModel(context);
         recyclerViewPager.setTriggerOffset(0.15f);
         recyclerViewPager.setFlingFactor(0.25f);
         recyclerViewPager.setHasFixedSize(false);
@@ -257,21 +249,22 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
         });
     }
 
+
     private void submitData(boolean b) {
         if (parcelCurrent == null) parcelCurrent = recycleViewPagerAdapter.holder.getParcel();
         Parcel parcel = recycleViewPagerAdapter.holder.validateFields(parcelCurrent);
         if (parcel == null) return;
         //  ParcelLab.addParcel(parcel, context);
-        List<Parcel> parcels = null;
+
 
         parcelCurrent = ParcelLab.newParcel(context);
-        parcels = updateParcelList(context);
+        //    parcels = updateParcelList(context);
         if (!b) {
-            for (Parcel parcelTemp : parcels) {
+            for (Parcel parcelTemp : crimes) {
                 submitCouriers(context, parcelTemp, TAG_COURIERS, loader);
             }
         } else {
-            updateUI(context);
+            //  updateUI(context);
         }
     }
 
@@ -312,21 +305,17 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
     }
 
     public void updateUI(Context context) {
-        List<Parcel> crimes = null;
-
-        crimes = updateParcelList(context);
-        Log.d(TAG, "crimes updateUI " + crimes);
 
         if (recycleViewPagerAdapter == null) {
-            recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, getLayoutInflater(), getContext(), crimes);
+            recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, getLayoutInflater(), getContext(), new ArrayList<Parcel>());
             recyclerViewPager.setAdapter(recycleViewPagerAdapter);
-        } else {
+        }/* else {
             int pos = RecyclerView.generateViewId();
             recycleViewPagerAdapter.setParcels(crimes);
             recycleViewPagerAdapter.notifyItemChanged(pos);
         }
-
-        updateSubtitle();
+*/
+        // updateSubtitle();
     }
 
     private List<Parcel> updateParcelList(Context context) {
