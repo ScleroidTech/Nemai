@@ -31,7 +31,6 @@ public class PagerAdapter extends RecyclerView.Adapter<PageHolder> {
         this.pager = pager;
         this.inflater = inflater;
         this.parcels = parcels;
-
         this.context = context;
     }
 

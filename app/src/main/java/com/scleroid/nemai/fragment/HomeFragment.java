@@ -20,6 +20,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -66,6 +67,8 @@ import static com.scleroid.nemai.network.NetworkCalls.submitCouriers;
 
 public class HomeFragment extends Fragment {
     public static final int THRESHOLD = 3;
+    // YourActivity.java
+    public final static String LIST_STATE_KEY = "recycler_list_state";
     private static final String ARG_PARCEL_ID = "parcel_id";
     private static final String TAG = HomeFragment.class.getSimpleName();
     private static final String TAG_COURIERS = "req_couriers";
@@ -75,18 +78,16 @@ public class HomeFragment extends Fragment {
     final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
     ParcelViewModel parcelViewModel;
     Button mSubmitButton;
-
     FloatingActionButton fabNewCourier;
-
     Parcel parcel;
-
     PagerAdapter recycleViewPagerAdapter;
-
    RecyclerViewPager recyclerViewPager;
     List<Parcel> crimes;
     Parcel parcelCurrent;
+    Parcelable listState;
     private Context context;
     private ShowLoader loader;
+    private LinearLayoutManager mLayoutManager;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -105,7 +106,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle state) {
 
 
         context = getActivity();
@@ -114,7 +115,13 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         v.clearFocus();
 
-        setupRecyclerView(v);
+        setupRecyclerView(v, inflater, context);
+        if (state != null)
+            listState = state.getParcelable(LIST_STATE_KEY);
+        if (listState != null) {
+            recyclerViewPager.getLayoutManager().onRestoreInstanceState(listState);
+        }
+
 
         parcelViewModel = ViewModelProviders.of(HomeFragment.this).get(ParcelViewModel.class);
 
@@ -170,16 +177,38 @@ public class HomeFragment extends Fragment {
         return v;
     }
 
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        // Save list state
+        listState = recyclerViewPager.getLayoutManager().onSaveInstanceState();
+        state.putParcelable(LIST_STATE_KEY, listState);
+    }
+
+
+   /* public void onRestoreInstanceState(Bundle state) {
+
+        // Retrieve list state and list/item positions
+        if(state != null)
+            listState = state.getParcelable(LIST_STATE_KEY);
+        super.onActivityCreated(state);
+    }*/
+
+ /*   @Override
+    public void onActivityCreated(@Nullable Bundle state) {
+
+        super.onActivityCreated(state);
+    }*/
+
     public void createDefaultParcel() {
         ParcelLab.newParcel(context);
     }
 
-    private void setupRecyclerView(View v) {
+    private void setupRecyclerView(View v, LayoutInflater inflater, Context context) {
         recyclerViewPager = v.findViewById(R.id.pager);
-        recyclerViewPager.setLayoutManager(new LinearLayoutManager(context,
+        recyclerViewPager.setLayoutManager(new LinearLayoutManager(this.context,
                 LinearLayoutManager.HORIZONTAL, false));
-        updateUI(context);
-        //  updateUIviaViewModel(context);
+        recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, inflater, context, new ArrayList<Parcel>());
+        recyclerViewPager.setAdapter(recycleViewPagerAdapter);
         recyclerViewPager.setTriggerOffset(0.15f);
         recyclerViewPager.setFlingFactor(0.25f);
         recyclerViewPager.setHasFixedSize(false);
@@ -195,7 +224,9 @@ public class HomeFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
 //                mPositionText.setText("First: " + mRecyclerViewPager.getFirstVisiblePosition());
                 int childCount = recyclerViewPager.getChildCount();
-                int width = recyclerViewPager.getChildAt(0).getWidth();
+                int width = 0;
+                if (recyclerViewPager.getChildAt(0) != null)
+                    width = recyclerViewPager.getChildAt(0).getWidth();
                 int padding = (recyclerViewPager.getWidth() - width) / 4;
                 Log.d(TAG, "childCount " + childCount + " width " + width + " padding " + padding + " widthMain " + recyclerViewPager.getWidth());
 
@@ -363,6 +394,9 @@ public class HomeFragment extends Fragment {
         super.onResume();
         GlobalBus.getBus().register(this);
         loader.dismissDialog();
+        /*if (listState != null) {
+            recyclerViewPager.getLayoutManager().onRestoreInstanceState(listState);
+        }*/
     }
 
     @Override
