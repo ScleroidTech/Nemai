@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
@@ -24,6 +25,8 @@ import com.scleroid.nemai.fragment.DatePickerFragment;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -39,6 +42,7 @@ import static com.scleroid.nemai.fragment.HomeFragment.mPinCodeSource;
 public class PageHolder extends RecyclerView.ViewHolder {
     private static final String DIALOG_DATE = "DIALOG_DATE";
     private static final int REQUEST_DATE = 0;
+    private static final String TAG = "PageHolder";
     TextView textClockDate;
     RadioButton mParcelRadioButton, mDocumentRadioButton;
     RadioButton mDomesticRadioButton, mInternationalRadioButton;
@@ -239,9 +243,9 @@ public class PageHolder extends RecyclerView.ViewHolder {
             mDateTIL.setErrorEnabled(true);
             mDateTIL.setError("You forgot the date ");
             noSubmit = true;
-        } else if (!textClockDate.getText().equals(getFormattedDate(Calendar.getInstance().getTime()))) {
+        } else if (!isValidDate(textClockDate)) {
             mDateTIL.setErrorEnabled(true);
-            mDateTIL.setError("Dude, That's in the past. !!!!!!!");
+            mDateTIL.setError("Dude, That's in the past. Please Enter a Date after today");
             noSubmit = true;
         } else mDateTIL.setErrorEnabled(false);
 
@@ -306,6 +310,32 @@ public class PageHolder extends RecyclerView.ViewHolder {
         }
         return null;
     }
+
+    private boolean isValidDate(TextView textClockDate) {
+        java.text.DateFormat dateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy ");
+        // DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try {
+            Date date = dateFormat.parse(textClockDate.getText().toString());
+            //     LocalDate date1 = LocalDate.of(D);
+            Calendar cal1 = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
+            cal1.setTime(date);
+            cal2.setTime(new Date());
+            if (cal1.before(cal2)) {
+                return false;
+            }
+
+        } catch (ParseException e) {
+            Log.e(TAG, "Date Parsing Exception " + e);
+            return false;
+        }
+        return true;
+    }
+
+    public CharSequence getFormattedDate(Date parcelDate) {
+        return DateFormat.format("EEE, MMM dd, yyyy ", parcelDate);
+    }
+
 
     private boolean isEmpty(TextView text) {
         return TextUtils.isEmpty(text.getText());
@@ -374,9 +404,6 @@ public class PageHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public CharSequence getFormattedDate(Date parcelDate) {
-        return DateFormat.format("EEE, MMM dd, yyyy ", parcelDate);
-    }
 
     public void bindNumber(int position, int size) {
         courierCount.setVisibility(View.VISIBLE);

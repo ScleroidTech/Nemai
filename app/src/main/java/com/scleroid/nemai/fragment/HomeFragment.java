@@ -124,10 +124,17 @@ public class HomeFragment extends Fragment {
 
                 recycleViewPagerAdapter.updateParcelList(parcels);
                 crimes = parcels;
+                if (parcels.size() == 0)
+                    createDefaultParcel();
 
 
             }
         });
+        /*
+        if (crimes == null || crimes.size() == 0){
+            createDefaultParcel();
+            Log.d(TAG,"Adding a parcel");
+        }*/
 
 
         fabNewCourier = v.findViewById(R.id.fab_new_data);
@@ -161,6 +168,10 @@ public class HomeFragment extends Fragment {
         });
 
         return v;
+    }
+
+    public void createDefaultParcel() {
+        ParcelLab.newParcel(context);
     }
 
     private void setupRecyclerView(View v) {
@@ -357,10 +368,17 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        GlobalBus.getBus().unregister(this);
+        // GlobalBus.getBus().unregister(this);
         if (loader != null) {
             loader.dismissDialog();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        GlobalBus.getBus().unregister(this);
+
     }
 
     @Subscribe
