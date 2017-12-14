@@ -243,16 +243,16 @@ public class PageHolder extends RecyclerView.ViewHolder {
             mDateTIL.setErrorEnabled(true);
             mDateTIL.setError("You forgot the date ");
             noSubmit = true;
-        } else if (!isValidDate(textClockDate)) {
-            mDateTIL.setErrorEnabled(true);
-            mDateTIL.setError("Dude, That's in the past. Please Enter a Date after today");
-            noSubmit = true;
         } else mDateTIL.setErrorEnabled(false);
 
         if (isEmpty(pinSourceAutoCompleteTextView)) {
             mPinSourceTIL.setErrorEnabled(true);
             mPinSourceTIL.setError("Enter the Source first");
+            noSubmit = true;/*else if (!isValidDate(textClockDate)) {
+            mDateTIL.setErrorEnabled(true);
+            mDateTIL.setError("Dude, That's in the past. Please Enter a Date after today");
             noSubmit = true;
+        } */
         } else mPinSourceTIL.setErrorEnabled(false);
 
         if (isEmpty(pinDestinationAutoCompleteTextView)) {
