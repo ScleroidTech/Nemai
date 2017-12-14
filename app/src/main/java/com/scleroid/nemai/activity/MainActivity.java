@@ -1,6 +1,5 @@
 package com.scleroid.nemai.activity;
 
-import android.arch.lifecycle.LifecycleActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +41,7 @@ import com.scleroid.nemai.other.SessionManager;
 
 import java.util.List;
 
-public class MainActivity extends LifecycleActivity {
+public class MainActivity extends AppCompatActivity {
 
     // urls to load navigation header background image
     // and profile image
@@ -114,7 +114,7 @@ public class MainActivity extends LifecycleActivity {
         }
 
         toolbar = findViewById(R.id.toolbar);
-        //  setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
         /*HandlerThread thread = new HandlerThread("MyHandlerThread");
         thread.start();*/
@@ -305,7 +305,7 @@ public class MainActivity extends LifecycleActivity {
         selectNavMenu();
 
         // set toolbar title
-        //setToolbarTitle();
+        setToolbarTitle();
 
         // if user select the current navigation menu again, don't do anything
         // just close the navigation drawer
@@ -363,9 +363,9 @@ public class MainActivity extends LifecycleActivity {
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
 
-  /*//  private void setToolbarTitle() {
+    private void setToolbarTitle() {
         getSupportActionBar().setTitle(activityTitles[navItemIndex]);
-    }*/
+    }
 
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
