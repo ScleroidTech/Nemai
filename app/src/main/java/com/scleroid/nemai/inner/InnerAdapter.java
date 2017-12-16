@@ -28,6 +28,8 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     public static int lastSelectedPosition = -1;
     ItemInnerAddressCardBinding binding;
     private List<Address> mData = new ArrayList<>();
+    private List<Address> mDataSelected = new ArrayList<>();
+
     private View mEmptyView;
     private View innerLayout;
     private RadioButton lastChecked = null;
@@ -39,14 +41,14 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     private Context context;
 
 
-    public void clearSelections() {
+   /* public void clearSelections() {
         selectedItems.clear();
         notifyDataSetChanged();
     }
 
     public int getSelectedItemCount() {
         return selectedItems.size();
-    }
+    }*/
 
     public List<Integer> getSelectedItems() {
         List<Integer> items =
@@ -93,9 +95,9 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         holder.setContent(address);
         context = holder.getInnerLayout().getContext();
         holder.itemView.setTag(address);
-        setRadioSelected(holder, position);
+        //  setRadioSelected(holder, position);
 
-        holder.itemView.setActivated(selectedItems.get(position, false));
+        // holder.itemView.setActivated(selectedItems.get(position, false));
         //TODO disable already activated view, then activate second view, reduce response time
         // Use getSelectedItems for the purpose
 
@@ -117,25 +119,32 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         notifyDataSetChanged(); //need to call it for the child views to be re-created with buttons.
     }
 
+/*
     public void toggleSelection(int pos) {
         boolean bool = false;
 
         if (selectedItems.get(pos, false)) {
 
-            clearSelections();
+         //   clearSelections();
             selectedItems.delete(pos);
             bool = true;
 
             buttonDeliver.setVisibility(View.VISIBLE);
         } else {
-            if (getSelectedItemCount() > 1) {
-               /*for (int item = 0; item < selectedItems.size(); item++) {
+          */
+/*  if (getSelectedItemCount() > 1) {
+               *//*
+*/
+/*for (int item = 0; item < selectedItems.size(); item++) {
                    Log.d("InnerAdapter", selectedItems.get(item) + "");
                    if (item != pos) selectedItems.delete(item);
 
                }
-           }*/
-                clearSelections();
+           }*//*
+*/
+/*
+                clearSelections();*//*
+
             }
             bool = false;
             selectedItems.put(pos, true);
@@ -148,6 +157,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         notifyItemChanged(pos);
     }
 
+*/
 
     public void setRadioSelected(InnerItem holder, int position) {
         lastSelectedPosition = position;
