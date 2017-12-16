@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '27.0.1'
     defaultConfig {
         applicationId 'com.scleroid.nemai'
-        minSdkVersion 21
-        targetSdkVersion 26
+        minSdkVersion 19
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         // Enabling multidex support.
@@ -51,7 +51,7 @@ dependencies {
     compile 'com.msg91.sendotp.library:library:3.1'
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:design:27.0.2'
     compile 'com.hbb20:ccp:2.0.8'
 
     //implementation "android.arch.lifecycle:runtime:1.0.3"

@@ -6,16 +6,12 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -39,7 +35,7 @@ import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
  * Created by Ganesh on 15-11-2017.
  */
 
-public class OuterItem extends HeaderItem implements RecyclerView.OnItemTouchListener, ActionMode.Callback {
+public class OuterItem extends HeaderItem {
 
     private final static float MIDDLE_RATIO_START = 0.7f;
     private final static float MIDDLE_RATIO_MAX = 0.1f;
@@ -183,9 +179,23 @@ public class OuterItem extends HeaderItem implements RecyclerView.OnItemTouchLis
         adapter = (InnerAdapter) mRecyclerView.getAdapter();
         ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail);
 
-        mRecyclerView.addOnItemTouchListener(this);
-        gestureDetector =
-                new GestureDetectorCompat(this.getHeader().getContext(), new RecyclerViewDemoOnGestureListener());
+        mRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
+        //gestureDetector = new GestureDetectorCompat(this.getHeader().getContext(), new RecyclerViewDemoOnGestureListener());
 
         final String title1 = bindNumber(position, size);
 
@@ -263,9 +273,9 @@ public class OuterItem extends HeaderItem implements RecyclerView.OnItemTouchLis
         setContent(new ArrayList<Address>(), parcel, position, size);
     }
 
-    @Override
+   /* @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-        gestureDetector.onTouchEvent(e);
+      //  gestureDetector.onTouchEvent(e);
         return false;
     }
 
@@ -302,9 +312,9 @@ public class OuterItem extends HeaderItem implements RecyclerView.OnItemTouchLis
     public void onDestroyActionMode(ActionMode mode) {
 
         this.actionMode = null;
-        adapter.clearSelections();
+  //      adapter.clearSelections();
     }
-
+*/
    /* @Override
     public void onClick(View view) {
         // item click
@@ -324,9 +334,9 @@ public class OuterItem extends HeaderItem implements RecyclerView.OnItemTouchLis
     }*/
 
     private void myToggleSelection(int idx) {
-        adapter.toggleSelection(idx);
+        // adapter.toggleSelection(idx);
         // adapter.setRadioSelected();
-        String title = getHeader().getContext().getString(R.string.selected_count, adapter.getSelectedItemCount() + "");
+        // String title = getHeader().getContext().getString(R.string.selected_count, adapter.getSelectedItemCount() + "");
         //actionMode.setTitle(title);
     }
 
