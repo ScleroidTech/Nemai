@@ -28,7 +28,7 @@ import java.util.GregorianCalendar;
 public class DatePickerFragment extends DialogFragment {
     public static final String EXTRA_DATE = "com.example.ganesh.criminalintent.date";
     public static final String EXTRA_SERIAL = "serial_no";
-
+    public static final String EXTRA_PARCEL = "oneMoreParcel";
     private static final String TAG = "DatePickerFragment";
     private static final String EXTRA_SOURCE_PIN = "source";
     private static final String EXTRA_PACKAGE = "packageType";
@@ -40,7 +40,6 @@ public class DatePickerFragment extends DialogFragment {
     private static final String EXTRA_HEIGHT = "height";
     private static final String EXTRA_WIDTH = "width";
     private static final String EXTRA_LENGTH = "length";
-
     Date tempDate = new Date();
     long serialNo;
     String source, destination, deliveryType, packageType, desc;
@@ -59,7 +58,8 @@ public class DatePickerFragment extends DialogFragment {
 
     public static Bundle createBundle(Parcel parcel) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(EXTRA_DATE, parcel.getParcelDate());
+        bundle.putParcelable(EXTRA_PARCEL, parcel);
+        /*bundle.putSerializable(EXTRA_DATE, parcel.getParcelDate());
         bundle.putLong(EXTRA_SERIAL, parcel.getSerialNo());
         bundle.putString(EXTRA_SOURCE_PIN, parcel.getSourcePin());
         bundle.putString(EXTRA_DELIVERY_TYPE, parcel.getDeliveryType());
@@ -70,7 +70,7 @@ public class DatePickerFragment extends DialogFragment {
         bundle.putInt(EXTRA_WEIGHT, parcel.getWeight());
         bundle.putInt(EXTRA_WIDTH, parcel.getWidth());
         bundle.putInt(EXTRA_LENGTH, parcel.getLength());
-        bundle.putInt(EXTRA_HEIGHT, parcel.getHeight());
+        bundle.putInt(EXTRA_HEIGHT, parcel.getHeight());*/
         return bundle;
     }
 

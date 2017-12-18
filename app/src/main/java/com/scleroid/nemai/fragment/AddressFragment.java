@@ -38,6 +38,7 @@ AddressFragment extends DialogFragment {
     public static final String EXTRA_NEW_ADDRESS = "new_address";
 
     public static final int REQUEST_ADDRESS = 10;
+    public static final String EXTRA_ADDRESS = "address";
 
     private AddressListener mListener;
 
@@ -50,14 +51,14 @@ AddressFragment extends DialogFragment {
 
     }
 
-    public static AddressFragment newInstance(String city, String pin, String state) {
+  /*  public static AddressFragment newInstance(String city, String pin, String state) {
         Bundle bundle = createBundle(city, pin, state);
         AddressFragment fragment = new AddressFragment();
         fragment.setArguments(bundle);
         return fragment;
 
 
-    }
+    }*/
 
     public static void show(AppCompatActivity context) {
         AddressFragment dialog = new AddressFragment();
@@ -66,14 +67,15 @@ AddressFragment extends DialogFragment {
     @NonNull
     private static Bundle createBundle(Address address) {
         Bundle bundle = new Bundle();
-        bundle.putString(EXTRA_PIN, address.getPincode());
+        bundle.putParcelable(EXTRA_ADDRESS, address);
+      /*  bundle.putString(EXTRA_PIN, address.getPincode());
         bundle.putString(EXTRA_CITY, address.getCity());
         bundle.putString(EXTRA_STATE, address.getState());
         bundle.putLong(EXTRA_SERIAL_NO, address.getSerialNo());
         bundle.putString(EXTRA_NAME, address.getName());
         bundle.putString(EXTRA_MOBILE, address.getMobileNo());
         bundle.putString(EXTRA_ADDRESS_LINE_1, address.getAddress_line_1());
-        bundle.putString(EXTRA_ADDRESS_LINE_1, address.getAddress_line_1());
+        bundle.putString(EXTRA_ADDRESS_LINE_1, address.getAddress_line_1());*/
         bundle.putBoolean(EXTRA_NEW_ADDRESS, false);
         return bundle;
     }
@@ -115,16 +117,16 @@ AddressFragment extends DialogFragment {
         if (bundle != null) {
 
             Log.d("addressFragment", "Different Approch, bundle ");
-
-            pinEditText.setText(bundle.getString(EXTRA_PIN));
-            cityEditText.setText(bundle.getString(EXTRA_CITY));
-            stateEditText.setText(bundle.getString(EXTRA_STATE));
-            serialNo = bundle.getLong(EXTRA_SERIAL_NO);
+            Address address = bundle.getParcelable(EXTRA_ADDRESS);
+            pinEditText.setText(address.getPincode());
+            cityEditText.setText(address.getCity());
+            stateEditText.setText(address.getState());
+            serialNo = address.getSerialNo();
             if (!bundle.getBoolean(EXTRA_NEW_ADDRESS)) {
-                nameEditText.setText(bundle.getString(EXTRA_NAME));
-                mobileEditText.setText(bundle.getString(EXTRA_MOBILE));
-                addressLine1EditText.setText(bundle.getString(EXTRA_ADDRESS_LINE_1));
-                addressLine2EditText.setText(bundle.getString(EXTRA_ADDRESS_LINE_2));
+                nameEditText.setText(address.getName());
+                mobileEditText.setText(address.getMobileNo());
+                addressLine1EditText.setText(address.getAddress_line_1());
+                addressLine2EditText.setText(address.getAddress_line_1());
 
 
             }

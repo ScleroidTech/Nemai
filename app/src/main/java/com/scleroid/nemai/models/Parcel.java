@@ -8,6 +8,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
+import android.os.Parcelable;
 
 import com.scleroid.nemai.utils.DateConverter;
 
@@ -15,7 +16,18 @@ import java.util.Date;
 import java.util.Random;
 
 @Entity
-public class Parcel {
+public class Parcel implements Parcelable {
+    public static final Creator<Parcel> CREATOR = new Creator<Parcel>() {
+        @Override
+        public Parcel createFromParcel(android.os.Parcel in) {
+            return new Parcel(in);
+        }
+
+        @Override
+        public Parcel[] newArray(int size) {
+            return new Parcel[size];
+        }
+    };
     @PrimaryKey
     private long serialNo;
     private String sourcePin;
@@ -36,6 +48,7 @@ public class Parcel {
 
     }
 
+
     //TODO handle data through serial no, implement viewmodel if things doesn't work. & Make changes(whatever that means)
     @Ignore
     public Parcel() {
@@ -48,22 +61,24 @@ public class Parcel {
         this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", new Date(), new Random().nextLong());
 
     }
-
-    @Ignore
-    public Parcel(Date date, long serialNo) {
-        /*this.sourcePin = "null";
-        this.destinationPin = "null";
-        this.deliveryType = "Domestic";
-        this.packageType = "Document";
-        this.description = "null";
-        this.serialNo = UUID.randomUUID();*/
-        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", date, serialNo);
-
-    }
-
     @Ignore
     public Parcel(String city, String city1, String domestic, String parcel, int positive, int positive1, int positive2, int positive3, int positive4, String s, Date birthday) {
         this(city, city1, domestic, parcel, positive, positive1, positive2, positive3, positive4, s, birthday, new Random().nextLong());
+    }
+
+    @Ignore
+    protected Parcel(android.os.Parcel in) {
+        serialNo = in.readLong();
+        sourcePin = in.readString();
+        destinationPin = in.readString();
+        deliveryType = in.readString();
+        packageType = in.readString();
+        weight = in.readInt();
+        invoice = in.readInt();
+        length = in.readInt();
+        width = in.readInt();
+        height = in.readInt();
+        description = in.readString();
     }
 
     public Parcel updateInstance(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo) {
@@ -181,5 +196,25 @@ public class Parcel {
 
     public void setParcelDate(Date parcelDate) {
         this.parcelDate = parcelDate;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel parcel, int i) {
+        parcel.writeLong(serialNo);
+        parcel.writeString(sourcePin);
+        parcel.writeString(destinationPin);
+        parcel.writeString(deliveryType);
+        parcel.writeString(packageType);
+        parcel.writeInt(weight);
+        parcel.writeInt(invoice);
+        parcel.writeInt(length);
+        parcel.writeInt(width);
+        parcel.writeInt(height);
+        parcel.writeString(description);
     }
 }

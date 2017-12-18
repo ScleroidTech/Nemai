@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.facebook.FacebookSdk;
 import com.ramotion.garlandview.TailLayoutManager;
 import com.ramotion.garlandview.TailRecyclerView;
 import com.ramotion.garlandview.TailSnapHelper;
@@ -37,14 +38,7 @@ import java.util.List;
 
 import io.bloco.faker.Faker;
 
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_ADDRESS_LINE_1;
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_ADDRESS_LINE_2;
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_CITY;
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_MOBILE;
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_NAME;
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_PIN;
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_SERIAL_NO;
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_STATE;
+import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_ADDRESS;
 
 
 /**
@@ -69,6 +63,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
                 .build();
         Fabric.with(fabric);*/
         setContentView(R.layout.activity_checkout);
+        FacebookSdk.sdkInitialize(CheckoutActivity.this);
         context = CheckoutActivity.this;
         ((GarlandApp) getApplication()).addListener(this);
         initRecyclerView(new ArrayList<Address>(), new ArrayList<Parcel>());
@@ -121,7 +116,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     public void onFakerReady(Faker faker) {
         //  List<com.scleroid.nemai.models.Parcel> parcels = new ArrayList<>();
 
-        populateData(faker);
+        //populateData(faker);
         // List<Address> innerData;
         // innerData = AddressLab.getAllAddresss(context);
         //  parcels = ParcelLab.getAllParcels(context);
@@ -209,8 +204,9 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     @Subscribe
     public void onAddressMessage(Events.AddressMessage fragmentActivityMessage) {
         Bundle bundle = fragmentActivityMessage.getMessage();
-        Address model = new Address(bundle.getString(EXTRA_NAME), bundle.getString(EXTRA_ADDRESS_LINE_1),
+        Address model = bundle.getParcelable(EXTRA_ADDRESS); /*new Address(bundle.getString(EXTRA_NAME), bundle.getString(EXTRA_ADDRESS_LINE_1),
                 bundle.getString(EXTRA_ADDRESS_LINE_2), bundle.getString(EXTRA_STATE), bundle.getString(EXTRA_CITY), bundle.getString(EXTRA_PIN), bundle.getString(EXTRA_MOBILE), bundle.getLong(EXTRA_SERIAL_NO));
+       */
         Log.d("CHeckout", "onAddress Eventbus");
         AddressLab.updateAddress(model, AppDatabase.getAppDatabase(context));
 
