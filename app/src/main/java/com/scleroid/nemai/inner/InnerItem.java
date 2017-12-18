@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -34,6 +35,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
     public final View innerItemView;
     public RadioButton radioButton;
     public Button deliverButtton;
+    public CardView cardView;
     private Address mInnerData;
 
 
@@ -41,6 +43,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         super(itemView);
         innerItemView = itemView;
 
+        cardView = itemView.findViewById(R.id.frame_inner);
         //     Log.d("inneritem", "view " + itemView.toString());
         innerLayout = ((ViewGroup) itemView).getChildAt(0);
         mLine = itemView.findViewById(R.id.line);

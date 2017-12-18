@@ -11,11 +11,13 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ramotion.garlandview.header.HeaderDecorator;
 import com.ramotion.garlandview.header.HeaderItem;
@@ -24,6 +26,7 @@ import com.ramotion.garlandview.inner.InnerRecyclerView;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.inner.InnerAdapter;
 import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.models.Order;
 import com.scleroid.nemai.models.Parcel;
 
 import java.util.ArrayList;
@@ -36,6 +39,8 @@ import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
  */
 
 public class OuterItem extends HeaderItem {
+
+    private static final String TAG = "OuterItem";
 
     private final static float MIDDLE_RATIO_START = 0.7f;
     private final static float MIDDLE_RATIO_MAX = 0.1f;
@@ -79,9 +84,13 @@ public class OuterItem extends HeaderItem {
     private final int mTitleSize2;
     GestureDetectorCompat gestureDetector;
     android.view.ActionMode actionMode;
+    List<Address> tail, multiSelectList;
+    Order thatOrder;
     private boolean mIsScrolling;
     private View mEmptyView;
     private InnerAdapter adapter;
+    private boolean isMultiSelect = false;
+    private Parcel header;
 
 
     public OuterItem(View itemView, RecyclerView.RecycledViewPool pool) {
@@ -169,32 +178,39 @@ public class OuterItem extends HeaderItem {
     void setContent(@NonNull List<Address> innerDataList, final Parcel parcel, int position, int size) {
         final Context context = itemView.getContext();
 
-        final Parcel header = parcel;
-        final List<Address> tail = innerDataList;
+        header = parcel;
+        tail = innerDataList;
+        multiSelectList = new ArrayList<>();
         //  Crashlytics.getInstance().crash(); // Force a crash
 
 
 
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
         adapter = (InnerAdapter) mRecyclerView.getAdapter();
-        ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail);
-
-        mRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+        ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail, multiSelectList);
+        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
+            public void onItemClick(View view, int position) {
+
+
+                multi_select(position);
+
+                Toast.makeText(getHeader().getContext(), "Details Page", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+            public void onItemLongClick(View view, int position) {
+                if (!isMultiSelect) {
+                    isMultiSelect = true;
+
+                }
+
+                //multi_select(position);
 
             }
+        }));
 
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
-            }
-        });
         //gestureDetector = new GestureDetectorCompat(this.getHeader().getContext(), new RecyclerViewDemoOnGestureListener());
 
         final String title1 = bindNumber(position, size);
@@ -212,6 +228,36 @@ public class OuterItem extends HeaderItem {
         cost.setText("Rs. " + parcel.getInvoice());//TODO get delivery price, not invoice
 
 
+    }
+
+    private void multi_select(int position) {
+        try {
+            if (multiSelectList.isEmpty()) {
+                Log.d(TAG, "list empty " + multiSelectList.isEmpty());
+                thatOrder = new Order(header, tail.get(position));
+                multiSelectList.add(tail.get(position));
+            } else {
+                Log.d(TAG, "list not  empty " + multiSelectList.isEmpty());
+
+                if (multiSelectList.contains(tail.get(position))) {
+                    multiSelectList.remove(tail.get(position));
+                    thatOrder.setAddress(null);
+                } else if (multiSelectList.size() > 0) {
+                    multiSelectList.clear();
+                    thatOrder.setAddress(tail.get(position));
+                    multiSelectList.add(tail.get(position));
+                }
+
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Log.e(TAG, "Array Out of Bound " + e);
+        }
+        refreshAdapter();
+
+    }
+
+    public void refreshAdapter() {
+        adapter.addData(tail, multiSelectList);
     }
 
     public String bindNumber(int position, int size) {
@@ -339,6 +385,7 @@ public class OuterItem extends HeaderItem {
         // String title = getHeader().getContext().getString(R.string.selected_count, adapter.getSelectedItemCount() + "");
         //actionMode.setTitle(title);
     }
+
 
     private class RecyclerViewDemoOnGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override

@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.scleroid.nemai.models.Parcel;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -74,18 +73,13 @@ public class ParcelLab {
         return null;
     }
 
-    public static Parcel updateParcel(final Context context, Date date, long lonely) {
+    public static void updateParcel(final Context context, Parcel parcel) {
 
-        UpdateParcelAsync task = new UpdateParcelAsync(AppDatabase.getAppDatabase(context), date, lonely);
+        UpdateParcelAsync task = new UpdateParcelAsync(AppDatabase.getAppDatabase(context), parcel);
 
-        try {
-            return task.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return null;
+
+        task.execute();
+
     }
 
     public static List<Parcel> getAllParcels(final Context context) {
@@ -227,11 +221,11 @@ public class ParcelLab {
         private final AppDatabase mDb;
         private final Parcel parcel;
 
-        UpdateParcelAsync(AppDatabase db, Date date, long serialNo) {
+        UpdateParcelAsync(AppDatabase db, Parcel parcel) {
 
             //Make Changes here TODO
             this.mDb = db;
-            this.parcel = new Parcel(date, serialNo);
+            this.parcel = parcel;
         }
 
         @Override

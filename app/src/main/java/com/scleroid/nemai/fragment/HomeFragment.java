@@ -51,12 +51,10 @@ import com.scleroid.nemai.volley_support.ShowLoader;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_DATE;
-import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_SERIAL;
+import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_PARCEL;
 import static com.scleroid.nemai.network.NetworkCalls.submitCouriers;
 
 
@@ -419,10 +417,11 @@ public class HomeFragment extends Fragment {
     public void onDateMessage(Events.DateMessage fragmentActivityMessage) {
         Bundle bundle = fragmentActivityMessage.getMessage();
 
-        Date date = (Date) bundle.getSerializable(EXTRA_DATE);
+        Parcel parcel = bundle.getParcelable(EXTRA_PARCEL);
+       /* Date date = (Date) bundle.getSerializable(EXTRA_DATE);
         long lonely = bundle.getLong(EXTRA_SERIAL);
-        Log.d("CHeckout", "onDate Eventbus");
-        ParcelLab.updateParcel(context, date, lonely);
+        Log.d("CHeckout", "onDate Eventbus");*/
+        ParcelLab.updateParcel(context, parcel);
         recycleViewPagerAdapter.notifyDataSetChanged();
         // setContent(model);
 

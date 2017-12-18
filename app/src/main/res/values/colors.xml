@@ -40,4 +40,7 @@
     <color name="details_item_header">@color/details_name_color</color>
     <color name="details_item_text">#858d92</color>
     <color name="details_item_separator">@color/item_separator_color</color>
+
+    <color name="list_item_selected_state">#F4F6F6</color>
+    <color name="list_item_normal_state">#FFFFFF</color>
 </resources>

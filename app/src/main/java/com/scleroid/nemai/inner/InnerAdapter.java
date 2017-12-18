@@ -3,6 +3,7 @@ package com.scleroid.nemai.inner;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -97,8 +98,19 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         holder.itemView.setTag(address);
         //  setRadioSelected(holder, position);
 
+        if (mDataSelected.contains(mData.get(position))) {
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.list_item_selected_state));
+            holder.itemView.setActivated(true);
+            holder.radioButton.setChecked(true);
+        } else {
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.list_item_normal_state));
+            holder.itemView.setActivated(false);
+            holder.radioButton.setChecked(false);
+        }
+
         // holder.itemView.setActivated(selectedItems.get(position, false));
-        //TODO disable already activated view, then activate second view, reduce response time
+        //TODO disable alre
+        // ady activated view, then activate second view, reduce response time
         // Use getSelectedItems for the purpose
 
         // binding.setDiff((position >= mData.size() || mData.isEmpty()) ? 1 : 0);
@@ -195,13 +207,14 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         return R.layout.item_inner_address_card;
     }
 
-    public void addData(@Nullable List<Address> innerDataList) {
+    public void addData(@Nullable List<Address> innerDataList, List<Address> selected) {
         final int size = mData.size();
         mData = innerDataList;
+        mDataSelected = selected;
         //      Log.d("innerItem", "is it here? addData" + mData.size());
 
-        //notifyDataSetChanged();
-        notifyItemRangeInserted(size, innerDataList.size());
+        notifyDataSetChanged();
+        //notifyItemRangeInserted(size, innerDataList.size());
     }
 
     public void clearData() {
