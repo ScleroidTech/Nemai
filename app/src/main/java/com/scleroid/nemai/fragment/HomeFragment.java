@@ -128,6 +128,7 @@ public class HomeFragment extends Fragment {
             public void onChanged(@Nullable List<Parcel> parcels) {
 
                 recycleViewPagerAdapter.updateParcelList(parcels);
+
                 crimes = parcels;
                 if (parcels.size() == 0)
                     createDefaultParcel();
@@ -250,6 +251,14 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+        //TODO implement this on empty address
+        //
+        //
+        //
+        //
+        //
+        //
+        // recyclerViewPager.scrollToPosition();
         recyclerViewPager.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
             @Override
             public void OnPageChanged(int oldPosition, int newPosition) {
