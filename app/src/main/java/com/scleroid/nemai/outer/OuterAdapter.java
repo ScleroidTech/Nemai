@@ -74,6 +74,10 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
         return R.layout.item_outer;
     }
 
+    public List<Parcel> getParcels() {
+        return parcels;
+    }
+
     public void updateParcelList(List<Parcel> parcels) {
         this.parcels = parcels;
         //   updateAddressList(addresses);
