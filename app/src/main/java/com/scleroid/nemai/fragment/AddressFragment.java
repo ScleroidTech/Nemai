@@ -80,9 +80,10 @@ AddressFragment extends DialogFragment {
     @NonNull
     private static Bundle createBundle(String city, String pin, String state) {
         Bundle bundle = new Bundle();
-        bundle.putString(EXTRA_PIN, pin);
-        bundle.putString(EXTRA_CITY, city);
-        bundle.putString(EXTRA_STATE, state);
+        Address address = new Address(null, null, null, state, city, pin, null);
+        bundle.putParcelable(EXTRA_ADDRESS, address);
+       /* bundle.putString(EXTRA_CITY, city);
+        bundle.putString(EXTRA_STATE, state);*/
         bundle.putBoolean(EXTRA_NEW_ADDRESS, true);
 
         return bundle;
@@ -119,7 +120,7 @@ AddressFragment extends DialogFragment {
             cityEditText.setText(address.getCity());
             stateEditText.setText(address.getState());
             serialNo = address.getSerialNo();
-            if (!bundle.getBoolean(EXTRA_NEW_ADDRESS)) {
+            if (bundle.getBoolean(EXTRA_NEW_ADDRESS)) {
                 nameEditText.setText(address.getName());
                 mobileEditText.setText(address.getMobileNo());
                 addressLine1EditText.setText(address.getAddress_line_1());
