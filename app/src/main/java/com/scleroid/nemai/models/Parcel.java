@@ -17,6 +17,7 @@ import java.util.Random;
 
 @Entity
 public class Parcel implements Parcelable {
+
     public static final Creator<Parcel> CREATOR = new Creator<Parcel>() {
         @Override
         public Parcel createFromParcel(android.os.Parcel in) {
@@ -42,29 +43,8 @@ public class Parcel implements Parcelable {
     private String description;
     @TypeConverters(DateConverter.class)
     private Date parcelDate;
-
-    public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo) {
-        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo);
-
-    }
-
-
-    //TODO handle data through serial no, implement viewmodel if things doesn't work. & Make changes(whatever that means)
     @Ignore
-    public Parcel() {
-        /*this.sourcePin = "null";
-        this.destinationPin = "null";
-        this.deliveryType = "Domestic";
-        this.packageType = "Document";
-        this.description = "null";
-        this.serialNo = UUID.randomUUID();*/
-        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", new Date(), new Random().nextLong());
-
-    }
-    @Ignore
-    public Parcel(String city, String city1, String domestic, String parcel, int positive, int positive1, int positive2, int positive3, int positive4, String s, Date birthday) {
-        this(city, city1, domestic, parcel, positive, positive1, positive2, positive3, positive4, s, birthday, new Random().nextLong());
-    }
+    private PinCode sourcePinCode, destinationPinCode;
 
     @Ignore
     protected Parcel(android.os.Parcel in) {
@@ -81,13 +61,59 @@ public class Parcel implements Parcelable {
         description = in.readString();
     }
 
-    public Parcel updateInstance(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo) {
-        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo);
+    @Ignore
+    public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo, PinCode sourcePinCode, PinCode destinationPinCode) {
+        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo, sourcePinCode, destinationPinCode);
+
+    }
+
+    public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo) {
+        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo, null, null);
+
+    }
+
+    //TODO handle data through serial no, implement viewmodel if things doesn't work. & Make changes(whatever that means)
+    @Ignore
+    public Parcel() {
+        /*this.sourcePin = "null";
+        this.destinationPin = "null";
+        this.deliveryType = "Domestic";
+        this.packageType = "Document";
+        this.description = "null";
+        this.serialNo = UUID.randomUUID();*/
+        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", new Date(), new Random().nextLong(), null, null);
+
+    }
+
+    //TODO remove this constructor, only for dummy data
+    @Ignore
+    public Parcel(String city, String city1, String domestic, String parcel, int positive, int positive1, int positive2, int positive3, int positive4, String s, Date birthday) {
+        this(city, city1, domestic, parcel, positive, positive1, positive2, positive3, positive4, s, birthday, new Random().nextLong(), null, null);
+    }
+
+    public PinCode getSourcePinCode() {
+        return sourcePinCode;
+    }
+
+    public void setSourcePinCode(PinCode sourcePinCode) {
+        this.sourcePinCode = sourcePinCode;
+    }
+
+    public PinCode getDestinationPinCode() {
+        return destinationPinCode;
+    }
+
+    public void setDestinationPinCode(PinCode destinationPinCode) {
+        this.destinationPinCode = destinationPinCode;
+    }
+
+    public Parcel updateInstance(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo, PinCode sourcePinCode, PinCode destinationPinCode) {
+        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo, sourcePinCode, destinationPinCode);
         return this;
 
     }
 
-    private void initializeObject(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo) {
+    private void initializeObject(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo, PinCode sourcePinCode, PinCode destinationPinCode) {
         this.sourcePin = sourcePin;
         this.destinationPin = destinationPin;
         this.deliveryType = deliveryType;
@@ -100,6 +126,8 @@ public class Parcel implements Parcelable {
         this.description = description;
         this.parcelDate = parcelDate;
         this.serialNo = serialNo;
+        this.sourcePinCode = sourcePinCode;
+        this.destinationPinCode = destinationPinCode;
     }
 
     public long getSerialNo() {

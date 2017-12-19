@@ -26,6 +26,7 @@ import java.util.List;
 public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<InnerItem> {
 
     private static final int EMPTY_VIEW = 10;
+    private static final String TAG = "innerAdapter";
     public static int lastSelectedPosition = -1;
     ItemInnerAddressCardBinding binding;
     private List<Address> mData = new ArrayList<>();
@@ -102,10 +103,16 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.list_item_selected_state));
             holder.itemView.setActivated(true);
             holder.radioButton.setChecked(true);
+            holder.deliverButtton.setEnabled(true);
+            holder.deliverButtton.setVisibility(View.VISIBLE);
+
         } else {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.list_item_normal_state));
             holder.itemView.setActivated(false);
             holder.radioButton.setChecked(false);
+
+            holder.deliverButtton.setEnabled(false);
+            holder.deliverButtton.setVisibility(View.INVISIBLE);
         }
 
         // holder.itemView.setActivated(selectedItems.get(position, false));
@@ -113,63 +120,35 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         // ady activated view, then activate second view, reduce response time
         // Use getSelectedItems for the purpose
 
-        // binding.setDiff((position >= mData.size() || mData.isEmpty()) ? 1 : 0);
-        // bindViewHolder(holder,position);
-
-       /* holder.innerItemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRadioSelected(holder, position);
-            }
-        });
-*/
 
     }
+
+    // Swap itemA with itemB
+    public void swapItems(int position) {
+        //make sure to check if dataset is null and if itemA and itemB are valid indexes.
+        //      List<Address> temp = new ArrayList<>();
+        try {
+            if (position != 0 && mDataSelected.contains(mData.get(position))) {
+                Address itemA = mData.get(position);
+                Address itemB = mData.get(0);
+                mData.set(position, itemB);
+                mData.set(0, itemA);
+           /* mData.add(0, itemA);
+            mData.remove(tail.lastIndexOf(itemA));*/
+
+                //   notifyItemMoved(position, 0);
+            }//This will trigger onBindViewHolder method from the adapter.
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Log.e(TAG, "Array Out of Bound " + e);
+        }
+    }
+
 
     public void activateButtons(boolean activate) {
         this.activate = activate;
         notifyDataSetChanged(); //need to call it for the child views to be re-created with buttons.
     }
 
-/*
-    public void toggleSelection(int pos) {
-        boolean bool = false;
-
-        if (selectedItems.get(pos, false)) {
-
-         //   clearSelections();
-            selectedItems.delete(pos);
-            bool = true;
-
-            buttonDeliver.setVisibility(View.VISIBLE);
-        } else {
-          */
-/*  if (getSelectedItemCount() > 1) {
-               *//*
-*/
-/*for (int item = 0; item < selectedItems.size(); item++) {
-                   Log.d("InnerAdapter", selectedItems.get(item) + "");
-                   if (item != pos) selectedItems.delete(item);
-
-               }
-           }*//*
-*/
-/*
-                clearSelections();*//*
-
-            }
-            bool = false;
-            selectedItems.put(pos, true);
-            buttonDeliver.setVisibility(View.INVISIBLE);
-        }
-
-        this.activate = bool;
-        lastChecked.setChecked(bool);
-        //activateButtons(bool);
-        notifyItemChanged(pos);
-    }
-
-*/
 
     public void setRadioSelected(InnerItem holder, int position) {
         lastSelectedPosition = position;
@@ -190,7 +169,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     @Override
     public void onViewRecycled(InnerItem holder) {
         // Log.d("innerItem", " onVIewRecycled" + mData.size());
-        holder.clearContent();
+        //  holder.clearContent();
     }
 
     @Override
@@ -200,7 +179,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         return mData.size();
     }
 
-    //TODO getItemCOunt, onBindViewHolder, & onCreateViewHolder doesn'tget called at all.
+
     @Override
     public int getItemViewType(int position) {
         //     Log.d("innerItem", "is it here? getItemViewType" + mData.size());
@@ -211,11 +190,25 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         final int size = mData.size();
         mData = innerDataList;
         mDataSelected = selected;
+        if (!mDataSelected.isEmpty())
+            swapItems(mData.indexOf(selected.get(0)));
         //      Log.d("innerItem", "is it here? addData" + mData.size());
 
         notifyDataSetChanged();
         //notifyItemRangeInserted(size, innerDataList.size());
     }
+
+    public void updateSelectedData(int position, List<Address> selected) {
+
+
+        mDataSelected = selected;
+        // swapItems(position);
+        //      Log.d("innerItem", "is it here? addData" + mData.size());
+
+        notifyDataSetChanged();
+        //notifyItemRangeInserted(size, innerDataList.size());
+    }
+
 
     public void clearData() {
         mData.clear();

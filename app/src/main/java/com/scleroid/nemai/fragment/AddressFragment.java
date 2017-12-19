@@ -2,7 +2,6 @@ package com.scleroid.nemai.fragment;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -47,18 +46,16 @@ AddressFragment extends DialogFragment {
         AddressFragment fragment = new AddressFragment();
         fragment.setArguments(bundle);
         return fragment;
-
-
     }
 
-  /*  public static AddressFragment newInstance(String city, String pin, String state) {
+    public static AddressFragment newInstance(String city, String pin, String state) {
         Bundle bundle = createBundle(city, pin, state);
         AddressFragment fragment = new AddressFragment();
         fragment.setArguments(bundle);
         return fragment;
 
 
-    }*/
+    }
 
     public static void show(AppCompatActivity context) {
         AddressFragment dialog = new AddressFragment();
@@ -161,11 +158,6 @@ AddressFragment extends DialogFragment {
         return createBundle(address);
     }
 
-    private void sendResult(int ResultCode, Bundle bundle) {
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_BUNDLE, bundle);
-        getTargetFragment().onActivityResult(getTargetRequestCode(), ResultCode, intent);
-    }
 
     /*  @Nullable
       @Override

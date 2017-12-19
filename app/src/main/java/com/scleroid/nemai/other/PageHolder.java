@@ -40,6 +40,7 @@ import static com.scleroid.nemai.fragment.HomeFragment.mPinCodeSource;
  */
 
 public class PageHolder extends RecyclerView.ViewHolder {
+
     private static final String DIALOG_DATE = "DIALOG_DATE";
     private static final int REQUEST_DATE = 0;
     private static final String TAG = "PageHolder";
@@ -350,13 +351,13 @@ public class PageHolder extends RecyclerView.ViewHolder {
     }
 
     public Parcel nextScreenParcel(String source, String destination, int weight, int invoice, int width, int height, int length, String description, String deliveryType, Parcel parcel, Date parcelDate) {
-        return parcel.updateInstance(source, destination, deliveryType, "Parcel", weight, invoice, width, height, length, description, parcelDate, parcel.getSerialNo());
+        return parcel.updateInstance(source, destination, deliveryType, "Parcel", weight, invoice, width, height, length, description, parcelDate, parcel.getSerialNo(), mPinCodeSource, mPinCodeDestination);
     }
 
 
     public Parcel nextScreenDocument(String source, String destination, int weight, int invoice, String description, String deliveryType, Parcel parcel, Date parcelDate) {
 
-        return parcel.updateInstance(source, destination, deliveryType, "Document", weight, invoice, 0, 0, 0, description, parcelDate, parcel.getSerialNo());
+        return parcel.updateInstance(source, destination, deliveryType, "Document", weight, invoice, 0, 0, 0, description, parcelDate, parcel.getSerialNo(), mPinCodeSource, mPinCodeDestination);
 
     }
 

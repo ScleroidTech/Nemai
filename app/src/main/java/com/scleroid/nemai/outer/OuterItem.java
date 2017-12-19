@@ -1,9 +1,12 @@
 package com.scleroid.nemai.outer;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -12,8 +15,6 @@ import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -24,10 +25,12 @@ import com.ramotion.garlandview.header.HeaderItem;
 import com.ramotion.garlandview.inner.InnerLayoutManager;
 import com.ramotion.garlandview.inner.InnerRecyclerView;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.fragment.AddressFragment;
 import com.scleroid.nemai.inner.InnerAdapter;
 import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.Order;
 import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.models.PinCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,10 +77,7 @@ public class OuterItem extends HeaderItem {
     private final View mMiddle;
     private final View mMiddleEdit;
     private final View mFooter;
-    private final View mNewAddressButton;
-
     private final List<View> mMiddleCollapsible = new ArrayList<>(2);
-
     private final int m10dp;
     private final int m120dp;
     private final int mTitleSize1;
@@ -86,6 +86,7 @@ public class OuterItem extends HeaderItem {
     android.view.ActionMode actionMode;
     List<Address> tail, multiSelectList;
     Order thatOrder;
+    private View mNewAddressButton;
     private boolean mIsScrolling;
     private View mEmptyView;
     private InnerAdapter adapter;
@@ -119,6 +120,8 @@ public class OuterItem extends HeaderItem {
         mMiddleEdit = itemView.findViewById(R.id.header_middle_edit);
         mFooter = itemView.findViewById(R.id.header_footer);
 
+        mNewAddressButton = itemView.findViewById(R.id.new_address_button);
+
         //  mMiddleCollapsible.add((View)mAvatar.getParent());
         mMiddleCollapsible.add((View) cost.getParent());
 
@@ -135,7 +138,7 @@ public class OuterItem extends HeaderItem {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                // onItemScrolled(recyclerView, dx, dy);
+                onItemScrolled(recyclerView, dx, dy);
             }
         });
 
@@ -153,7 +156,6 @@ public class OuterItem extends HeaderItem {
 
         DataBindingUtil.bind(((FrameLayout) mHeader).getChildAt(0));
     }
-
 
     @Override
     public View getHeader() {
@@ -228,40 +230,68 @@ public class OuterItem extends HeaderItem {
         cost.setText("Rs. " + parcel.getInvoice());//TODO get delivery price, not invoice
 
 
+        mNewAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                FragmentManager fm = ((FragmentActivity) getHeader().getContext()).getFragmentManager();
+                Parcel parcel = header;
+                PinCode pincode = parcel.getDestinationPinCode();
+                DialogFragment dialog = AddressFragment.newInstance(pincode.getLocation(), pincode.getPincode(), pincode.getState());
+                //  dialog.setTargetFragment(getInnerLayout().getContext(),REQUEST_ADDRESS);
+                //  dialog.setListener()
+                dialog.show(fm, "adad");
+                //TODO City & other values DialogFragment dialog = AddressFragment.newInstance(parcel.getDestinationPin().toString());
+                //  dialog.setTargetFragment(context,REQUEST_ADDRESS);
+                //  dialog.setListener()
+                //TODO enable after implementing the above dialog.show(fm, "adad");
+
+                //TODO update dataset of room, which will update this too
+            }
+        });
+
     }
 
     private void multi_select(int position) {
         try {
+
             if (multiSelectList.isEmpty()) {
                 Log.d(TAG, "list empty " + multiSelectList.isEmpty());
                 thatOrder = new Order(header, tail.get(position));
                 multiSelectList.add(tail.get(position));
+
             } else {
                 Log.d(TAG, "list not  empty " + multiSelectList.isEmpty());
 
                 if (multiSelectList.contains(tail.get(position))) {
                     multiSelectList.remove(tail.get(position));
                     thatOrder.setAddress(null);
-                } else if (multiSelectList.size() > 0) {
+                } else {
                     multiSelectList.clear();
                     thatOrder.setAddress(tail.get(position));
                     multiSelectList.add(tail.get(position));
+
                 }
 
+                //TODO list updation, exception handling
             }
+
         } catch (ArrayIndexOutOfBoundsException e) {
             Log.e(TAG, "Array Out of Bound " + e);
+        } catch (IndexOutOfBoundsException e) {
+            Log.e(TAG, "Array Out of Bound " + e);
         }
-        refreshAdapter();
+        refreshAdapter(position);
 
     }
 
-    public void refreshAdapter() {
-        adapter.addData(tail, multiSelectList);
+    public void refreshAdapter(int position) {
+        adapter.updateSelectedData(position, multiSelectList);
     }
 
     public String bindNumber(int position, int size) {
-        return (String.format("Shipment %d of %d", position + 1, size));
+        return String.format("Shipment %d of %d", position + 1, size);
     }
 
     void clearContent() {
@@ -309,101 +339,11 @@ public class OuterItem extends HeaderItem {
             ViewCompat.setScaleY(view, middleRatio);
             ViewCompat.setAlpha(view, middleRatio);
         }
-/*
-        final ViewGroup.LayoutParams lp = mMiddle.getLayoutParams();
-        lp.height = m120dp - (int) (m10dp * (1f - middleRatio));
-        mMiddle.setLayoutParams(lp);*/
     }
 
     public void setContent(Parcel parcel, int position, int size) {
         setContent(new ArrayList<Address>(), parcel, position, size);
     }
 
-   /* @Override
-    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-      //  gestureDetector.onTouchEvent(e);
-        return false;
-    }
 
-    @Override
-    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-    }
-
-    @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-    }
-
-    @Override
-    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        // Inflate a menu resource providing context menu items
-        MenuInflater inflater = actionMode.getMenuInflater();
-        inflater.inflate(R.menu.menu_cab_recyclerviewdemoactivity, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
-    }
-
-    @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        return false;
-    }
-
-    @Override
-    public void onDestroyActionMode(ActionMode mode) {
-
-        this.actionMode = null;
-  //      adapter.clearSelections();
-    }
-*/
-   /* @Override
-    public void onClick(View view) {
-        // item click
-        int idx = mRecyclerView.getChildPosition(view);
-
-        if (actionMode != null) {
-            return;
-        }
-        // Start the CAB using the ActionMode.Callback defined above
-     //   actionMode = startActionMode(RecyclerViewDemoActivity.this);
-            myToggleSelection(idx);
-            adapter.activateButtons(true);
-            return;
-
-
-
-    }*/
-
-    private void myToggleSelection(int idx) {
-        // adapter.toggleSelection(idx);
-        // adapter.setRadioSelected();
-        // String title = getHeader().getContext().getString(R.string.selected_count, adapter.getSelectedItemCount() + "");
-        //actionMode.setTitle(title);
-    }
-
-
-    private class RecyclerViewDemoOnGestureListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            View view = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
-            int idx = mRecyclerView.getChildPosition(view);
-            myToggleSelection(idx);
-            return super.onSingleTapConfirmed(e);
-        }
-
-        public void onLongPress(MotionEvent e) {
-            View view = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
-
-            // Start the CAB using the ActionMode.Callback defined above
-            // actionMode = getHeader().startActionMode((android.view.ActionMode.Callback) getHeader().getContext()); */
-            int idx = mRecyclerView.getChildPosition(view);
-            myToggleSelection(idx);
-            super.onLongPress(e);
-        }
-    }
 }

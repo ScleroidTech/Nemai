@@ -45,6 +45,7 @@ public class DatePickerFragment extends DialogFragment {
     String source, destination, deliveryType, packageType, desc;
     int height, weight, width, length, invoice;
     private DatePicker mDatePicker;
+    private Parcel parcel;
 
     public static DatePickerFragment newInstance(Parcel parcel) {
         Bundle bundle = createBundle(parcel);
@@ -87,7 +88,8 @@ public class DatePickerFragment extends DialogFragment {
 
         final Bundle bundle = getArguments();
         if (bundle != null) {
-            tempDate = (Date) bundle.getSerializable(EXTRA_DATE);
+            parcel = bundle.getParcelable(EXTRA_PARCEL);
+            /*tempDate = (Date) bundle.getSerializable(EXTRA_DATE);
             serialNo = bundle.getLong(EXTRA_SERIAL);
             source = bundle.getString(EXTRA_SOURCE_PIN);
             destination = bundle.getString(EXTRA_DEST_PIN);
@@ -98,7 +100,7 @@ public class DatePickerFragment extends DialogFragment {
             height = bundle.getInt(EXTRA_HEIGHT);
             width = bundle.getInt(EXTRA_WIDTH);
             length = bundle.getInt(EXTRA_LENGTH);
-            invoice = bundle.getInt(EXTRA_INVOICE);
+            invoice = bundle.getInt(EXTRA_INVOICE);*/
 
         }
 
@@ -143,7 +145,8 @@ public class DatePickerFragment extends DialogFragment {
                 int month = mDatePicker.getMonth();
                 int day = mDatePicker.getDayOfMonth();
                 Date date = new GregorianCalendar(year, month, day).getTime();
-                Parcel parcel = new Parcel(source, destination, deliveryType, packageType, weight, invoice, length, width, height, desc, date, serialNo);
+                parcel.setParcelDate(date);/*
+                Parcel parcel = new Parcel(source, destination, deliveryType, packageType, weight, invoice, length, width, height, desc, date, serialNo); */
                 Bundle bundle = createBundle(parcel);
                 //sendResult(Activity.RESULT_OK,date);
                 Events.DateMessage addressMessage = new Events.DateMessage(bundle);

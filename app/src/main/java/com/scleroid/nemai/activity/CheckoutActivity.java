@@ -1,13 +1,11 @@
 package com.scleroid.nemai.activity;
 
-import android.app.FragmentManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -52,7 +50,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     List<List<Address>> outerData = new ArrayList<>();
     private CheckoutViewModel viewModel;
     private OuterAdapter outerAdapter;
-    private FloatingActionButton mNewAddressButton;
+    private TailRecyclerView outerRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,19 +80,6 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
             @Override
             public void onChanged(@Nullable List<Address> addresses) {
                 outerAdapter.updateAddressList(addresses);
-            }
-        });
-        mNewAddressButton = findViewById(R.id.new_address_button);
-        mNewAddressButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = CheckoutActivity.this.getFragmentManager();
-                //TODO City & other values DialogFragment dialog = AddressFragment.newInstance(parcel.getDestinationPin().toString());
-                //  dialog.setTargetFragment(context,REQUEST_ADDRESS);
-                //  dialog.setListener()
-                //TODO enable after implementing the above dialog.show(fm, "adad");
-
-                //TODO update dataset of room, which will update this too
             }
         });
 
@@ -153,12 +138,12 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     private void initRecyclerView(List<Address> data, List<Parcel> parcels) {
         findViewById(R.id.progressBar).setVisibility(View.GONE);
 
-        final TailRecyclerView rv = findViewById(R.id.recycler_view);
-        ((TailLayoutManager) rv.getLayoutManager()).setPageTransformer(new HeaderTransformer());
+        outerRecyclerView = findViewById(R.id.recycler_view);
+        ((TailLayoutManager) outerRecyclerView.getLayoutManager()).setPageTransformer(new HeaderTransformer());
         outerAdapter = new OuterAdapter(data, parcels);
-        rv.setAdapter(outerAdapter);
-        rv.setOnFlingListener(null);
-        new TailSnapHelper().attachToRecyclerView(rv);
+        outerRecyclerView.setAdapter(outerAdapter);
+        outerRecyclerView.setOnFlingListener(null);
+        new TailSnapHelper().attachToRecyclerView(outerRecyclerView);
     }
 
     private Address createInnerData(Faker faker) {
