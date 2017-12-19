@@ -24,6 +24,7 @@ import com.scleroid.nemai.inner.InnerItem;
 import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.CheckoutViewModel;
 import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.outer.OuterAdapter;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
@@ -101,7 +102,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     public void onFakerReady(Faker faker) {
         //  List<com.scleroid.nemai.models.Parcel> parcels = new ArrayList<>();
 
-        //populateData(faker);
+        populateData(faker);
         // List<Address> innerData;
         // innerData = AddressLab.getAllAddresss(context);
         //  parcels = ParcelLab.getAllParcels(context);
@@ -159,9 +160,11 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     }
 
     private com.scleroid.nemai.models.Parcel createParcelData(Faker faker) {
+        String source = faker.address.city();
+        String dest = faker.address.city();
         return new com.scleroid.nemai.models.Parcel(
-                faker.address.city(),
-                faker.address.city(),
+                source,
+                dest,
                 "Domestic",
                 "Parcel",
                 faker.number.positive(0, 10),
@@ -170,7 +173,9 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
                 faker.number.positive(),
                 faker.number.positive(),
                 faker.company.catchPhrase(),
-                faker.date.forward()
+                faker.date.forward(),
+                new PinCode(source, (faker.number.between(111111, 999999)) + "", faker.address.state(), faker.address.streetName()),
+                new PinCode(dest, (faker.number.between(111111, 999999)) + "", faker.address.state(), faker.address.streetName())
         );
     }
 

@@ -11,12 +11,14 @@ import android.arch.persistence.room.TypeConverters;
 import android.os.Parcelable;
 
 import com.scleroid.nemai.utils.DateConverter;
+import com.scleroid.nemai.utils.PinConverter;
 
 import java.util.Date;
 import java.util.Random;
 
 @Entity
 public class Parcel implements Parcelable {
+
 
     public static final Creator<Parcel> CREATOR = new Creator<Parcel>() {
         @Override
@@ -43,35 +45,21 @@ public class Parcel implements Parcelable {
     private String description;
     @TypeConverters(DateConverter.class)
     private Date parcelDate;
-    @Ignore
-    private PinCode sourcePinCode, destinationPinCode;
-
-    @Ignore
-    protected Parcel(android.os.Parcel in) {
-        serialNo = in.readLong();
-        sourcePin = in.readString();
-        destinationPin = in.readString();
-        deliveryType = in.readString();
-        packageType = in.readString();
-        weight = in.readInt();
-        invoice = in.readInt();
-        length = in.readInt();
-        width = in.readInt();
-        height = in.readInt();
-        description = in.readString();
-    }
-
-    @Ignore
+    @TypeConverters(PinConverter.class)
+    private PinCode sourcePinCode;
+    @TypeConverters(PinConverter.class)
+    private PinCode destinationPinCode;
     public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo, PinCode sourcePinCode, PinCode destinationPinCode) {
         initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo, sourcePinCode, destinationPinCode);
 
     }
 
+    /*
     public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo) {
-        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo, null, null);
+        this(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo, null, null);
 
     }
-
+*/
     //TODO handle data through serial no, implement viewmodel if things doesn't work. & Make changes(whatever that means)
     @Ignore
     public Parcel() {
@@ -87,8 +75,25 @@ public class Parcel implements Parcelable {
 
     //TODO remove this constructor, only for dummy data
     @Ignore
-    public Parcel(String city, String city1, String domestic, String parcel, int positive, int positive1, int positive2, int positive3, int positive4, String s, Date birthday) {
-        this(city, city1, domestic, parcel, positive, positive1, positive2, positive3, positive4, s, birthday, new Random().nextLong(), null, null);
+    public Parcel(String city, String city1, String domestic, String parcel, int positive, int positive1, int positive2, int positive3, int positive4, String s, Date birthday, PinCode sourcePinCode, PinCode destinationPinCode) {
+        this(city, city1, domestic, parcel, positive, positive1, positive2, positive3, positive4, s, birthday, new Random().nextLong(), sourcePinCode, destinationPinCode);
+    }
+
+    protected Parcel(android.os.Parcel in) {
+        sourcePinCode = in.readParcelable(PinCode.class.getClassLoader());
+        destinationPin = in.readParcelable(PinCode.class.getClassLoader());
+        serialNo = in.readLong();
+        sourcePin = in.readString();
+        destinationPin = in.readString();
+        deliveryType = in.readString();
+        packageType = in.readString();
+        weight = in.readInt();
+        invoice = in.readInt();
+        length = in.readInt();
+        width = in.readInt();
+        height = in.readInt();
+        description = in.readString();
+
     }
 
     public PinCode getSourcePinCode() {
@@ -226,6 +231,7 @@ public class Parcel implements Parcelable {
         this.parcelDate = parcelDate;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -244,5 +250,7 @@ public class Parcel implements Parcelable {
         parcel.writeInt(width);
         parcel.writeInt(height);
         parcel.writeString(description);
+        parcel.writeParcelable(sourcePinCode, 0);
+        parcel.writeParcelable(destinationPinCode, 0);
     }
 }
