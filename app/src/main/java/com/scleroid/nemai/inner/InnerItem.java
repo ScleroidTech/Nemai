@@ -20,7 +20,7 @@ import com.scleroid.nemai.models.Address;
  * Created by Ganesh on 15-11-2017.
  */
 
-public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
+public class InnerItem extends com.ramotion.garlandview.inner.InnerItem implements View.OnClickListener {
     private static DialogFragment dialog;
     public final TextView mobile;
     public final TextView name;
@@ -58,26 +58,18 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
         editTextView = itemView.findViewById(R.id.edit_image_button);
         deliverButtton = itemView.findViewById(R.id.deliver_button);
         deliverButtton.setVisibility(View.GONE);
-        editTextView.setOnClickListener(new View.OnClickListener() {
+       /* editTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = ((FragmentActivity) getInnerLayout().getContext()).getFragmentManager();
                 dialog = AddressFragment.newInstance(mInnerData);
-                //  dialog.setTargetFragment(getInnerLayout().getContext(),REQUEST_ADDRESS);
-                //  dialog.setListener()
+
                 dialog.show(fm, "adad");
             }
-        });
-
-        /*innerLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //EventBus.getDefault().post(InnerItem.this);
-
-
-
-            }
         });*/
+        editTextView.setOnClickListener(this);
+
+
     }
 
     @Override
@@ -113,4 +105,16 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem {
                 .into(mAvatar);*/
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == editTextView.getId()) {
+            FragmentManager fm = ((FragmentActivity) getInnerLayout().getContext()).getFragmentManager();
+            dialog = AddressFragment.newInstance(mInnerData);
+
+            dialog.show(fm, "adad");
+        } else {
+
+        }
+
+    }
 }

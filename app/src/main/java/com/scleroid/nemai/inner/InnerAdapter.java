@@ -144,27 +144,6 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     }
 
 
-    public void activateButtons(boolean activate) {
-        this.activate = activate;
-        notifyDataSetChanged(); //need to call it for the child views to be re-created with buttons.
-    }
-
-
-    public void setRadioSelected(InnerItem holder, int position) {
-        lastSelectedPosition = position;
-        RadioButton tempRadio = holder.radioButton;
-        Button tempButton = holder.deliverButtton;
-
-        lastChecked = tempRadio;
-        buttonDeliver = tempButton;
-        // lastChecked.setChecked(true);
-        // deliverButton.setVisibility(View.VISIBLE);
-        //holder.radioButton.setChecked(lastSelectedPosition == position);
-        //holder.radioButton.setChecked(lastSelectedPosition == position);
-        // notifyItemChanged(lastSelectedPosition);
-
-    }
-
 
     @Override
     public void onViewRecycled(InnerItem holder) {

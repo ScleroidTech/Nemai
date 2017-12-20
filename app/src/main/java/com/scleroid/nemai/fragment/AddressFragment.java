@@ -39,8 +39,6 @@ AddressFragment extends DialogFragment {
     public static final int REQUEST_ADDRESS = 10;
     public static final String EXTRA_ADDRESS = "address";
 
-    private AddressListener mListener;
-
     public static AddressFragment newInstance(Address address) {
         Bundle bundle = createBundle(address);
         AddressFragment fragment = new AddressFragment();
@@ -90,16 +88,6 @@ AddressFragment extends DialogFragment {
     }
 
 
-    public void setListener(AddressListener listener) {
-        mListener = listener;
-    }
-
-    /* @Override
-     public void onStart() {
-         super.onStart();
-
-     }
- */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         long serialNo = 0;
@@ -160,22 +148,5 @@ AddressFragment extends DialogFragment {
     }
 
 
-    /*  @Nullable
-      @Override
-      public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
-
-          return super.onCreateView(inflater, container, savedInstanceState);
-      }
-
-      @Override
-      public void onDestroyView() {
-          super.onDestroyView();
-
-      }
-  */
-    interface AddressListener {
-        void returnData(int result);
-    }
 
 }
