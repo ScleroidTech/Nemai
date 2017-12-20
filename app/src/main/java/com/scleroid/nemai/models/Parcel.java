@@ -4,6 +4,7 @@ package com.scleroid.nemai.models;
  * Created by Ganesh on 22/07/2017.
  */
 
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
@@ -11,7 +12,6 @@ import android.arch.persistence.room.TypeConverters;
 import android.os.Parcelable;
 
 import com.scleroid.nemai.utils.DateConverter;
-import com.scleroid.nemai.utils.PinConverter;
 
 import java.util.Date;
 import java.util.Random;
@@ -45,9 +45,11 @@ public class Parcel implements Parcelable {
     private String description;
     @TypeConverters(DateConverter.class)
     private Date parcelDate;
-    @TypeConverters(PinConverter.class)
+    //  @TypeConverters(PinConverter.class)
+    @Embedded(prefix = "source_")
     private PinCode sourcePinCode;
-    @TypeConverters(PinConverter.class)
+    // @TypeConverters(PinConverter.class)
+    @Embedded(prefix = "dest_")
     private PinCode destinationPinCode;
     public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo, PinCode sourcePinCode, PinCode destinationPinCode) {
         initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo, sourcePinCode, destinationPinCode);

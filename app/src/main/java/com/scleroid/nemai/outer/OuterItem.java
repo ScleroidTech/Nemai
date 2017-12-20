@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ramotion.garlandview.header.HeaderDecorator;
 import com.ramotion.garlandview.header.HeaderItem;
@@ -34,6 +33,8 @@ import com.scleroid.nemai.models.PinCode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
 
@@ -190,28 +191,26 @@ public class OuterItem extends HeaderItem {
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
         adapter = (InnerAdapter) mRecyclerView.getAdapter();
         ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail, multiSelectList);
+
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
-
+                if (view.getId() == R.id.edit_image_button) {
+                    Toasty.error(getHeader().getContext(), "It works ").show();
+                }
                 multi_select(position);
 
-                Toast.makeText(getHeader().getContext(), "Details Page", Toast.LENGTH_SHORT).show();
+                //  Toasty.makeText(getHeader().getContext(), "Details Page", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onItemLongClick(View view, int position) {
-                if (!isMultiSelect) {
-                    isMultiSelect = true;
-
-                }
 
                 //multi_select(position);
 
             }
         }));
-
 
         //gestureDetector = new GestureDetectorCompat(this.getHeader().getContext(), new RecyclerViewDemoOnGestureListener());
 
@@ -239,21 +238,14 @@ public class OuterItem extends HeaderItem {
                 Parcel parcel = header;
                 PinCode pincode = parcel.getDestinationPinCode();
                 DialogFragment dialog = AddressFragment.newInstance(pincode.getLocation(), pincode.getPincode(), pincode.getState());
-                //  dialog.setTargetFragment(getInnerLayout().getContext(),REQUEST_ADDRESS);
-                //  dialog.setListener()
                 dialog.show(fm, "adad");
-                //TODO City & other values DialogFragment dialog = AddressFragment.newInstance(parcel.getDestinationPin().toString());
-                //  dialog.setTargetFragment(context,REQUEST_ADDRESS);
-                //  dialog.setListener()
-                //TODO enable after implementing the above dialog.show(fm, "adad");
 
-                //TODO update dataset of room, which will update this too
             }
         });
 
     }
 
-    private void multi_select(int position) {
+    public void multi_select(int position) {
         try {
 
             if (multiSelectList.isEmpty()) {
@@ -277,8 +269,6 @@ public class OuterItem extends HeaderItem {
                 //TODO list updation, exception handling
             }
 
-        } catch (ArrayIndexOutOfBoundsException e) {
-            Log.e(TAG, "Array Out of Bound " + e);
         } catch (IndexOutOfBoundsException e) {
             Log.e(TAG, "Array Out of Bound " + e);
         }
