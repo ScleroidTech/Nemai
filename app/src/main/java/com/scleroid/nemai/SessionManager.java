@@ -1,4 +1,4 @@
-package com.scleroid.nemai.other;
+package com.scleroid.nemai;
 
 import android.content.Context;
 import android.content.SharedPreferences;

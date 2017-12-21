@@ -14,7 +14,8 @@ import android.os.Parcelable;
 import com.scleroid.nemai.utils.DateConverter;
 
 import java.util.Date;
-import java.util.Random;
+
+import static com.scleroid.nemai.utils.RandomSerialNumberGen.getRandomSerialNo;
 
 @Entity
 public class Parcel implements Parcelable {
@@ -71,14 +72,14 @@ public class Parcel implements Parcelable {
         this.packageType = "Document";
         this.description = "null";
         this.serialNo = UUID.randomUUID();*/
-        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", new Date(), new Random().nextLong(), null, null);
+        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", new Date(), getRandomSerialNo(), null, null);
 
     }
 
     //TODO remove this constructor, only for dummy data
     @Ignore
     public Parcel(String city, String city1, String domestic, String parcel, int positive, int positive1, int positive2, int positive3, int positive4, String s, Date birthday, PinCode sourcePinCode, PinCode destinationPinCode) {
-        this(city, city1, domestic, parcel, positive, positive1, positive2, positive3, positive4, s, birthday, new Random().nextLong(), sourcePinCode, destinationPinCode);
+        this(city, city1, domestic, parcel, positive, positive1, positive2, positive3, positive4, s, birthday, getRandomSerialNo(), sourcePinCode, destinationPinCode);
     }
 
     protected Parcel(android.os.Parcel in) {

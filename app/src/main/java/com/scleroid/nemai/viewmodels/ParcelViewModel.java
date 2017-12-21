@@ -1,11 +1,12 @@
-package com.scleroid.nemai.models;
+package com.scleroid.nemai.viewmodels;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-import com.scleroid.nemai.adapter.AppDatabase;
+import com.scleroid.nemai.AppDatabase;
+import com.scleroid.nemai.models.Parcel;
 
 import java.util.List;
 

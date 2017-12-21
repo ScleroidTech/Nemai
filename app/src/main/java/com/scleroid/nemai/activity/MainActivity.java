@@ -26,9 +26,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.adapter.AppDatabase;
-import com.scleroid.nemai.adapter.ParcelLab;
+import com.scleroid.nemai.SessionManager;
+import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.fragment.HomeFragment;
 import com.scleroid.nemai.fragment.MoviesFragment;
 import com.scleroid.nemai.fragment.NotificationsFragment;
@@ -37,7 +38,6 @@ import com.scleroid.nemai.fragment.SettingsFragment;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.other.CircleTransform;
-import com.scleroid.nemai.other.SessionManager;
 
 import java.util.List;
 

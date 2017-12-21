@@ -1,4 +1,4 @@
-package com.scleroid.nemai.adapter;
+package com.scleroid.nemai.controller;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.models.Parcel;
 
 import java.util.List;
