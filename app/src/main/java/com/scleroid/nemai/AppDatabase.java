@@ -1,19 +1,21 @@
-package com.scleroid.nemai.adapter;
+package com.scleroid.nemai;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import com.scleroid.nemai.dao.AddressDao;
+import com.scleroid.nemai.dao.OrderDao;
+import com.scleroid.nemai.dao.ParcelDao;
 import com.scleroid.nemai.models.Address;
-import com.scleroid.nemai.models.AddressDao;
+import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
-import com.scleroid.nemai.models.ParcelDao;
 
 /**
  * Created by scleroid on 27/10/17.
  */
-@Database(entities = {Parcel.class, Address.class}, version = 2)
+@Database(entities = {Parcel.class, Address.class, OrderedCourier.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;
@@ -39,6 +41,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ParcelDao parcelDao();
 
     public abstract AddressDao addressDao();
+
+    public abstract OrderDao orderDao();
 
 
 }

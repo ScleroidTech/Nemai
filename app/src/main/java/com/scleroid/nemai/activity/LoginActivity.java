@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.SessionManager;
 import com.scleroid.nemai.network.NetworkCalls;
-import com.scleroid.nemai.other.SessionManager;
 import com.scleroid.nemai.volley_support.ShowLoader;
 import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
 

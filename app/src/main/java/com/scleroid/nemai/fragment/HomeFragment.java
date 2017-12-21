@@ -37,15 +37,15 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
+import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.adapter.AppDatabase;
 import com.scleroid.nemai.adapter.PagerAdapter;
-import com.scleroid.nemai.adapter.ParcelLab;
+import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.models.Parcel;
-import com.scleroid.nemai.models.ParcelViewModel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
+import com.scleroid.nemai.viewmodels.ParcelViewModel;
 import com.scleroid.nemai.volley_support.ShowLoader;
 
 import org.greenrobot.eventbus.Subscribe;

@@ -110,7 +110,7 @@
 
     <string name="sign_in">Sign in</string>
     <string name="saved_address">Saved Address</string>
-    <string name="orders">Orders</string>
+    <string name="orderedCouriers">Orders</string>
     <string name="courier_partners">Courier Partners</string>
     <string name="notifications">Notifications</string>
     <string name="enter_number">Enter Number</string>

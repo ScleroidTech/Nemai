@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Random;
+import static com.scleroid.nemai.utils.RandomSerialNumberGen.getRandomSerialNo;
 
 /**
  * Created by Ganesh on 15-11-2017.
@@ -37,7 +37,7 @@ public class Address implements Parcelable {
     private String mobileNo;
 
     public Address(String name, String address_line_1, String address_line_2, String state, String city, String pincode, String mobileNo) {
-        this(name, address_line_1, address_line_2, state, city, pincode, mobileNo, new Random().nextLong());
+        this(name, address_line_1, address_line_2, state, city, pincode, mobileNo, getRandomSerialNo());
 
     }
     @Ignore

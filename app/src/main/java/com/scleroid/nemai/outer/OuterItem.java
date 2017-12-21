@@ -23,11 +23,13 @@ import com.ramotion.garlandview.header.HeaderDecorator;
 import com.ramotion.garlandview.header.HeaderItem;
 import com.ramotion.garlandview.inner.InnerLayoutManager;
 import com.ramotion.garlandview.inner.InnerRecyclerView;
+import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.controller.OrderLab;
 import com.scleroid.nemai.fragment.AddressFragment;
 import com.scleroid.nemai.inner.InnerAdapter;
 import com.scleroid.nemai.models.Address;
-import com.scleroid.nemai.models.Order;
+import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 
@@ -86,7 +88,7 @@ public class OuterItem extends HeaderItem {
     GestureDetectorCompat gestureDetector;
     android.view.ActionMode actionMode;
     List<Address> tail, multiSelectList;
-    Order thatOrder;
+    OrderedCourier thatOrderedCourier;
     private View mNewAddressButton;
     private boolean mIsScrolling;
     private View mEmptyView;
@@ -250,22 +252,22 @@ public class OuterItem extends HeaderItem {
 
             if (multiSelectList.isEmpty()) {
                 Log.d(TAG, "list empty " + multiSelectList.isEmpty());
-                thatOrder = new Order(header, tail.get(position));
+                thatOrderedCourier = new OrderedCourier(header, tail.get(position));
                 multiSelectList.add(tail.get(position));
 
             } else {
                 Log.d(TAG, "list not  empty " + multiSelectList.isEmpty());
 
-                if (multiSelectList.contains(tail.get(position))) {
-                    multiSelectList.remove(tail.get(position));
-                    thatOrder.setAddress(null);
-                } else {
+                if (tail.contains(multiSelectList.get(0))) {
                     multiSelectList.clear();
-                    thatOrder.setAddress(tail.get(position));
+                    thatOrderedCourier.setAddress(tail.get(position));
                     multiSelectList.add(tail.get(position));
 
+                } else {
+                    multiSelectList.remove(tail.get(position));
+                    thatOrderedCourier.setAddress(null);
                 }
-
+                OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
                 //TODO list updation, exception handling
             }
 

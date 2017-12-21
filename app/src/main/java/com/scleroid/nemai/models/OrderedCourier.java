@@ -1,26 +1,35 @@
 package com.scleroid.nemai.models;
 
-import java.util.Random;
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
+import static com.scleroid.nemai.utils.RandomSerialNumberGen.getRandomSerialNo;
 
 /**
  * Created by Ganesh on 18-12-2017.
  */
-
-public class Order {
-    Parcel parcel;
-    Address address;
+@Entity
+public class OrderedCourier {
+    @Embedded(prefix = "parcel_")
+    private Parcel parcel;
+    @Embedded(prefix = "address_")
+    private Address address;
+    @PrimaryKey
     private Long serialNo;
 
-    public Order(Long serialNo, Parcel parcel, Address address) {
+    public OrderedCourier(Long serialNo, Parcel parcel, Address address) {
         this.serialNo = serialNo;
         this.parcel = parcel;
         this.address = address;
     }
 
-
-    public Order(Parcel parcel, Address address) {
-        this(new Random().nextLong(), parcel, address);
+    @Ignore
+    public OrderedCourier(Parcel parcel, Address address) {
+        this(getRandomSerialNo(), parcel, address);
     }
+
 
     public Long getSerialNo() {
         return serialNo;
