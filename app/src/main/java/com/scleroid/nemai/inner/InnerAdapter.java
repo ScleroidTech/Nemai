@@ -170,7 +170,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         mData = innerDataList;
         mDataSelected = selected;
         if (!mDataSelected.isEmpty())
-            swapItems(mData.indexOf(selected.get(0)));
+            // swapItems(mData.indexOf(selected.get(0)));
         //      Log.d("innerItem", "is it here? addData" + mData.size());
 
         notifyDataSetChanged();
