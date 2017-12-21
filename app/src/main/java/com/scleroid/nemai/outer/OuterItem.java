@@ -256,14 +256,14 @@ public class OuterItem extends HeaderItem {
             } else {
                 Log.d(TAG, "list not  empty " + multiSelectList.isEmpty());
 
-                if (tail.contains(multiSelectList.get(0))) {
+                if (multiSelectList.contains(tail.get(position))) {
+                    multiSelectList.remove(tail.get(position));
+                    thatOrderedCourier.setAddress(null);
+                } else {
                     multiSelectList.clear();
                     thatOrderedCourier.setAddress(tail.get(position));
                     multiSelectList.add(tail.get(position));
 
-                } else {
-                    multiSelectList.remove(tail.get(position));
-                    thatOrderedCourier.setAddress(null);
                 }
                 //    OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
                 //TODO list updation, exception handling
