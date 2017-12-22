@@ -10,7 +10,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 /**
- * Created by Tamboli on 14-Mar-17.
+ * Created by Ganesh on 14-Mar-17.
  */
 
 public class AppController extends Application {

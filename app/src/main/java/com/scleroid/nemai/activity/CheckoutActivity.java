@@ -289,6 +289,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
                     } else {
                         //TODO Add logic to get unselected addresses view
 
+
                     }
                 }
                 Toast.makeText(getApplicationContext(), "Settings Click", Toast.LENGTH_SHORT).show();
