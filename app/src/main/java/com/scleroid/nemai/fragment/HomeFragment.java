@@ -232,7 +232,7 @@ public class HomeFragment extends Fragment {
 
                 for (int j = 0; j < childCount; j++) {
                     View v = recyclerView.getChildAt(j);
-                    //往左 从 padding 到 -(v.getWidth()-padding) 的过程中，由大到小
+
                     float rate = 0;
                     if (v.getLeft() <= padding) {
                         if (v.getLeft() >= padding - v.getWidth()) {
@@ -242,7 +242,7 @@ public class HomeFragment extends Fragment {
                         }
                         v.setScaleY(1 - rate * 0.1f);
                     } else {
-                        //往右 从 padding 到 recyclerView.getWidth()-padding 的过程中，由大到小
+
                         if (v.getLeft() <= recyclerView.getWidth() - padding) {
                             rate = (recyclerView.getWidth() - padding - v.getLeft()) * 1f / v.getWidth();
                         }

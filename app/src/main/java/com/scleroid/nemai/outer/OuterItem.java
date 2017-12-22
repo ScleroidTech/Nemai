@@ -248,26 +248,30 @@ public class OuterItem extends HeaderItem {
     }
 
     public void multi_select(int position) {
+        boolean whatToDo = false;// if false, delete  it from db, if true, add it
         try {
 
             if (multiSelectList.isEmpty()) {
                 Log.d(TAG, "list empty " + multiSelectList.isEmpty());
                 thatOrderedCourier = new OrderedCourier(header, tail.get(position));
                 multiSelectList.add(tail.get(position));
+                OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
 
             } else {
                 Log.d(TAG, "list not  empty " + multiSelectList.isEmpty());
 
                 if (multiSelectList.contains(tail.get(position))) {
                     multiSelectList.remove(tail.get(position));
-                    thatOrderedCourier.setAddress(null);
+                    thatOrderedCourier = null;
+                    OrderLab.deleteOrderedCourier(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
                 } else {
                     multiSelectList.clear();
                     thatOrderedCourier.setAddress(tail.get(position));
                     multiSelectList.add(tail.get(position));
+                    OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
 
                 }
-                OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
+
                 //TODO list updation, exception handling
             }
 
