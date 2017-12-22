@@ -41,28 +41,63 @@ import es.dmoral.toasty.Toasty;
 import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
 
 /**
- * Created by Ganesh on 15-11-2017.
+ * This is The viewholder class for the RecyclerViewPager
+ * which extends HeaderItem, which extends RecyclerView.ViewHolder
+ * It holds Data to be displayed on the recyclerView & the connections it needs to be making
+ * @author Ganesh
+ * @since 15-11-2017
+ * @see android.support.v7.widget.RecyclerView.ViewHolder
+ * @see HeaderItem
+ *
  */
 
 public class OuterItem extends HeaderItem {
 
+    /**
+     * TAG variable used to generate log for the logcat
+     *
+     * @see Log
+     */
     private static final String TAG = "OuterItem";
 
+    /**
+     * start Ratio for the middle view,
+     */
     private final static float MIDDLE_RATIO_START = 0.7f;
+    /**
+     * Maximum allowed ratio of the middle
+     */
     private final static float MIDDLE_RATIO_MAX = 0.1f;
+    /**
+     * Difference between max ratio of middle & start ratio of the middle
+     */
     private final static float MIDDLE_RATIO_DIFF = MIDDLE_RATIO_START - MIDDLE_RATIO_MAX;
-
+    /**
+     * start Ratio for the footer view,
+     */
     private final static float FOOTER_RATIO_START = 1.1f;
+    /**
+     * Maximum allowed ratio of the footer
+     */
     private final static float FOOTER_RATIO_MAX = 0.35f;
+    /**
+     * Difference between max ratio of footer & start ratio of footer
+     */
     private final static float FOOTER_RATIO_DIFF = FOOTER_RATIO_START - FOOTER_RATIO_MAX;
-
+    /**
+     * start Ratio for the answer view,
+     */
     private final static float ANSWER_RATIO_START = 0.75f;
+    /**
+     * Maximum allowed ratio of the answer View
+     */
     private final static float ANSWER_RATIO_MAX = 0.35f;
+    /**
+     * Difference between max ratio of answer view & start ratio of answer View
+     */
     private final static float ANSWER_RATIO_DIFF = ANSWER_RATIO_START - ANSWER_RATIO_MAX;
 
- /*   private final static float AVATAR_RATIO_START = 1f;
-    private final static float AVATAR_RATIO_MAX = 0.25f;
-    private final static float AVATAR_RATIO_DIFF = AVATAR_RATIO_START - AVATAR_RATIO_MAX;*/
+
 
 
     private final View mHeader;
@@ -255,25 +290,32 @@ public class OuterItem extends HeaderItem {
                 Log.d(TAG, "list empty " + multiSelectList.isEmpty());
                 thatOrderedCourier = new OrderedCourier(header, tail.get(position));
                 multiSelectList.add(tail.get(position));
-                OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
+                whatToDo = true;
+
 
             } else {
                 Log.d(TAG, "list not  empty " + multiSelectList.isEmpty());
 
                 if (multiSelectList.contains(tail.get(position))) {
                     multiSelectList.remove(tail.get(position));
-                    thatOrderedCourier = null;
-                    OrderLab.deleteOrderedCourier(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
+                    thatOrderedCourier.setAddress(null);
+                    whatToDo = false;
+
                 } else {
                     multiSelectList.clear();
                     thatOrderedCourier.setAddress(tail.get(position));
                     multiSelectList.add(tail.get(position));
-                    OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
+                    whatToDo = true;
+
 
                 }
 
-                //TODO list updation, exception handling
+
             }
+            if (whatToDo)
+                OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
+            else
+                OrderLab.deleteOrderedCourier(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
 
         } catch (IndexOutOfBoundsException e) {
             Log.e(TAG, "Array Out of Bound " + e);
