@@ -116,7 +116,7 @@ public class OrderLab {
         task.execute();
     }
 
-    public static void DeleteUserAsync(@NonNull final AppDatabase db, OrderedCourier orderedCourier) {
+    public static void deleteOrderedCourier(@NonNull final OrderedCourier orderedCourier, AppDatabase db) {
         OrderLab.DeleteUserAsync task = new OrderLab.DeleteUserAsync(db, orderedCourier);
         task.execute();
     }

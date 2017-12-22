@@ -27,12 +27,14 @@ import com.scleroid.nemai.controller.AddressLab;
 import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.inner.InnerItem;
 import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.outer.OuterAdapter;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
 import com.scleroid.nemai.viewmodels.CheckoutViewModel;
+import com.scleroid.nemai.viewmodels.OrderViewModel;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -56,6 +58,8 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     private final static int INNER_COUNT = 5;
     Context context;
     List<List<Address>> outerData = new ArrayList<>();
+
+    List<OrderedCourier> orderedCourierList = new ArrayList<>();
     private CheckoutViewModel viewModel;
     private OuterAdapter outerAdapter;
     private TailRecyclerView outerRecyclerView;
@@ -94,6 +98,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
         }
     };
+    private OrderViewModel orderViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +113,14 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         context = CheckoutActivity.this;
         ((GarlandApp) getApplication()).addListener(this);
         initRecyclerView(new ArrayList<Address>(), new ArrayList<Parcel>());
+        orderViewModel = ViewModelProviders.of(CheckoutActivity.this).get(OrderViewModel.class);
 
+        orderViewModel.getOrderList().observe(CheckoutActivity.this, new Observer<List<OrderedCourier>>() {
+            @Override
+            public void onChanged(@Nullable List<OrderedCourier> orderedCouriers) {
+                orderedCourierList = orderedCouriers;
+            }
+        });
         viewModel = ViewModelProviders.of(CheckoutActivity.this).get(CheckoutViewModel.class);
 
         viewModel.getParcelList().observe(CheckoutActivity.this, new Observer<List<Parcel>>() {
@@ -127,7 +139,6 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         });
 
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -270,6 +281,16 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
                 onBackPressed();
                 return true;
             case R.id.action_next:
+                if (orderedCourierList == null || orderedCourierList.isEmpty()) {
+                    outerRecyclerView.scrollToPosition(0);
+                } else {
+                    if (orderedCourierList.size() == outerAdapter.getParcels().size()) {
+                        Toast.makeText(getApplicationContext(), "You did it hero", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //TODO Add logic to get unselected addresses view
+
+                    }
+                }
                 Toast.makeText(getApplicationContext(), "Settings Click", Toast.LENGTH_SHORT).show();
                 return true;
 
