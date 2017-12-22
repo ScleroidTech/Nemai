@@ -38,6 +38,7 @@ AddressFragment extends DialogFragment {
 
     public static final int REQUEST_ADDRESS = 10;
     public static final String EXTRA_ADDRESS = "address";
+    private boolean isNewAddress;
 
     public static AddressFragment newInstance(Address address) {
         Bundle bundle = createBundle(address);
@@ -61,6 +62,12 @@ AddressFragment extends DialogFragment {
 
     @NonNull
     private static Bundle createBundle(Address address) {
+
+        return createBundle(address, false);
+    }
+
+    @NonNull
+    private static Bundle createBundle(Address address, boolean isNewAddress) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA_ADDRESS, address);
       /*  bundle.putString(EXTRA_PIN, address.getPincode());
@@ -71,20 +78,14 @@ AddressFragment extends DialogFragment {
         bundle.putString(EXTRA_MOBILE, address.getMobileNo());
         bundle.putString(EXTRA_ADDRESS_LINE_1, address.getAddress_line_1());
         bundle.putString(EXTRA_ADDRESS_LINE_1, address.getAddress_line_1());*/
-        bundle.putBoolean(EXTRA_NEW_ADDRESS, false);
+        bundle.putBoolean(EXTRA_NEW_ADDRESS, isNewAddress);
         return bundle;
     }
 
     @NonNull
     private static Bundle createBundle(String city, String pin, String state) {
-        Bundle bundle = new Bundle();
         Address address = new Address(null, null, null, state, city, pin, null);
-        bundle.putParcelable(EXTRA_ADDRESS, address);
-       /* bundle.putString(EXTRA_CITY, city);
-        bundle.putString(EXTRA_STATE, state);*/
-        bundle.putBoolean(EXTRA_NEW_ADDRESS, true);
-
-        return bundle;
+        return createBundle(address, true);
     }
 
 
@@ -108,6 +109,7 @@ AddressFragment extends DialogFragment {
             cityEditText.setText(address.getCity());
             stateEditText.setText(address.getState());
             serialNo = address.getSerialNo();
+            isNewAddress = bundle.getBoolean(EXTRA_NEW_ADDRESS);
             if (bundle.getBoolean(EXTRA_NEW_ADDRESS)) {
                 nameEditText.setText(address.getName());
                 mobileEditText.setText(address.getMobileNo());
@@ -144,7 +146,7 @@ AddressFragment extends DialogFragment {
     private Bundle createBundle(TextInputEditText cityEditText, TextInputEditText pinEditText, TextInputEditText stateEditText, TextInputEditText addressLine1EditText, TextInputEditText addressLine2EditText, TextInputEditText nameEditText, TextInputEditText mobileEditText, long serialNo) {
         Address address = new Address(nameEditText.getText().toString(), addressLine1EditText.getText().toString(), addressLine2EditText.getText().toString(), stateEditText.getText().toString(), cityEditText.getText().toString(), pinEditText.getText().toString(), mobileEditText.getText().toString(), serialNo);
 
-        return createBundle(address);
+        return createBundle(address, isNewAddress);
     }
 
 

@@ -23,7 +23,9 @@ import com.ramotion.garlandview.header.HeaderDecorator;
 import com.ramotion.garlandview.header.HeaderItem;
 import com.ramotion.garlandview.inner.InnerLayoutManager;
 import com.ramotion.garlandview.inner.InnerRecyclerView;
+import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.controller.OrderLab;
 import com.scleroid.nemai.fragment.AddressFragment;
 import com.scleroid.nemai.inner.InnerAdapter;
 import com.scleroid.nemai.models.Address;
@@ -265,7 +267,7 @@ public class OuterItem extends HeaderItem {
                     multiSelectList.add(tail.get(position));
 
                 }
-                //    OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
+                OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
                 //TODO list updation, exception handling
             }
 

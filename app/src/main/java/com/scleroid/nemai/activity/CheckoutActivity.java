@@ -8,7 +8,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.ramotion.garlandview.TailLayoutManager;
@@ -35,9 +40,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import io.bloco.faker.Faker;
 
 import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_ADDRESS;
+import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_NEW_ADDRESS;
 
 
 /**
@@ -52,6 +59,41 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     private CheckoutViewModel viewModel;
     private OuterAdapter outerAdapter;
     private TailRecyclerView outerRecyclerView;
+    private ActionMode mActionMode;
+    private Menu context_menu;
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.menu_checkout_activity, menu);
+            context_menu = menu;
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false; // Return false if nothing is done
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_next:
+                    Toasty.error(context, "CLicked me");
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,13 +240,43 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
                 bundle.getString(EXTRA_ADDRESS_LINE_2), bundle.getString(EXTRA_STATE), bundle.getString(EXTRA_CITY), bundle.getString(EXTRA_PIN), bundle.getString(EXTRA_MOBILE), bundle.getLong(EXTRA_SERIAL_NO));
        */
         Log.d("CHeckout", "onAddress Eventbus");
-        AddressLab.updateAddress(model, AppDatabase.getAppDatabase(context));
-
+        if (bundle.getBoolean(EXTRA_NEW_ADDRESS)) {
+            AddressLab.addAddress(model, AppDatabase.getAppDatabase(context));
+        } else {
+            AddressLab.updateAddress(model, AppDatabase.getAppDatabase(context));
+        }
         //   setContent(model);
 
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_checkout_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.action_next:
+                Toast.makeText(getApplicationContext(), "Settings Click", Toast.LENGTH_SHORT).show();
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 
 }
