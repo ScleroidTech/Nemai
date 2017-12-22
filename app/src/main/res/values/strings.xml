@@ -214,5 +214,6 @@
     <string name="selected_count">%1$s selected</string>
     <string name="action_remove">Remove</string>
     <string name="date_picker_title">Courier Pickup Date</string>
+    <string name="next">Next</string>
 
 </resources>
