@@ -6,7 +6,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -99,10 +101,25 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         }
     };
     private OrderViewModel orderViewModel;
+    private boolean isFinalized = false;
+    private Toolbar toolbar;
+    private ActionBar actionBar;
+    private MenuItem nextItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+      /* toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("Select Address");
+        }
+
+*/
         /*final Fabric fabric = new Fabric.Builder(this)
                 .kits(new Crashlytics())
                 .debuggable(true)           // Enables Crashlytics debugger
@@ -113,12 +130,15 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         context = CheckoutActivity.this;
         ((GarlandApp) getApplication()).addListener(this);
         initRecyclerView(new ArrayList<Address>(), new ArrayList<Parcel>());
+
         orderViewModel = ViewModelProviders.of(CheckoutActivity.this).get(OrderViewModel.class);
 
         orderViewModel.getOrderList().observe(CheckoutActivity.this, new Observer<List<OrderedCourier>>() {
             @Override
             public void onChanged(@Nullable List<OrderedCourier> orderedCouriers) {
                 orderedCourierList = orderedCouriers;
+                isFinalized = orderedCouriers.size() == outerAdapter.getParcels().size();
+                updateSubtitle();
             }
         });
         viewModel = ViewModelProviders.of(CheckoutActivity.this).get(CheckoutViewModel.class);
@@ -265,8 +285,12 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_checkout_activity, menu);
+        context_menu = menu;
+        nextItem = menu.findItem(R.id.action_next);
+        nextItem.setEnabled(false);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -298,6 +322,19 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateSubtitle() {
+
+        invalidateOptionsMenu();
+        if (nextItem == null) return;
+
+        if (isFinalized) {
+            //TODO
+            nextItem.setEnabled(true);
+        }
+        nextItem.setEnabled(false);
+        getSupportActionBar().setSubtitle("Hey Ya");
     }
 
 
