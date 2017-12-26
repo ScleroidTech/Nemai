@@ -3,6 +3,7 @@ package com.scleroid.nemai.activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,22 +28,24 @@ import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.controller.AddressLab;
 import com.scleroid.nemai.controller.ParcelLab;
-import com.scleroid.nemai.inner.InnerItem;
 import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.outer.OuterAdapter;
+import com.scleroid.nemai.outer.OuterItem;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
 import com.scleroid.nemai.viewmodels.CheckoutViewModel;
 import com.scleroid.nemai.viewmodels.OrderViewModel;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 import io.bloco.faker.Faker;
@@ -62,6 +65,11 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     List<List<Address>> outerData = new ArrayList<>();
 
     List<OrderedCourier> orderedCourierList = new ArrayList<>();
+    /**
+     * //TODO Future Implementation, remove all stuff here
+     * Holds the positions value with true if address is already selected, false if not
+     */
+    Map<Integer, Boolean> selectedPositions = new HashMap<>();
     private CheckoutViewModel viewModel;
     private OuterAdapter outerAdapter;
     private TailRecyclerView outerRecyclerView;
@@ -105,6 +113,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     private Toolbar toolbar;
     private ActionBar actionBar;
     private MenuItem nextItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -252,18 +261,6 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         );
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void OnInnerItemClick(InnerItem item) {
-        final Address itemData = item.getItemData();
-        if (itemData == null) {
-            return;
-        }
-
-       /* DetailsActivity.start(this,
-                item.getItemData().name, item.mAddress.getText().toString(),
-                item.getItemData().avatarUrl, item.itemView, item.mAvatarBorder);*/
-    }
-
     @Subscribe
     public void onAddressMessage(Events.AddressMessage fragmentActivityMessage) {
         Bundle bundle = fragmentActivityMessage.getMessage();
@@ -277,6 +274,33 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
             AddressLab.updateAddress(model, AppDatabase.getAppDatabase(context));
         }
         //   setContent(model);
+
+
+    }
+
+    /**
+     * The subscribe method of
+     *
+     * @param selectionMap
+     * @see EventBus
+     * Handles the message sent by An event sent at
+     * @see OuterItem
+     * which provides which items are selected & which aren't
+     */
+    @Subscribe
+    public void onSelection(Events.selectionMap selectionMap) {
+        /**
+         * Saves the position of the Courier
+         */
+        int position = selectionMap.getPosition();
+        /**
+         * saves if the position is selected or not
+         */
+        boolean isSelected = selectionMap.isSelected();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            selectedPositions.putIfAbsent(position, isSelected);
+        } else if (!selectedPositions.containsKey(position))
+            selectedPositions.put(position, isSelected);
 
 
     }
@@ -324,10 +348,16 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * This will enable or disable the Next Menu Button from the actionBar, if already all items have been set, the button
+     */
     private void updateSubtitle() {
 
         invalidateOptionsMenu();
         if (nextItem == null) return;
+        if (orderedCourierList.size() != outerAdapter.getParcels().size()) {
+
+        }
 
         if (isFinalized) {
             //TODO

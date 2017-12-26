@@ -3,7 +3,8 @@ package com.scleroid.nemai.utils;
 import org.greenrobot.eventbus.EventBus;
 
 /**
- * Created by Ganesh on 22-11-2017.
+ * @author Ganesh Kaple
+ * @since 22-11-2017
  */
 
 public class GlobalBus {

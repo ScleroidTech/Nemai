@@ -30,6 +30,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     private List<Address> addresses;
     private List<Parcel> parcels;
 
+
     public OuterAdapter(List<Address> addresses, List<Parcel> parcels) {
         this.addresses = addresses;
         this.parcels = parcels;
@@ -105,6 +106,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
         }
         return outerData;
     }
+
 }
 
 
