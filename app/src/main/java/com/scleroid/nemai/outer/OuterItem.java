@@ -32,6 +32,8 @@ import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.utils.Events;
+import com.scleroid.nemai.utils.GlobalBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -312,6 +314,8 @@ public class OuterItem extends HeaderItem {
 
 
             }
+            Events.selectionMap selectionMap = new Events.selectionMap(position, whatToDo);
+            GlobalBus.getBus().post(selectionMap);
             if (whatToDo)
                 OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
             else

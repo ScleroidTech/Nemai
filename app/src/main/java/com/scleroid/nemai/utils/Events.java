@@ -5,20 +5,45 @@ import android.os.Bundle;
 import com.scleroid.nemai.models.Address;
 
 /**
- * Created by Ganesh on 22-11-2017.
+ * The class used to provide events that need to be handled by
+ * @see org.greenrobot.eventbus.EventBus
+ * The inner classes are static & needs it's methods to be implemented with
+ * subscribe annotations
+ * @author Ganesh
+ * @since 22-11-2017
+ *
  */
 
 public class Events {
-    // Event used to send message from fragment to activity.
-    public static class FragmentActivityMessage {
-        private String message;
 
-        public FragmentActivityMessage(String message) {
-            this.message = message;
+    /**
+     * This class is used to display the selected & unselected Couriers from
+     * the list of
+     *
+     * @see com.scleroid.nemai.models.OrderedCourier
+     */
+    public static class selectionMap {
+        /**
+         * The position in the list
+         */
+        private int position;
+        /**
+         * the variable showing is selected or not,
+         * true if selected, otherwise false
+         */
+        private boolean isSelected;
+
+        public selectionMap(int position, boolean isSelected) {
+            this.position = position;
+            this.isSelected = isSelected;
         }
 
-        public String getMessage() {
-            return message;
+        public int getPosition() {
+            return position;
+        }
+
+        public boolean isSelected() {
+            return isSelected;
         }
     }
 
