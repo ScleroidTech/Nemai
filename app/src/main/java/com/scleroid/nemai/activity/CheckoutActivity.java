@@ -3,6 +3,7 @@ package com.scleroid.nemai.activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,8 +16,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.ramotion.garlandview.TailLayoutManager;
 import com.ramotion.garlandview.TailRecyclerView;
@@ -48,7 +49,9 @@ import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 import io.bloco.faker.Faker;
+import io.fabric.sdk.android.Fabric;
 
+import static com.google.common.util.concurrent.Runnables.doNothing;
 import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_ADDRESS;
 import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_NEW_ADDRESS;
 
@@ -119,22 +122,12 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      /* toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        // Get a support ActionBar corresponding to this toolbar
-        actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("Select Address");
-        }
-
-*/
-        /*final Fabric fabric = new Fabric.Builder(this)
+        final Fabric fabric = new Fabric.Builder(this)
                 .kits(new Crashlytics())
                 .debuggable(true)           // Enables Crashlytics debugger
                 .build();
-        Fabric.with(fabric);*/
+        Fabric.with(fabric);
         setContentView(R.layout.activity_checkout);
         FacebookSdk.sdkInitialize(CheckoutActivity.this);
         context = CheckoutActivity.this;
@@ -167,7 +160,9 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
     private void populateSelectionMap() {
         for (int i = 0; i < outerAdapter.getItemCount(); i++) {
-            selectedPositions.put(i, false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                selectedPositions.putIfAbsent(i, false);
+            } else if (!selectedPositions.containsKey(i)) selectedPositions.put(i, false);
         }
     }
 
@@ -330,12 +325,14 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
                 onBackPressed();
                 return true;
             case R.id.action_next:
-                if (orderedCourierList == null || orderedCourierList.isEmpty()) {
-                    outerRecyclerView.scrollToPosition(0);
+                if (orderedCourierList == null || orderedCourierList.isEmpty())
+                // outerRecyclerView.smoothScrollToPosition(0);
+                //This doesn't do anything
+                {
+                    Runnable runnable = doNothing();
                 } else
                     isAllDone();
 
-                Toast.makeText(getApplicationContext(), "Settings Click", Toast.LENGTH_SHORT).show();
                 return true;
 
         }
@@ -349,16 +346,20 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
     private void isAllDone() {
 
-        // invalidateOptionsMenu();
+        invalidateOptionsMenu();
         if (nextItem == null) return;
 
         if (orderedCourierList.size() != outerAdapter.getParcels().size()) {
 
 
             for (Map.Entry<Integer, Boolean> entry : selectedPositions.entrySet()) {
-                if (entry.getValue()) {
-                    outerRecyclerView.scrollToPosition(outerAdapter.getItemCount() - 5);
-                    Toasty.warning(context, "You haven't selected all addresses for parcels").show();
+                if (!entry.getValue()) {/*
+                //TODO The commented code doesn't work, keeping for future Implementation
+                    outerRecyclerView.scrollToPosition(outerAdapter.getItemCount() - 5);*/
+                    // TailLayoutManager layoutManager = (TailLayoutManager) outerRecyclerView.getLayoutManager();
+                    //   layoutManager.scrollToPosition(5);
+                    isFinalized = false;
+                    Toasty.warning(context, "You haven't selected address for parcel No. " + entry.getKey()).show();
                     break;
                 }
 
@@ -376,11 +377,9 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
         } else isFinalized = true;
 
-       /* if (isFinalized) {
-            //TODO
+        if (isFinalized) {
             nextItem.setEnabled(true);
-        }*/
-        // nextItem.setEnabled(true);
+        } else nextItem.setEnabled(true);
         getSupportActionBar().setSubtitle("Hey Ya");
     }
 
