@@ -35,6 +35,13 @@ android {
         enabled = true
     }
 
+    dexOptions {
+        incremental true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -46,45 +53,33 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:11.6.2'
     compile 'com.basgeekball:awesome-validation:2.0'
     compile files('libs/volley.jar')
-
     compile 'com.facebook.android:facebook-android-sdk:4.27.0'
     compile 'com.msg91.sendotp.library:library:3.1'
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:27.0.2'
     compile 'com.hbb20:ccp:2.0.8'
-
     //implementation "android.arch.lifecycle:runtime:1.0.3"
-
-
     compile 'android.arch.lifecycle:extensions:1.0.0'
     compile 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
-
     //compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-   // compile 'com.facebook.stetho:stetho:1.5.0'
+    // compile 'com.facebook.stetho:stetho:1.5.0'
     compile 'com.github.lsjwzh.RecyclerViewPager:lib:v1.1.2@aar'
-   // compile 'com.rollbar:rollbar-android:0+'
+    // compile 'com.rollbar:rollbar-android:0+'
     compile 'com.github.javiersantos:MaterialStyledDialogs:2.1'
     compile 'com.github.GrenderG:Toasty:1.2.5'
     compile 'com.ramotion.garlandview:garland-view:0.2.1'
-
     compile 'org.greenrobot:eventbus:3.1.1'
-
     compile 'com.github.blocoio:faker:1.2.5'
-
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.1.2'
-
     compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
     compile 'com.google.firebase:firebase-core:11.6.2'
-
     compile 'com.google.code.gson:gson:2.8.2'
-
-
     //  testCompile 'org.junit.jupiter:junit-jupiter-api'
 }
 
