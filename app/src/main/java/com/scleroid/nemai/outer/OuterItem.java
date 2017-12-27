@@ -238,7 +238,7 @@ public class OuterItem extends HeaderItem {
                 if (view.getId() == R.id.edit_image_button) {
                     Toasty.error(getHeader().getContext(), "It works ").show();
                 }
-                multi_select(getAdapterPosition());
+                multi_select(position);
 
                 //  Toasty.makeText(getHeader().getContext(), "Details Page", Toast.LENGTH_SHORT).show();
             }

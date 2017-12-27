@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,9 +44,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 import io.bloco.faker.Faker;
@@ -77,7 +75,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
      * //TODO Future Implementation, remove all stuff here
      * Holds the positions value with true if address is already selected, false if not
      */
-    Map<Integer, Boolean> selectedPositions = new HashMap<>();
+    SparseBooleanArray selectedPositions = new SparseBooleanArray();
 
 
     private CheckoutViewModel viewModel;
@@ -159,16 +157,22 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         });
         viewModel.getAddressList().observe(CheckoutActivity.this, outerAdapter::updateAddressList);
 
-        populateSelectionMap();
+        // populateSelectionMap();
 
 
     }
 
+    /**
+     * Populate the map with false values
+     *
+     * @see SparseBooleanArray
+     * @deprecated no longer necessary, because we're now using
+     */
     private void populateSelectionMap() {
         for (int i = 0; i < outerAdapter.getItemCount(); i++) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                selectedPositions.putIfAbsent(i, false);
-            } else if (!selectedPositions.containsKey(i)) selectedPositions.put(i, false);
+
+            selectedPositions.put(i, false);
+            if (!selectedPositions.valueAt(i)) selectedPositions.put(i, false);
         }
     }
 
@@ -345,7 +349,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     }
 
     /**
-     * if already all items have been set, It'll go to next screen, otherwise, it'll throw it to not done items
+     * if already all items have been set, It'll go to next screen, otherwise, it'll throw the Courier number which is not ready
      */
 
     @SuppressLint("LongLogTag")
@@ -357,20 +361,19 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         if (orderedCourierList.size() != outerAdapter.getParcels().size()) {
 
 
-            for (Map.Entry<Integer, Boolean> entry : selectedPositions.entrySet()) {
-                Log.d(TAG, "What's the map value " + entry.getKey() + "=" + entry.getValue());
-                if (!entry.getValue()) {/*
+            // Log.d(TAG, "What's the map value " + selectedPositions. + "=" + entry.getValue());
+
                 //TODO The commented code doesn't work, keeping for future Implementation
 
-                    outerRecyclerView.scrollToPosition(outerAdapter.getItemCount() - 5);*/
+            // outerRecyclerView.scrollToPosition(outerAdapter.getItemCount() - 5);*/
                     // TailLayoutManager layoutManager = (TailLayoutManager) outerRecyclerView.getLayoutManager();
                     //   layoutManager.scrollToPosition(5);
+            int index = selectedPositions.indexOfValue(false);
                     isFinalized = false;
-                    Toasty.warning(context, "You haven't selected address for parcel No. " + entry.getKey()).show();
-                    break;
-                }
+            Toasty.warning(context, "You haven't selected address for parcel No. " + index).show();
 
-            }
+
+
            /*  Just another way for the same approach
            Iterator<Map.Entry<Integer, Boolean>> entryIterator= selectedPositions.entrySet().iterator();
             while (entryIterator.hasNext()){
