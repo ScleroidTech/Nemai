@@ -238,7 +238,7 @@ public class OuterItem extends HeaderItem {
                 if (view.getId() == R.id.edit_image_button) {
                     Toasty.error(getHeader().getContext(), "It works ").show();
                 }
-                multi_select(position);
+                multi_select(getAdapterPosition());
 
                 //  Toasty.makeText(getHeader().getContext(), "Details Page", Toast.LENGTH_SHORT).show();
             }
@@ -281,6 +281,10 @@ public class OuterItem extends HeaderItem {
 
     }
 
+    private void setSelection(int position, boolean whatToDo) {
+        Events.selectionMap selectionMap = new Events.selectionMap(position, whatToDo);
+        GlobalBus.getBus().post(selectionMap);
+    }
     public void multi_select(int position) {
         boolean whatToDo = false;// if false, delete  it from db, if true, add it
         try {
@@ -311,8 +315,7 @@ public class OuterItem extends HeaderItem {
 
 
             }
-            Events.selectionMap selectionMap = new Events.selectionMap(position, whatToDo);
-            GlobalBus.getBus().post(selectionMap);
+            setSelection(getAdapterPosition(), whatToDo);
             if (whatToDo)
                 OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
             else

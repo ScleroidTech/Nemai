@@ -1,5 +1,6 @@
 package com.scleroid.nemai.activity;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -57,12 +58,17 @@ import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_NEW_ADDRESS;
 
 
 /**
- * Created by scleroid on 26/8/17.
+ * @author Ganesh Kaple
+ * @since 26/8/17
  */
 
 public class CheckoutActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
     private final static int OUTER_COUNT = 5;
     private final static int INNER_COUNT = 5;
+    /**
+     * Value used to generate Log
+     */
+    private static final String TAG = "com.scleroid.nemai.activity.checkoutActivity";
     Context context;
     List<List<Address>> outerData = new ArrayList<>();
 
@@ -286,16 +292,14 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
      * @see OuterItem
      * which provides which items are selected & which aren't
      */
+    @SuppressLint("LongLogTag")
     @Subscribe
     public void onSelection(Events.selectionMap selectionMap) {
-        /**
-         * Saves the position of the Courier
-         */
         int position = selectionMap.getPosition();
-        /**
-         * saves if the position is selected or not
-         */
+        // saves if the position is selected or not
         boolean isSelected = selectionMap.isSelected();
+        Log.d(TAG, "is this called?" + isSelected + " " + position);
+
         selectedPositions.put(position, isSelected);
 
 
@@ -344,6 +348,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
      * if already all items have been set, It'll go to next screen, otherwise, it'll throw it to not done items
      */
 
+    @SuppressLint("LongLogTag")
     private void isAllDone() {
 
         invalidateOptionsMenu();
@@ -353,8 +358,10 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
 
             for (Map.Entry<Integer, Boolean> entry : selectedPositions.entrySet()) {
+                Log.d(TAG, "What's the map value " + entry.getKey() + "=" + entry.getValue());
                 if (!entry.getValue()) {/*
                 //TODO The commented code doesn't work, keeping for future Implementation
+
                     outerRecyclerView.scrollToPosition(outerAdapter.getItemCount() - 5);*/
                     // TailLayoutManager layoutManager = (TailLayoutManager) outerRecyclerView.getLayoutManager();
                     //   layoutManager.scrollToPosition(5);

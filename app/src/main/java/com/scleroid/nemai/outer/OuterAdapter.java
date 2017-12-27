@@ -57,11 +57,13 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
             holder.setContent(parcels.get(position), position, parcels.size());
         else
             holder.setContent(addressesList.get(position), parcels.get(position), position, parcels.size());
+
     }
+
 
     @Override
     public void onViewRecycled(OuterItem holder) {
-        holder.clearContent();
+        //  holder.clearContent();
     }
 
     @Override
