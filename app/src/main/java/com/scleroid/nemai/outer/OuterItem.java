@@ -268,18 +268,15 @@ public class OuterItem extends HeaderItem {
         cost.setText("Rs. " + parcel.getInvoice());//TODO get delivery price, not invoice
 
 
-        mNewAddressButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mNewAddressButton.setOnClickListener(v -> {
 
 
-                FragmentManager fm = ((FragmentActivity) getHeader().getContext()).getFragmentManager();
-                Parcel parcel = header;
-                PinCode pincode = parcel.getDestinationPinCode();
-                DialogFragment dialog = AddressFragment.newInstance(pincode.getLocation(), pincode.getPincode(), pincode.getState());
-                dialog.show(fm, "adad");
+            FragmentManager fm = ((FragmentActivity) getHeader().getContext()).getFragmentManager();
+            Parcel parcel1 = header;
+            PinCode pincode = parcel1.getDestinationPinCode();
+            DialogFragment dialog = AddressFragment.newInstance(pincode.getLocation(), pincode.getPincode(), pincode.getState());
+            dialog.show(fm, "adad");
 
-            }
         });
 
     }

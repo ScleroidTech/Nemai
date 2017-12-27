@@ -3,7 +3,6 @@ package com.scleroid.nemai.activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -70,6 +69,8 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
      * Holds the positions value with true if address is already selected, false if not
      */
     Map<Integer, Boolean> selectedPositions = new HashMap<>();
+
+
     private CheckoutViewModel viewModel;
     private OuterAdapter outerAdapter;
     private TailRecyclerView outerRecyclerView;
@@ -139,7 +140,6 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         context = CheckoutActivity.this;
         ((GarlandApp) getApplication()).addListener(this);
         initRecyclerView(new ArrayList<Address>(), new ArrayList<Parcel>());
-
         orderViewModel = ViewModelProviders.of(CheckoutActivity.this).get(OrderViewModel.class);
 
         orderViewModel.getOrderList().observe(CheckoutActivity.this, new Observer<List<OrderedCourier>>() {
@@ -147,27 +147,30 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
             public void onChanged(@Nullable List<OrderedCourier> orderedCouriers) {
                 orderedCourierList = orderedCouriers;
                 isFinalized = orderedCouriers.size() == outerAdapter.getParcels().size();
-                updateSubtitle();
+
             }
         });
         viewModel = ViewModelProviders.of(CheckoutActivity.this).get(CheckoutViewModel.class);
 
-        viewModel.getParcelList().observe(CheckoutActivity.this, new Observer<List<Parcel>>() {
-            @Override
-            public void onChanged(@Nullable List<Parcel> parcels) {
+        viewModel.getParcelList().observe(CheckoutActivity.this, parcels -> {
 
-                outerAdapter.updateParcelList(parcels);
+            outerAdapter.updateParcelList(parcels);
+            if (selectedPositions.size() != outerAdapter.getItemCount()) populateSelectionMap();
 
-            }
         });
-        viewModel.getAddressList().observe(CheckoutActivity.this, new Observer<List<Address>>() {
-            @Override
-            public void onChanged(@Nullable List<Address> addresses) {
-                outerAdapter.updateAddressList(addresses);
-            }
-        });
+        viewModel.getAddressList().observe(CheckoutActivity.this, outerAdapter::updateAddressList);
+
+        populateSelectionMap();
+
 
     }
+
+    private void populateSelectionMap() {
+        for (int i = 0; i < outerAdapter.getItemCount(); i++) {
+            selectedPositions.put(i, false);
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -279,6 +282,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     }
 
     /**
+     * //TODO Future Implementation
      * The subscribe method of
      *
      * @param selectionMap
@@ -297,10 +301,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
          * saves if the position is selected or not
          */
         boolean isSelected = selectionMap.isSelected();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            selectedPositions.putIfAbsent(position, isSelected);
-        } else if (!selectedPositions.containsKey(position))
-            selectedPositions.put(position, isSelected);
+        selectedPositions.put(position, isSelected);
 
 
     }
@@ -311,7 +312,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         getMenuInflater().inflate(R.menu.menu_checkout_activity, menu);
         context_menu = menu;
         nextItem = menu.findItem(R.id.action_next);
-        nextItem.setEnabled(false);
+        // nextItem.setEnabled(false);
         return true;
     }
 
@@ -331,15 +332,9 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
             case R.id.action_next:
                 if (orderedCourierList == null || orderedCourierList.isEmpty()) {
                     outerRecyclerView.scrollToPosition(0);
-                } else {
-                    if (orderedCourierList.size() == outerAdapter.getParcels().size()) {
-                        Toast.makeText(getApplicationContext(), "You did it hero", Toast.LENGTH_SHORT).show();
-                    } else {
-                        //TODO Add logic to get unselected addresses view
+                } else
+                    isAllDone();
 
-
-                    }
-                }
                 Toast.makeText(getApplicationContext(), "Settings Click", Toast.LENGTH_SHORT).show();
                 return true;
 
@@ -349,21 +344,43 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     }
 
     /**
-     * This will enable or disable the Next Menu Button from the actionBar, if already all items have been set, the button
+     * if already all items have been set, It'll go to next screen, otherwise, it'll throw it to not done items
      */
-    private void updateSubtitle() {
 
-        invalidateOptionsMenu();
+    private void isAllDone() {
+
+        // invalidateOptionsMenu();
         if (nextItem == null) return;
+
         if (orderedCourierList.size() != outerAdapter.getParcels().size()) {
 
-        }
 
-        if (isFinalized) {
+            for (Map.Entry<Integer, Boolean> entry : selectedPositions.entrySet()) {
+                if (entry.getValue()) {
+                    outerRecyclerView.scrollToPosition(outerAdapter.getItemCount() - 5);
+                    Toasty.warning(context, "You haven't selected all addresses for parcels").show();
+                    break;
+                }
+
+            }
+           /*  Just another way for the same approach
+           Iterator<Map.Entry<Integer, Boolean>> entryIterator= selectedPositions.entrySet().iterator();
+            while (entryIterator.hasNext()){
+                Map.Entry entry = entryIterator.next();
+                if (!(Boolean)entry.getValue()){
+                    outerRecyclerView.scrollToPosition((Integer) entry.getKey());
+                    Toasty.warning(context, "You haven't selected all addresses for parcels").show();
+                    break;
+                }
+            }*/
+
+        } else isFinalized = true;
+
+       /* if (isFinalized) {
             //TODO
             nextItem.setEnabled(true);
-        }
-        nextItem.setEnabled(false);
+        }*/
+        // nextItem.setEnabled(true);
         getSupportActionBar().setSubtitle("Hey Ya");
     }
 
