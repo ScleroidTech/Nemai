@@ -29,9 +29,13 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     private static final String TAG = "innerAdapter";
     public static int lastSelectedPosition = -1;
     ItemInnerAddressCardBinding binding;
+    /**
+     * variable to hold selected Item position
+     */
+
+    int mSelectedItemPosition = -1;
     private List<Address> mData = new ArrayList<>();
     private List<Address> mDataSelected = new ArrayList<>();
-
     private View mEmptyView;
     private View innerLayout;
     private RadioButton lastChecked = null;
@@ -79,7 +83,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
             return new EmptyViewHolder(binding.getRoot());
         }*/
         //    mData = new ArrayList<>();
-        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), viewType, parent, false);
+        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_inner_address_card, parent, false);
         //    Log.d("innerItem", "data " + mData.size());
 
         selectedItems = new SparseBooleanArray();
@@ -90,14 +94,15 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     @Override
     public void onBindViewHolder(final InnerItem holder, final int position) {
 
-        //  holder.setIsRecyclable(false);
+        holder.setIsRecyclable(false);
         Address address = mData.get(position);
         // Log.d("innerItem", "is it here? onBindViewHolder" + mData.size() + "  position " + position);
         // if (position < mData.size() && !mData.isEmpty())
         holder.setContent(address);
         context = holder.getInnerLayout().getContext();
         holder.itemView.setTag(address);
-        //  setRadioSelected(holder, position);
+        holder.mSelectedItemPosition = mSelectedItemPosition;
+
 
         if (mDataSelected.contains(mData.get(position))) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.list_item_selected_state));
@@ -115,7 +120,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
             holder.deliverButtton.setVisibility(View.INVISIBLE);
         }
 
-        // holder.itemView.setActivated(selectedItems.get(position, false));
+        holder.itemView.setActivated(selectedItems.get(position, false));
         //TODO disable alre
         // ady activated view, then activate second view, reduce response time
         // Use getSelectedItems for the purpose
@@ -143,13 +148,13 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         }
     }
 
+    public void toggleSelection(int pos) {
 
+        selectedItems.put(pos, true);
 
-    @Override
-    public void onViewRecycled(InnerItem holder) {
-        // Log.d("innerItem", " onVIewRecycled" + mData.size());
-        //  holder.clearContent();
+        notifyItemChanged(pos);
     }
+
 
     @Override
     public int getItemCount() {
@@ -158,20 +163,27 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         return mData.size();
     }
 
-
+    /**
+     * TODO Need to override it for multiple view support
+     * Returns the view Type to be displayed,
+     *
+     * @param position the position of adapter
+     * @return
+     */
     @Override
     public int getItemViewType(int position) {
         //     Log.d("innerItem", "is it here? getItemViewType" + mData.size());
-        return R.layout.item_inner_address_card;
+        return position;
+        //return R.layout.item_inner_address_card;
     }
 
     public void addData(@Nullable List<Address> innerDataList, List<Address> selected) {
         final int size = mData.size();
         mData = innerDataList;
-        mDataSelected = selected;
-        if (!mDataSelected.isEmpty())
+        if (selected != null && !selected.isEmpty())
+            mDataSelected = selected;
             // swapItems(mData.indexOf(selected.get(0)));
-        //      Log.d("innerItem", "is it here? addData" + mData.size());
+        Log.d("innerItem", "is it here? addData" + mData.size());
 
         notifyDataSetChanged();
         //notifyItemRangeInserted(size, innerDataList.size());

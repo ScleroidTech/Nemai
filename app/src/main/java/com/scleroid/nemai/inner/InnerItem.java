@@ -36,6 +36,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem implemen
     public RadioButton radioButton;
     public Button deliverButtton;
     public CardView cardView;
+    int mSelectedItemPosition = -1;
     private Address mInnerData;
 
 
@@ -68,6 +69,7 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem implemen
             }
         });*/
         editTextView.setOnClickListener(this);
+        itemView.setOnClickListener(this);
 
 
     }
@@ -113,6 +115,14 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem implemen
 
             dialog.show(fm, "adad");
         } else {
+            //Handling for background selection state changed
+            int previousSelectState = mSelectedItemPosition;
+            mSelectedItemPosition = getAdapterPosition();
+            //notify previous selected item
+            // notifyItemChanged(previousSelectState);
+            //notify new selected Item
+            //   notifyItemChanged(mSelectedItemPosition);
+
 
         }
 
