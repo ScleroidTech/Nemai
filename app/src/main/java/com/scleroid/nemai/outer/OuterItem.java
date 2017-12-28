@@ -132,6 +132,7 @@ public class OuterItem extends HeaderItem {
     private InnerAdapter adapter;
     private boolean isMultiSelect = false;
     private Parcel header;
+    private OrderedCourier mOrderedCourier;
 
 
     public OuterItem(View itemView, RecyclerView.RecycledViewPool pool) {
@@ -214,11 +215,14 @@ public class OuterItem extends HeaderItem {
         return mRecyclerView;
     }
 
-    void setContent(@NonNull List<Address> innerDataList, final Parcel parcel, int position, int size) {
+    void setContent(@NonNull List<Address> innerDataList, final Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
         final Context context = itemView.getContext();
-
+        //TODO find position & re assign the value to it, to retain from the view changes
+        if (orderedCourier != null) selectedAddressList.add();
         header = parcel;
         tail = innerDataList;
+        mOrderedCourier = orderedCourier;
+        thatOrderedCourier = orderedCourier;
 
         //  Crashlytics.getInstance().crash(); // Force a crash
 
@@ -227,6 +231,7 @@ public class OuterItem extends HeaderItem {
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
         adapter = (InnerAdapter) mRecyclerView.getAdapter();
         ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail, selectedAddressList);
+//        ((InnerAdapter) mRecyclerView.getAdapter()).setSelection(selectedAddressList.get(getAdapterPosition()));
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -235,8 +240,8 @@ public class OuterItem extends HeaderItem {
                 if (view.getId() == R.id.edit_image_button) {
                     Toasty.error(getHeader().getContext(), "It works ").show();
                 }
-                adapter.toggleSelection(position);
-                //  multi_select(position);
+                //adapter.toggleSelection(position);
+                multi_select(position);
 
                 //  Toasty.makeText(getHeader().getContext(), "Details Page", Toast.LENGTH_SHORT).show();
             }
@@ -387,8 +392,8 @@ public class OuterItem extends HeaderItem {
         }
     }
 
-    public void setContent(Parcel parcel, int position, int size) {
-        setContent(new ArrayList<Address>(), parcel, position, size);
+    public void setContent(Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
+        setContent(new ArrayList<Address>(), parcel, position, size, orderedCourier);
     }
 
 

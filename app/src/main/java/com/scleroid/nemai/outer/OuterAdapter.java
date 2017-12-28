@@ -11,6 +11,7 @@ import com.ramotion.garlandview.TailAdapter;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.databinding.ItemOuterBinding;
 import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     private List<Address> addresses;
     private List<Parcel> parcels;
     private List<Address> selectedAddress;
-
+    private List<OrderedCourier> orderedCourierList;
 
     public OuterAdapter(List<Address> addresses, List<Parcel> parcels) {
         this.addresses = addresses;
@@ -39,6 +40,14 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
         addressesList = sortAddresses(parcels, addresses);
         mPool = new RecyclerView.RecycledViewPool();
         mPool.setMaxRecycledViews(0, POOL_SIZE);
+    }
+
+    public List<OrderedCourier> getOrderedCourierList() {
+        return orderedCourierList;
+    }
+
+    public void setOrderedCourierList(List<OrderedCourier> orderedCourierList) {
+        this.orderedCourierList = orderedCourierList;
     }
 
     @Override
@@ -57,9 +66,9 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
         holder.itemView.setTag(parcels.get(position));
         //  holder.selectedAddressList = selectedAddress;
         if (addressesList.size() == 0)
-            holder.setContent(parcels.get(position), position, parcels.size());
+            holder.setContent(parcels.get(position), position, parcels.size(), orderedCourierList.get(position));
         else
-            holder.setContent(addressesList.get(position), parcels.get(position), position, parcels.size());
+            holder.setContent(addressesList.get(position), parcels.get(position), position, parcels.size(), orderedCourierList.get(position));
 
     }
 
