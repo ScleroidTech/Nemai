@@ -29,11 +29,13 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     private List<List<Address>> addressesList;
     private List<Address> addresses;
     private List<Parcel> parcels;
+    private List<Address> selectedAddress;
 
 
     public OuterAdapter(List<Address> addresses, List<Parcel> parcels) {
         this.addresses = addresses;
         this.parcels = parcels;
+        //  this.selectedAddress = selectedAddress;
         addressesList = sortAddresses(parcels, addresses);
         mPool = new RecyclerView.RecycledViewPool();
         mPool.setMaxRecycledViews(0, POOL_SIZE);
@@ -41,8 +43,8 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
 
     @Override
     public OuterItem onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), viewType, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_outer, parent, false);
+        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_outer, parent, false);
         Log.d("innerItem", "data " + addresses.size());
         //  binding.setDataset(addresses);
 
@@ -51,8 +53,9 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
 
     @Override
     public void onBindViewHolder(OuterItem holder, int position) {
-
+        holder.setIsRecyclable(false);
         holder.itemView.setTag(parcels.get(position));
+        //  holder.selectedAddressList = selectedAddress;
         if (addressesList.size() == 0)
             holder.setContent(parcels.get(position), position, parcels.size());
         else
@@ -74,7 +77,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     @Override
     public int getItemViewType(int position) {
 
-        return R.layout.item_outer;
+        return position;
     }
 
     public List<Parcel> getParcels() {

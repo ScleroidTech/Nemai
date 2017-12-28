@@ -124,8 +124,8 @@ public class OuterItem extends HeaderItem {
     private final int mTitleSize2;
     GestureDetectorCompat gestureDetector;
     android.view.ActionMode actionMode;
-    List<Address> tail, multiSelectList;
-    OrderedCourier thatOrderedCourier;
+    private List<Address> tail, selectedAddressList = new ArrayList<>();
+    private OrderedCourier thatOrderedCourier;
     private View mNewAddressButton;
     private boolean mIsScrolling;
     private View mEmptyView;
@@ -182,18 +182,15 @@ public class OuterItem extends HeaderItem {
             }
         });
 
-        mRecyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mRecyclerView.setOnClickListener(v -> {
 
-            }
         });
         mRecyclerView.addItemDecoration(new HeaderDecorator(
                 itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_height_decoration),
                 itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_offset)));
         // Init fonts
 
-
+        //  selectedAddressList = new ArrayList<>();
         DataBindingUtil.bind(((FrameLayout) mHeader).getChildAt(0));
     }
 
@@ -222,14 +219,14 @@ public class OuterItem extends HeaderItem {
 
         header = parcel;
         tail = innerDataList;
-        multiSelectList = new ArrayList<>();
+
         //  Crashlytics.getInstance().crash(); // Force a crash
 
 
 
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
         adapter = (InnerAdapter) mRecyclerView.getAdapter();
-        ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail, multiSelectList);
+        ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail, selectedAddressList);
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -238,7 +235,8 @@ public class OuterItem extends HeaderItem {
                 if (view.getId() == R.id.edit_image_button) {
                     Toasty.error(getHeader().getContext(), "It works ").show();
                 }
-                multi_select(position);
+                adapter.toggleSelection(position);
+                //  multi_select(position);
 
                 //  Toasty.makeText(getHeader().getContext(), "Details Page", Toast.LENGTH_SHORT).show();
             }
@@ -285,29 +283,35 @@ public class OuterItem extends HeaderItem {
         Events.selectionMap selectionMap = new Events.selectionMap(position, whatToDo);
         GlobalBus.getBus().post(selectionMap);
     }
+
+    /**
+     * @param position
+     * @deprecated Will be removed soon
+     * As not functioning solution due to reusing of the viewHolder
+     */
     public void multi_select(int position) {
         boolean whatToDo = false;// if false, delete  it from db, if true, add it
         try {
 
-            if (multiSelectList.isEmpty()) {
-                Log.d(TAG, "list empty " + multiSelectList.isEmpty());
+            if (selectedAddressList.isEmpty()) {
+                Log.d(TAG, "list empty " + selectedAddressList.isEmpty());
                 thatOrderedCourier = new OrderedCourier(header, tail.get(position));
-                multiSelectList.add(tail.get(position));
+                selectedAddressList.add(tail.get(position));
                 whatToDo = true;
 
 
             } else {
-                Log.d(TAG, "list not  empty " + multiSelectList.isEmpty());
+                Log.d(TAG, "list not  empty " + selectedAddressList.isEmpty());
 
-                if (multiSelectList.contains(tail.get(position))) {
-                    multiSelectList.remove(tail.get(position));
+                if (selectedAddressList.contains(tail.get(position))) {
+                    selectedAddressList.remove(tail.get(position));
                     thatOrderedCourier.setAddress(null);
                     whatToDo = false;
 
                 } else {
-                    multiSelectList.clear();
+                    selectedAddressList.clear();
                     thatOrderedCourier.setAddress(tail.get(position));
-                    multiSelectList.add(tail.get(position));
+                    selectedAddressList.add(tail.get(position));
                     whatToDo = true;
 
 
@@ -329,7 +333,7 @@ public class OuterItem extends HeaderItem {
     }
 
     public void refreshAdapter(int position) {
-        adapter.updateSelectedData(position, multiSelectList);
+        adapter.updateSelectedData(position, selectedAddressList);
     }
 
     public String bindNumber(int position, int size) {

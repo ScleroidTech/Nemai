@@ -60,7 +60,9 @@ public class Events {
         }
     }
 
-    // Event used to send message from activity to activity.
+    /**
+     *
+     */
     public static class ActivityActivityMessage {
         private String message;
 

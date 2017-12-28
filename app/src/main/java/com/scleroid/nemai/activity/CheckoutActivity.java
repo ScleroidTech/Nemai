@@ -370,7 +370,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
                     //   layoutManager.scrollToPosition(5);
             int index = selectedPositions.indexOfValue(false);
                     isFinalized = false;
-            Toasty.warning(context, "You haven't selected address for parcel No. " + index).show();
+            Toasty.warning(context, "You haven't selected address for parcel No. " + index + 1).show();
 
 
 
