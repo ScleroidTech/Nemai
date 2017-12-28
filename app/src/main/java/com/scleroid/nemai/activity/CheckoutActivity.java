@@ -143,6 +143,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
             @Override
             public void onChanged(@Nullable List<OrderedCourier> orderedCouriers) {
                 orderedCourierList = orderedCouriers;
+                outerAdapter.setOrderedCourierList(orderedCouriers);
                 isFinalized = orderedCouriers.size() == outerAdapter.getParcels().size();
 
             }

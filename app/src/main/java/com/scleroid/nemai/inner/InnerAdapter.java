@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.databinding.ItemInnerAddressCardBinding;
 import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.models.OrderedCourier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +95,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     @Override
     public void onBindViewHolder(final InnerItem holder, final int position) {
 
-        holder.setIsRecyclable(false);
+        //   holder.setIsRecyclable(false);
         Address address = mData.get(position);
         // Log.d("innerItem", "is it here? onBindViewHolder" + mData.size() + "  position " + position);
         // if (position < mData.size() && !mData.isEmpty())
@@ -103,6 +104,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         holder.itemView.setTag(address);
         holder.mSelectedItemPosition = mSelectedItemPosition;
 
+        //  setSelection();
 
         if (mDataSelected.contains(mData.get(position))) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.list_item_selected_state));
@@ -120,12 +122,15 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
             holder.deliverButtton.setVisibility(View.INVISIBLE);
         }
 
-        holder.itemView.setActivated(selectedItems.get(position, false));
+        // holder.itemView.setActivated(selectedItems.get(position, false));
         //TODO disable alre
         // ady activated view, then activate second view, reduce response time
         // Use getSelectedItems for the purpose
 
 
+    }
+
+    public void setSelection(OrderedCourier selection) {
     }
 
     // Swap itemA with itemB
@@ -149,8 +154,11 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     }
 
     public void toggleSelection(int pos) {
-
+        boolean check = !selectedItems.get(pos);
+        selectedItems.put(pos, check);
+        /*if (!selectedItems.get(pos))
         selectedItems.put(pos, true);
+        else selectedItems.put(pos,false);*/
 
         notifyItemChanged(pos);
     }
