@@ -1,5 +1,6 @@
 package com.scleroid.nemai.outer;
 
+import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,6 +25,7 @@ import java.util.List;
 public class OuterAdapter extends TailAdapter<OuterItem> {
 
     private static final int EMPTY_VIEW = 10;
+    private static final String TAG = "scleroid.nemai.outerAdapter";
     private final int POOL_SIZE = 16;
     private final RecyclerView.RecycledViewPool mPool;
     ItemOuterBinding binding;
@@ -60,15 +62,25 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
         return new OuterItem(view, mPool);
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public void onBindViewHolder(OuterItem holder, int position) {
-        holder.setIsRecyclable(false);
+        holder.setIsRecyclable(true);
         holder.itemView.setTag(parcels.get(position));
         //  holder.selectedAddressList = selectedAddress;
+        OrderedCourier thatOrderedCourier = orderedCourierList.get(position);
         if (addressesList.size() == 0)
-            holder.setContent(parcels.get(position), position, parcels.size(), orderedCourierList.get(position));
-        else
-            holder.setContent(addressesList.get(position), parcels.get(position), position, parcels.size(), orderedCourierList.get(position));
+            holder.setContent(parcels.get(position), position, parcels.size(), thatOrderedCourier);
+        else {
+            holder.setContent(addressesList.get(position), parcels.get(position), position, parcels.size(), thatOrderedCourier);
+
+            if (thatOrderedCourier.getAddress() != null) {
+                Log.d(TAG, "I'm adding address to selectedAddresses");
+                holder.selectedAddressList.add(thatOrderedCourier.getAddress());
+            }
+
+
+        }
 
     }
 

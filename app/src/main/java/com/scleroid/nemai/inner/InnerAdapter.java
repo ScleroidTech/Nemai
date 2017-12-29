@@ -104,7 +104,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         holder.itemView.setTag(address);
         holder.mSelectedItemPosition = mSelectedItemPosition;
 
-        //  setSelection();
+        //  setSelectedAddress();
 
         if (mDataSelected.contains(mData.get(position))) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.list_item_selected_state));
