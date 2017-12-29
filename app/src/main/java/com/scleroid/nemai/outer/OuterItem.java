@@ -122,9 +122,10 @@ public class OuterItem extends HeaderItem {
     private final int m120dp;
     private final int mTitleSize1;
     private final int mTitleSize2;
+    protected List<Address> selectedAddressList = new ArrayList<>();
     GestureDetectorCompat gestureDetector;
     android.view.ActionMode actionMode;
-    private List<Address> tail, selectedAddressList = new ArrayList<>();
+    private List<Address> tail;
     private OrderedCourier thatOrderedCourier;
     private View mNewAddressButton;
     private boolean mIsScrolling;
@@ -218,11 +219,11 @@ public class OuterItem extends HeaderItem {
     void setContent(@NonNull List<Address> innerDataList, final Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
         final Context context = itemView.getContext();
         //TODO find position & re assign the value to it, to retain from the view changes
-        if (orderedCourier != null) selectedAddressList.add();
+
         header = parcel;
         tail = innerDataList;
-        mOrderedCourier = orderedCourier;
         thatOrderedCourier = orderedCourier;
+
 
         //  Crashlytics.getInstance().crash(); // Force a crash
 
@@ -231,7 +232,7 @@ public class OuterItem extends HeaderItem {
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
         adapter = (InnerAdapter) mRecyclerView.getAdapter();
         ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail, selectedAddressList);
-//        ((InnerAdapter) mRecyclerView.getAdapter()).setSelection(selectedAddressList.get(getAdapterPosition()));
+//        ((InnerAdapter) mRecyclerView.getAdapter()).setSelectedAddress(selectedAddressList.get(getAdapterPosition()));
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -284,7 +285,15 @@ public class OuterItem extends HeaderItem {
 
     }
 
-    private void setSelection(int position, boolean whatToDo) {
+    /**
+     * Sets the selected position in the
+     *
+     * @param position the current position, for which this method is called
+     * @param whatToDo is the position selected or not, true if selected, otherwise false
+     * @see java.util.Map which later changed to
+     * @see android.util.SparseBooleanArray
+     */
+    private void setSelectedAddress(int position, boolean whatToDo) {
         Events.selectionMap selectionMap = new Events.selectionMap(position, whatToDo);
         GlobalBus.getBus().post(selectionMap);
     }
@@ -324,7 +333,7 @@ public class OuterItem extends HeaderItem {
 
 
             }
-            setSelection(getAdapterPosition(), whatToDo);
+            setSelectedAddress(getAdapterPosition(), whatToDo);
             if (whatToDo)
                 OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
             else
@@ -395,6 +404,7 @@ public class OuterItem extends HeaderItem {
     public void setContent(Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
         setContent(new ArrayList<Address>(), parcel, position, size, orderedCourier);
     }
+
 
 
 }

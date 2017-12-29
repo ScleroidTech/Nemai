@@ -140,10 +140,12 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         orderViewModel = ViewModelProviders.of(CheckoutActivity.this).get(OrderViewModel.class);
 
         orderViewModel.getOrderList().observe(CheckoutActivity.this, new Observer<List<OrderedCourier>>() {
+            @SuppressLint("LongLogTag")
             @Override
             public void onChanged(@Nullable List<OrderedCourier> orderedCouriers) {
                 orderedCourierList = orderedCouriers;
                 outerAdapter.setOrderedCourierList(orderedCouriers);
+                Log.d(TAG, "Courier List updated, Yo" + orderedCouriers.size());
                 isFinalized = orderedCouriers.size() == outerAdapter.getParcels().size();
 
             }
@@ -191,18 +193,11 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
     @Override
     public void onFakerReady(Faker faker) {
-        //  List<com.scleroid.nemai.models.Parcel> parcels = new ArrayList<>();
 
         populateData(faker);
-        // List<Address> innerData;
-        // innerData = AddressLab.getAllAddresss(context);
-        //  parcels = ParcelLab.getAllParcels(context);
 
-        // outerData = outerAdapter.sortAddresses(parcels, innerData);
-
-        // outerData = Collections.emptyList();
-        //  initRecyclerView(outerData, parcels);
     }
+
 
     @NonNull
     private void populateData(Faker faker) {
