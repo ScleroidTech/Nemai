@@ -194,7 +194,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     @Override
     public void onFakerReady(Faker faker) {
 
-        populateData(faker);
+        //  populateData(faker);
 
     }
 
@@ -211,7 +211,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
             for (int j = 0; j < INNER_COUNT - i; j++) {
                 //innerData.add(createInnerData(faker));
-                AddressLab.addAddress(createInnerData(faker), AppDatabase.getAppDatabase(context));
+                //AddressLab.addAddress(createInnerData(faker), AppDatabase.getAppDatabase(context));
 
             }
 
