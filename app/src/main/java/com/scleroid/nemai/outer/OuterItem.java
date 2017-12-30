@@ -3,7 +3,6 @@ package com.scleroid.nemai.outer;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -16,7 +15,6 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.ramotion.garlandview.header.HeaderDecorator;
@@ -193,7 +191,7 @@ public class OuterItem extends HeaderItem {
         // Init fonts
 
         //  selectedAddressList = new ArrayList<>();
-        DataBindingUtil.bind(((FrameLayout) mHeader).getChildAt(0));
+        //  DataBindingUtil.bind(((FrameLayout) mHeader).getChildAt(0));
     }
 
     @Override
@@ -218,6 +216,7 @@ public class OuterItem extends HeaderItem {
 
     void setContent(@NonNull List<Address> innerDataList, final Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
         final Context context = itemView.getContext();
+        itemView.setTag(parcel);
         //TODO find position & re assign the value to it, to retain from the view changes
 
         header = parcel;

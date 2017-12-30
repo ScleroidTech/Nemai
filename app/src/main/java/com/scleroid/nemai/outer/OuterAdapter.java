@@ -66,7 +66,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     @Override
     public void onBindViewHolder(OuterItem holder, int position) {
         holder.setIsRecyclable(true);
-        holder.itemView.setTag(parcels.get(position));
+        //holder.itemView.setTag(parcels.get(position));
         //  holder.selectedAddressList = selectedAddress;
         if (orderedCourierList != null && !orderedCourierList.isEmpty()) {
             OrderedCourier thatOrderedCourier = orderedCourierList.get(position);

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <!--   <data>
 
            <import type="android.view.View" />
@@ -9,18 +11,23 @@
                type="java.util.List&lt;java.util.Listcom.scleroid.nemai.inner.Addressl&gt;&gt;" />
        </data>-->
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
         <com.ramotion.garlandview.inner.InnerRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
             android:layout_height="match_parent"
         android:clipChildren="false" />
 
-
+            <include layout="@layout/item_empty_address_view" />
+        </LinearLayout>
     <FrameLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -47,8 +54,10 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="20dp"
             android:textColor="@color/colorWhite"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_add_location_white_24dp" />
     </FrameLayout>
+
 </layout>
