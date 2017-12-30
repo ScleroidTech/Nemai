@@ -364,9 +364,18 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
             // outerRecyclerView.scrollToPosition(outerAdapter.getItemCount() - 5);*/
                     // TailLayoutManager layoutManager = (TailLayoutManager) outerRecyclerView.getLayoutManager();
                     //   layoutManager.scrollToPosition(5);
-            int index = selectedPositions.indexOfValue(false);
+            for (int i = 0; i < selectedPositions.size(); i++) {
+                int key = selectedPositions.keyAt(i);
+                boolean value = selectedPositions.valueAt(i);
+                // get the object by the key.
+                if (!value && key != -1) {
+                    Toasty.warning(context, "You haven't selected address for parcel No. " + key + 1).show();
+                }
+            }
+            //Another way to do same thing
+            // int index = selectedPositions.indexOfValue(false);
                     isFinalized = false;
-            Toasty.warning(context, "You haven't selected address for parcel No. " + index + 1).show();
+
 
 
 

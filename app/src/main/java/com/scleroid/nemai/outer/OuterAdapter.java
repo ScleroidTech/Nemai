@@ -68,15 +68,17 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
         holder.setIsRecyclable(true);
         holder.itemView.setTag(parcels.get(position));
         //  holder.selectedAddressList = selectedAddress;
-        OrderedCourier thatOrderedCourier = orderedCourierList.get(position);
-        if (addressesList.size() == 0)
-            holder.setContent(parcels.get(position), position, parcels.size(), thatOrderedCourier);
-        else {
-            holder.setContent(addressesList.get(position), parcels.get(position), position, parcels.size(), thatOrderedCourier);
+        if (orderedCourierList != null && !orderedCourierList.isEmpty()) {
+            OrderedCourier thatOrderedCourier = orderedCourierList.get(position);
+            if (addressesList.size() == 0)
+                holder.setContent(parcels.get(position), position, parcels.size(), thatOrderedCourier);
+            else {
+                holder.setContent(addressesList.get(position), parcels.get(position), position, parcels.size(), thatOrderedCourier);
 
-            if (thatOrderedCourier.getAddress() != null) {
-                Log.d(TAG, "I'm adding address to selectedAddresses");
-                holder.selectedAddressList.add(thatOrderedCourier.getAddress());
+                if (thatOrderedCourier.getAddress() != null) {
+                    Log.d(TAG, "I'm adding address to selectedAddresses");
+                    holder.selectedAddressList.add(thatOrderedCourier.getAddress());
+                }
             }
 
 
