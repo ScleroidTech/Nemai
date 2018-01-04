@@ -20,13 +20,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-        <com.ramotion.garlandview.inner.InnerRecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-            android:layout_height="match_parent"
-        android:clipChildren="false" />
 
-            <include layout="@layout/item_empty_address_view" />
+            <com.ramotion.garlandview.inner.InnerRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="250dp"
+                android:text="No Addresses found"
+                android:textSize="30sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Please Add a new address first"
+                android:textSize="15sp" />
+
+
+            <!--  <include layout="@layout/item_empty_address_view" />-->
         </LinearLayout>
     <FrameLayout
         android:id="@+id/header"
