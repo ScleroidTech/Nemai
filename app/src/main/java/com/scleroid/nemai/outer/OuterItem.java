@@ -222,6 +222,8 @@ public class OuterItem extends HeaderItem {
         header = parcel;
         tail = innerDataList;
         thatOrderedCourier = orderedCourier;
+        if (thatOrderedCourier != null && thatOrderedCourier.getAddress() != null)
+            selectedAddressList.add(thatOrderedCourier.getAddress());
 
 
         //  Crashlytics.getInstance().crash(); // Force a crash
@@ -230,8 +232,7 @@ public class OuterItem extends HeaderItem {
 
         mRecyclerView.setLayoutManager(new InnerLayoutManager());
         adapter = (InnerAdapter) mRecyclerView.getAdapter();
-        ((InnerAdapter) mRecyclerView.getAdapter()).addData(tail, selectedAddressList);
-//        ((InnerAdapter) mRecyclerView.getAdapter()).setSelectedAddress(selectedAddressList.get(getAdapterPosition()));
+        adapter.addData(tail, selectedAddressList);
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override

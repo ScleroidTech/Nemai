@@ -154,11 +154,15 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
         viewModel.getParcelList().observe(CheckoutActivity.this, parcels -> {
 
-            outerAdapter.updateParcelList(parcels);
+            outerAdapter.setParcels(parcels);
+            outerAdapter.notifyDataSetChanged();
             if (selectedPositions.size() != outerAdapter.getItemCount()) populateSelectionMap();
 
         });
-        viewModel.getAddressList().observe(CheckoutActivity.this, outerAdapter::updateAddressList);
+        viewModel.getAddressList().observe(CheckoutActivity.this, addresses -> {
+            outerAdapter.updateAddressList(addresses);
+            outerAdapter.notifyDataSetChanged();
+        });
 
         // populateSelectionMap();
 
@@ -265,6 +269,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         );
     }
 
+    @SuppressLint("LongLogTag")
     @Subscribe
     public void onAddressMessage(Events.AddressMessage fragmentActivityMessage) {
         Bundle bundle = fragmentActivityMessage.getMessage();
@@ -277,6 +282,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         } else {
             AddressLab.updateAddress(model, AppDatabase.getAppDatabase(context));
         }
+        Log.d(TAG, " Is this address method  working");
         //   setContent(model);
 
 
