@@ -235,16 +235,16 @@ public class OuterItem extends HeaderItem {
 
         //  Crashlytics.getInstance().crash(); // Force a crash
 
-        if (tail == null && tail.isEmpty()) {
-            noAddressTitleTextView.setVisibility(View.VISIBLE);
-            noAddressSubtitleTextView.setVisibility(View.VISIBLE);
-            innerRecyclerView.setVisibility(View.GONE);
-
-        } else {
+        if (tail != null && !tail.isEmpty()) {
             noAddressTitleTextView.setVisibility(View.GONE);
             noAddressSubtitleTextView.setVisibility(View.GONE);
             innerRecyclerView.setVisibility(View.VISIBLE);
             setupInsideRecyclerView();
+        } else {
+            noAddressTitleTextView.setVisibility(View.VISIBLE);
+            noAddressSubtitleTextView.setVisibility(View.VISIBLE);
+            innerRecyclerView.setVisibility(View.GONE);
+
         }
 
         //gestureDetector = new GestureDetectorCompat(this.getHeader().getContext(), new RecyclerViewDemoOnGestureListener());

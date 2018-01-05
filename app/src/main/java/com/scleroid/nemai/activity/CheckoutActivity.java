@@ -1,12 +1,9 @@
 package com.scleroid.nemai.activity;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -124,6 +121,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     private MenuItem nextItem;
 
 
+    @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,19 +135,15 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         FacebookSdk.sdkInitialize(CheckoutActivity.this);
         context = CheckoutActivity.this;
         ((GarlandApp) getApplication()).addListener(this);
-        initRecyclerView(new ArrayList<Address>(), new ArrayList<Parcel>());
+        initRecyclerView(new ArrayList<>(), new ArrayList<>());
         orderViewModel = ViewModelProviders.of(CheckoutActivity.this).get(OrderViewModel.class);
 
-        orderViewModel.getOrderList().observe(CheckoutActivity.this, new Observer<List<OrderedCourier>>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onChanged(@Nullable List<OrderedCourier> orderedCouriers) {
-                orderedCourierList = orderedCouriers;
-                outerAdapter.setOrderedCourierList(orderedCouriers);
-                Log.d(TAG, "Courier List updated, Yo" + orderedCouriers.size());
-                isFinalized = orderedCouriers.size() == outerAdapter.getParcels().size();
+        orderViewModel.getOrderList().observe(CheckoutActivity.this, orderedCouriers -> {
+            orderedCourierList = orderedCouriers;
+            outerAdapter.setOrderedCourierList(orderedCouriers);
+            Log.d(TAG, "Courier List updated, Yo" + orderedCouriers.size());
+            isFinalized = orderedCouriers.size() == outerAdapter.getParcels().size();
 
-            }
         });
         viewModel = ViewModelProviders.of(CheckoutActivity.this).get(CheckoutViewModel.class);
 
@@ -205,7 +199,6 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     }
 
 
-    @NonNull
     private void populateData(Faker faker) {
         List<Address> innerData = new ArrayList<>();
         List<Address> tempList = new ArrayList<>();

@@ -16,18 +16,19 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 //TODO https://uk.linkedin.com/in/chrisbanes/
 
 import android.app.Dialog;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -103,6 +104,18 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_fragment_main, menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle state) {
 
@@ -123,18 +136,15 @@ public class HomeFragment extends Fragment {
 
         parcelViewModel = ViewModelProviders.of(HomeFragment.this).get(ParcelViewModel.class);
 
-        parcelViewModel.getParcelList().observe(HomeFragment.this, new Observer<List<Parcel>>() {
-            @Override
-            public void onChanged(@Nullable List<Parcel> parcels) {
+        parcelViewModel.getParcelList().observe(HomeFragment.this, parcels -> {
 
-                recycleViewPagerAdapter.updateParcelList(parcels);
+            recycleViewPagerAdapter.updateParcelList(parcels);
 
-                crimes = parcels;
-                if (parcels.size() == 0)
-                    createDefaultParcel();
+            crimes = parcels;
+            if ((parcels != null ? parcels.size() : 0) == 0)
+                createDefaultParcel();
 
 
-            }
         });
         /*
         if (crimes == null || crimes.size() == 0){
@@ -144,19 +154,15 @@ public class HomeFragment extends Fragment {
 
 
         fabNewCourier = v.findViewById(R.id.fab_new_data);
-        fabNewCourier.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        fabNewCourier.setOnClickListener(v1 -> {
 //TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data before sending it to server.& send all data to server at once
 
 
+            //validateFields(false);
+            //submitRequest(null, false);
+            submitData(true);
 
-                //validateFields(false);
-                //submitRequest(null, false);
-                submitData(true);
 
-
-            }
         });
 
 

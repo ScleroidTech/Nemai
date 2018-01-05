@@ -4,6 +4,8 @@
 
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
     android:elevation="2dp"
     android:paddingTop="2dp">
 
@@ -631,7 +633,6 @@
                     android:id="@+id/editDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:elevation="6dp"
                     android:hint="@string/package_description"
                     android:inputType="textMultiLine"
                     android:maxLength="160"
