@@ -1,7 +1,6 @@
 package com.scleroid.nemai.outer;
 
 import android.annotation.SuppressLint;
-import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +17,8 @@ import com.scleroid.nemai.models.Parcel;
 import java.util.ArrayList;
 import java.util.List;
 
+import hugo.weaving.DebugLog;
+
 /**
  * Adapter which holds the outer Recyclerview
  * @see com.ramotion.garlandview.TailRecyclerView
@@ -31,9 +32,9 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
 
     private static final int EMPTY_VIEW = 10;
     private static final String TAG = "scleroid.nemai.outerAdapter";
-    private final int POOL_SIZE = 16;
     private final RecyclerView.RecycledViewPool mPool;
     ItemOuterBinding binding;
+    private int poolSize = 1;
     private List<List<Address>> addressesList;
     private List<Address> addresses;
     private List<Parcel> parcels;
@@ -46,13 +47,15 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
      * @param addresses list of addresses
      * @param parcels   list of parcels
      */
+    @DebugLog
     public OuterAdapter(List<Address> addresses, List<Parcel> parcels) {
         this.addresses = addresses;
         this.parcels = parcels;
         //  this.selectedAddress = selectedAddress;
         addressesList = sortAddresses(parcels, addresses);
+        poolSize = addresses.size() + parcels.size();
         mPool = new RecyclerView.RecycledViewPool();
-        mPool.setMaxRecycledViews(0, POOL_SIZE);
+        mPool.setMaxRecycledViews(0, poolSize);
     }
 
     /**
@@ -165,7 +168,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     @Override
     public OuterItem onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_outer, parent, false);
-        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_outer, parent, false);
+        //   binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_outer, parent, false);
         Log.d("innerItem", "data " + addresses.size());
         //  binding.setDataset(addresses);
 
