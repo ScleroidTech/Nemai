@@ -53,7 +53,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
         this.parcels = parcels;
         //  this.selectedAddress = selectedAddress;
         addressesList = sortAddresses(parcels, addresses);
-        poolSize = addresses.size() + parcels.size();
+        poolSize = addresses.size()/* + parcels.size()*/;
         mPool = new RecyclerView.RecycledViewPool();
         mPool.setMaxRecycledViews(0, poolSize);
     }

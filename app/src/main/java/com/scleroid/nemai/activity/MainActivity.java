@@ -193,61 +193,57 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpNavigationView() {
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        // This method will trigger on item Click of navigation menu
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
 
-            // This method will trigger on item Click of navigation menu
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
+            //Check to see which item was being clicked and perform appropriate action
+      /*      switch (menuItem.getItemId()) {
+                //Replacing the main content with ContentFragment Which is our Inbox View;
+                case R.id.home:
+                    navItemIndex = 0;
+                    CURRENT_TAG = TAG_HOME;
+                    break;
+                case R.id.nav_partners:
+                    navItemIndex = 1;
+                    CURRENT_TAG = TAG_PHOTOS;
+                    break;
+                case R.id.nav_address:
+                    navItemIndex = 2;
+                    CURRENT_TAG = TAG_MOVIES;
+                    break;
+                case R.id.nav_notifications:
+                    navItemIndex = 3;
+                    CURRENT_TAG = TAG_NOTIFICATIONS;
+                    break;
+                case R.id.nav_settings:
+                    navItemIndex = 4;
+                    CURRENT_TAG = TAG_SETTINGS;
+                    break;
+                case R.id.nav_about_us:
+                    // launch new intent instead of loading fragment
+                    startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
+                    drawer.closeDrawers();
+                    return true;
+                case R.id.nav_privacy_policy:
+                    // launch new intent instead of loading fragment
+                    startActivity(new Intent(MainActivity.this, PrivacyPolicyActivity.class));
+                    drawer.closeDrawers();
+                    return true;
+                default:
+                    navItemIndex = 0;
+            }*/
 
-                //Check to see which item was being clicked and perform appropriate action
-          /*      switch (menuItem.getItemId()) {
-                    //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.home:
-                        navItemIndex = 0;
-                        CURRENT_TAG = TAG_HOME;
-                        break;
-                    case R.id.nav_partners:
-                        navItemIndex = 1;
-                        CURRENT_TAG = TAG_PHOTOS;
-                        break;
-                    case R.id.nav_address:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_MOVIES;
-                        break;
-                    case R.id.nav_notifications:
-                        navItemIndex = 3;
-                        CURRENT_TAG = TAG_NOTIFICATIONS;
-                        break;
-                    case R.id.nav_settings:
-                        navItemIndex = 4;
-                        CURRENT_TAG = TAG_SETTINGS;
-                        break;
-                    case R.id.nav_about_us:
-                        // launch new intent instead of loading fragment
-                        startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_privacy_policy:
-                        // launch new intent instead of loading fragment
-                        startActivity(new Intent(MainActivity.this, PrivacyPolicyActivity.class));
-                        drawer.closeDrawers();
-                        return true;
-                    default:
-                        navItemIndex = 0;
-                }*/
-
-                //Checking if the item is in checked state or not, if not make it in checked state
-                if (menuItem.isChecked()) {
-                    menuItem.setChecked(false);
-                } else {
-                    menuItem.setChecked(true);
-                }
+            //Checking if the item is in checked state or not, if not make it in checked state
+            if (menuItem.isChecked()) {
+                menuItem.setChecked(false);
+            } else {
                 menuItem.setChecked(true);
-
-                loadHomeFragment();
-
-                return true;
             }
+            menuItem.setChecked(true);
+
+            loadHomeFragment();
+
+            return true;
         });
 
 

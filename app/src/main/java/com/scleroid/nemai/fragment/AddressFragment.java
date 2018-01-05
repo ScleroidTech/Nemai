@@ -134,12 +134,7 @@ AddressFragment extends DialogFragment {
             }
 
 
-        }).withDialogAnimation(true).onNegative(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                getDialog().dismiss();
-            }
-        }).setScrollable(true).setNegativeText(android.R.string.cancel).setPositiveText(android.R.string.ok).build();
+        }).withDialogAnimation(true).onNegative((dialog1, which) -> getDialog().dismiss()).setScrollable(true).setNegativeText(android.R.string.cancel).setPositiveText(android.R.string.ok).build();
         return dialog;
     }
 
