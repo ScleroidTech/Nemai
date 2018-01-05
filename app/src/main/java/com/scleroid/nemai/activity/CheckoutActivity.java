@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import hugo.weaving.DebugLog;
 import io.bloco.faker.Faker;
 import io.fabric.sdk.android.Fabric;
 
@@ -175,6 +176,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
      * @see SparseBooleanArray
      * @deprecated no longer necessary, because we're now using
      */
+    @DebugLog
     private void populateSelectionMap() {
         for (int i = 0; i < outerAdapter.getItemCount(); i++) {
 
@@ -198,7 +200,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     @Override
     public void onFakerReady(Faker faker) {
 
-        //  populateData(faker);
+        populateData(faker);
 
     }
 
@@ -270,6 +272,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     }
 
     @SuppressLint("LongLogTag")
+    @DebugLog
     @Subscribe
     public void onAddressMessage(Events.AddressMessage fragmentActivityMessage) {
         Bundle bundle = fragmentActivityMessage.getMessage();
@@ -298,6 +301,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
      * @see OuterItem
      * which provides which items are selected & which aren't
      */
+    @DebugLog
     @SuppressLint("LongLogTag")
     @Subscribe
     public void onSelection(Events.selectionMap selectionMap) {

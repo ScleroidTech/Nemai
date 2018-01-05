@@ -43,7 +43,7 @@ import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
 /**
  * This is The viewholder class for the RecyclerViewPager
  * which extends HeaderItem, which extends RecyclerView.ViewHolder
- * It holds Data to be displayed on the recyclerView & the connections it needs to be making
+ * It holds Data to be displayed on the innerRecyclerView & the connections it needs to be making
  * @author Ganesh
  * @since 15-11-2017
  * @see android.support.v7.widget.RecyclerView.ViewHolder
@@ -96,33 +96,28 @@ public class OuterItem extends HeaderItem {
      * Difference between max ratio of answer view & start ratio of answer View
      */
     private final static float ANSWER_RATIO_DIFF = ANSWER_RATIO_START - ANSWER_RATIO_MAX;
-
-
-
-
-    private final View mHeader;
-    private final View mHeaderAlpha;
-
-    private final InnerRecyclerView mRecyclerView;
-
-    private final TextView mHeaderCaption1;
-    private final TextView mHeaderCaption2;
-    private final TextView source;
-    private final TextView destination;
-    private final TextView cost;
-    private final TextView edit;
-
-    private final View mMiddle;
-    private final View mMiddleEdit;
-    private final View mFooter;
     private final List<View> mMiddleCollapsible = new ArrayList<>(2);
-    private final int m10dp;
-    private final int m120dp;
-    private final int mTitleSize1;
-    private final int mTitleSize2;
+    private final TextView noAddressTitleTextView;
+    private final TextView noAddressSubtitleTextView;
     protected List<Address> selectedAddressList = new ArrayList<>();
     GestureDetectorCompat gestureDetector;
     android.view.ActionMode actionMode;
+    private View mHeader;
+    private View mHeaderAlpha;
+    private InnerRecyclerView innerRecyclerView;
+    private TextView mHeaderCaption1;
+    private TextView mHeaderCaption2;
+    private TextView source;
+    private TextView destination;
+    private TextView cost;
+    private TextView edit;
+    private View mMiddle;
+    private View mMiddleEdit;
+    private View mFooter;
+    private int m10dp;
+    private int m120dp;
+    private int mTitleSize1;
+    private int mTitleSize2;
     private List<Address> tail;
     private OrderedCourier thatOrderedCourier;
     private View mNewAddressButton;
@@ -136,7 +131,47 @@ public class OuterItem extends HeaderItem {
 
     public OuterItem(View itemView, RecyclerView.RecycledViewPool pool) {
         super(itemView);
+        initHeader(itemView);
+        initRecycerView(itemView, pool);
 
+        //Init Empty View Message
+        noAddressTitleTextView = itemView.findViewById(R.id.no_address_title);
+        noAddressSubtitleTextView = itemView.findViewById(R.id.no_address_subtitle);
+
+
+        // Init fonts
+
+        //  selectedAddressList = new ArrayList<>();
+        //  DataBindingUtil.bind(((FrameLayout) mHeader).getChildAt(0));
+    }
+
+    public void initRecycerView(View itemView, RecyclerView.RecycledViewPool pool) {
+        // Init RecyclerView
+        innerRecyclerView = itemView.findViewById(R.id.recycler_view);
+        innerRecyclerView.setRecycledViewPool(pool);
+        innerRecyclerView.setAdapter(new InnerAdapter());
+
+        innerRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                mIsScrolling = newState != RecyclerView.SCROLL_STATE_IDLE;
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                onItemScrolled(recyclerView, dx, dy);
+            }
+        });
+
+        innerRecyclerView.setOnClickListener(v -> {
+
+        });
+        innerRecyclerView.addItemDecoration(new HeaderDecorator(
+                itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_height_decoration),
+                itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_offset)));
+    }
+
+    public void initHeader(View itemView) {
         // Init header
         m10dp = itemView.getContext().getResources().getDimensionPixelSize(R.dimen.dp10);
         m120dp = itemView.getContext().getResources().getDimensionPixelSize(R.dimen.dp120);
@@ -164,34 +199,6 @@ public class OuterItem extends HeaderItem {
 
         //  mMiddleCollapsible.add((View)mAvatar.getParent());
         mMiddleCollapsible.add((View) cost.getParent());
-
-        // Init RecyclerView
-        mRecyclerView = itemView.findViewById(R.id.recycler_view);
-        mRecyclerView.setRecycledViewPool(pool);
-        mRecyclerView.setAdapter(new InnerAdapter());
-
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                mIsScrolling = newState != RecyclerView.SCROLL_STATE_IDLE;
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                onItemScrolled(recyclerView, dx, dy);
-            }
-        });
-
-        mRecyclerView.setOnClickListener(v -> {
-
-        });
-        mRecyclerView.addItemDecoration(new HeaderDecorator(
-                itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_height_decoration),
-                itemView.getContext().getResources().getDimensionPixelSize(R.dimen.inner_item_offset)));
-        // Init fonts
-
-        //  selectedAddressList = new ArrayList<>();
-        //  DataBindingUtil.bind(((FrameLayout) mHeader).getChildAt(0));
     }
 
     @Override
@@ -211,7 +218,7 @@ public class OuterItem extends HeaderItem {
 
     @Override
     public InnerRecyclerView getViewGroup() {
-        return mRecyclerView;
+        return innerRecyclerView;
     }
 
     void setContent(@NonNull List<Address> innerDataList, final Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
@@ -228,32 +235,17 @@ public class OuterItem extends HeaderItem {
 
         //  Crashlytics.getInstance().crash(); // Force a crash
 
+        if (tail == null && tail.isEmpty()) {
+            noAddressTitleTextView.setVisibility(View.VISIBLE);
+            noAddressSubtitleTextView.setVisibility(View.VISIBLE);
+            innerRecyclerView.setVisibility(View.GONE);
 
-
-        mRecyclerView.setLayoutManager(new InnerLayoutManager());
-        adapter = (InnerAdapter) mRecyclerView.getAdapter();
-        adapter.addData(tail, selectedAddressList);
-
-        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-                if (view.getId() == R.id.edit_image_button) {
-                    Toasty.error(getHeader().getContext(), "It works ").show();
-                }
-                //adapter.toggleSelection(position);
-                multi_select(position);
-
-                //  Toasty.makeText(getHeader().getContext(), "Details Page", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-                //multi_select(position);
-
-            }
-        }));
+        } else {
+            noAddressTitleTextView.setVisibility(View.GONE);
+            noAddressSubtitleTextView.setVisibility(View.GONE);
+            innerRecyclerView.setVisibility(View.VISIBLE);
+            setupInsideRecyclerView();
+        }
 
         //gestureDetector = new GestureDetectorCompat(this.getHeader().getContext(), new RecyclerViewDemoOnGestureListener());
 
@@ -283,6 +275,33 @@ public class OuterItem extends HeaderItem {
 
         });
 
+    }
+
+    private void setupInsideRecyclerView() {
+        innerRecyclerView.setLayoutManager(new InnerLayoutManager());
+        adapter = (InnerAdapter) innerRecyclerView.getAdapter();
+        adapter.addData(tail, selectedAddressList);
+
+        innerRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), innerRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                if (view.getId() == R.id.edit_image_button) {
+                    Toasty.error(getHeader().getContext(), "It works ").show();
+                }
+                //adapter.toggleSelection(position);
+                multi_select(position);
+
+                //  Toasty.makeText(getHeader().getContext(), "Details Page", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+                //multi_select(position);
+
+            }
+        }));
     }
 
     /**
@@ -356,7 +375,7 @@ public class OuterItem extends HeaderItem {
 
     void clearContent() {
         // Glide.clear(mAvatar);
-        ((InnerAdapter) mRecyclerView.getAdapter()).clearData();
+        ((InnerAdapter) innerRecyclerView.getAdapter()).clearData();
     }
 
     private float computeRatio(RecyclerView recyclerView) {
@@ -402,7 +421,7 @@ public class OuterItem extends HeaderItem {
     }
 
     public void setContent(Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
-        setContent(new ArrayList<Address>(), parcel, position, size, orderedCourier);
+        setContent(new ArrayList<>(), parcel, position, size, orderedCourier);
     }
 
 
