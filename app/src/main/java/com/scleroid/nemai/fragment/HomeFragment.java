@@ -87,6 +87,7 @@ public class HomeFragment extends Fragment {
     private Context context;
     private ShowLoader loader;
     private LinearLayoutManager mLayoutManager;
+    private FloatingActionButton fabDeleteCourier;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -151,8 +152,8 @@ public class HomeFragment extends Fragment {
             createDefaultParcel();
             Log.d(TAG,"Adding a parcel");
         }*/
-
-
+        fabDeleteCourier = v.findViewById(R.id.fab_delete);
+        fabDeleteCourier.setOnClickListener(v1 -> deleteParcel());
         fabNewCourier = v.findViewById(R.id.fab_new_data);
         fabNewCourier.setOnClickListener(v1 -> {
 //TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data before sending it to server.& send all data to server at once
@@ -160,7 +161,7 @@ public class HomeFragment extends Fragment {
 
             //validateFields(false);
             //submitRequest(null, false);
-            submitData(true);
+            submitData();
 
 
         });
@@ -168,18 +169,19 @@ public class HomeFragment extends Fragment {
 
         mSubmitButton = v.findViewById(R.id.btn_submit);
 
-        mSubmitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                submitData(false);
+        mSubmitButton.setOnClickListener(view -> {
+            if (submitData() != null)
+                sendCouriers();
 
 
-                // Intent i = new Intent(getActivity(), PartnerActivity.class);
-                //startActivity(i);
-            }
+            // Intent i = new Intent(getActivity(), PartnerActivity.class);
+            //startActivity(i);
         });
 
         return v;
+    }
+
+    private void deleteParcel() {
     }
 
     public void onSaveInstanceState(Bundle state) {
@@ -190,19 +192,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-   /* public void onRestoreInstanceState(Bundle state) {
-
-        // Retrieve list state and list/item positions
-        if(state != null)
-            listState = state.getParcelable(LIST_STATE_KEY);
-        super.onActivityCreated(state);
-    }*/
-
- /*   @Override
-    public void onActivityCreated(@Nullable Bundle state) {
-
-        super.onActivityCreated(state);
-    }*/
 
     public void createDefaultParcel() {
         ParcelLab.newParcel(context);
@@ -265,7 +254,11 @@ public class HomeFragment extends Fragment {
         //
         //
         // recyclerViewPager.scrollToPosition();
-        recyclerViewPager.addOnPageChangedListener((oldPosition, newPosition) -> Log.d("test", "oldPosition:" + oldPosition + " newPosition:" + newPosition));
+        recyclerViewPager.addOnPageChangedListener((oldPosition, newPosition) -> {
+            if (!crimes.get(oldPosition).equals(recycleViewPagerAdapter.holder.getParcel()))
+                ParcelLab.addParcel(recycleViewPagerAdapter.holder.getParcel(), AppDatabase.getAppDatabase(context));
+            Log.d("test", "oldPosition:" + oldPosition + " newPosition:" + newPosition + " parcel at old " + crimes.get(oldPosition).toString() + " parcel at new " + crimes.get(newPosition).toString());
+        });
 
         recyclerViewPager.addOnLayoutChangeListener((v12, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             if (recyclerViewPager.getChildCount() < 3) {
@@ -297,21 +290,25 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void submitData(boolean b) {
+    private Parcel submitData() {
         if (parcelCurrent == null) parcelCurrent = recycleViewPagerAdapter.holder.getParcel();
+        for (parcel:
+             crimes) {
+            //TODO check for all blank values
+        }
+
         Parcel parcel = recycleViewPagerAdapter.holder.validateFields(parcelCurrent);
-        if (parcel == null) return;
+        if (parcel == null) return null;
         //  ParcelLab.addParcel(parcel, context);
-
-
         parcelCurrent = ParcelLab.newParcel(context);
+        return parcel;
         //    parcels = updateParcelList(context);
-        if (!b) {
-            for (Parcel parcelTemp : crimes) {
-                submitCouriers(context, parcelTemp, TAG_COURIERS, loader);
-            }
-        } else {
-            //  updateUI(context);
+
+    }
+
+    private void sendCouriers() {
+        for (Parcel parcelTemp : crimes) {
+            submitCouriers(context, parcelTemp, TAG_COURIERS, loader);
         }
     }
 

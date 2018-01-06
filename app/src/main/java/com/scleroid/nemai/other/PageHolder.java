@@ -106,10 +106,10 @@ public class PageHolder extends RecyclerView.ViewHolder {
         mDomesticRadioButton = v.findViewById(R.id.rDomestic);
         mInternationalRadioButton = v.findViewById(R.id.rInternational);
         pinDestinationAutoCompleteTextView.setLoadingIndicator(
-                (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator2));
+                v.findViewById(R.id.pb_loading_indicator2));
 
         pinSourceAutoCompleteTextView.setLoadingIndicator(
-                (android.widget.ProgressBar) v.findViewById(R.id.pb_loading_indicator));
+                v.findViewById(R.id.pb_loading_indicator));
 
         courierCount = v.findViewById(R.id.courier_number_text_view);
 
@@ -225,15 +225,12 @@ public class PageHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        textClockDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //todo textClockDate.setText(updateDate());
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getFragmentManager();
-                DialogFragment dialogFragment = DatePickerFragment.newInstance(parcel);
-                dialogFragment.setTargetFragment(fragmentManager.findFragmentByTag(CURRENT_TAG), REQUEST_DATE);
-                dialogFragment.show(fragmentManager, DIALOG_DATE);
-            }
+        textClockDate.setOnClickListener(v -> {
+            //todo textClockDate.setText(updateDate());
+            FragmentManager fragmentManager = ((AppCompatActivity) context).getFragmentManager();
+            DialogFragment dialogFragment = DatePickerFragment.newInstance(parcel);
+            dialogFragment.setTargetFragment(fragmentManager.findFragmentByTag(CURRENT_TAG), REQUEST_DATE);
+            dialogFragment.show(fragmentManager, DIALOG_DATE);
         });
     }
 
