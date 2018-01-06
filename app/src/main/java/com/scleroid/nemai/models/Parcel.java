@@ -256,4 +256,58 @@ public class Parcel implements Parcelable {
         parcel.writeParcelable(sourcePinCode, 0);
         parcel.writeParcelable(destinationPinCode, 0);
     }
+
+    @Override
+    public String toString() {
+        return "Parcel{" +
+                "serialNo=" + serialNo +
+                ", sourcePin='" + sourcePin + '\'' +
+                ", destinationPin='" + destinationPin + '\'' +
+                ", deliveryType='" + deliveryType + '\'' +
+                ", packageType='" + packageType + '\'' +
+                ", weight=" + weight +
+                ", invoice=" + invoice +
+                ", length=" + length +
+                ", width=" + width +
+                ", height=" + height +
+                ", description='" + description + '\'' +
+                ", parcelDate=" + parcelDate +
+                ", sourcePinCode=" + sourcePinCode +
+                ", destinationPinCode=" + destinationPinCode +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Parcel)) return false;
+
+        Parcel parcel = (Parcel) o;
+
+        if (getSerialNo() != parcel.getSerialNo()) return false;
+        if (getWeight() != parcel.getWeight()) return false;
+        if (getInvoice() != parcel.getInvoice()) return false;
+        if (getLength() != parcel.getLength()) return false;
+        if (getWidth() != parcel.getWidth()) return false;
+        if (getHeight() != parcel.getHeight()) return false;
+        if (getSourcePin() != null ? !getSourcePin().equals(parcel.getSourcePin()) : parcel.getSourcePin() != null)
+            return false;
+        if (getDestinationPin() != null ? !getDestinationPin().equals(parcel.getDestinationPin()) : parcel.getDestinationPin() != null)
+            return false;
+        if (getDeliveryType() != null ? !getDeliveryType().equals(parcel.getDeliveryType()) : parcel.getDeliveryType() != null)
+            return false;
+        if (getPackageType() != null ? !getPackageType().equals(parcel.getPackageType()) : parcel.getPackageType() != null)
+            return false;
+        if (getDescription() != null ? !getDescription().equals(parcel.getDescription()) : parcel.getDescription() != null)
+            return false;
+        if (getParcelDate() != null ? !getParcelDate().equals(parcel.getParcelDate()) : parcel.getParcelDate() != null)
+            return false;
+        if (getSourcePinCode() != null ? !getSourcePinCode().equals(parcel.getSourcePinCode()) : parcel.getSourcePinCode() != null)
+            return false;
+        return getDestinationPinCode() != null ? getDestinationPinCode().equals(parcel.getDestinationPinCode()) : parcel.getDestinationPinCode() == null;
+    }
+
+    //TODO
+// Create this & use this
+
 }
