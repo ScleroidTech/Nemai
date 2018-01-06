@@ -54,6 +54,7 @@ public class PagerAdapter extends RecyclerView.Adapter<PageHolder> {
 
     }
 
+
     @Override
     public int getItemCount() {
         return parcels.size();

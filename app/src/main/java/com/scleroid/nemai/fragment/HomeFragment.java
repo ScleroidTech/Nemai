@@ -286,19 +286,24 @@ public class HomeFragment extends Fragment {
                 }
             }
 
+
         });
     }
 
 
     private Parcel submitData() {
         if (parcelCurrent == null) parcelCurrent = recycleViewPagerAdapter.holder.getParcel();
-        for (parcel:
+        for (Parcel parcel :
              crimes) {
             //TODO check for all blank values
+            Parcel parcelNew = recycleViewPagerAdapter.holder.validateFields(parcel);
+            if (parcelNew == null) {
+                recyclerViewPager.smoothScrollToPosition(crimes.indexOf(parcel));
+                return null;
+            }
         }
 
-        Parcel parcel = recycleViewPagerAdapter.holder.validateFields(parcelCurrent);
-        if (parcel == null) return null;
+
         //  ParcelLab.addParcel(parcel, context);
         parcelCurrent = ParcelLab.newParcel(context);
         return parcel;
