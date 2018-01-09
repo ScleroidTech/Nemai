@@ -1,4 +1,4 @@
-package com.scleroid.nemai.other;
+package com.scleroid.nemai.viewholders;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
@@ -24,6 +24,7 @@ import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
 import com.scleroid.nemai.fragment.DatePickerFragment;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.other.DelayedAutoCompleteTextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

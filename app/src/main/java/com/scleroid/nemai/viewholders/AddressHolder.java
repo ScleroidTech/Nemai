@@ -1,4 +1,4 @@
-package com.scleroid.nemai.inner;
+package com.scleroid.nemai.viewholders;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
@@ -20,7 +20,7 @@ import com.scleroid.nemai.models.Address;
  * Created by Ganesh on 15-11-2017.
  */
 
-public class InnerItem extends com.ramotion.garlandview.inner.InnerItem implements View.OnClickListener {
+public class AddressHolder extends com.ramotion.garlandview.inner.InnerItem implements View.OnClickListener {
     private static DialogFragment dialog;
     public final TextView mobile;
     public final TextView name;
@@ -36,11 +36,10 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem implemen
     public RadioButton radioButton;
     public Button deliverButtton;
     public CardView cardView;
-    int mSelectedItemPosition = -1;
+    int selectedItemPosition = -1;
     private Address mInnerData;
 
-
-    public InnerItem(View itemView) {
+    public AddressHolder(View itemView) {
         super(itemView);
         innerItemView = itemView;
 
@@ -74,8 +73,16 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem implemen
 
     }
 
+    public int getSelectedItemPosition() {
+        return selectedItemPosition;
+    }
+
+    public void setSelectedItemPosition(int selectedItemPosition) {
+        this.selectedItemPosition = selectedItemPosition;
+    }
+
     @Override
-    protected View getInnerLayout() {
+    public View getInnerLayout() {
         return innerLayout;
     }
 
@@ -116,12 +123,12 @@ public class InnerItem extends com.ramotion.garlandview.inner.InnerItem implemen
             dialog.show(fm, "adad");
         } else {
             //Handling for background selection state changed
-            int previousSelectState = mSelectedItemPosition;
-            mSelectedItemPosition = getAdapterPosition();
+            int previousSelectState = selectedItemPosition;
+            selectedItemPosition = getAdapterPosition();
             //notify previous selected item
             // notifyItemChanged(previousSelectState);
             //notify new selected Item
-            //   notifyItemChanged(mSelectedItemPosition);
+            //   notifyItemChanged(selectedItemPosition);
 
 
         }

@@ -1,4 +1,4 @@
-package com.scleroid.nemai.inner;
+package com.scleroid.nemai.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -16,6 +16,7 @@ import com.scleroid.nemai.R;
 import com.scleroid.nemai.databinding.ItemInnerAddressCardBinding;
 import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.OrderedCourier;
+import com.scleroid.nemai.viewholders.AddressHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
  * Created by Ganesh on 15-11-2017.
  */
 
-public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<InnerItem> {
+public class AddressRecyclerViewAdapter extends com.ramotion.garlandview.inner.InnerAdapter<AddressHolder> {
 
     private static final int EMPTY_VIEW = 10;
     private static final String TAG = "innerAdapter";
@@ -34,7 +35,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
      * variable to hold selected Item position
      */
 
-    int mSelectedItemPosition = -1;
+    int selectedItemPosition = -1;
     private List<Address> mData = new ArrayList<>();
     private List<Address> mDataSelected = new ArrayList<>();
     private View mEmptyView;
@@ -65,7 +66,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         }
         return items;
     }
-    /*public class EmptyViewHolder extends InnerItem {
+    /*public class EmptyViewHolder extends AddressHolder {
         public EmptyViewHolder(View itemView) {
             super(itemView);
             innerLayout =  ((ViewGroup) itemView).getChildAt(0);;
@@ -78,7 +79,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
     }*/
 
     @Override
-    public InnerItem onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AddressHolder onCreateViewHolder(ViewGroup parent, int viewType) {
        /* if (viewType == EMPTY_VIEW) {
             final ItemEmptyAddressViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_empty_address_view,parent,false);
             return new EmptyViewHolder(binding.getRoot());
@@ -89,11 +90,11 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
 
         selectedItems = new SparseBooleanArray();
         //    Log.d("innerItem", "is it here? onCreateViewHolder" + mData.size());
-        return new InnerItem(binding.getRoot());
+        return new AddressHolder(binding.getRoot());
     }
 
     @Override
-    public void onBindViewHolder(final InnerItem holder, final int position) {
+    public void onBindViewHolder(final AddressHolder holder, final int position) {
 
         //   holder.setIsRecyclable(false);
         Address address = mData.get(position);
@@ -102,7 +103,7 @@ public class InnerAdapter extends com.ramotion.garlandview.inner.InnerAdapter<In
         holder.setContent(address);
         context = holder.getInnerLayout().getContext();
         holder.itemView.setTag(address);
-        holder.mSelectedItemPosition = mSelectedItemPosition;
+        holder.setSelectedItemPosition(selectedItemPosition);
 
         //  setSelectedAddress();
 
