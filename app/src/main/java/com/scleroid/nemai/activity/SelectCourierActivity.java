@@ -23,17 +23,18 @@ import com.ramotion.garlandview.header.HeaderTransformer;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.adapter.ParcelAdapter;
-import com.scleroid.nemai.controller.AddressLab;
+import com.scleroid.nemai.adapter.recyclerview.CourierAdapter;
+import com.scleroid.nemai.adapter.recyclerview.ParcelAdapterForCouriers;
 import com.scleroid.nemai.controller.ParcelLab;
-import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
-import com.scleroid.nemai.viewmodels.CheckoutViewModel;
+import com.scleroid.nemai.viewmodels.CourierViewModel;
 import com.scleroid.nemai.viewmodels.OrderViewModel;
+import com.scleroid.nemai.viewmodels.ParcelViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,8 +48,6 @@ import io.bloco.faker.Faker;
 import io.fabric.sdk.android.Fabric;
 
 import static com.google.common.util.concurrent.Runnables.doNothing;
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_ADDRESS;
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_NEW_ADDRESS;
 
 public class SelectCourierActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
 
@@ -59,18 +58,18 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
      */
     private static final String TAG = "com.scleroid.nemai.activity.checkoutActivity";
     Context context;
-    List<List<Address>> outerData = new ArrayList<>();
+    List<List<Courier>> outerData = new ArrayList<>();
 
     List<OrderedCourier> orderedCourierList = new ArrayList<>();
     /**
      * //TODO Future Implementation, remove all stuff here
-     * Holds the positions value with true if address is already selected, false if not
+     * Holds the positions value with true if courier is already selected, false if not
      */
     SparseBooleanArray selectedPositions = new SparseBooleanArray();
 
 
-    private CheckoutViewModel viewModel;
-    private ParcelAdapter parcelAdapter;
+    private ParcelViewModel parcelViewModel;
+    private ParcelAdapterForCouriers parcelAdapter;
     private TailRecyclerView outerRecyclerView;
     private ActionMode mActionMode;
     private Menu context_menu;
@@ -81,6 +80,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
     private MenuItem nextItem;
 
 
+    @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,17 +104,21 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
             isFinalized = orderedCouriers.size() == parcelAdapter.getParcels().size();
 
         });
-        viewModel = ViewModelProviders.of(SelectCourierActivity.this).get(CheckoutViewModel.class);
+        parcelViewModel = ViewModelProviders.of(SelectCourierActivity.this).get(ParcelViewModel.class);
 
-        viewModel.getParcelList().observe(SelectCourierActivity.this, parcels -> {
+
+        parcelViewModel.getParcelList().observe(SelectCourierActivity.this, parcels -> {
 
             parcelAdapter.setParcels(parcels);
             parcelAdapter.notifyDataSetChanged();
             if (selectedPositions.size() != parcelAdapter.getItemCount()) populateSelectionMap();
 
         });
-        viewModel.getAddressList().observe(SelectCourierActivity.this, addresses -> {
-            parcelAdapter.updateAddressList(addresses);
+
+        CourierViewModel courierViewModel = ViewModelProviders.of(SelectCourierActivity.this).get(CourierViewModel.class);
+
+        courierViewModel.getCourierList().observe(SelectCourierActivity.this, couriers -> {
+            parcelAdapter.updateCourierList(couriers);
             parcelAdapter.notifyDataSetChanged();
         });
     }
@@ -156,8 +160,8 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
 
 
     private void populateData(Faker faker) {
-        List<Address> innerData = new ArrayList<>();
-        List<Address> tempList = new ArrayList<>();
+        List<Courier> innerData = new ArrayList<>();
+        List<Courier> tempList = new ArrayList<>();
         for (int i = 0; i < OUTER_COUNT; i++) {
             ParcelLab.addParcel(createParcelData(faker), AppDatabase.getAppDatabase(context));
         }
@@ -166,7 +170,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
 
             for (int j = 0; j < INNER_COUNT - i; j++) {
                 //innerData.add(createInnerData(faker));
-                //AddressLab.addAddress(createInnerData(faker), AppDatabase.getAppDatabase(context));
+                //CourierLab.addCourier(createInnerData(faker), AppDatabase.getAppDatabase(context));
 
             }
 
@@ -177,32 +181,32 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
 
     }
 
-    private void initRecyclerView(List<Address> data, List<Parcel> parcels) {
+    private void initRecyclerView(List<Courier> data, List<Parcel> parcels) {
         findViewById(R.id.progressBar).setVisibility(View.GONE);
 
         outerRecyclerView = findViewById(R.id.recycler_view);
         ((TailLayoutManager) outerRecyclerView.getLayoutManager()).setPageTransformer(new HeaderTransformer());
-        parcelAdapter = new ParcelAdapter(data, parcels);
+        parcelAdapter = new CourierAdapter(data, parcels);
         outerRecyclerView.setAdapter(parcelAdapter);
         outerRecyclerView.setOnFlingListener(null);
         new TailSnapHelper().attachToRecyclerView(outerRecyclerView);
     }
 
-    private Address createInnerData(Faker faker) {
-        return new Address(
+    /*private Courier createInnerData(Faker faker) {
+        return new Courier(
                 faker.name.name(),
-                faker.address.streetAddress(),
-                faker.address.streetName(),
-                faker.address.state(),
-                faker.address.city(),
+                faker.courier.streetCourier(),
+                faker.courier.streetName(),
+                faker.courier.state(),
+                faker.courier.city(),
                 (faker.number.between(111111, 999999)) + "",
                 faker.phoneNumber.phoneNumber()
         );
-    }
+    }*/
 
     private com.scleroid.nemai.models.Parcel createParcelData(Faker faker) {
-        String source = faker.address.city();
-        String dest = faker.address.city();
+        String source = faker.courier.city();
+        String dest = faker.courier.city();
         return new com.scleroid.nemai.models.Parcel(
                 source,
                 dest,
@@ -215,30 +219,11 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
                 faker.number.positive(),
                 faker.company.catchPhrase(),
                 faker.date.forward(),
-                new PinCode(source, (faker.number.between(111111, 999999)) + "", faker.address.state(), faker.address.streetName()),
-                new PinCode(dest, (faker.number.between(111111, 999999)) + "", faker.address.state(), faker.address.streetName())
+                new PinCode(source, (faker.number.between(111111, 999999)) + "", faker.courier.state(), faker.courier.streetName()),
+                new PinCode(dest, (faker.number.between(111111, 999999)) + "", faker.courier.state(), faker.courier.streetName())
         );
     }
 
-    @SuppressLint("LongLogTag")
-    @DebugLog
-    @Subscribe
-    public void onAddressMessage(Events.AddressMessage fragmentActivityMessage) {
-        Bundle bundle = fragmentActivityMessage.getMessage();
-        Address model = bundle.getParcelable(EXTRA_ADDRESS); /*new Address(bundle.getString(EXTRA_NAME), bundle.getString(EXTRA_ADDRESS_LINE_1),
-                bundle.getString(EXTRA_ADDRESS_LINE_2), bundle.getString(EXTRA_STATE), bundle.getString(EXTRA_CITY), bundle.getString(EXTRA_PIN), bundle.getString(EXTRA_MOBILE), bundle.getLong(EXTRA_SERIAL_NO));
-       */
-        Log.d("CHeckout", "onAddress Eventbus");
-        if (bundle.getBoolean(EXTRA_NEW_ADDRESS)) {
-            AddressLab.addAddress(model, AppDatabase.getAppDatabase(context));
-        } else {
-            AddressLab.updateAddress(model, AppDatabase.getAppDatabase(context));
-        }
-        Log.d(TAG, " Is this address method  working");
-        //   setContent(model);
-
-
-    }
 
     /**
      * //TODO Future Implementation
@@ -248,6 +233,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
      * @see EventBus
      * Handles the message sent by An event sent at
      * @see ParcelHolder
+     * .
      * which provides which items are selected & which aren't
      */
     @DebugLog
@@ -328,7 +314,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
                 boolean value = selectedPositions.valueAt(i);
                 // get the object by the key.
                 if (!value && key != -1) {
-                    Toasty.warning(context, "You haven't selected address for parcel No. " + key + 1).show();
+                    Toasty.warning(context, "You haven't selected courier for parcel No. " + key + 1).show();
                 }
             }
             //Another way to do same thing
@@ -344,7 +330,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
                 Map.Entry entry = entryIterator.next();
                 if (!(Boolean)entry.getValue()){
                     outerRecyclerView.scrollToPosition((Integer) entry.getKey());
-                    Toasty.warning(context, "You haven't selected all addresses for parcels").show();
+                    Toasty.warning(context, "You haven't selected all courieres for parcels").show();
                     break;
                 }
             }*/

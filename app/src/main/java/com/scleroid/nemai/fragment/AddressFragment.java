@@ -44,6 +44,7 @@ AddressFragment extends DialogFragment {
         Bundle bundle = createBundle(address);
         AddressFragment fragment = new AddressFragment();
         fragment.setArguments(bundle);
+
         return fragment;
     }
 
@@ -101,6 +102,7 @@ AddressFragment extends DialogFragment {
         final TextInputEditText addressLine1EditText = v.findViewById(R.id.address_line_1_edit_text);
         final TextInputEditText addressLine2EditText = v.findViewById(R.id.address_line_2_edit_text);
         final Bundle bundle = getArguments();
+
         if (bundle != null) {
 
             Log.d("addressFragment", "Different Approch, bundle ");

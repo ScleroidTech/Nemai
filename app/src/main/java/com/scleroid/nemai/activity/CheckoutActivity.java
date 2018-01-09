@@ -24,7 +24,7 @@ import com.ramotion.garlandview.header.HeaderTransformer;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.adapter.ParcelAdapter;
+import com.scleroid.nemai.adapter.recyclerview.ParcelAdapterForAddress;
 import com.scleroid.nemai.controller.AddressLab;
 import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.models.Address;
@@ -33,7 +33,7 @@ import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
-import com.scleroid.nemai.viewholders.ParcelHolder;
+import com.scleroid.nemai.viewholders.ParcelHolderForAddress;
 import com.scleroid.nemai.viewmodels.CheckoutViewModel;
 import com.scleroid.nemai.viewmodels.OrderViewModel;
 
@@ -77,7 +77,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
 
     private CheckoutViewModel viewModel;
-    private ParcelAdapter parcelAdapter;
+    private ParcelAdapterForAddress parcelAdapterForAddress;
     private TailRecyclerView outerRecyclerView;
     private ActionMode mActionMode;
     private Menu context_menu;
@@ -140,25 +140,25 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
         orderViewModel.getOrderList().observe(CheckoutActivity.this, orderedCouriers -> {
             orderedCourierList = orderedCouriers;
-            parcelAdapter.setOrderedCourierList(orderedCouriers);
+            parcelAdapterForAddress.setOrderedCourierList(orderedCouriers);
             Log.d(TAG, "Courier List updated, Yo" + orderedCouriers.size());
-            isFinalized = orderedCouriers.size() == parcelAdapter.getParcels().size();
+            isFinalized = orderedCouriers.size() == parcelAdapterForAddress.getParcels().size();
 
         });
         viewModel = ViewModelProviders.of(CheckoutActivity.this).get(CheckoutViewModel.class);
 
         viewModel.getParcelList().observe(CheckoutActivity.this, parcels -> {
 
-            parcelAdapter.setParcels(parcels);
-            parcelAdapter.notifyDataSetChanged();
-            if (selectedPositions.size() != parcelAdapter.getItemCount()) populateSelectionMap();
+            parcelAdapterForAddress.setParcels(parcels);
+            parcelAdapterForAddress.notifyDataSetChanged();
+            if (selectedPositions.size() != parcelAdapterForAddress.getItemCount())
+                populateSelectionMap();
 
         });
         viewModel.getAddressList().observe(CheckoutActivity.this, addresses -> {
-            parcelAdapter.updateAddressList(addresses);
-            parcelAdapter.notifyDataSetChanged();
+            parcelAdapterForAddress.updateAddressList(addresses);
+            parcelAdapterForAddress.notifyDataSetChanged();
         });
-
         // populateSelectionMap();
 
 
@@ -172,7 +172,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
      */
     @DebugLog
     private void populateSelectionMap() {
-        for (int i = 0; i < parcelAdapter.getItemCount(); i++) {
+        for (int i = 0; i < parcelAdapterForAddress.getItemCount(); i++) {
 
             selectedPositions.put(i, false);
             if (!selectedPositions.valueAt(i)) selectedPositions.put(i, false);
@@ -226,8 +226,8 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
 
         outerRecyclerView = findViewById(R.id.recycler_view);
         ((TailLayoutManager) outerRecyclerView.getLayoutManager()).setPageTransformer(new HeaderTransformer());
-        parcelAdapter = new ParcelAdapter(data, parcels);
-        outerRecyclerView.setAdapter(parcelAdapter);
+        parcelAdapterForAddress = new ParcelAdapterForAddress(data, parcels);
+        outerRecyclerView.setAdapter(parcelAdapterForAddress);
         outerRecyclerView.setOnFlingListener(null);
         new TailSnapHelper().attachToRecyclerView(outerRecyclerView);
     }
@@ -291,7 +291,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
      * @param selectionMap
      * @see EventBus
      * Handles the message sent by An event sent at
-     * @see ParcelHolder
+     * @see ParcelHolderForAddress
      * which provides which items are selected & which aren't
      */
     @DebugLog
@@ -357,14 +357,14 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         invalidateOptionsMenu();
         if (nextItem == null) return;
 
-        if (orderedCourierList.size() != parcelAdapter.getParcels().size()) {
+        if (orderedCourierList.size() != parcelAdapterForAddress.getParcels().size()) {
 
 
             // Log.d(TAG, "What's the map value " + selectedPositions. + "=" + entry.getValue());
 
                 //TODO The commented code doesn't work, keeping for future Implementation
 
-            // outerRecyclerView.scrollToPosition(parcelAdapter.getItemCount() - 5);*/
+            // outerRecyclerView.scrollToPosition(parcelAdapterForAddress.getItemCount() - 5);*/
                     // TailLayoutManager layoutManager = (TailLayoutManager) outerRecyclerView.getLayoutManager();
                     //   layoutManager.scrollToPosition(5);
             for (int i = 0; i < selectedPositions.size(); i++) {

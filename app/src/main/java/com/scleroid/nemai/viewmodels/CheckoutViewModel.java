@@ -16,7 +16,7 @@ public class CheckoutViewModel extends AndroidViewModel {
     private Parcel parcel;
     private List<Address> addresses;
 
-    private LiveData<List<Parcel>> parcelList;
+    //    private LiveData<List<Parcel>> parcelList;
     private LiveData<List<Address>> addressList;
 
     private AppDatabase appDatabase;
@@ -25,11 +25,11 @@ public class CheckoutViewModel extends AndroidViewModel {
         super(application);
 
         appDatabase = AppDatabase.getAppDatabase(this.getApplication());
-        parcelList = updateParcelLiveData();
+        //      parcelList = updateParcelLiveData();
         addressList = updateAddressLiveData();
     }
 
-    private LiveData<List<Parcel>> updateParcelLiveData() {
+/*Possible duplicate code    private LiveData<List<Parcel>> updateParcelLiveData() {
 
         LiveData<List<Parcel>> parcelList = appDatabase.parcelDao().getAllParcelsLive();
         return parcelList;
@@ -41,7 +41,7 @@ public class CheckoutViewModel extends AndroidViewModel {
         }
 
         return parcelList;
-    }
+    }*/
 
     public LiveData<List<Address>> getAddressList() {
         if (addressList == null) {

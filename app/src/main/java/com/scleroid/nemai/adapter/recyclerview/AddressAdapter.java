@@ -1,4 +1,4 @@
-package com.scleroid.nemai.adapter;
+package com.scleroid.nemai.adapter.recyclerview;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -25,7 +25,7 @@ import java.util.List;
  * Created by Ganesh on 15-11-2017.
  */
 
-public class AddressRecyclerViewAdapter extends com.ramotion.garlandview.inner.InnerAdapter<AddressHolder> {
+public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<AddressHolder> {
 
     private static final int EMPTY_VIEW = 10;
     private static final String TAG = "innerAdapter";

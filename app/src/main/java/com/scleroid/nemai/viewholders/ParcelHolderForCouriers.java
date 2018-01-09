@@ -23,10 +23,10 @@ import com.ramotion.garlandview.inner.InnerLayoutManager;
 import com.ramotion.garlandview.inner.InnerRecyclerView;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.adapter.AddressRecyclerViewAdapter;
+import com.scleroid.nemai.adapter.recyclerview.CourierAdapter;
 import com.scleroid.nemai.controller.OrderLab;
-import com.scleroid.nemai.fragment.AddressFragment;
-import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.fragment.CourierFragment;
+import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
@@ -45,21 +45,20 @@ import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
  * This is The viewholder class for the RecyclerViewPager
  * which extends HeaderItem, which extends RecyclerView.ViewHolder
  * It holds Data to be displayed on the innerRecyclerView & the connections it needs to be making
+ *
  * @author Ganesh
- * @since 15-11-2017
  * @see android.support.v7.widget.RecyclerView.ViewHolder
  * @see HeaderItem
- *
+ * @since 09-01-2018
  */
-
-public class ParcelHolder extends HeaderItem {
+public class ParcelHolderForCouriers extends HeaderItem {
 
     /**
      * TAG variable used to generate log for the logcat
      *
      * @see Log
      */
-    private static final String TAG = "ParcelHolder";
+    private static final String TAG = "ParcelHolderForCouriers";
 
     /**
      * start Ratio for the middle view,
@@ -98,9 +97,9 @@ public class ParcelHolder extends HeaderItem {
      */
     private final static float ANSWER_RATIO_DIFF = ANSWER_RATIO_START - ANSWER_RATIO_MAX;
     private final List<View> mMiddleCollapsible = new ArrayList<>(2);
-    private final TextView noAddressTitleTextView;
-    private final TextView noAddressSubtitleTextView;
-    protected List<Address> selectedAddressList = new ArrayList<>();
+    private final TextView noCourierTitleTextView;
+    private final TextView noCourierSubtitleTextView;
+    protected List<Courier> selectedCourierList = new ArrayList<>();
     GestureDetectorCompat gestureDetector;
     android.view.ActionMode actionMode;
     private View mHeader;
@@ -119,49 +118,49 @@ public class ParcelHolder extends HeaderItem {
     private int m120dp;
     private int mTitleSize1;
     private int mTitleSize2;
-    private List<Address> tail;
+    private List<Courier> tail;
     private OrderedCourier thatOrderedCourier;
-    private View mNewAddressButton;
+    private View mNewCourierButton;
     private boolean mIsScrolling;
     private View mEmptyView;
-    private AddressRecyclerViewAdapter adapter;
+    private CourierAdapter adapter;
     private boolean isMultiSelect = false;
     private Parcel header;
     private OrderedCourier mOrderedCourier;
 
-    public ParcelHolder(View itemView, RecyclerView.RecycledViewPool pool) {
+    public ParcelHolderForCouriers(View itemView, RecyclerView.RecycledViewPool pool) {
         super(itemView);
         initHeader(itemView);
         initRecycerView(itemView, pool);
 
         //Init Empty View Message
-        noAddressTitleTextView = itemView.findViewById(R.id.no_address_title);
-        noAddressSubtitleTextView = itemView.findViewById(R.id.no_address_subtitle);
+        noCourierTitleTextView = itemView.findViewById(R.id.no_courier_title);
+        noCourierSubtitleTextView = itemView.findViewById(R.id.no_courier_subtitle);
 
 
         // Init fonts
 
-        //  selectedAddressList = new ArrayList<>();
+        //  selectedCourierList = new ArrayList<>();
         //  DataBindingUtil.bind(((FrameLayout) mHeader).getChildAt(0));
     }
 
-    public List<Address> getSelectedAddressList() {
-        return selectedAddressList;
+    public List<Courier> getSelectedCourierList() {
+        return selectedCourierList;
     }
 
-    public void setSelectedAddressList(List<Address> selectedAddressList) {
-        this.selectedAddressList = selectedAddressList;
+    public void setSelectedCourierList(List<Courier> selectedCourierList) {
+        this.selectedCourierList = selectedCourierList;
     }
 
-    public void updateSelectedAddressList(Address selectedAddressList) {
-        this.selectedAddressList.add(selectedAddressList);
+    public void updateSelectedCourierList(Courier selectedCourierList) {
+        this.selectedCourierList.add(selectedCourierList);
     }
 
     public void initRecycerView(View itemView, RecyclerView.RecycledViewPool pool) {
         // Init RecyclerView
         innerRecyclerView = itemView.findViewById(R.id.recycler_view);
         innerRecyclerView.setRecycledViewPool(pool);
-        innerRecyclerView.setAdapter(new AddressRecyclerViewAdapter());
+        innerRecyclerView.setAdapter(new CourierAdapter());
 
         innerRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -192,7 +191,7 @@ public class ParcelHolder extends HeaderItem {
 
         mHeader = itemView.findViewById(R.id.header);
         mHeaderAlpha = itemView.findViewById(R.id.header_alpha);
-        mNewAddressButton = itemView.findViewById(R.id.new_address_button);
+        mNewCourierButton = itemView.findViewById(R.id.new_courier_button);
 
 
         mHeaderCaption1 = itemView.findViewById(R.id.header_shipment_title_1);
@@ -207,7 +206,7 @@ public class ParcelHolder extends HeaderItem {
         mMiddleEdit = itemView.findViewById(R.id.header_middle_edit);
         mFooter = itemView.findViewById(R.id.header_footer);
 
-        mNewAddressButton = itemView.findViewById(R.id.new_address_button);
+        mNewCourierButton = itemView.findViewById(R.id.new_courier_button);
 
         //  mMiddleCollapsible.add((View)mAvatar.getParent());
         mMiddleCollapsible.add((View) cost.getParent());
@@ -233,7 +232,7 @@ public class ParcelHolder extends HeaderItem {
         return innerRecyclerView;
     }
 
-    public void setContent(@NonNull List<Address> innerDataList, final Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
+    public void setContent(@NonNull List<Courier> innerDataList, final Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
         final Context context = itemView.getContext();
         itemView.setTag(parcel);
         //TODO find position & re assign the value to it, to retain from the view changes
@@ -241,20 +240,20 @@ public class ParcelHolder extends HeaderItem {
         header = parcel;
         tail = innerDataList;
         thatOrderedCourier = orderedCourier;
-        if (thatOrderedCourier != null && thatOrderedCourier.getAddress() != null)
-            selectedAddressList.add(thatOrderedCourier.getAddress());
+        if (thatOrderedCourier != null && thatOrderedCourier.getCourier() != null)
+            selectedCourierList.add(thatOrderedCourier.getCourier());
 
 
         //  Crashlytics.getInstance().crash(); // Force a crash
 
         if (tail != null && !tail.isEmpty()) {
-            noAddressTitleTextView.setVisibility(View.GONE);
-            noAddressSubtitleTextView.setVisibility(View.GONE);
+            noCourierTitleTextView.setVisibility(View.GONE);
+            noCourierSubtitleTextView.setVisibility(View.GONE);
             innerRecyclerView.setVisibility(View.VISIBLE);
             setupInsideRecyclerView();
         } else {
-            noAddressTitleTextView.setVisibility(View.VISIBLE);
-            noAddressSubtitleTextView.setVisibility(View.VISIBLE);
+            noCourierTitleTextView.setVisibility(View.VISIBLE);
+            noCourierSubtitleTextView.setVisibility(View.VISIBLE);
             innerRecyclerView.setVisibility(View.GONE);
 
         }
@@ -276,13 +275,13 @@ public class ParcelHolder extends HeaderItem {
         cost.setText("Rs. " + parcel.getInvoice());//TODO get delivery price, not invoice
 
 
-        mNewAddressButton.setOnClickListener(v -> {
+        mNewCourierButton.setOnClickListener(v -> {
 
 
             FragmentManager fm = ((FragmentActivity) getHeader().getContext()).getFragmentManager();
             Parcel parcel1 = header;
             PinCode pincode = parcel1.getDestinationPinCode();
-            DialogFragment dialog = AddressFragment.newInstance(pincode.getLocation(), pincode.getPincode(), pincode.getState());
+            DialogFragment dialog = CourierFragment.newInstance(pincode.getLocation(), pincode.getPincode(), pincode.getState());
             dialog.show(fm, "adad");
 
         });
@@ -291,8 +290,8 @@ public class ParcelHolder extends HeaderItem {
 
     private void setupInsideRecyclerView() {
         innerRecyclerView.setLayoutManager(new InnerLayoutManager());
-        adapter = (AddressRecyclerViewAdapter) innerRecyclerView.getAdapter();
-        adapter.addData(tail, selectedAddressList);
+        adapter = (CourierAdapter) innerRecyclerView.getAdapter();
+        adapter.addData(tail, selectedCourierList);
 
         innerRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), innerRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -324,7 +323,7 @@ public class ParcelHolder extends HeaderItem {
      * @see java.util.Map which later changed to
      * @see android.util.SparseBooleanArray
      */
-    private void setSelectedAddress(int position, boolean whatToDo) {
+    private void setSelectedCourier(int position, boolean whatToDo) {
         Events.selectionMap selectionMap = new Events.selectionMap(position, whatToDo);
         GlobalBus.getBus().post(selectionMap);
     }
@@ -338,25 +337,25 @@ public class ParcelHolder extends HeaderItem {
         boolean whatToDo = false;// if false, delete  it from db, if true, add it
         try {
 
-            if (selectedAddressList.isEmpty()) {
-                Log.d(TAG, "list empty " + selectedAddressList.isEmpty());
-                thatOrderedCourier = new OrderedCourier(header, tail.get(position));
-                selectedAddressList.add(tail.get(position));
+            if (selectedCourierList.isEmpty()) {
+                Log.d(TAG, "list empty " + selectedCourierList.isEmpty());
+                thatOrderedCourier = new OrderedCourier(header, tail.get(position), courier);
+                selectedCourierList.add(tail.get(position));
                 whatToDo = true;
 
 
             } else {
-                Log.d(TAG, "list not  empty " + selectedAddressList.isEmpty());
+                Log.d(TAG, "list not  empty " + selectedCourierList.isEmpty());
 
-                if (selectedAddressList.contains(tail.get(position))) {
-                    selectedAddressList.remove(tail.get(position));
-                    thatOrderedCourier.setAddress(null);
+                if (selectedCourierList.contains(tail.get(position))) {
+                    selectedCourierList.remove(tail.get(position));
+                    thatOrderedCourier.setCourier(null);
                     whatToDo = false;
 
                 } else {
-                    selectedAddressList.clear();
-                    thatOrderedCourier.setAddress(tail.get(position));
-                    selectedAddressList.add(tail.get(position));
+                    selectedCourierList.clear();
+                    thatOrderedCourier.setCourier(tail.get(position));
+                    selectedCourierList.add(tail.get(position));
                     whatToDo = true;
 
 
@@ -364,7 +363,7 @@ public class ParcelHolder extends HeaderItem {
 
 
             }
-            setSelectedAddress(getAdapterPosition(), whatToDo);
+            setSelectedCourier(getAdapterPosition(), whatToDo);
             if (whatToDo)
                 OrderLab.addOrder(thatOrderedCourier, AppDatabase.getAppDatabase(getHeader().getContext()));
             else
@@ -378,7 +377,7 @@ public class ParcelHolder extends HeaderItem {
     }
 
     public void refreshAdapter(int position) {
-        adapter.updateSelectedData(position, selectedAddressList);
+        adapter.updateSelectedData(position, selectedCourierList);
     }
 
     public String bindNumber(int position, int size) {
@@ -387,7 +386,7 @@ public class ParcelHolder extends HeaderItem {
 
     void clearContent() {
         // Glide.clear(mAvatar);
-        ((AddressRecyclerViewAdapter) innerRecyclerView.getAdapter()).clearData();
+        ((CourierAdapter) innerRecyclerView.getAdapter()).clearData();
     }
 
     private float computeRatio(RecyclerView recyclerView) {
@@ -435,7 +434,6 @@ public class ParcelHolder extends HeaderItem {
     public void setContent(Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
         setContent(new ArrayList<>(), parcel, position, size, orderedCourier);
     }
-
 
 
 }

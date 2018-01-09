@@ -18,16 +18,19 @@ public class OrderedCourier {
     private Address address;
     @PrimaryKey
     private Long serialNo;
+    @Embedded(prefix = "courier_")
+    private Courier courier;
 
-    public OrderedCourier(Long serialNo, Parcel parcel, Address address) {
+    public OrderedCourier(Long serialNo, Parcel parcel, Address address, Courier courier) {
         this.serialNo = serialNo;
         this.parcel = parcel;
         this.address = address;
+        this.courier = courier;
     }
 
     @Ignore
-    public OrderedCourier(Parcel parcel, Address address) {
-        this(getRandomSerialNo(), parcel, address);
+    public OrderedCourier(Parcel parcel, Address address, Courier courier) {
+        this(getRandomSerialNo(), parcel, address, courier);
     }
 
 
@@ -56,4 +59,11 @@ public class OrderedCourier {
     }
 
 
+    public Courier getCourier() {
+        return courier;
+    }
+
+    public void setCourier(Courier courier) {
+        this.courier = courier;
+    }
 }
