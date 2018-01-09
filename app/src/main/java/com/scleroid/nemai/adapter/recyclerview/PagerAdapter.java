@@ -1,4 +1,4 @@
-package com.scleroid.nemai.adapter;
+package com.scleroid.nemai.adapter.recyclerview;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

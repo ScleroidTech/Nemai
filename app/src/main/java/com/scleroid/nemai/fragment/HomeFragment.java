@@ -40,7 +40,7 @@ import android.widget.Toast;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.adapter.PagerAdapter;
+import com.scleroid.nemai.adapter.recyclerview.PagerAdapter;
 import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
