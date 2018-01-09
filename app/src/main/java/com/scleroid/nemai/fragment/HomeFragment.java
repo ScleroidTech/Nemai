@@ -128,6 +128,7 @@ public class HomeFragment extends Fragment {
         v.clearFocus();
 
         setupRecyclerView(v, inflater, context);
+
         if (state != null)
             listState = state.getParcelable(LIST_STATE_KEY);
         if (listState != null) {
@@ -177,11 +178,15 @@ public class HomeFragment extends Fragment {
             // Intent i = new Intent(getActivity(), PartnerActivity.class);
             //startActivity(i);
         });
-
+        setButtonsVisibility(recyclerViewPager.getCurrentPosition());
         return v;
     }
 
     private void deleteParcel() {
+        int position = recyclerViewPager.getCurrentPosition();
+
+        Parcel parcel = crimes.get(position);
+        ParcelLab.deleteCurrentParcel(AppDatabase.getAppDatabase(context), parcel);
     }
 
     public void onSaveInstanceState(Bundle state) {
@@ -255,8 +260,11 @@ public class HomeFragment extends Fragment {
         //
         // recyclerViewPager.scrollToPosition();
         recyclerViewPager.addOnPageChangedListener((oldPosition, newPosition) -> {
+
             if (!crimes.get(oldPosition).equals(recycleViewPagerAdapter.holder.getParcel()))
                 ParcelLab.addParcel(recycleViewPagerAdapter.holder.getParcel(), AppDatabase.getAppDatabase(context));
+            setButtonsVisibility(newPosition);
+
             Log.d("test", "oldPosition:" + oldPosition + " newPosition:" + newPosition + " parcel at old " + crimes.get(oldPosition).toString() + " parcel at new " + crimes.get(newPosition).toString());
         });
 
@@ -288,6 +296,24 @@ public class HomeFragment extends Fragment {
 
 
         });
+    }
+
+    /**
+     * sets the visibility of new & delete FAB
+     *
+     * @param newPosition the position where the view is just scrolled
+     */
+    private void setButtonsVisibility(int newPosition) {
+        if (crimes != null) {
+
+            if (crimes.size() <= 1) fabDeleteCourier.setVisibility(View.GONE);
+            else fabDeleteCourier.setVisibility(View.VISIBLE);
+            if (newPosition == crimes.size() - 1) fabNewCourier.setVisibility(View.VISIBLE);
+            else fabNewCourier.setVisibility(View.GONE);
+        } else {
+            fabDeleteCourier.setVisibility(View.GONE);
+            fabNewCourier.setVisibility(View.VISIBLE);
+        }
     }
 
 

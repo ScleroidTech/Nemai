@@ -113,7 +113,7 @@ public class ParcelLab {
         task.execute();
     }
 
-    public static void DeleteUserAsync(@NonNull final AppDatabase db, Parcel parcel) {
+    public static void deleteCurrentParcel(@NonNull final AppDatabase db, Parcel parcel) {
         DeleteUserAsync task = new DeleteUserAsync(db, parcel);
         task.execute();
     }
