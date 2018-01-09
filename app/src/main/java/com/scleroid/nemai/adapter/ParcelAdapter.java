@@ -1,4 +1,4 @@
-package com.scleroid.nemai.outer;
+package com.scleroid.nemai.adapter;
 
 import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +13,7 @@ import com.scleroid.nemai.databinding.ItemOuterBinding;
 import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.viewholders.ParcelHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ import hugo.weaving.DebugLog;
  * @since 15-11-2017
  */
 
-public class OuterAdapter extends TailAdapter<OuterItem> {
+public class ParcelAdapter extends TailAdapter<ParcelHolder> {
 
     private static final int EMPTY_VIEW = 10;
     private static final String TAG = "scleroid.nemai.outerAdapter";
@@ -42,13 +43,13 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
     private List<OrderedCourier> orderedCourierList;
 
     /**
-     * Constructor for OuterAdapter
+     * Constructor for ParcelAdapter
      *
      * @param addresses list of addresses
      * @param parcels   list of parcels
      */
     @DebugLog
-    public OuterAdapter(List<Address> addresses, List<Parcel> parcels) {
+    public ParcelAdapter(List<Address> addresses, List<Parcel> parcels) {
         this.addresses = addresses;
         this.parcels = parcels;
         //  this.selectedAddress = selectedAddress;
@@ -166,18 +167,18 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
      */
 
     @Override
-    public OuterItem onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ParcelHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_outer, parent, false);
         //   binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_outer, parent, false);
         Log.d("innerItem", "data " + addresses.size());
         //  binding.setDataset(addresses);
 
-        return new OuterItem(view, mPool);
+        return new ParcelHolder(view, mPool);
     }
 
     @SuppressLint("LongLogTag")
     @Override
-    public void onBindViewHolder(OuterItem holder, int position) {
+    public void onBindViewHolder(ParcelHolder holder, int position) {
         holder.setIsRecyclable(true);
         //holder.itemView.setTag(parcels.get(position));
         //  holder.selectedAddressList = selectedAddress;
@@ -192,7 +193,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
 
                 if (thatOrderedCourier != null &&  thatOrderedCourier.getAddress() != null) {
                     Log.d(TAG, "I'm adding address to selectedAddresses");
-                    holder.selectedAddressList.add(thatOrderedCourier.getAddress());
+                    holder.updateSelectedAddressList(thatOrderedCourier.getAddress());
                 }
             }
 
@@ -203,7 +204,7 @@ public class OuterAdapter extends TailAdapter<OuterItem> {
 
 
     @Override
-    public void onViewRecycled(OuterItem holder) {
+    public void onViewRecycled(ParcelHolder holder) {
         //  holder.clearContent();
     }
 

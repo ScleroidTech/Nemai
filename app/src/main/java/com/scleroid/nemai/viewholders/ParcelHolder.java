@@ -1,4 +1,4 @@
-package com.scleroid.nemai.outer;
+package com.scleroid.nemai.viewholders;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
@@ -23,13 +23,14 @@ import com.ramotion.garlandview.inner.InnerLayoutManager;
 import com.ramotion.garlandview.inner.InnerRecyclerView;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.adapter.AddressRecyclerViewAdapter;
 import com.scleroid.nemai.controller.OrderLab;
 import com.scleroid.nemai.fragment.AddressFragment;
-import com.scleroid.nemai.inner.InnerAdapter;
 import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.outer.RecyclerItemClickListener;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
 
@@ -51,14 +52,14 @@ import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
  *
  */
 
-public class OuterItem extends HeaderItem {
+public class ParcelHolder extends HeaderItem {
 
     /**
      * TAG variable used to generate log for the logcat
      *
      * @see Log
      */
-    private static final String TAG = "OuterItem";
+    private static final String TAG = "ParcelHolder";
 
     /**
      * start Ratio for the middle view,
@@ -123,13 +124,12 @@ public class OuterItem extends HeaderItem {
     private View mNewAddressButton;
     private boolean mIsScrolling;
     private View mEmptyView;
-    private InnerAdapter adapter;
+    private AddressRecyclerViewAdapter adapter;
     private boolean isMultiSelect = false;
     private Parcel header;
     private OrderedCourier mOrderedCourier;
 
-
-    public OuterItem(View itemView, RecyclerView.RecycledViewPool pool) {
+    public ParcelHolder(View itemView, RecyclerView.RecycledViewPool pool) {
         super(itemView);
         initHeader(itemView);
         initRecycerView(itemView, pool);
@@ -145,11 +145,23 @@ public class OuterItem extends HeaderItem {
         //  DataBindingUtil.bind(((FrameLayout) mHeader).getChildAt(0));
     }
 
+    public List<Address> getSelectedAddressList() {
+        return selectedAddressList;
+    }
+
+    public void setSelectedAddressList(List<Address> selectedAddressList) {
+        this.selectedAddressList = selectedAddressList;
+    }
+
+    public void updateSelectedAddressList(Address selectedAddressList) {
+        this.selectedAddressList.add(selectedAddressList);
+    }
+
     public void initRecycerView(View itemView, RecyclerView.RecycledViewPool pool) {
         // Init RecyclerView
         innerRecyclerView = itemView.findViewById(R.id.recycler_view);
         innerRecyclerView.setRecycledViewPool(pool);
-        innerRecyclerView.setAdapter(new InnerAdapter());
+        innerRecyclerView.setAdapter(new AddressRecyclerViewAdapter());
 
         innerRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -221,7 +233,7 @@ public class OuterItem extends HeaderItem {
         return innerRecyclerView;
     }
 
-    void setContent(@NonNull List<Address> innerDataList, final Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
+    public void setContent(@NonNull List<Address> innerDataList, final Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
         final Context context = itemView.getContext();
         itemView.setTag(parcel);
         //TODO find position & re assign the value to it, to retain from the view changes
@@ -279,7 +291,7 @@ public class OuterItem extends HeaderItem {
 
     private void setupInsideRecyclerView() {
         innerRecyclerView.setLayoutManager(new InnerLayoutManager());
-        adapter = (InnerAdapter) innerRecyclerView.getAdapter();
+        adapter = (AddressRecyclerViewAdapter) innerRecyclerView.getAdapter();
         adapter.addData(tail, selectedAddressList);
 
         innerRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), innerRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
@@ -375,7 +387,7 @@ public class OuterItem extends HeaderItem {
 
     void clearContent() {
         // Glide.clear(mAvatar);
-        ((InnerAdapter) innerRecyclerView.getAdapter()).clearData();
+        ((AddressRecyclerViewAdapter) innerRecyclerView.getAdapter()).clearData();
     }
 
     private float computeRatio(RecyclerView recyclerView) {
