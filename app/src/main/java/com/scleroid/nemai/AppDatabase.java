@@ -6,9 +6,11 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import com.scleroid.nemai.dao.AddressDao;
+import com.scleroid.nemai.dao.CourierDao;
 import com.scleroid.nemai.dao.OrderDao;
 import com.scleroid.nemai.dao.ParcelDao;
 import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
 
@@ -24,7 +26,7 @@ import com.scleroid.nemai.models.Parcel;
  * @see Address
  * @see OrderedCourier
  */
-@Database(entities = {Parcel.class, Address.class, OrderedCourier.class}, version = 3)
+@Database(entities = {Parcel.class, Address.class, OrderedCourier.class, Courier.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
     /**
      * Holds the instance of the database
@@ -37,11 +39,11 @@ public abstract class AppDatabase extends RoomDatabase {
      * & returns that
      *
      * @param context Context of Application or current activity needs to be passed
-     * @return AppDatabase
+     * @return AppDatabase returns the instance of Appdatabase
      */
     public static AppDatabase getAppDatabase(Context context) {
-        /**
-         *  creates a new database if instance doesn't exists
+        /*
+           creates a new database if instance doesn't exists
          */
 
         if (instance == null) {
@@ -66,7 +68,8 @@ public abstract class AppDatabase extends RoomDatabase {
      * Parcel Model Data Access Object,
      * For Room Library
      * @see ParcelDao
-     * @return
+     * @return an object of
+     * @see ParcelDao
      */
     public abstract ParcelDao parcelDao();
 
@@ -75,15 +78,28 @@ public abstract class AppDatabase extends RoomDatabase {
      * For Room Library
      * @see AddressDao
      *
-     * @return
+     * @return an object of
+     * @see AddressDao
      */
     public abstract AddressDao addressDao();
+
+    /**
+     * Courier Model Data Access Object,
+     * For Room Library
+     *
+     * @return an object of
+     * @see com.scleroid.nemai.dao.CourierDao
+     * @see com.scleroid.nemai.dao.CourierDao
+     */
+    public abstract CourierDao courierDao();
+
 
     /**
      * Order Model Data Access Object,
      * For Room Library
      * @see OrderDao
-     * @return
+     * @return returns an object of
+     * @see OrderDao
      */
     public abstract OrderDao orderDao();
 

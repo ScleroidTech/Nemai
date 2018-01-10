@@ -34,8 +34,9 @@ import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
 import com.scleroid.nemai.viewholders.ParcelHolderForAddress;
-import com.scleroid.nemai.viewmodels.CheckoutViewModel;
+import com.scleroid.nemai.viewmodels.AddressViewModel;
 import com.scleroid.nemai.viewmodels.OrderViewModel;
+import com.scleroid.nemai.viewmodels.ParcelViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -76,7 +77,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     SparseBooleanArray selectedPositions = new SparseBooleanArray();
 
 
-    private CheckoutViewModel viewModel;
+    private AddressViewModel addressViewModel;
     private ParcelAdapterForAddress parcelAdapterForAddress;
     private TailRecyclerView outerRecyclerView;
     private ActionMode mActionMode;
@@ -119,6 +120,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     private Toolbar toolbar;
     private ActionBar actionBar;
     private MenuItem nextItem;
+    private ParcelViewModel parcelViewModel;
 
 
     @SuppressLint("LongLogTag")
@@ -145,9 +147,10 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
             isFinalized = orderedCouriers.size() == parcelAdapterForAddress.getParcels().size();
 
         });
-        viewModel = ViewModelProviders.of(CheckoutActivity.this).get(CheckoutViewModel.class);
+        addressViewModel = ViewModelProviders.of(CheckoutActivity.this).get(AddressViewModel.class);
+        parcelViewModel = ViewModelProviders.of(CheckoutActivity.this).get(ParcelViewModel.class);
 
-        viewModel.getParcelList().observe(CheckoutActivity.this, parcels -> {
+        parcelViewModel.getParcelList().observe(CheckoutActivity.this, parcels -> {
 
             parcelAdapterForAddress.setParcels(parcels);
             parcelAdapterForAddress.notifyDataSetChanged();
@@ -155,7 +158,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
                 populateSelectionMap();
 
         });
-        viewModel.getAddressList().observe(CheckoutActivity.this, addresses -> {
+        addressViewModel.getAddressList().observe(CheckoutActivity.this, addresses -> {
             parcelAdapterForAddress.updateAddressList(addresses);
             parcelAdapterForAddress.notifyDataSetChanged();
         });
@@ -204,19 +207,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         List<Address> tempList = new ArrayList<>();
         for (int i = 0; i < OUTER_COUNT; i++) {
             ParcelLab.addParcel(createParcelData(faker), AppDatabase.getAppDatabase(context));
-        }
-
-        for (int i = 0; i < OUTER_COUNT; i++) {
-
-            for (int j = 0; j < INNER_COUNT - i; j++) {
-                //innerData.add(createInnerData(faker));
-                //AddressLab.addAddress(createInnerData(faker), AppDatabase.getAppDatabase(context));
-
-            }
-
-
-            //  parcels.add(createParcelData(faker));
-
+            // AddressLab.addAddress(createInnerData(faker), AppDatabase.getAppDatabase(context));
         }
 
     }

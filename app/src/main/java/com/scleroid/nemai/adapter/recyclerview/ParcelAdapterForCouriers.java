@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.ramotion.garlandview.TailAdapter;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.databinding.ItemOuterBinding;
 import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
@@ -36,7 +35,7 @@ public class ParcelAdapterForCouriers extends TailAdapter<ParcelHolderForCourier
     private static final int EMPTY_VIEW = 10;
     private static final String TAG = "scleroid.nemai.outerAdapter";
     private final RecyclerView.RecycledViewPool mPool;
-    ItemOuterBinding binding;
+
     private int poolSize = 1;
     private List<List<Courier>> courieresList;
     private List<Courier> courieres;
@@ -185,6 +184,9 @@ public class ParcelAdapterForCouriers extends TailAdapter<ParcelHolderForCourier
     @SuppressLint("LongLogTag")
     @Override
     public void onBindViewHolder(ParcelHolderForCouriers holder, int position) {
+        /*
+          This was a hack, to keep the holder from destroying other people(holders) lives
+         */
         holder.setIsRecyclable(true);
         //holder.itemView.setTag(parcels.get(position));
         //  holder.selectedCourierList = selectedCourier;

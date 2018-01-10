@@ -1,13 +1,17 @@
 package com.scleroid.nemai.models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.scleroid.nemai.utils.RandomSerialNumberGen;
 
 /**
  * @author Ganesh Kaple
  * @since 09-01-2018
  */
-
+@Entity
 public class Courier {
+    @PrimaryKey
     private long serialNo;
     private String courierName;
     private double price;

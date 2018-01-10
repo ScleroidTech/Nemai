@@ -46,7 +46,7 @@ public class AddressLab {
     }
 
     private static int getCount(final AppDatabase db) {
-        int count = db.addressDao().countAddresss();
+        int count = db.addressDao().countAddress();
         return count;
     }
 

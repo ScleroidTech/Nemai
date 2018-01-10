@@ -20,12 +20,16 @@ import com.ramotion.garlandview.TailLayoutManager;
 import com.ramotion.garlandview.TailRecyclerView;
 import com.ramotion.garlandview.TailSnapHelper;
 import com.ramotion.garlandview.header.HeaderTransformer;
+import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.ParcelAdapterForCouriers;
+import com.scleroid.nemai.controller.CourierLab;
+import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
 import com.scleroid.nemai.viewmodels.CourierViewModel;
@@ -74,6 +78,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
     private Toolbar toolbar;
     private ActionBar actionBar;
     private MenuItem nextItem;
+    private List<Parcel> parcels;
 
 
     @SuppressLint("LongLogTag")
@@ -150,32 +155,21 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
     @Override
     public void onFakerReady(Faker faker) {
 
-        //populateData(faker);
+        populateData(faker);
 
     }
 
 
-   /* private void populateData(Faker faker) {
+    private void populateData(Faker faker) {
         List<Courier> innerData = new ArrayList<>();
         List<Courier> tempList = new ArrayList<>();
         for (int i = 0; i < OUTER_COUNT; i++) {
             ParcelLab.addParcel(createParcelData(faker), AppDatabase.getAppDatabase(context));
+            CourierLab.addCourier(createInnerData(faker), AppDatabase.getAppDatabase(context));
         }
 
-        for (int i = 0; i < OUTER_COUNT; i++) {
 
-            for (int j = 0; j < INNER_COUNT - i; j++) {
-                //innerData.add(createInnerData(faker));
-                //CourierLab.addCourier(createInnerData(faker), AppDatabase.getAppDatabase(context));
-
-            }
-
-
-            //  parcels.add(createParcelData(faker));
-
-        }
-
-    }*/
+    }
 
     private void initRecyclerView(List<Courier> data, List<Parcel> parcels) {
         findViewById(R.id.progressBar).setVisibility(View.GONE);
@@ -188,21 +182,19 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
         new TailSnapHelper().attachToRecyclerView(outerRecyclerView);
     }
 
-    /*private Courier createInnerData(Faker faker) {
+    private Courier createInnerData(Faker faker) {
         return new Courier(
                 faker.name.name(),
-                faker.courier.streetCourier(),
-                faker.courier.streetName(),
-                faker.courier.state(),
-                faker.courier.city(),
-                (faker.number.between(111111, 999999)) + "",
-                faker.phoneNumber.phoneNumber()
+                faker.commerce.price().doubleValue(),
+                faker.commerce.productName(),
+                faker.team.sport(),
+                faker.avatar.image()
         );
-    }*/
+    }
 
-   /* private com.scleroid.nemai.models.Parcel createParcelData(Faker faker) {
-        String source = faker.courier.city();
-        String dest = faker.courier.city();
+    private com.scleroid.nemai.models.Parcel createParcelData(Faker faker) {
+        String source = faker.address.city();
+        String dest = faker.address.city();
         return new com.scleroid.nemai.models.Parcel(
                 source,
                 dest,
@@ -215,12 +207,11 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
                 faker.number.positive(),
                 faker.company.catchPhrase(),
                 faker.date.forward(),
-                new PinCode(source, (faker.number.between(111111, 999999)) + "", faker.courier.state(), faker.courier.streetName()),
-                new PinCode(dest, (faker.number.between(111111, 999999)) + "", faker.courier.state(), faker.courier.streetName())
+                new PinCode(source, (faker.number.between(111111, 999999)) + "", faker.address.state(), faker.address.streetName()),
+                new PinCode(dest, (faker.number.between(111111, 999999)) + "", faker.address.state(), faker.address.streetName())
         );
     }
 
-*/
     /**
      * //TODO Future Implementation
      * The subscribe method of
