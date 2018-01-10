@@ -1,11 +1,9 @@
 package com.scleroid.nemai.viewholders;
 
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -25,11 +23,9 @@ import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.CourierAdapter;
 import com.scleroid.nemai.controller.OrderLab;
-import com.scleroid.nemai.fragment.CourierFragment;
 import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
-import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.outer.RecyclerItemClickListener;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
@@ -97,8 +93,8 @@ public class ParcelHolderForCouriers extends HeaderItem {
      */
     private final static float ANSWER_RATIO_DIFF = ANSWER_RATIO_START - ANSWER_RATIO_MAX;
     private final List<View> mMiddleCollapsible = new ArrayList<>(2);
-    private final TextView noCourierTitleTextView;
-    private final TextView noCourierSubtitleTextView;
+
+    private final TextView noDataReceived;
     protected List<Courier> selectedCourierList = new ArrayList<>();
     GestureDetectorCompat gestureDetector;
     android.view.ActionMode actionMode;
@@ -120,13 +116,14 @@ public class ParcelHolderForCouriers extends HeaderItem {
     private int mTitleSize2;
     private List<Courier> tail;
     private OrderedCourier thatOrderedCourier;
-    private View mNewCourierButton;
+    //   private View mNewCourierButton;
     private boolean mIsScrolling;
     private View mEmptyView;
     private CourierAdapter adapter;
     private boolean isMultiSelect = false;
     private Parcel header;
     private OrderedCourier mOrderedCourier;
+    private FloatingActionButton mNewCourierButton;
 
     public ParcelHolderForCouriers(View itemView, RecyclerView.RecycledViewPool pool) {
         super(itemView);
@@ -134,8 +131,7 @@ public class ParcelHolderForCouriers extends HeaderItem {
         initRecycerView(itemView, pool);
 
         //Init Empty View Message
-        noCourierTitleTextView = itemView.findViewById(R.id.no_courier_title);
-        noCourierSubtitleTextView = itemView.findViewById(R.id.no_courier_subtitle);
+        noDataReceived = itemView.findViewById(R.id.no_data);
 
 
         // Init fonts
@@ -191,7 +187,7 @@ public class ParcelHolderForCouriers extends HeaderItem {
 
         mHeader = itemView.findViewById(R.id.header);
         mHeaderAlpha = itemView.findViewById(R.id.header_alpha);
-        mNewCourierButton = itemView.findViewById(R.id.new_courier_button);
+        mNewCourierButton = itemView.findViewById(R.id.new_address_button);
 
 
         mHeaderCaption1 = itemView.findViewById(R.id.header_shipment_title_1);
@@ -206,7 +202,6 @@ public class ParcelHolderForCouriers extends HeaderItem {
         mMiddleEdit = itemView.findViewById(R.id.header_middle_edit);
         mFooter = itemView.findViewById(R.id.header_footer);
 
-        mNewCourierButton = itemView.findViewById(R.id.new_courier_button);
 
         //  mMiddleCollapsible.add((View)mAvatar.getParent());
         mMiddleCollapsible.add((View) cost.getParent());
@@ -247,13 +242,12 @@ public class ParcelHolderForCouriers extends HeaderItem {
         //  Crashlytics.getInstance().crash(); // Force a crash
 
         if (tail != null && !tail.isEmpty()) {
-            noCourierTitleTextView.setVisibility(View.GONE);
-            noCourierSubtitleTextView.setVisibility(View.GONE);
+            noDataReceived.setVisibility(View.GONE);
+
             innerRecyclerView.setVisibility(View.VISIBLE);
             setupInsideRecyclerView();
         } else {
-            noCourierTitleTextView.setVisibility(View.VISIBLE);
-            noCourierSubtitleTextView.setVisibility(View.VISIBLE);
+            noDataReceived.setVisibility(View.VISIBLE);
             innerRecyclerView.setVisibility(View.GONE);
 
         }
@@ -272,19 +266,10 @@ public class ParcelHolderForCouriers extends HeaderItem {
 
         source.setText(parcel.getSourcePin());//TODO COnvert Pincode to room , get source city instead of pincod,e & store selected object instead of text
         destination.setText(parcel.getDestinationPin());
-        cost.setText("Rs. " + parcel.getInvoice());//TODO get delivery price, not invoice
+        cost.setText(String.format("Rs. %d", parcel.getInvoice()));//TODO get delivery price, not invoice
 
 
-        mNewCourierButton.setOnClickListener(v -> {
-
-
-            FragmentManager fm = ((FragmentActivity) getHeader().getContext()).getFragmentManager();
-            Parcel parcel1 = header;
-            PinCode pincode = parcel1.getDestinationPinCode();
-            DialogFragment dialog = CourierFragment.newInstance(pincode.getLocation(), pincode.getPincode(), pincode.getState());
-            dialog.show(fm, "adad");
-
-        });
+        mNewCourierButton.setVisibility(View.GONE);
 
     }
 
@@ -339,7 +324,7 @@ public class ParcelHolderForCouriers extends HeaderItem {
 
             if (selectedCourierList.isEmpty()) {
                 Log.d(TAG, "list empty " + selectedCourierList.isEmpty());
-                thatOrderedCourier = new OrderedCourier(header, tail.get(position), courier);
+                thatOrderedCourier = new OrderedCourier(header, null, tail.get(position));
                 selectedCourierList.add(tail.get(position));
                 whatToDo = true;
 

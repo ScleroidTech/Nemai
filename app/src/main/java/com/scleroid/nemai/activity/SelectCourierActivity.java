@@ -20,16 +20,12 @@ import com.ramotion.garlandview.TailLayoutManager;
 import com.ramotion.garlandview.TailRecyclerView;
 import com.ramotion.garlandview.TailSnapHelper;
 import com.ramotion.garlandview.header.HeaderTransformer;
-import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.adapter.recyclerview.CourierAdapter;
 import com.scleroid.nemai.adapter.recyclerview.ParcelAdapterForCouriers;
-import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
-import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
 import com.scleroid.nemai.viewmodels.CourierViewModel;
@@ -154,12 +150,12 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
     @Override
     public void onFakerReady(Faker faker) {
 
-        populateData(faker);
+        //populateData(faker);
 
     }
 
 
-    private void populateData(Faker faker) {
+   /* private void populateData(Faker faker) {
         List<Courier> innerData = new ArrayList<>();
         List<Courier> tempList = new ArrayList<>();
         for (int i = 0; i < OUTER_COUNT; i++) {
@@ -179,14 +175,14 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
 
         }
 
-    }
+    }*/
 
     private void initRecyclerView(List<Courier> data, List<Parcel> parcels) {
         findViewById(R.id.progressBar).setVisibility(View.GONE);
 
         outerRecyclerView = findViewById(R.id.recycler_view);
         ((TailLayoutManager) outerRecyclerView.getLayoutManager()).setPageTransformer(new HeaderTransformer());
-        parcelAdapter = new CourierAdapter(data, parcels);
+        parcelAdapter = new ParcelAdapterForCouriers(data, parcels);
         outerRecyclerView.setAdapter(parcelAdapter);
         outerRecyclerView.setOnFlingListener(null);
         new TailSnapHelper().attachToRecyclerView(outerRecyclerView);
@@ -204,7 +200,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
         );
     }*/
 
-    private com.scleroid.nemai.models.Parcel createParcelData(Faker faker) {
+   /* private com.scleroid.nemai.models.Parcel createParcelData(Faker faker) {
         String source = faker.courier.city();
         String dest = faker.courier.city();
         return new com.scleroid.nemai.models.Parcel(
@@ -224,7 +220,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
         );
     }
 
-
+*/
     /**
      * //TODO Future Implementation
      * The subscribe method of
@@ -232,7 +228,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
      * @param selectionMap
      * @see EventBus
      * Handles the message sent by An event sent at
-     * @see ParcelHolder
+     * @see com.scleroid.nemai.viewholders.ParcelHolderForCouriers
      * .
      * which provides which items are selected & which aren't
      */
