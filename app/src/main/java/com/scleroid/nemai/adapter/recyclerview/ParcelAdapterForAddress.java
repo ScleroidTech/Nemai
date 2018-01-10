@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.ramotion.garlandview.TailAdapter;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.databinding.ItemOuterBinding;
 import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
@@ -34,7 +33,7 @@ public class ParcelAdapterForAddress extends TailAdapter<ParcelHolderForAddress>
     private static final int EMPTY_VIEW = 10;
     private static final String TAG = "scleroid.nemai.outerAdapter";
     private final RecyclerView.RecycledViewPool mPool;
-    ItemOuterBinding binding;
+
     private int poolSize = 1;
     private List<List<Address>> addressesList;
     private List<Address> addresses;
@@ -225,7 +224,7 @@ public class ParcelAdapterForAddress extends TailAdapter<ParcelHolderForAddress>
         List<List<Address>> outerData = new ArrayList<>();
         for (Parcel parcel : parcels) {
             for (Address address : innerData) {
-                //  if (parcel.getDestinationPin().equals(address.getPincode()))
+                if (parcel.getDestinationPin().equals(address.getPincode()))
                     tempList.add(address);
 
             }

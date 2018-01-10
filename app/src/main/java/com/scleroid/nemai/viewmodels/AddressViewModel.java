@@ -8,12 +8,11 @@ import android.support.annotation.NonNull;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.controller.AddressLab;
 import com.scleroid.nemai.models.Address;
-import com.scleroid.nemai.models.Parcel;
 
 import java.util.List;
 
-public class CheckoutViewModel extends AndroidViewModel {
-    private Parcel parcel;
+public class AddressViewModel extends AndroidViewModel {
+
     private List<Address> addresses;
 
     //    private LiveData<List<Parcel>> parcelList;
@@ -21,7 +20,7 @@ public class CheckoutViewModel extends AndroidViewModel {
 
     private AppDatabase appDatabase;
 
-    public CheckoutViewModel(@NonNull Application application) {
+    public AddressViewModel(@NonNull Application application) {
         super(application);
 
         appDatabase = AppDatabase.getAppDatabase(this.getApplication());

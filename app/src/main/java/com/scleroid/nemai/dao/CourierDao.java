@@ -7,7 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.models.Courier;
 
 import java.util.List;
 
@@ -15,77 +15,86 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 /**
  * Data Access Object required for
+ *
+ * @author Ganesh Kaple
  * @see android.arch.persistence.room.Room
  * For Model
- * @see Address
- * @author Ganesh Kaple
- * @since 22-11-2017
+ * @see Courier
+ * @since 10-01-2018
  */
 @Dao
-public interface AddressDao {
+public interface CourierDao {
+
     /**
      * Select Query
      *
-     * @return List of all addresses in database
+     * @return List of all courieres in database
      */
-    @Query("SELECT * FROM Address")
-    List<Address> getAll();
+    @Query("SELECT * FROM Courier")
+    List<Courier> getAll();
 
     /**
-     * Returns  list of all addresses
-     * @return LiveData object List of all addresses in database
+     * Returns  list of all courieres
+     *
+     * @return LiveData object List of all courieres in database
      */
-    @Query("SELECT * FROM Address")
-    LiveData<List<Address>> getAllAddressLive();
+    @Query("SELECT * FROM Courier")
+    LiveData<List<Courier>> getAllCourierLive();
 
     /**
      * Returns a specific value compared to serialNo passed
+     *
      * @param serialNo the serialNo of object to be found
-     * @return address object with same serialNo
+     * @return courier object with same serialNo
      */
-    @Query("SELECT * FROM Address where serialNo = :serialNo ")
-    Address findById(long serialNo);
+    @Query("SELECT * FROM Courier where serialNo = :serialNo ")
+    Courier findById(long serialNo);
 
     /**
-     * select query to count Number of address
+     * select query to count Number of courier
+     *
      * @return number of total entries in the table
      */
-    @Query("SELECT COUNT(*) from Address")
-    int countAddress();
+    @Query("SELECT COUNT(*) from Courier")
+    int countCourier();
 
     /**
      * Performs insertion operation
-     * @param address inserts this object in the database
+     *
+     * @param courier inserts this object in the database
      */
     @Insert(onConflict = REPLACE)
-    void insert(Address address);
+    void insert(Courier courier);
 
     /**
      * Performs insertion operation for multiple values
-     * @param address inserts list of address object
+     *
+     * @param courier inserts list of courier object
      */
     @Insert
-    void insertAll(Address... address);
+    void insertAll(Courier... courier);
 
     /**
      * Updates a specified dataset
-     * @param address the address which needs to be updated
+     *
+     * @param courier the courier which needs to be updated
      */
     @Update(onConflict = REPLACE)
-    void update(Address address);
+    void update(Courier courier);
 
     /**
      * Removes a particular dataset from the database
-     * @param address the object which needs to be deleted
+     *
+     * @param courier the object which needs to be deleted
      */
     @Delete
-    void delete(Address address);
+    void delete(Courier courier);
 
     /**
      * Let the database be a part of history
      * I meant, it deletes the whole table
      */
-    @Query("DELETE FROM Address")
+    @Query("DELETE FROM Courier")
     void nukeTable();
 
 }
