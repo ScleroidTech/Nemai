@@ -1,241 +1,260 @@
 package com.scleroid.nemai.adapter.recyclerview;
 
-import android.annotation.SuppressLint;
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RadioButton;
 
-import com.ramotion.garlandview.TailAdapter;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.databinding.ItemOuterBinding;
+import com.scleroid.nemai.databinding.ItemInnerCourierCardBinding;
 import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
-import com.scleroid.nemai.models.Parcel;
-import com.scleroid.nemai.viewholders.ParcelHolder;
+import com.scleroid.nemai.viewholders.CourierHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import hugo.weaving.DebugLog;
-
 /**
- * Adapter which holds the outer Recyclerview
- *
  * @author Ganesh Kaple
- * @see com.ramotion.garlandview.TailRecyclerView
- * which implements
- * @see TailAdapter
- * @since 09-01-2018
+ * @since 10-01-2018
  */
 
-public class CourierAdapter extends TailAdapter<ParcelHolder> {
+public class CourierAdapter extends com.ramotion.garlandview.inner.InnerAdapter<CourierHolder> {
 
     private static final int EMPTY_VIEW = 10;
-    private static final String TAG = "scleroid.nemai.outerAdapter";
-    private final RecyclerView.RecycledViewPool mPool;
-    ItemOuterBinding binding;
-    private int poolSize = 1;
-    private List<List<Courier>> courieresList;
-    private List<Courier> courieres;
-    private List<Parcel> parcels;
-    private List<Courier> selectedCourier;
-    private List<OrderedCourier> orderedCourierList;
-
+    private static final String TAG = "innerAdapter";
+    public static int lastSelectedPosition = -1;
+    ItemInnerCourierCardBinding binding;
     /**
-     * Constructor for ParcelAdapterforAddress
-     *
-     * @param courieres list of courieres
-     * @param parcels   list of parcels
-     */
-    @DebugLog
-    public CourierAdapter(List<Courier> courieres, List<Parcel> parcels) {
-        this.courieres = courieres;
-        this.parcels = parcels;
-        //  this.selectedCourier = selectedCourier;
-        courieresList = sortCourieres(parcels, courieres);
-        poolSize = courieres.size()/* + parcels.size()*/;
-        mPool = new RecyclerView.RecycledViewPool();
-        mPool.setMaxRecycledViews(0, poolSize);
-    }
-
-    /**
-     * Getter for CourieresList
-     *
-     * @return List of List<Courier>
-     */
-    public List<List<Courier>> getCourieresList() {
-        return courieresList;
-    }
-
-    /**
-     * setter for CourieresList
-     *
-     * @param courieresList the list of courieres
-     */
-    public void setCourieresList(List<List<Courier>> courieresList) {
-        this.courieresList = courieresList;
-    }
-
-    /**
-     * getter for CourierList
-     *
-     * @return List of Courier
-     */
-    public List<Courier> getCourieres() {
-        return courieres;
-    }
-
-    /**
-     * setter for CourierList
-     *
-     * @param courieres list of courier
-     */
-    public void setCourieres(List<Courier> courieres) {
-        this.courieres = courieres;
-    }
-
-    /**
-     * getter for ParcelList
-     *
-     * @return List of parcels
-     */
-    public List<Parcel> getParcels() {
-        return parcels;
-    }
-
-    /**
-     * setter for parcelList
-     *
-     * @param parcels list of parcels
-     */
-    public void setParcels(List<Parcel> parcels) {
-        this.parcels = parcels;
-    }
-
-    @SuppressLint("LongLogTag")
-    public void updateCourierList(List<Courier> courieres) {
-
-        setCourieresList(sortCourieres(this.parcels, courieres));
-        Log.d(TAG, " Courier list updated");
-        // notifyDataSetChanged();
-
-    }
-
-    /**
-     * getter for selectedCourier
-     *
-     * @return List of Courier
-     */
-    public List<Courier> getSelectedCourier() {
-        return selectedCourier;
-    }
-
-    /**
-     * setter for selectedCourier
-     *
-     * @param selectedCourier list of selectedCourier
-     */
-    public void setSelectedCourier(List<Courier> selectedCourier) {
-        this.selectedCourier = selectedCourier;
-    }
-
-    /**
-     * getter for OrderedCouriersList
-     *
-     * @return List of OrderedCourier
-     */
-    public List<OrderedCourier> getOrderedCourierList() {
-        return orderedCourierList;
-    }
-
-    /**
-     * setter for OrderedCouriersList
-     *
-     * @param orderedCourierList List of OrderedCourierList
-     */
-    public void setOrderedCourierList(List<OrderedCourier> orderedCourierList) {
-        this.orderedCourierList = orderedCourierList;
-    }
-
-    /**
-     * creates the
-     *
-     * @param parent   viewgroup object
-     * @param viewType type of view is passed, which can be set by calling
-     * @return
-     * @see com.ramotion.garlandview.header.HeaderItem ViewHolder for the
-     * @see com.ramotion.garlandview.TailRecyclerView
-     * @see #getItemViewType(int position)
+     * variable to hold selected Item position
      */
 
-    @Override
-    public ParcelHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_parcel_view, parent, false);
-        //   binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_parcel_view, parent, false);
-        Log.d("innerItem", "data " + courieres.size());
-        //  binding.setDataset(courieres);
+    int selectedItemPosition = -1;
+    private List<Courier> mData = new ArrayList<>();
+    private List<Courier> mDataSelected = new ArrayList<>();
+    private View mEmptyView;
+    private View innerLayout;
+    private RadioButton lastChecked = null;
+    private Button deliverButton = null;
+    // ...
+    private SparseBooleanArray selectedItems = new SparseBooleanArray();
+    private boolean activate;
+    private Button buttonDeliver;
+    private Context context;
 
-        return new ParcelHolder(view, mPool);
+
+   /* public void clearSelections() {
+        selectedItems.clear();
+        notifyDataSetChanged();
     }
 
-    @SuppressLint("LongLogTag")
-    @Override
-    public void onBindViewHolder(ParcelHolder holder, int position) {
-        holder.setIsRecyclable(true);
-        //holder.itemView.setTag(parcels.get(position));
-        //  holder.selectedCourierList = selectedCourier;
-        OrderedCourier thatOrderedCourier = null;
-        if (orderedCourierList != null && !orderedCourierList.isEmpty()) {
-            thatOrderedCourier = orderedCourierList.get(position);
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }*/
+
+    public List<Integer> getSelectedItems() {
+        List<Integer> items =
+                new ArrayList<Integer>(selectedItems.size());
+        for (int i = 0; i < selectedItems.size(); i++) {
+            items.add(selectedItems.keyAt(i));
         }
-        if (courieresList.size() == 0)
-            holder.setContent(parcels.get(position), position, parcels.size(), thatOrderedCourier);
-        else {
-            holder.setContent(courieresList.get(position), parcels.get(position), position, parcels.size(), thatOrderedCourier);
-
-            if (thatOrderedCourier != null && thatOrderedCourier.getCourier() != null) {
-                Log.d(TAG, "I'm adding courier to selectedCourieres");
-                holder.updateSelectedCourierList(thatOrderedCourier.getCourier());
-            }
+        return items;
+    }
+    /*public class EmptyViewHolder extends CourierHolder {
+        public EmptyViewHolder(View itemView) {
+            super(itemView);
+            innerLayout =  ((ViewGroup) itemView).getChildAt(0);;
         }
 
-
-    }
-
+        @Override
+        protected View getInnerLayout() {
+            return innerLayout;
+        }
+    }*/
 
     @Override
-    public void onViewRecycled(ParcelHolder holder) {
-        //  holder.clearContent();
+    public CourierHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+       /* if (viewType == EMPTY_VIEW) {
+            final ItemEmptyCourierViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_empty_courier_view,parent,false);
+            return new EmptyViewHolder(binding.getRoot());
+        }*/
+        //    mData = new ArrayList<>();
+        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_inner_courier_card, parent, false);
+        //    Log.d("innerItem", "data " + mData.size());
+
+        selectedItems = new SparseBooleanArray();
+        //    Log.d("innerItem", "is it here? onCreateViewHolder" + mData.size());
+        return new CourierHolder(binding.getRoot());
     }
+
+    @Override
+    public void onBindViewHolder(final CourierHolder holder, final int position) {
+
+        //   holder.setIsRecyclable(false);
+        Courier courier = mData.get(position);
+        // Log.d("innerItem", "is it here? onBindViewHolder" + mData.size() + "  position " + position);
+        // if (position < mData.size() && !mData.isEmpty())
+
+        context = holder.getInnerLayout().getContext();
+        holder.setContent(courier, context);
+        holder.itemView.setTag(courier);
+        holder.setSelectedItemPosition(selectedItemPosition);
+
+        //  setSelectedCourier();
+
+        if (mDataSelected.contains(mData.get(position))) {
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.list_item_selected_state));
+            holder.itemView.setActivated(true);
+            holder.radioButton.setChecked(true);
+            holder.selectButtton.setEnabled(true);
+            holder.selectButtton.setVisibility(View.VISIBLE);
+
+        } else {
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.list_item_normal_state));
+            holder.itemView.setActivated(false);
+            holder.radioButton.setChecked(false);
+
+            holder.selectButtton.setEnabled(false);
+            holder.selectButtton.setVisibility(View.INVISIBLE);
+        }
+
+        // holder.itemView.setActivated(selectedItems.get(position, false));
+        //TODO disable alre
+        // ady activated view, then activate second view, reduce response time
+        // Use getSelectedItems for the purpose
+
+
+    }
+
+    public void setSelection(OrderedCourier selection) {
+    }
+
+    // Swap itemA with itemB
+    public void swapItems(int position) {
+        //make sure to check if dataset is null and if itemA and itemB are valid indexes.
+        //      List<Courier> temp = new ArrayList<>();
+        try {
+            if (position != 0 && mDataSelected.contains(mData.get(position))) {
+                Courier itemA = mData.get(position);
+                Courier itemB = mData.get(0);
+                mData.set(position, itemB);
+                mData.set(0, itemA);
+           /* mData.add(0, itemA);
+            mData.remove(tail.lastIndexOf(itemA));*/
+
+                //   notifyItemMoved(position, 0);
+            }//This will trigger onBindViewHolder method from the adapter.
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Log.e(TAG, "Array Out of Bound " + e);
+        }
+    }
+
+    public void toggleSelection(int pos) {
+        boolean check = !selectedItems.get(pos);
+        selectedItems.put(pos, check);
+        /*if (!selectedItems.get(pos))
+        selectedItems.put(pos, true);
+        else selectedItems.put(pos,false);*/
+
+        notifyItemChanged(pos);
+    }
+
 
     @Override
     public int getItemCount() {
-        return parcels.size();
+
+        //       Log.d("innerItem", "is it here? getItemCOunt" + mData.size());
+        return mData.size();
     }
 
+    /**
+     * TODO Need to override it for multiple view support
+     * Returns the view Type to be displayed,
+     *
+     * @param position the position of adapter
+     * @return
+     */
     @Override
     public int getItemViewType(int position) {
-
+        //     Log.d("innerItem", "is it here? getItemViewType" + mData.size());
         return position;
+        //return R.layout.item_inner_courier_card;
+    }
+
+    public void addData(@Nullable List<Courier> innerDataList, List<Courier> selected) {
+        final int size = mData.size();
+        mData = innerDataList;
+        if (selected != null && !selected.isEmpty())
+            mDataSelected = selected;
+        // swapItems(mData.indexOf(selected.get(0)));
+        Log.d("innerItem", "is it here? addData" + mData.size());
+
+        notifyDataSetChanged();
+        //notifyItemRangeInserted(size, innerDataList.size());
+    }
+
+    public void updateSelectedData(int position, List<Courier> selected) {
+
+
+        mDataSelected = selected;
+        // swapItems(position);
+        //      Log.d("innerItem", "is it here? addData" + mData.size());
+
+        notifyDataSetChanged();
+        //notifyItemRangeInserted(size, innerDataList.size());
     }
 
 
-    public List<List<Courier>> sortCourieres(List<Parcel> parcels, List<Courier> innerData) {
-        List<Courier> tempList = new ArrayList<>();
-        List<List<Courier>> outerData = new ArrayList<>();
-        for (Parcel parcel : parcels) {
-            for (Courier courier : innerData) {
-                //  if (parcel.getDestinationPin().equals(courier.getPincode()))
-                tempList.add(courier);
+    public void clearData() {
+        mData.clear();
+        notifyDataSetChanged();
+    }
 
-            }
-            outerData.add(tempList);
+
+ /*   private void checkAdapterIsEmpty() {
+
+        if (getAdapter().getItemCount() == 0) {
+            mEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyView.setVisibility(View.GONE);
         }
-        return outerData;
+    }*/
+
+    public void changeOfDataset() {
+        notifyDataSetChanged();
+
     }
+
+
+/*
+    public void onLongPress(MotionEvent e) {
+        View view =
+                recyclerView.findChildViewUnder(e.getX(), e.getY());
+        if (actionMode != null) {
+            return;
+        }
+        actionMode =
+                startActionMode(RecyclerViewDemoActivity.this);
+        int idx = recyclerView.getChildPosition(view);
+        myToggleSelection(idx);
+        super.onLongPress(e);
+    }
+
+    private void myToggleSelection(int idx) {
+        adapter.toggleSelection(idx);
+        String title = getString(
+                R.string.selected_count,
+                adapter.getSelectedItemCount());
+        actionMode.setTitle(title);
+    }
+
+*/
 
 }
-
-

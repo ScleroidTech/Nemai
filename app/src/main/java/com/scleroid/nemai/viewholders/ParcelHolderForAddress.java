@@ -207,7 +207,6 @@ public class ParcelHolderForAddress extends HeaderItem {
         mMiddleEdit = itemView.findViewById(R.id.header_middle_edit);
         mFooter = itemView.findViewById(R.id.header_footer);
 
-        mNewAddressButton = itemView.findViewById(R.id.new_address_button);
 
         //  mMiddleCollapsible.add((View)mAvatar.getParent());
         mMiddleCollapsible.add((View) cost.getParent());
@@ -340,7 +339,8 @@ public class ParcelHolderForAddress extends HeaderItem {
 
             if (selectedAddressList.isEmpty()) {
                 Log.d(TAG, "list empty " + selectedAddressList.isEmpty());
-                thatOrderedCourier = new OrderedCourier(header, tail.get(position), courier);
+                //TODO courier shouldn't be null
+                thatOrderedCourier = new OrderedCourier(header, tail.get(position), null);
                 selectedAddressList.add(tail.get(position));
                 whatToDo = true;
 
