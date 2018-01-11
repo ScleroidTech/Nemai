@@ -65,20 +65,24 @@
                     android:layout_height="66dp"
                     android:layout_marginBottom="8dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="Edit"
                     android:textAlignment="center"
                     android:textColor="#00f"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/delivery_time_text_view"
                     app:srcCompat="@drawable/ic_edit_location_black_24dp" />
 
                 <RadioButton
                     android:id="@+id/select_courier_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/delivery_time_text_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -87,6 +91,10 @@
                     android:id="@+id/delivery_time_text_view"
                     android:layout_width="315dp"
                     android:layout_height="33dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:paddingLeft="35dp"
@@ -95,25 +103,29 @@
                     android:textColor="@color/item_name_color"
                     android:textSize="@dimen/item_name_text_size"
                     app:font='@{"SF-UI-Display-Medium.ttf"}'
-                    tools:layout_editor_absoluteX="35dp"
-                    tools:layout_editor_absoluteY="52dp" />
+                    app:layout_constraintBottom_toBottomOf="@+id/price_text_view"
+                    app:layout_constraintEnd_toStartOf="@+id/select_button"
+                    app:layout_constraintStart_toStartOf="@+id/price_text_view"
+                    app:layout_constraintTop_toBottomOf="@+id/service_type_text_view" />
 
                 <TextView
                     android:id="@+id/price_text_view"
                     android:layout_width="335dp"
-                    android:layout_height="59dp"
+                    android:layout_height="61dp"
 
+                    android:layout_marginBottom="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="8dp"
-                    android:ellipsize="end"
 
+                    android:ellipsize="end"
                     android:maxLines="1"
                     android:text="Rs 2000"
-                    android:textAlignment="textEnd"
 
+                    android:textAlignment="textEnd"
                     android:textColor="@color/colorAccent"
                     android:textSize="22sp"
                     app:font='@{"SF-UI-Display-Regular.ttf"}'
+                    app:layout_constraintBottom_toTopOf="@+id/select_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/service_type_text_view" />
 
