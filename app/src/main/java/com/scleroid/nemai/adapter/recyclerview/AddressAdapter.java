@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.util.DiffUtil;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -200,13 +201,46 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
 
     public void updateSelectedData(int position, List<Address> selected) {
 
-
+//        checkDifference(mDataSelected, selected);
         mDataSelected = selected;
         // swapItems(position);
         //      Log.d("innerItem", "is it here? addData" + mData.size());
 
         notifyDataSetChanged();
         //notifyItemRangeInserted(size, innerDataList.size());
+    }
+
+    /**
+     * TODO FUture Implementation
+     * DIfference Util instead of notifyDataSetChanged,
+     * to improve Performance
+     *
+     * @param oldItems
+     * @param items
+     */
+    private void checkDifference(List<Address> oldItems, List<Address> items) {
+        DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return oldItems.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return items.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                return oldItems.get(oldItemPosition).equals(items.get(newItemPosition));
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                return oldItems.get(oldItemPosition).equals(items.get(newItemPosition));
+            }
+        }).dispatchUpdatesTo(this);
+
     }
 
 
