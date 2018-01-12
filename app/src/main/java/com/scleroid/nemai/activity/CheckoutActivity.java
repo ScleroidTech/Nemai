@@ -25,7 +25,6 @@ import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.ParcelAdapterForAddress;
-import com.scleroid.nemai.controller.AddressLab;
 import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.OrderedCourier;
@@ -50,8 +49,6 @@ import io.bloco.faker.Faker;
 import io.fabric.sdk.android.Fabric;
 
 import static com.google.common.util.concurrent.Runnables.doNothing;
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_ADDRESS;
-import static com.scleroid.nemai.fragment.AddressFragment.EXTRA_NEW_ADDRESS;
 
 
 /**
@@ -255,14 +252,20 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         );
     }
 
+    /**  Adds or updates address using
+     * @see EventBus
+     * is this necessary?
+     *
+     * @param traveller
+     *//*
     @SuppressLint("LongLogTag")
     @DebugLog
     @Subscribe
-    public void onAddressMessage(Events.AddressMessage fragmentActivityMessage) {
-        Bundle bundle = fragmentActivityMessage.getMessage();
-        Address model = bundle.getParcelable(EXTRA_ADDRESS); /*new Address(bundle.getString(EXTRA_NAME), bundle.getString(EXTRA_ADDRESS_LINE_1),
+    public void onAddressMessage(Events.AddressMessage traveller) {
+        Bundle bundle = traveller.getMessage();
+        Address model = bundle.getParcelable(EXTRA_ADDRESS); *//*new Address(bundle.getString(EXTRA_NAME), bundle.getString(EXTRA_ADDRESS_LINE_1),
                 bundle.getString(EXTRA_ADDRESS_LINE_2), bundle.getString(EXTRA_STATE), bundle.getString(EXTRA_CITY), bundle.getString(EXTRA_PIN), bundle.getString(EXTRA_MOBILE), bundle.getLong(EXTRA_SERIAL_NO));
-       */
+       *//*
         Log.d("CHeckout", "onAddress Eventbus");
         if (bundle.getBoolean(EXTRA_NEW_ADDRESS)) {
             AddressLab.addAddress(model, AppDatabase.getAppDatabase(context));
@@ -273,7 +276,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         //   setContent(model);
 
 
-    }
+    }*/
 
     /**
      * //TODO Future Implementation
