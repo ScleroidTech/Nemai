@@ -202,7 +202,7 @@ public class NetworkCalls {
                         isUserExists[0] = jsonObject.getBoolean("status");
 
 
-                        //                      Toast.makeText(getApplicationContext(), "User authentication successful", Toast.LENGTH_LONG).show();
+                        //                      Toast.makeText(getApplicationContext(), "UserProfile authentication successful", Toast.LENGTH_LONG).show();
                     } else {
 
                         // Error occurred in login. Get the error
@@ -394,7 +394,7 @@ public class NetworkCalls {
                         if (error) {
 
 
-                            Toast.makeText(context, "User successfully logged in", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "UserProfile successfully logged in", Toast.LENGTH_LONG).show();
 
                             session.setLogin(true);
 
@@ -483,6 +483,7 @@ public class NetworkCalls {
 
 
                             Toasty.success(context, "Registered successfully, let's verify you", Toast.LENGTH_LONG, true).show();
+                            session.getUser().setUserProfile(firstName, lastName, email, phone, gender);
 
                             //session.setLogin(true);
                             session.setLogin(true);
@@ -569,7 +570,7 @@ public class NetworkCalls {
                         boolean error = jsonObject.getBoolean("status");
                         if (error) {
 
-                            Toast.makeText(context, "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "UserProfile successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
 
                             //session.setLogin(true);
 
@@ -708,7 +709,7 @@ public class NetworkCalls {
                         boolean error = jsonObject.getBoolean("status");
                         if (error) {
 
-                            Toast.makeText(getApplicationContext(), "User successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "UserProfile successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
 
                             //session.setLogin(true);
 

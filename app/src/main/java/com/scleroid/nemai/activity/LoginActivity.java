@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,35 +100,26 @@ public class LoginActivity extends SocialLoginActivity {
 
 
         TextView mRegisterTextView = findViewById(R.id.register_link_text_view);
-        mRegisterTextView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
+        mRegisterTextView.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
 
         TextView mResetPasswordTextView = findViewById(R.id.forgot_password_text_view);
-        mResetPasswordTextView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
-                startActivity(intent);
-            }
+        mResetPasswordTextView.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+            startActivity(intent);
         });
         mLoginFormView = findViewById(R.id.login_form);
 //        mProgressView = findViewById(R.id.login_progress);
 
 
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.sign_in_button || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
+        mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
+            if (id == R.id.sign_in_button || id == EditorInfo.IME_NULL) {
+                attemptLogin();
+                return true;
             }
+            return false;
         });
 
         mPasswordView = findViewById(R.id.password_login);
@@ -139,12 +128,7 @@ public class LoginActivity extends SocialLoginActivity {
 
         Button mSignInButton = findViewById(R.id.sign_in_button);
 
-        mSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+        mSignInButton.setOnClickListener(view -> attemptLogin());
     }
 
 
@@ -213,7 +197,13 @@ public class LoginActivity extends SocialLoginActivity {
 
     }
 
-
+    /**
+     * Checks if the field is a valid Email Address or a Mobile Number
+     * Using Regular Expression
+     *
+     * @param input provided input to check
+     * @return true if it's a valid email or phone, otherwise false
+     */
 
     private boolean isValidField(String input) {
 

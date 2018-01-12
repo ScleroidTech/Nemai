@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -15,7 +14,6 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -25,22 +23,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.network.NetworkCalls;
 import com.scleroid.nemai.volley_support.AppController;
 import com.scleroid.nemai.volley_support.ShowLoader;
 import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 
 import es.dmoral.toasty.Toasty;
 
 import static com.scleroid.nemai.activity.MainActivity.session;
-import static com.scleroid.nemai.network.NetworkCalls.isAlreadyUser;
 
 /**
  * Created by Ganesh on 10-11-2017.
@@ -74,12 +69,7 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
         mCallbackManager = CallbackManager.Factory.create();
         mFBcloneButton = findViewById(R.id.fb_custom);
         final LoginButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
-        mFBcloneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mFacebookLoginButton.performClick();
-            }
-        });
+        mFBcloneButton.setOnClickListener(v -> mFacebookLoginButton.performClick());
 
         /*FancyButton mFacebookLoginButton = findViewById(R.id.facebook_login_button);
         Context hostActivity = context;
@@ -109,7 +99,7 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
                 Log.i(LoginActivity.TAG, "Hello" + loginResult.getAccessToken().getToken());
                 Toasty.success(SocialLoginActivity.this, "Login with Facebook Successful", Toast.LENGTH_SHORT, true).show();
 
-                handleFacebookAccessToken(loginResult.getAccessToken());
+                handleFacebookSignIn(loginResult.getAccessToken());
 
                 loader.dismissDialog();
             }
@@ -133,13 +123,10 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
     protected void buildGoogleSignIn() {
         mGoogleSignInButton = findViewById(R.id.google_sign_in_button);
 
-        mGoogleSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (networkErrorDialog.showDialog()) {
-                    loader.showDialog();
-                    signInGoogle();
-                }
+        mGoogleSignInButton.setOnClickListener(view -> {
+            if (networkErrorDialog.showDialog()) {
+                loader.showDialog();
+                signInGoogle();
             }
         });
         // mGoogleSignInButton.setEnabled(false);
@@ -167,14 +154,11 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
     // [START signOut]
     private void signOut() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // [START_EXCLUDE]
-                        //TODO signout
-                        //updateUI(false);
-                        // [END_EXCLUDE]
-                    }
+                status -> {
+                    // [START_EXCLUDE]
+                    //TODO signout
+                    //updateUI(false);
+                    // [END_EXCLUDE]
                 });
     }
 
@@ -188,7 +172,7 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
         Log.d(LoginActivity.TAG, "onConnectionFailed:" + connectionResult);
     }
 
-    protected void handleGoogleSignInResult(GoogleSignInResult result, Context context) {
+    protected void handleGoogleSignIn(GoogleSignInResult result, Context context) {
         Log.d(LoginActivity.TAG, "handleSignInResult:" + result.toString());
         if (result.isSuccess()) {
             //TODO work on updating the UI & crosscheck if already updated
@@ -200,10 +184,11 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
             lastName = acct.getFamilyName();
             email = acct.getEmail();
             String googleID = acct.getId();
+            String image = acct.getPhotoUrl().toString();
             session.setLoggedInMethod("google");
             Log.d(LoginActivity.TAG, acct.toString());
             // Toast.makeText(this, "firstname " + firstName + "  " + lastName + "  " + email, Toast.LENGTH_LONG).show();
-            checkUser(context);
+            isAlreadyUser(context);
 
             // mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             loader.dismissDialog();
@@ -220,9 +205,70 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
         }
     }
 
-    private void checkUser(Context context) {
+    private void handleFacebookSignIn(AccessToken token) {
+        Log.d(LoginActivity.TAG, "handleFacebookSignIn:" + token);
+
+        GraphRequest request = GraphRequest.newMeRequest(token, (object, response) -> {
+            Log.i(LoginActivity.TAG, response.toString() + object.toString());
+            // Get facebook data from login
+            //Intent i = new Intent(LoginActivity.this,HomePage.class);
+            //startActivity(i);
+            //i.putExtras(bFacebookData);
+
+            try {
+                if (object.has("first_name")) {
+
+                    firstName = object.getString("first_name");
+                }
+                if (object.has("last_name")) {
+                    lastName = object.getString("last_name");
+
+                }
+                if (object.has("email")) {
+                    email = object.getString("email");
+
+                }
+                if (object.has("gender")) {
+                    gender = object.getString("gender");
+                }
+                if (object.has("picture")) {
+                    String image = object.getString("picture");
+                    session.getUser().setUserImageUrl(image, true);
+                } else session.getUser().setUserImageUrl(null, false);
+
+                session.setLoggedInMethod("facebook");
+
+                isAlreadyUser(context);
+//TODO submit to review first
+         /*   if (object.has("location")) {
+                String location = object.getJSONObject("location").getString("name");
+
+            }
+                if (object.has("birthday")) {
+                    String birthday = object.getString("birthday");
+
+                }*/
+            } catch (JSONException e) {
+                Log.d(LoginActivity.TAG, "JSONException " + e);
+                singInFailedFacebook(context);
+            }
+
+
+            //    Toast.makeText(LoginActivity.this, object.toString(), Toast.LENGTH_LONG).show();
+
+        });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id, first_name, last_name, email,gender" /*, birthday, location" */); // Parámetros que pedimos a facebook
+        request.setParameters(parameters);
+        request.executeAsync();
+
+
+    }
+
+
+    private void isAlreadyUser(Context context) {
         loader.showDialog();
-        if (isAlreadyUser(this, email, TAG_USER_EXISTS, loader)) {
+        if (NetworkCalls.isAlreadyUser(this, email, TAG_USER_EXISTS, loader)) {
             Log.d(LoginActivity.TAG, "already a user");
             Toasty.info(context, "Welcome Back!", Toast.LENGTH_SHORT, true).show();
 
@@ -237,22 +283,6 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
             socialRegisterUser(firstName, lastName, email, null, session.getLoggedInMethod());
         }
     }
-
-    private void checkUser() {
-        if (isAlreadyUser(this, email, TAG_USER_EXISTS, loader)) {
-            Log.d(LoginActivity.TAG, "already a user");
-            Toasty.info(context, "Welcome Back!", Toast.LENGTH_SHORT, true).show();
-            loader.dismissDialog();
-            Intent intent = MainActivity.newIntent(this);
-            startActivity(intent);
-            finish();
-        } else {
-            Toasty.info(context, "It's your first time, Let's register first", Toast.LENGTH_SHORT, true).show();
-            Log.d(LoginActivity.TAG, "Not a user, registering");
-            socialRegisterUser(firstName, lastName, email, gender, session.getLoggedInMethod());
-        }
-    }
-
 
     private void singInFailedGoogle(Context context) {
         Toasty.error(context, "There's an error with Google Sign-in, Try another way", Toast.LENGTH_SHORT, true).show();
@@ -274,7 +304,7 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             //   Log.d(TAG, "Result : " + result.isSuccess() + " " + result.getStatus() + "  " + result.getSignInAccount());
-            handleGoogleSignInResult(result, context);
+            handleGoogleSignIn(result, context);
         } else
             //Result from Facebook login
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
@@ -291,7 +321,7 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
             // and the GoogleSignInResult will be available instantly.
             Log.d(TAG, "Got cached sign-in");
             GoogleSignInResult result = opr.get();
-            handleGoogleSignInResult(result);
+            handleGoogleSignIn(result);
         } else {
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
@@ -301,7 +331,7 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
                     showProgress(context, false);
-                    handleGoogleSignInResult(googleSignInResult);
+                    handleGoogleSignIn(googleSignInResult);
                 }
             });
         }
@@ -323,65 +353,6 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
     }
 
 
-    private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(LoginActivity.TAG, "handleFacebookAccessToken:" + token);
-
-        GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
-
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
-                Log.i(LoginActivity.TAG, response.toString());
-                // Get facebook data from login
-                //Intent i = new Intent(LoginActivity.this,HomePage.class);
-                //startActivity(i);
-                //i.putExtras(bFacebookData);
-
-                try {
-                    if (object.has("first_name")) {
-
-                        firstName = object.getString("first_name");
-                    }
-                    if (object.has("last_name")) {
-                        lastName = object.getString("last_name");
-
-                    }
-                    if (object.has("email")) {
-                        email = object.getString("email");
-
-                    }
-                    if (object.has("gender")) {
-                        gender = object.getString("gender");
-                    }
-
-                    session.setLoggedInMethod("facebook");
-
-                    checkUser();
-//TODO submit to review first
-             /*   if (object.has("location")) {
-                    String location = object.getJSONObject("location").getString("name");
-
-                }
-                    if (object.has("birthday")) {
-                        String birthday = object.getString("birthday");
-
-                    }*/
-                } catch (JSONException e) {
-                    Log.d(LoginActivity.TAG, "JSONException " + e);
-                    singInFailedFacebook(context);
-                }
-
-
-                //    Toast.makeText(LoginActivity.this, object.toString(), Toast.LENGTH_LONG).show();
-
-            }
-        });
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id, first_name, last_name, email,gender" /*, birthday, location" */); // Parámetros que pedimos a facebook
-        request.setParameters(parameters);
-        request.executeAsync();
-
-
-    }
 
     protected void socialRegisterUser(final String firstName, final String lastName, final String email, final String gender, final String loginMethod) {
 
