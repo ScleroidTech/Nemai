@@ -139,12 +139,9 @@ public class MainActivity extends AppCompatActivity {
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
         btn_search = findViewById(R.id.btn_search);
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, TrackingActivity.class);
-                startActivity(i);
-            }
+        btn_search.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, TrackingActivity.class);
+            startActivity(i);
         });
 
 
@@ -205,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             Drawable d = getResources().getDrawable(R.drawable.ic_person);
-            imgNavHeaderBg.setImageDrawable(d);
+            imgProfile.setImageDrawable(d);
         }
     }
 
