@@ -13,7 +13,7 @@
     <string name="closeDrawer">close_drawer</string>
 
     <!-- Navigation Drawer menu labels -->
-    <string name="nav_home">Home</string>
+    <string name="dashboard">Dashboard</string>
     <string name="nav_photos">Photos</string>
     <string name="nav_movies">Movies</string>
     <string name="nav_notifications">Notifications</string>
@@ -109,7 +109,7 @@
     <string name="proceed_to_payment">Proceed to payment</string>
 
     <string name="sign_in">Sign in</string>
-    <string name="saved_address">Saved Address</string>
+    <string name="saved_address">Addresses</string>
     <string name="orderedCouriers">Orders</string>
     <string name="courier_partners">Courier Partners</string>
     <string name="notifications">Notifications</string>
@@ -199,7 +199,7 @@
     <string name="connect">Deliver here</string>
     <string name="years">years</string>
     <string name="asked">asked</string>
-    <string name="profile">"'s Profile"</string>
+    <string name="profile">"Profile"</string>
 
     <string name="transition_avatar_border" translatable="false">avatar_border</string>
     <string name="transition_card" translatable="false">card</string>
@@ -215,5 +215,8 @@
     <string name="action_remove">Remove</string>
     <string name="date_picker_title">Courier Pickup Date</string>
     <string name="next">Next</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

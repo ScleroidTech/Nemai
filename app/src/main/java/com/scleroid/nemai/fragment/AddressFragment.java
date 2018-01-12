@@ -2,6 +2,7 @@ package com.scleroid.nemai.fragment;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -14,10 +15,10 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.controller.AddressLab;
 import com.scleroid.nemai.models.Address;
-import com.scleroid.nemai.utils.Events;
-import com.scleroid.nemai.utils.GlobalBus;
 
 /**
  * Created by Ganesh on 20-11-2017.
@@ -35,9 +36,9 @@ AddressFragment extends DialogFragment {
     public static final String EXTRA_BUNDLE = "address_bundle";
     public static final String EXTRA_SERIAL_NO = "serial_no";
     public static final String EXTRA_NEW_ADDRESS = "new_address";
-
     public static final int REQUEST_ADDRESS = 10;
     public static final String EXTRA_ADDRESS = "address";
+    public final String TAG = "AddressFragment";
     private boolean isNewAddress;
 
     public static AddressFragment newInstance(Address address) {
@@ -130,9 +131,10 @@ AddressFragment extends DialogFragment {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 Bundle newBundle = createBundle(cityEditText, pinEditText, stateEditText, addressLine1EditText, addressLine2EditText, nameEditText, mobileEditText, finalSerialNo);
-                Events.AddressMessage addressMessage = new Events.AddressMessage(newBundle);
-                GlobalBus.getBus().post(addressMessage);
-                //   sendResult(Activity.RESULT_OK, newBundle);
+                onAddressMessage(newBundle);
+             /* //  Events.AddressMessage addressMessage = new Events.AddressMessage(newBundle);
+             //Removing addressbus, because this won't be accessible from navigation drawer   GlobalBus.getBus().post(addressMessage);
+                //   sendResult(Activity.RESULT_OK, newBundle);*/
             }
 
 
@@ -144,6 +146,31 @@ AddressFragment extends DialogFragment {
         Address address = new Address(nameEditText.getText().toString(), addressLine1EditText.getText().toString(), addressLine2EditText.getText().toString(), stateEditText.getText().toString(), cityEditText.getText().toString(), pinEditText.getText().toString(), mobileEditText.getText().toString(), serialNo);
 
         return createBundle(address, isNewAddress);
+    }
+
+    /**
+     * Doing address updation without eventBus, Hope this'll work
+     *
+     * @param traveller bundle holding address
+     */
+    public void onAddressMessage(Bundle traveller) {
+        Context context = getActivity().getApplicationContext();
+        Bundle bundle = traveller;
+        Address model = bundle.getParcelable(EXTRA_ADDRESS);
+
+        /*new Address(bundle.getString(EXTRA_NAME), bundle.getString(EXTRA_ADDRESS_LINE_1),
+        bundle.getString(EXTRA_ADDRESS_LINE_2), bundle.getString(EXTRA_STATE), bundle.getString(EXTRA_CITY), bundle.getString(EXTRA_PIN), bundle.getString(EXTRA_MOBILE), bundle.getLong(EXTRA_SERIAL_NO));*/
+
+        Log.d("CHeckout", "onAddress Eventbus");
+        if (bundle.getBoolean(EXTRA_NEW_ADDRESS)) {
+            AddressLab.addAddress(model, AppDatabase.getAppDatabase(context));
+        } else {
+            AddressLab.updateAddress(model, AppDatabase.getAppDatabase(context));
+        }
+        Log.d(TAG, " Is this address method  working");
+        //   setContent(model);
+
+
     }
 
 

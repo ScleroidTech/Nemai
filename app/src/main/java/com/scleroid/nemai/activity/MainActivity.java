@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -35,6 +34,7 @@ import com.scleroid.nemai.fragment.HomeFragment;
 import com.scleroid.nemai.fragment.MoviesFragment;
 import com.scleroid.nemai.fragment.NotificationsFragment;
 import com.scleroid.nemai.fragment.PhotosFragment;
+import com.scleroid.nemai.fragment.ProfileFragment;
 import com.scleroid.nemai.fragment.SettingsFragment;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
@@ -48,17 +48,16 @@ public class MainActivity extends AppCompatActivity {
     // and profile image
     private static final String TAG = MainActivity.class.getSimpleName();
     //TODO add header for cover image of social login
-    private static final String urlNavHeaderBg = "drawable";
-    private static final String urlProfileImg = "https://lh3.googleusercontent.com/-CG0dhPwB76w/AAAAAAAAAAI/AAAAAAAAAB4/H2cuC_7i9FE/s60-p-no/photo.jpg";
     // tags used to attach the fragments
-    private static final String TAG_HOME = "home";
-    private static final String TAG_PHOTOS = "photos";
-    private static final String TAG_MOVIES = "movies";
-    private static final String TAG_NOTIFICATIONS = "notifications";
+    private static final String TAG_DASHBOARD = "dashboard";
+    private static final String TAG_PARTNERS = "partners";
+    private static final String TAG_ADDRESS = "address";
+    private static final String TAG_PROFILE = "profile";
     private static final String TAG_SETTINGS = "settings";
+    private static final String TAG_ORDERS = "orders";
     // index to identify current nav menu item
     public static int navItemIndex = 0;
-    public static String CURRENT_TAG = TAG_HOME;
+    public static String CURRENT_TAG = TAG_DASHBOARD;
     public static SessionManager session;
     public Context mContext;
     ImageButton btn_search;
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             navItemIndex = 0;
-            CURRENT_TAG = TAG_HOME;
+            CURRENT_TAG = TAG_DASHBOARD;
             loadHomeFragment();
         }
 
@@ -221,26 +220,31 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(menuItem -> {
 
             //Check to see which item was being clicked and perform appropriate action
-      /*      switch (menuItem.getItemId()) {
+            switch (menuItem.getItemId()) {
                 //Replacing the main content with ContentFragment Which is our Inbox View;
-                case R.id.home:
+                case R.id.nav_dashboard:
                     navItemIndex = 0;
-                    CURRENT_TAG = TAG_HOME;
+                    CURRENT_TAG = TAG_DASHBOARD;
                     break;
-                case R.id.nav_partners:
+                case R.id.nav_orders:
                     navItemIndex = 1;
-                    CURRENT_TAG = TAG_PHOTOS;
+                    CURRENT_TAG = TAG_ORDERS;
                     break;
                 case R.id.nav_address:
                     navItemIndex = 2;
-                    CURRENT_TAG = TAG_MOVIES;
+                    CURRENT_TAG = TAG_ADDRESS;
                     break;
-                case R.id.nav_notifications:
+                case R.id.nav_partners:
                     navItemIndex = 3;
-                    CURRENT_TAG = TAG_NOTIFICATIONS;
+                    CURRENT_TAG = TAG_PARTNERS;
+                    break;
+
+                case R.id.nav_profile:
+                    navItemIndex = 4;
+                    CURRENT_TAG = TAG_PROFILE;
                     break;
                 case R.id.nav_settings:
-                    navItemIndex = 4;
+                    navItemIndex = 5;
                     CURRENT_TAG = TAG_SETTINGS;
                     break;
                 case R.id.nav_about_us:
@@ -255,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 default:
                     navItemIndex = 0;
-            }*/
+            }
 
             //Checking if the item is in checked state or not, if not make it in checked state
             if (menuItem.isChecked()) {
@@ -287,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         //Setting the actionbarToggle to drawer layout
-        drawer.setDrawerListener(actionBarDrawerToggle);
+        drawer.addDrawerListener(actionBarDrawerToggle);
 
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
@@ -307,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
             // rather than home
             if (navItemIndex != 0) {
                 navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
+                CURRENT_TAG = TAG_DASHBOARD;
                 loadHomeFragment();
                 return;
             }
@@ -342,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
        /* mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return getHomeFragment();
+                return getCurrentFragment();
             }
 
             @Override
@@ -353,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
         Runnable mPendingRunnable = () -> {
             // update the main content by replacing fragments
 
-            Fragment fragment = getHomeFragment();
+            Fragment fragment = getCurrentFragment();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                     android.R.anim.fade_out);
@@ -382,25 +386,30 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(activityTitles[navItemIndex]);
     }
 
-    private Fragment getHomeFragment() {
+    private Fragment getCurrentFragment() {
         switch (navItemIndex) {
             case 0:
-                // home
+                // dashboard
                 return new HomeFragment();
             case 1:
-                // photos
+                // orders
 
                 return new PhotosFragment();
             case 2:
-                // movies fragment
+                // address fragment
                 return new MoviesFragment();
             case 3:
-                // notifications fragment
+                // partners fragment
                 return new NotificationsFragment();
 
             case 4:
-                // settings fragment
+                // profile fragment
+                return new ProfileFragment();
+
+            case 5:
+                //setting fragment
                 return new SettingsFragment();
+
             default:
                 return new HomeFragment();// HomeFragment.newInstance(HomeFragment.parcelCount);
         }
@@ -413,9 +422,9 @@ public class MainActivity extends AppCompatActivity {
         // show menu only when home fragment is selected
 
         // when fragment is notifications, load the menu created for notifications
-        if (navItemIndex == 3) {
+        /*if (navItemIndex == 3) {
             getMenuInflater().inflate(R.menu.notifications, menu);
-        }
+        }*/
         return true;
     }
 
@@ -427,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
+       /* if (id == R.id.action_logout) {
 
             Intent i = new Intent(MainActivity.this, TrackingActivity.class);
             startActivity(i);
@@ -445,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_clear_notifications) {
             Toast.makeText(getApplicationContext(), "Clear all notifications!", Toast.LENGTH_LONG).show();
         }
-
+*/
         return super.onOptionsItemSelected(item);
     }
 
