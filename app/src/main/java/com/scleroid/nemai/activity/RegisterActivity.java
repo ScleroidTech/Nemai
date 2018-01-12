@@ -152,7 +152,7 @@ public class RegisterActivity extends SocialLoginActivity {
             // and the GoogleSignInResult will be available instantly.
             Log.d(TAG, "Got cached sign-in");
             GoogleSignInResult result = opr.get();
-            handleGoogleSignInResult(result);
+            handleGoogleSignIn(result);
         } else {
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
@@ -162,7 +162,7 @@ public class RegisterActivity extends SocialLoginActivity {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
                     showProgress(false);
-                    handleGoogleSignInResult(googleSignInResult);
+                    handleGoogleSignIn(googleSignInResult);
                 }
             });
         }

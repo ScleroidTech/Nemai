@@ -157,7 +157,7 @@ public class ResetPasswordActivity extends EmailAutoCompleteActivity {
                         if (!error) {
 
 
-                            Toast.makeText(getApplicationContext(), "User successfully logged in", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "UserProfile successfully logged in", Toast.LENGTH_LONG).show();
 
                             session.setLogin(true);
 

@@ -3,6 +3,7 @@ package com.scleroid.nemai.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -46,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
     // urls to load navigation header background image
     // and profile image
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String urlNavHeaderBg = "http://api.androidhive.info/images/nav-menu-header-bg.jpg";
+    //TODO add header for cover image of social login
+    private static final String urlNavHeaderBg = "drawable";
     private static final String urlProfileImg = "https://lh3.googleusercontent.com/-CG0dhPwB76w/AAAAAAAAAAI/AAAAAAAAAB4/H2cuC_7i9FE/s60-p-no/photo.jpg";
     // tags used to attach the fragments
     private static final String TAG_HOME = "home";
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private View navHeader;
     private ImageView imgNavHeaderBg, imgProfile;
-    private TextView txtName, txtWebsite;
+    private TextView txtName;
     private Toolbar toolbar;
     private FloatingActionButton fab;
     // toolbar titles respected to selected nav menu item
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
         txtName = navHeader.findViewById(R.id.name);
-        txtWebsite = navHeader.findViewById(R.id.website);
+
         imgNavHeaderBg = navHeader.findViewById(R.id.img_header_bg);
         imgProfile = navHeader.findViewById(R.id.img_profile);
 
@@ -169,26 +171,51 @@ public class MainActivity extends AppCompatActivity {
      * name, website, notifications action view (dot)
      */
     private void loadNavHeader() {
-        // TODO add model for registration & then change data here
-        txtName.setText("Ravi Tamada");
-        txtWebsite.setText("www.androidhive.info");
 
-        // loading header background image
+        txtName.setText(String.format("%s %s", session.getUser().getUserFirstName(), session.getUser().getUserLastName()));
+
+        /*// loading header background image
         Glide.with(this).load(urlNavHeaderBg)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgNavHeaderBg);
+                .into(imgNavHeaderBg);*/
+        setHeaderBackgroundImage();
 
-        // Loading profile image
-        Glide.with(this).load(urlProfileImg)
-                .crossFade()
-                .thumbnail(0.5f)
-                .bitmapTransform(new CircleTransform(this))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgProfile);
+
+        setUserProfilePicture();
 
         // showing dot next to notifications label
         navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
+    }
+
+    /**
+     * Sets profile picture of user if exists
+     * if doesn't, uses the default profile picture of the user
+     */
+    private void setUserProfilePicture() {
+        if (session.getUser().isUserImageExists()) {
+            String profileURl = session.getUser().getUserImageUrl();
+            // Loading profile image
+            Glide.with(this).load(profileURl)
+                    .crossFade()
+                    .thumbnail(0.5f)
+                    .bitmapTransform(new CircleTransform(this))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imgProfile);
+
+        } else {
+            Drawable d = getResources().getDrawable(R.drawable.ic_person);
+            imgNavHeaderBg.setImageDrawable(d);
+        }
+    }
+
+    /**
+     * sets the default image as navigation header
+     * TODO add cover image from facebook or google as header background
+     */
+    private void setHeaderBackgroundImage() {
+        Drawable d = getResources().getDrawable(R.drawable.nav_drawer_header);
+        imgNavHeaderBg.setImageDrawable(d);
     }
 
     private void setUpNavigationView() {

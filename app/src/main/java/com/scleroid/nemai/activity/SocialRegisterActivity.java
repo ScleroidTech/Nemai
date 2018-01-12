@@ -166,10 +166,10 @@ public class SocialRegisterActivity extends AppCompatActivity {
     }
 
     public void onButtonClicked(View view) {
-        attemptSignup();
+        attemptSignUp();
     }
 
-    private void attemptSignup() {
+    private void attemptSignUp() {
         String mobile = getE164Number();
         registerUser(SocialRegisterActivity.this, mFirstName, mLastName, mEmail, mobile, mGender, null, mLoginMethod, countryCodePicker.getDefaultCountryCode(), TAG_REGISTER_USER, loader);
 
