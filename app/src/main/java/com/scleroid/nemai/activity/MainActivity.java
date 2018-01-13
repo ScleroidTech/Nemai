@@ -30,10 +30,10 @@ import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.SessionManager;
 import com.scleroid.nemai.controller.ParcelLab;
+import com.scleroid.nemai.fragment.AddressListFragment;
 import com.scleroid.nemai.fragment.HomeFragment;
-import com.scleroid.nemai.fragment.MoviesFragment;
-import com.scleroid.nemai.fragment.NotificationsFragment;
-import com.scleroid.nemai.fragment.PhotosFragment;
+import com.scleroid.nemai.fragment.OrdersFragment;
+import com.scleroid.nemai.fragment.PartnersFragment;
 import com.scleroid.nemai.fragment.ProfileFragment;
 import com.scleroid.nemai.fragment.SettingsFragment;
 import com.scleroid.nemai.models.Parcel;
@@ -392,15 +392,14 @@ public class MainActivity extends AppCompatActivity {
                 // dashboard
                 return new HomeFragment();
             case 1:
-                // orders
-
-                return new PhotosFragment();
+                // orders fragment
+                return new OrdersFragment();
             case 2:
                 // address fragment
-                return new MoviesFragment();
+                return new AddressListFragment();
             case 3:
                 // partners fragment
-                return new NotificationsFragment();
+                return new PartnersFragment();
 
             case 4:
                 // profile fragment

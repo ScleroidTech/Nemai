@@ -4,8 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +14,12 @@ import com.scleroid.nemai.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MoviesFragment.OnFragmentInteractionListener} interface
+ * {@link OrdersFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MoviesFragment#newInstance} factory method to
+ * Use the {@link OrdersFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MoviesFragment extends Fragment {
+public class OrdersFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -33,7 +31,7 @@ public class MoviesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public MoviesFragment() {
+    public OrdersFragment() {
         // Required empty public constructor
     }
 
@@ -43,11 +41,11 @@ public class MoviesFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MoviesFragment.
+     * @return A new instance of fragment OrdersFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MoviesFragment newInstance(String param1, String param2) {
-        MoviesFragment fragment = new MoviesFragment();
+    public static OrdersFragment newInstance(String param1, String param2) {
+        OrdersFragment fragment = new OrdersFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -68,49 +66,9 @@ public class MoviesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_movies, container, false);
-
-
-        RecyclerView recList = v.findViewById(R.id.cardList);
-        recList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(llm);
-
-
-
-
-        //list package
-
-
-        return v;
+        return inflater.inflate(R.layout.fragment_orders, container, false);
     }
 
-    /*
-      /*  private List<PackageInfo> createList(int size) {
-            List<PackageInfo> result = new ArrayList<PackageInfo>();
-            for (int i = 1; i <= size; i++) {
-                PackageInfo ci = new PackageInfo();
-                ci.package1 = PackageInfo.PACKAGE1_PREFIX + i;
-                ci.name = PackageInfo.NAME_PREFIX + i;
-                ci.surname = PackageInfo.SURNAME_PREFIX + i;
-                ci.address = PackageInfo.ADDRESS_PREFIX + i;
-                ci.pincode = PackageInfo.PINCODE_PREFIX + i;
-                ci.district = PackageInfo.DISTRICT_PREFIX + i;
-                ci.state = PackageInfo.STATE_PREFIX + i;
-                ci.email = PackageInfo.EMAIL_PREFIX + i + "@gmail.com";
-
-                result.add(ci);
-
-            }
-
-            return result;
-        }
-        //end list package
-
-    *//*
-
-*/
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

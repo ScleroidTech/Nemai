@@ -22,11 +22,15 @@
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
-        <item>Home</item>
-        <item>Photos</item>
-        <item>Movies</item>
-        <item>Notifications</item>
+        <item>Dashboard</item>
+        <item>Order</item>
+        <item>Address</item>
+        <item>Partners</item>
+        <item>Profile</item>
         <item>Settings</item>
+        <item>About Us</item>
+
+        <item>Privacy Policy</item>
     </string-array>
 
     <string name="activity_title_about_us">About Us</string>
