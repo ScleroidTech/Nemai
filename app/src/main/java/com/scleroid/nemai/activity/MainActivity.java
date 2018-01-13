@@ -2,7 +2,6 @@ package com.scleroid.nemai.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -123,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        drawer.setScrimColor(Color.parseColor("#33000000"));
+        //     drawer.setScrimColor(Color.parseColor("#33000000"));
 
         //  mViewPager = findViewById(R.id.frame_pager);
 
