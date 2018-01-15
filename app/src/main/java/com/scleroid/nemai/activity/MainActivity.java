@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_ORDERS = "orders";
     // index to identify current nav menu item
     public static int navItemIndex = 0;
-    public static String CURRENT_TAG = TAG_DASHBOARD;
+    public static String CURRENT_TAG = TAG_ADDRESS /*TAG_DASHBOARD*/;
     public static SessionManager session;
     public Context mContext;
     ImageButton btn_search;

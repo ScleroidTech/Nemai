@@ -10,10 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.activity.CheckoutActivity;
+import com.scleroid.nemai.adapter.recyclerview.AddressAdapter;
+import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.viewmodels.AddressViewModel;
+
+import java.util.List;
 
 
 /**
@@ -35,6 +39,10 @@ public class AddressListFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private List<Address> addresses;
+    private TextView noAddressTitleTextView;
+    private TextView noAddressSubtitleTextView;
 
     public AddressListFragment() {
         // Required empty public constructor
@@ -72,20 +80,42 @@ public class AddressListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_address_list, container, false);
+        noAddressTitleTextView = v.findViewById(R.id.no_address_title);
+        noAddressSubtitleTextView = v.findViewById(R.id.no_address_subtitle);
 
 
         RecyclerView addressRecyclerView = v.findViewById(R.id.addressRecyclerView);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        addressRecyclerView.setLayoutManager(llm);
 
-        AddressViewModel addressViewModel = ViewModelProviders.of(CheckoutActivity.this).get(AddressViewModel.class);
+
+        AddressViewModel addressViewModel = ViewModelProviders.of(AddressListFragment.this).get(AddressViewModel.class);
+        addressViewModel.getAddressList().observe(AddressListFragment.this, addresses -> {
+         /*   parcelAdapterForAddress.updateAddressList(addresses);
+            parcelAdapterForAddress.notifyDataSetChanged();*/
+        });
+        if (addresses != null && !addresses.isEmpty()) {
+            noAddressTitleTextView.setVisibility(View.GONE);
+            noAddressSubtitleTextView.setVisibility(View.GONE);
+            addressRecyclerView.setVisibility(View.VISIBLE);
+            setupRecyclerView(addressRecyclerView);
+        } else {
+            noAddressTitleTextView.setVisibility(View.VISIBLE);
+            noAddressSubtitleTextView.setVisibility(View.VISIBLE);
+            addressRecyclerView.setVisibility(View.GONE);
+
+        }
 
 
         //list package
 
 
         return v;
+    }
+
+    public void setupRecyclerView(RecyclerView addressRecyclerView) {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        addressRecyclerView.setLayoutManager(linearLayoutManager);
+        addressRecyclerView.setAdapter(new AddressAdapter());
     }
 
 
