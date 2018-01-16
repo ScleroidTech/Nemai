@@ -2,7 +2,6 @@ package com.scleroid.nemai.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -23,8 +22,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.SessionManager;
@@ -37,7 +34,7 @@ import com.scleroid.nemai.fragment.ProfileFragment;
 import com.scleroid.nemai.fragment.SettingsFragment;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
-import com.scleroid.nemai.other.CircleTransform;
+import com.scleroid.nemai.utils.ProfileUtils;
 
 import java.util.List;
 
@@ -56,8 +53,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_ORDERS = "orders";
     // index to identify current nav menu item
     public static int navItemIndex = 0;
-    public static String CURRENT_TAG = TAG_ADDRESS /*TAG_DASHBOARD*/;
+    public static String CURRENT_TAG = TAG_DASHBOARD;
     public static SessionManager session;
+    private final ProfileUtils profileUtils = new ProfileUtils(this);
     public Context mContext;
     ImageButton btn_search;
     int[] totalParcels;
@@ -167,51 +165,23 @@ public class MainActivity extends AppCompatActivity {
      */
     private void loadNavHeader() {
 
-        txtName.setText(String.format("%s %s", session.getUser().getUserFirstName(), session.getUser().getUserLastName()));
+        profileUtils.setProfileName(txtName);
 
         /*// loading header background image
         Glide.with(this).load(urlNavHeaderBg)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imgNavHeaderBg);*/
-        setHeaderBackgroundImage();
+        profileUtils.setHeaderBackgroundImage(imgNavHeaderBg);
 
 
-        setUserProfilePicture();
+        profileUtils.setUserProfilePicture(imgProfile);
 
         // showing dot next to notifications label
         navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
     }
 
-    /**
-     * Sets profile picture of user if exists
-     * if doesn't, uses the default profile picture of the user
-     */
-    private void setUserProfilePicture() {
-        if (session.getUser().isUserImageExists()) {
-            String profileURl = session.getUser().getUserImageUrl();
-            // Loading profile image
-            Glide.with(this).load(profileURl)
-                    .crossFade()
-                    .thumbnail(0.5f)
-                    .bitmapTransform(new CircleTransform(this))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(imgProfile);
 
-        } else {
-            Drawable d = getResources().getDrawable(R.drawable.ic_person);
-            imgProfile.setImageDrawable(d);
-        }
-    }
-
-    /**
-     * sets the default image as navigation header
-     * TODO add cover image from facebook or google as header background
-     */
-    private void setHeaderBackgroundImage() {
-        Drawable d = getResources().getDrawable(R.drawable.nav_drawer_header);
-        imgNavHeaderBg.setImageDrawable(d);
-    }
 
     private void setUpNavigationView() {
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
@@ -463,4 +433,6 @@ public class MainActivity extends AppCompatActivity {
         AppDatabase.destroyInstance();
         super.onDestroy();
     }
+
+
 }
