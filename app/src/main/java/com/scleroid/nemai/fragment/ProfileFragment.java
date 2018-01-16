@@ -1,6 +1,7 @@
 package com.scleroid.nemai.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.activity.PasswordChangeActivity;
+import com.scleroid.nemai.activity.SocialRegisterActivity;
 import com.scleroid.nemai.utils.ProfileUtils;
 
 import es.dmoral.toasty.Toasty;
@@ -46,6 +49,7 @@ public class ProfileFragment extends Fragment {
     private ImageView headerCover;
     private Button updateButton;
     private boolean toggle = false;
+    private Button changePassword;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -95,6 +99,10 @@ public class ProfileFragment extends Fragment {
                 //TODO post this updates to server
             } else toggleEditing(true);
         });
+        changePassword.setOnClickListener(l -> {
+            Intent verification = new Intent(ProfileFragment.this.getContext(), PasswordChangeActivity.class);
+            verification.putExtra(SocialRegisterActivity.INTENT_PHONENUMBER, mobileNumber.getText().toString());
+        });
         toggleEditing(false);
         return view;
     }
@@ -118,7 +126,7 @@ public class ProfileFragment extends Fragment {
         emailEditText = view.findViewById(R.id.email_text_input_edit_text);
         mobileNumber = view.findViewById(R.id.mobile_text_input_edit_text);
         updateButton = view.findViewById(R.id.update_profile_button);
-
+        changePassword = view.findViewById(R.id.change_password);
 
     }
 
