@@ -65,6 +65,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/details_avatar_border"
+                android:background="@color/colorPrimaryDark"
                 android:scaleType="centerCrop" />
 
         </FrameLayout>
@@ -172,6 +173,22 @@
             app:layout_constraintBottom_toBottomOf="@+id/card"
             app:layout_constraintEnd_toEndOf="@+id/card"
             app:layout_constraintStart_toStartOf="@+id/card" />
+
+        <Button
+            android:id="@+id/change_password"
+            android:layout_width="257dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/green_corners_top"
+            android:text="Change Password"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/update_profile_button"
+            app:layout_constraintEnd_toEndOf="@+id/card"
+            app:layout_constraintStart_toStartOf="@+id/card"
+            app:layout_constraintTop_toBottomOf="@+id/mobile_text_input_edit_text" />
         <!--android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
