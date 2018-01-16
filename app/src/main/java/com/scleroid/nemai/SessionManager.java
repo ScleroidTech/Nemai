@@ -121,7 +121,6 @@ public class SessionManager {
         }
 
         public void setUserProfile(String first_name, String last_name, String email, String phone, String gender) {
-            editor.clear();
             editor.putString(USER_FIRST_NAME, first_name);
             editor.putString(USER_LAST_NAME, last_name);
             editor.putString(USER_EMAIL, email);
@@ -137,7 +136,6 @@ public class SessionManager {
 
             editor.putString(USER_EMAIL, email);
             editor.putString(USER_PHONE, phone);
-
 
             editor.apply();
 

@@ -80,7 +80,6 @@
             android:enabled="false"
             android:gravity="center"
             android:maxLines="1"
-            android:text="John Doe"
             android:textColor="@color/details_name_color"
             android:textSize="24sp"
             app:font='@{"SF-UI-Display-Regular.ttf"}'
@@ -116,7 +115,6 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="2"
-            android:text="anonymous@gmail.com"
             android:textColor="@color/details_status_color"
             android:textSize="18.4sp"
             app:font='@{"SF-UI-Display-Semibold.ttf"}'
@@ -135,7 +133,6 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="2"
-            android:text="7588844548"
             android:textColor="@color/details_status_color"
             android:textSize="18.4sp"
             app:font='@{"SF-UI-Display-Semibold.ttf"}'
