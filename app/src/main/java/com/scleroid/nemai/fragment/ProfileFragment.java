@@ -14,13 +14,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.activity.PasswordChangeActivity;
 import com.scleroid.nemai.activity.SocialRegisterActivity;
 import com.scleroid.nemai.utils.ProfileUtils;
 
+import java.util.regex.Pattern;
+
 import es.dmoral.toasty.Toasty;
 
+import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
 import static com.scleroid.nemai.activity.MainActivity.session;
 
 /**
@@ -50,6 +54,7 @@ public class ProfileFragment extends Fragment {
     private Button updateButton;
     private boolean toggle = false;
     private Button changePassword;
+    private AwesomeValidation mAwesomeValidation;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -89,13 +94,17 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         profileUtils = new ProfileUtils(getActivity());
+        mAwesomeValidation = new AwesomeValidation(TEXT_INPUT_LAYOUT);
+        setupValidation();
         initializeViews(view);
         updateViews();
         updateButton.setOnClickListener((View l) -> {
             if (toggle) {
-                session.getUser().setUserMobileAndEmail(mobileNumber.getText().toString(), emailEditText.getText().toString());
-                toggleEditing(false);
-                Toasty.success(ProfileFragment.this.getContext(), "Your Details Have been Updated", Toast.LENGTH_LONG).show();
+                if (mAwesomeValidation.validate()) {
+                    session.getUser().setUserMobileAndEmail(mobileNumber.getText().toString(), emailEditText.getText().toString());
+                    toggleEditing(false);
+                    Toasty.success(ProfileFragment.this.getContext(), "Your Details Have been Updated", Toast.LENGTH_LONG).show();
+                }
                 //TODO post this updates to server
             } else toggleEditing(true);
         });
@@ -116,6 +125,17 @@ public class ProfileFragment extends Fragment {
         mobileNumber.setText(session.getUser().getUserPhone());
 
     }
+
+    private void setupValidation() {
+        //adding validation to edit-texts
+
+        Pattern regexEmail = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        mAwesomeValidation.addValidation(this.getActivity(), R.id.email_text_input_edit_text, regexEmail, R.string.emailerror);
+        mAwesomeValidation.addValidation(this.getActivity(), R.id.mobile_text_input_edit_text, "^[789]\\d{9}$", R.string.mobileerror);
+
+
+    }
+
 
     public void initializeViews(View view) {
         headerCover = view.findViewById(R.id.header_cover);
