@@ -92,8 +92,10 @@ public class AddressListFragment extends Fragment {
         addressViewModel.getAddressList().observe(AddressListFragment.this, addresses -> {
          /*   parcelAdapterForAddress.updateAddressList(addresses);
             parcelAdapterForAddress.notifyDataSetChanged();*/
-            addressAdapter.setAddresses(addresses);
-            addressAdapter.notifyDataSetChanged();
+            if (addresses != null && !addresses.isEmpty()) {
+                addressAdapter.setAddresses(addresses);
+                addressAdapter.notifyDataSetChanged();
+            }
         });
         if (addresses != null && !addresses.isEmpty()) {
             noAddressTitleTextView.setVisibility(View.GONE);
@@ -104,7 +106,6 @@ public class AddressListFragment extends Fragment {
             noAddressTitleTextView.setVisibility(View.VISIBLE);
             noAddressSubtitleTextView.setVisibility(View.VISIBLE);
             addressRecyclerView.setVisibility(View.GONE);
-
         }
 
 

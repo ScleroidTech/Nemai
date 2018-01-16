@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.utils.ProfileUtils;
@@ -32,7 +33,7 @@ public class ProfileFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private final ProfileUtils profileUtils = new ProfileUtils(getContext());
+    private ProfileUtils profileUtils;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -83,15 +84,28 @@ public class ProfileFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        profileUtils = new ProfileUtils(getActivity());
         initializeViews(view);
         updateViews();
+        updateButton.setOnClickListener((View l) -> {
+            if (toggle) {
+                session.getUser().setUserMobileAndEmail(mobileNumber.getText().toString(), emailEditText.getText().toString());
+                toggleEditing(false);
+                Toasty.success(ProfileFragment.this.getContext(), "Your Details Have been Updated", Toast.LENGTH_LONG).show();
+                //TODO post this updates to server
+            } else toggleEditing(true);
+        });
+        toggleEditing(false);
         return view;
     }
 
     private void updateViews() {
-        profileUtils.setHeaderBackgroundImage(headerCover);
+        //TO be set later      profileUtils.setHeaderBackgroundImage(headerCover);
         profileUtils.setUserProfilePicture(avatar);
         profileUtils.setProfileName(nameTextView);
+        genderTextView.setText(session.getUser().getUserGender());
+        emailEditText.setText(session.getUser().getUserEmail());
+        mobileNumber.setText(session.getUser().getUserPhone());
 
     }
 
@@ -102,17 +116,10 @@ public class ProfileFragment extends Fragment {
         nameTextView = view.findViewById(R.id.name_text_view);
 
         emailEditText = view.findViewById(R.id.email_text_input_edit_text);
-        toggleEditing(false);
         mobileNumber = view.findViewById(R.id.mobile_text_input_edit_text);
         updateButton = view.findViewById(R.id.update_profile_button);
-        updateButton.setOnClickListener(l -> {
-            if (toggle) {
-                session.getUser().setUserMobileAndEmail(mobileNumber.getText().toString(), emailEditText.getText().toString());
-                toggleEditing(false);
-                Toasty.success(getContext(), "Your Details Have been Updated");
-                //TODO post this updates to server
-            } else toggleEditing(true);
-        });
+
+
     }
 
     /**
