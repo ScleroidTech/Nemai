@@ -1,13 +1,282 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.scleroid.nemai.fragment.ProfileFragment">
+        android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        <ImageView
+            android:id="@+id/header_cover"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/details_top_background"
+            android:transitionName="@string/transition_background"
+            app:layout_constraintBottom_toBottomOf="@+id/name_text_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/details_image_gradient"
+            app:layout_constraintBottom_toBottomOf="@+id/header_cover"
+            app:layout_constraintLeft_toLeftOf="@+id/header_cover"
+            app:layout_constraintRight_toRightOf="@+id/header_cover"
+            app:layout_constraintTop_toTopOf="@+id/frameLayout" />
+
+        <View
+            android:id="@+id/card"
+            android:layout_width="317dp"
+            android:layout_height="423dp"
+            android:layout_marginBottom="80dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:background="@drawable/white_corners"
+            android:transitionName="@string/transition_card"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/header_cover"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/avatar_border_details"
+            android:transitionName="@string/transition_avatar_border"
+            app:layout_constraintBottom_toTopOf="@+id/card"
+            app:layout_constraintLeft_toLeftOf="@+id/card"
+            app:layout_constraintRight_toRightOf="@+id/card"
+            app:layout_constraintTop_toTopOf="@+id/card">
+
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/details_avatar_border"
+                android:scaleType="centerCrop" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/name_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="16dp"
+            android:ellipsize="end"
+            android:enabled="false"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="John Doe"
+            android:textColor="@color/details_name_color"
+            android:textSize="24sp"
+            app:font='@{"SF-UI-Display-Regular.ttf"}'
+            app:layout_constraintLeft_toLeftOf="@+id/card"
+            app:layout_constraintRight_toRightOf="@+id/card"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+
+        <TextView
+            android:id="@+id/agender_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text=" 23 years old, Male"
+            android:textColor="@color/details_info_color"
+            android:textSize="17sp"
+            app:font='@{"SF-UI-Display-Regular.ttf"}'
+            app:layout_constraintLeft_toLeftOf="@+id/card"
+            app:layout_constraintRight_toRightOf="@+id/card"
+            app:layout_constraintTop_toBottomOf="@+id/name_text_view" />
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/email_text_input_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="anonymous@gmail.com"
+            android:textColor="@color/details_status_color"
+            android:textSize="18.4sp"
+            app:font='@{"SF-UI-Display-Semibold.ttf"}'
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/card"
+            app:layout_constraintRight_toRightOf="@+id/card"
+            app:layout_constraintTop_toBottomOf="@+id/agender_text_view" />
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/mobile_text_input_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="7588844548"
+            android:textColor="@color/details_status_color"
+            android:textSize="18.4sp"
+            app:font='@{"SF-UI-Display-Semibold.ttf"}'
+            app:layout_constraintLeft_toLeftOf="@+id/card"
+            app:layout_constraintRight_toRightOf="@+id/card"
+            app:layout_constraintTop_toBottomOf="@+id/email_text_input_edit_text" />
+
+        <!-- TODO future implementation
+         <android.support.design.widget.TextInputEditText
+              android:id="@+id/date_of_birth_text_input_edit_text"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="8dp"
+              android:layout_marginLeft="32dp"
+              android:layout_marginRight="32dp"
+              android:layout_marginTop="8dp"
+              android:ellipsize="end"
+              android:gravity="center"
+              android:maxLines="2"
+              android:text="21 Jan, 2018"
+              android:textColor="@color/details_status_color"
+              android:textSize="18.4sp"
+              app:font='@{"SF-UI-Display-Semibold.ttf"}'
+              app:layout_constraintBottom_toTopOf="@+id/update_profile_button"
+              app:layout_constraintHorizontal_bias="0.0"
+              app:layout_constraintLeft_toLeftOf="@+id/card"
+              app:layout_constraintRight_toRightOf="@+id/card"
+              app:layout_constraintTop_toBottomOf="@+id/mobile_text_input_edit_text" />-->
+
+        <Button
+            android:id="@+id/update_profile_button"
+            android:layout_width="317dp"
+            android:layout_height="59dp"
+            android:background="@color/colorPrimary"
+            android:text="Update Profile"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/card"
+            app:layout_constraintEnd_toEndOf="@+id/card"
+            app:layout_constraintStart_toStartOf="@+id/card" />
+        <!--android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/details_lists_corners_bottom"
+            android:layout_marginBottom="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="0dp"
+            app:layout_constraintRight_toRightOf="@+id/card"
+            app:layout_constraintLeft_toLeftOf="@+id/card"
+            app:layout_constraintBottom_toBottomOf="@+id/card"
+            app:layout_constraintTop_toBottomOf="@+id/tv_status" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintLeft_toLeftOf="@+id/recycler_view"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+            android:id="@+id/linearLayout3">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/button_connect"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/details_connect"
+                android:textColor="@android:color/white"
+                android:alpha="0.5"
+                app:font='@{"SF-UI-Display-Semibold.ttf"}' />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/linearLayout2"
+            android:clickable="true"
+            android:onClick="onCloseClick"
+            android:layout_marginLeft="0dp"
+            app:layout_constraintLeft_toLeftOf="@+id/recycler_view"
+            android:layout_marginRight="0dp"
+            app:layout_constraintRight_toRightOf="@+id/recycler_view"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/button_close"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/details_close"
+                android:textColor="@android:color/white"
+                android:alpha="0.5"
+                app:font='@{"SF-UI-Display-Semibold.ttf"}' />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:onClick="onDetailsClick"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+            android:layout_marginRight="16dp"
+            app:layout_constraintRight_toRightOf="@+id/recycler_view">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/button_details"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/details_details"
+                android:textColor="@android:color/white"
+                android:alpha="0.5"
+                app:font='@{"SF-UI-Display-Semibold.ttf"}' />
+        </LinearLayout>
+
+    -->
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

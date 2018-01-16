@@ -133,6 +133,16 @@ public class SessionManager {
 
         }
 
+        public void setUserMobileAndEmail(String phone, String email) {
+
+            editor.putString(USER_EMAIL, email);
+            editor.putString(USER_PHONE, phone);
+
+
+            editor.apply();
+
+        }
+
         public void setUserImageUrl(String profileUrl, boolean isUrlSet) {
             editor.putBoolean(KEY_USER_IMAGE_EXISTS, isUrlSet);
             editor.putString(USER_IMAGE_URL, profileUrl);
