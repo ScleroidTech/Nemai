@@ -43,6 +43,7 @@ public class AddressListFragment extends Fragment {
     private List<Address> addresses;
     private TextView noAddressTitleTextView;
     private TextView noAddressSubtitleTextView;
+    private AddressAdapter addressAdapter;
 
     public AddressListFragment() {
         // Required empty public constructor
@@ -91,6 +92,8 @@ public class AddressListFragment extends Fragment {
         addressViewModel.getAddressList().observe(AddressListFragment.this, addresses -> {
          /*   parcelAdapterForAddress.updateAddressList(addresses);
             parcelAdapterForAddress.notifyDataSetChanged();*/
+            addressAdapter.setAddresses(addresses);
+            addressAdapter.notifyDataSetChanged();
         });
         if (addresses != null && !addresses.isEmpty()) {
             noAddressTitleTextView.setVisibility(View.GONE);
@@ -115,7 +118,8 @@ public class AddressListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         addressRecyclerView.setLayoutManager(linearLayoutManager);
-        addressRecyclerView.setAdapter(new AddressAdapter());
+        addressAdapter = new AddressAdapter();
+        addressRecyclerView.setAdapter(addressAdapter);
     }
 
 

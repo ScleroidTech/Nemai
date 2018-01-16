@@ -37,8 +37,8 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
      */
 
     int selectedItemPosition = -1;
-    private List<Address> mData = new ArrayList<>();
-    private List<Address> mDataSelected = new ArrayList<>();
+    private List<Address> addresses = new ArrayList<>();
+    private List<Address> selectedAddresses = new ArrayList<>();
     private View mEmptyView;
     private View innerLayout;
     private RadioButton lastChecked = null;
@@ -48,6 +48,14 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
     private boolean activate;
     private Button buttonDeliver;
     private Context context;
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
 
 
    /* public void clearSelections() {
@@ -85,12 +93,12 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
             final ItemEmptyAddressViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_empty_address_view,parent,false);
             return new EmptyViewHolder(binding.getRoot());
         }*/
-        //    mData = new ArrayList<>();
+        //    addresses = new ArrayList<>();
         binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_inner_address_card, parent, false);
-        //    Log.d("innerItem", "data " + mData.size());
+        //    Log.d("innerItem", "data " + addresses.size());
 
         selectedItems = new SparseBooleanArray();
-        //    Log.d("innerItem", "is it here? onCreateViewHolder" + mData.size());
+        //    Log.d("innerItem", "is it here? onCreateViewHolder" + addresses.size());
         return new AddressHolder(binding.getRoot());
     }
 
@@ -98,9 +106,9 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
     public void onBindViewHolder(final AddressHolder holder, final int position) {
 
         //   holder.setIsRecyclable(false);
-        Address address = mData.get(position);
-        // Log.d("innerItem", "is it here? onBindViewHolder" + mData.size() + "  position " + position);
-        // if (position < mData.size() && !mData.isEmpty())
+        Address address = addresses.get(position);
+        // Log.d("innerItem", "is it here? onBindViewHolder" + addresses.size() + "  position " + position);
+        // if (position < addresses.size() && !addresses.isEmpty())
         holder.setContent(address);
         context = holder.getInnerLayout().getContext();
         holder.itemView.setTag(address);
@@ -108,7 +116,7 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
 
         //  setSelectedAddress();
 
-        if (mDataSelected.contains(mData.get(position))) {
+        if (selectedAddresses.contains(addresses.get(position))) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.list_item_selected_state));
             holder.itemView.setActivated(true);
             holder.radioButton.setChecked(true);
@@ -140,13 +148,13 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
         //make sure to check if dataset is null and if itemA and itemB are valid indexes.
         //      List<Address> temp = new ArrayList<>();
         try {
-            if (position != 0 && mDataSelected.contains(mData.get(position))) {
-                Address itemA = mData.get(position);
-                Address itemB = mData.get(0);
-                mData.set(position, itemB);
-                mData.set(0, itemA);
-           /* mData.add(0, itemA);
-            mData.remove(tail.lastIndexOf(itemA));*/
+            if (position != 0 && selectedAddresses.contains(addresses.get(position))) {
+                Address itemA = addresses.get(position);
+                Address itemB = addresses.get(0);
+                addresses.set(position, itemB);
+                addresses.set(0, itemA);
+           /* addresses.add(0, itemA);
+            addresses.remove(tail.lastIndexOf(itemA));*/
 
                 //   notifyItemMoved(position, 0);
             }//This will trigger onBindViewHolder method from the adapter.
@@ -169,8 +177,8 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
     @Override
     public int getItemCount() {
 
-        //       Log.d("innerItem", "is it here? getItemCOunt" + mData.size());
-        return mData.size();
+        //       Log.d("innerItem", "is it here? getItemCOunt" + addresses.size());
+        return addresses.size();
     }
 
     /**
@@ -182,18 +190,18 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
      */
     @Override
     public int getItemViewType(int position) {
-        //     Log.d("innerItem", "is it here? getItemViewType" + mData.size());
+        //     Log.d("innerItem", "is it here? getItemViewType" + addresses.size());
         return position;
         //return R.layout.item_inner_address_card;
     }
 
     public void addData(@Nullable List<Address> innerDataList, List<Address> selected) {
-        final int size = mData.size();
-        mData = innerDataList;
+        final int size = addresses.size();
+        addresses = innerDataList;
         if (selected != null && !selected.isEmpty())
-            mDataSelected = selected;
-            // swapItems(mData.indexOf(selected.get(0)));
-        Log.d("innerItem", "is it here? addData" + mData.size());
+            selectedAddresses = selected;
+        // swapItems(addresses.indexOf(selected.get(0)));
+        Log.d("innerItem", "is it here? addData" + addresses.size());
 
         notifyDataSetChanged();
         //notifyItemRangeInserted(size, innerDataList.size());
@@ -201,10 +209,10 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
 
     public void updateSelectedData(int position, List<Address> selected) {
 
-//        checkDifference(mDataSelected, selected);
-        mDataSelected = selected;
+//        checkDifference(selectedAddresses, selected);
+        selectedAddresses = selected;
         // swapItems(position);
-        //      Log.d("innerItem", "is it here? addData" + mData.size());
+        //      Log.d("innerItem", "is it here? addData" + addresses.size());
 
         notifyDataSetChanged();
         //notifyItemRangeInserted(size, innerDataList.size());
@@ -245,7 +253,7 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
 
 
     public void clearData() {
-        mData.clear();
+        addresses.clear();
         notifyDataSetChanged();
     }
 
