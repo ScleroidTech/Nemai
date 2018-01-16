@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -128,12 +127,7 @@ public class RegisterActivity extends SocialLoginActivity {
         countryCode = ccp.getDefaultCountryCode();
 
         Button mRegisterButton = findViewById(R.id.register_button);
-        mRegisterButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+        mRegisterButton.setOnClickListener(view -> attemptLogin());
 
         mLoginFormView = findViewById(R.id.register_form);
 
