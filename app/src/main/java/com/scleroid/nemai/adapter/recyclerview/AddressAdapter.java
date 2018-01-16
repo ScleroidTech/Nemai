@@ -219,8 +219,8 @@ public class AddressAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
     }
 
     /**
-     * TODO FUture Implementation
-     * DIfference Util instead of notifyDataSetChanged,
+     * TODO Future Implementation
+     * Difference Util instead of notifyDataSetChanged,
      * to improve Performance
      *
      * @param oldItems

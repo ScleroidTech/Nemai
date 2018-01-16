@@ -1,0 +1,433 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "0d43774b2b55e4b0180606d2afba691e",
+    "entities": [
+      {
+        "tableName": "Parcel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serialNo` INTEGER NOT NULL, `sourcePin` TEXT, `destinationPin` TEXT, `deliveryType` TEXT, `packageType` TEXT, `weight` INTEGER NOT NULL, `invoice` INTEGER NOT NULL, `length` INTEGER NOT NULL, `width` INTEGER NOT NULL, `height` INTEGER NOT NULL, `description` TEXT, `parcelDate` INTEGER, `source_location` TEXT, `source_pincode` TEXT, `source_state` TEXT, `source_area` TEXT, `dest_location` TEXT, `dest_pincode` TEXT, `dest_state` TEXT, `dest_area` TEXT, PRIMARY KEY(`serialNo`))",
+        "fields": [
+          {
+            "fieldPath": "serialNo",
+            "columnName": "serialNo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourcePin",
+            "columnName": "sourcePin",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "destinationPin",
+            "columnName": "destinationPin",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deliveryType",
+            "columnName": "deliveryType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "packageType",
+            "columnName": "packageType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "weight",
+            "columnName": "weight",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "invoice",
+            "columnName": "invoice",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "length",
+            "columnName": "length",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "width",
+            "columnName": "width",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "height",
+            "columnName": "height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcelDate",
+            "columnName": "parcelDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sourcePinCode.location",
+            "columnName": "source_location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sourcePinCode.pincode",
+            "columnName": "source_pincode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sourcePinCode.state",
+            "columnName": "source_state",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sourcePinCode.area",
+            "columnName": "source_area",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "destinationPinCode.location",
+            "columnName": "dest_location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "destinationPinCode.pincode",
+            "columnName": "dest_pincode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "destinationPinCode.state",
+            "columnName": "dest_state",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "destinationPinCode.area",
+            "columnName": "dest_area",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "serialNo"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Address",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serialNo` INTEGER NOT NULL, `name` TEXT, `address_line_1` TEXT, `address_line_2` TEXT, `state` TEXT, `city` TEXT, `pincode` TEXT, `mobileNo` TEXT, PRIMARY KEY(`serialNo`))",
+        "fields": [
+          {
+            "fieldPath": "serialNo",
+            "columnName": "serialNo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address_line_1",
+            "columnName": "address_line_1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address_line_2",
+            "columnName": "address_line_2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pincode",
+            "columnName": "pincode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mobileNo",
+            "columnName": "mobileNo",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "serialNo"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "OrderedCourier",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serialNo` INTEGER, `parcel_serialNo` INTEGER, `parcel_sourcePin` TEXT, `parcel_destinationPin` TEXT, `parcel_deliveryType` TEXT, `parcel_packageType` TEXT, `parcel_weight` INTEGER, `parcel_invoice` INTEGER, `parcel_length` INTEGER, `parcel_width` INTEGER, `parcel_height` INTEGER, `parcel_description` TEXT, `parcel_parcelDate` INTEGER, `parcel_source_location` TEXT, `parcel_source_pincode` TEXT, `parcel_source_state` TEXT, `parcel_source_area` TEXT, `parcel_dest_location` TEXT, `parcel_dest_pincode` TEXT, `parcel_dest_state` TEXT, `parcel_dest_area` TEXT, `address_serialNo` INTEGER, `address_name` TEXT, `address_address_line_1` TEXT, `address_address_line_2` TEXT, `address_state` TEXT, `address_city` TEXT, `address_pincode` TEXT, `address_mobileNo` TEXT, `courier_serialNo` INTEGER, `courier_courierName` TEXT, `courier_price` REAL, `courier_serviceType` TEXT, `courier_deliveryTime` TEXT, `courier_courierImageUrl` TEXT, PRIMARY KEY(`serialNo`))",
+        "fields": [
+          {
+            "fieldPath": "serialNo",
+            "columnName": "serialNo",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.serialNo",
+            "columnName": "parcel_serialNo",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.sourcePin",
+            "columnName": "parcel_sourcePin",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.destinationPin",
+            "columnName": "parcel_destinationPin",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.deliveryType",
+            "columnName": "parcel_deliveryType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.packageType",
+            "columnName": "parcel_packageType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.weight",
+            "columnName": "parcel_weight",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.invoice",
+            "columnName": "parcel_invoice",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.length",
+            "columnName": "parcel_length",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.width",
+            "columnName": "parcel_width",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.height",
+            "columnName": "parcel_height",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.description",
+            "columnName": "parcel_description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.parcelDate",
+            "columnName": "parcel_parcelDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.sourcePinCode.location",
+            "columnName": "parcel_source_location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.sourcePinCode.pincode",
+            "columnName": "parcel_source_pincode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.sourcePinCode.state",
+            "columnName": "parcel_source_state",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.sourcePinCode.area",
+            "columnName": "parcel_source_area",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.destinationPinCode.location",
+            "columnName": "parcel_dest_location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.destinationPinCode.pincode",
+            "columnName": "parcel_dest_pincode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.destinationPinCode.state",
+            "columnName": "parcel_dest_state",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcel.destinationPinCode.area",
+            "columnName": "parcel_dest_area",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.serialNo",
+            "columnName": "address_serialNo",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.name",
+            "columnName": "address_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.address_line_1",
+            "columnName": "address_address_line_1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.address_line_2",
+            "columnName": "address_address_line_2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.state",
+            "columnName": "address_state",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.city",
+            "columnName": "address_city",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.pincode",
+            "columnName": "address_pincode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.mobileNo",
+            "columnName": "address_mobileNo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "courier.serialNo",
+            "columnName": "courier_serialNo",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "courier.courierName",
+            "columnName": "courier_courierName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "courier.price",
+            "columnName": "courier_price",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "courier.serviceType",
+            "columnName": "courier_serviceType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "courier.deliveryTime",
+            "columnName": "courier_deliveryTime",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "courier.courierImageUrl",
+            "columnName": "courier_courierImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "serialNo"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0d43774b2b55e4b0180606d2afba691e\")"
+    ]
+  }
+}
