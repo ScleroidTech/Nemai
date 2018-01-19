@@ -102,6 +102,8 @@ public class SessionManager {
         private static final String USER_GENDER = "gender";
 
         private static final String USER_DOB = "date_of_birth";
+
+        private static final String USER_LOCATION = "location";
         /**
          * Profile Image of the user, if available
          */
@@ -162,6 +164,17 @@ public class SessionManager {
         public void setUserDateOfBirth(Date date) {
             long dateLong = DateConverter.toTimestamp(date);
             editor.putLong(USER_DOB, dateLong);
+            editor.apply();
+        }
+
+        public String getUserLocation() {
+            return prefUser.getString(USER_LOCATION, null);
+
+        }
+
+        public void setUserLocation(String date) {
+
+            editor.putString(USER_LOCATION, date);
             editor.apply();
         }
 

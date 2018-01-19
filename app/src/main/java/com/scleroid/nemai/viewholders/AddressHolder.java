@@ -1,9 +1,8 @@
 package com.scleroid.nemai.viewholders;
 
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.fragment.AddressFragment;
 import com.scleroid.nemai.models.Address;
 
@@ -117,7 +117,7 @@ public class AddressHolder extends com.ramotion.garlandview.inner.InnerItem impl
     @Override
     public void onClick(View view) {
         if (view.getId() == editTextView.getId()) {
-            FragmentManager fm = ((FragmentActivity) getInnerLayout().getContext()).getFragmentManager();
+            FragmentManager fm = ((MainActivity) getInnerLayout().getContext()).getSupportFragmentManager();
             dialog = AddressFragment.newInstance(mInnerData);
 
             dialog.show(fm, "adad");

@@ -41,6 +41,6 @@ public class PartnerAdapter extends RecyclerView.Adapter<PartnerViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return logos.size();
     }
 }
