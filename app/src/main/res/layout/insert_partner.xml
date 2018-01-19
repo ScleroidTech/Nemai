@@ -12,7 +12,7 @@
         android:contentDescription="@string/dtdc"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:src="@drawable/dtdc" />
+        android:src="@drawable/courier_dtdc" />
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
