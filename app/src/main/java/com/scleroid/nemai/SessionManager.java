@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.scleroid.nemai.utils.DateConverter;
+
+import java.util.Date;
+
 /**
  * @author Ganesh Kaple
  * @since 13-10-2016
@@ -96,6 +100,8 @@ public class SessionManager {
         private static final String USER_EMAIL = "email";
         private static final String USER_PHONE = "phone";
         private static final String USER_GENDER = "gender";
+
+        private static final String USER_DOB = "date_of_birth";
         /**
          * Profile Image of the user, if available
          */
@@ -148,6 +154,17 @@ public class SessionManager {
 
         }
 
+        public Date getUserDateOfBirth() {
+            return DateConverter.toDate(prefUser.getLong(USER_DOB, 0));
+
+        }
+
+        public void setUserDateOfBirth(Date date) {
+            long dateLong = DateConverter.toTimestamp(date);
+            editor.putLong(USER_DOB, dateLong);
+            editor.apply();
+        }
+
         public String getUserFirstName() {
             return prefUser.getString(USER_FIRST_NAME, "John");
         }
@@ -169,7 +186,7 @@ public class SessionManager {
         }
 
         public String getUserImageUrl() {
-            return prefUser.getString(USER_IMAGE_URL, "drawable://" + R.drawable.ic_person);
+            return prefUser.getString(USER_IMAGE_URL, null);
         }
 
 

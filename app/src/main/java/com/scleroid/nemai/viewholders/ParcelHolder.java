@@ -1,11 +1,10 @@
 package com.scleroid.nemai.viewholders;
 
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -20,11 +19,13 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
 import com.scleroid.nemai.fragment.DatePickerFragment;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.other.DelayedAutoCompleteTextView;
+import com.scleroid.nemai.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,11 +41,12 @@ import static com.scleroid.nemai.fragment.HomeFragment.mPinCodeSource;
  * Created by Ganesh on 31-10-2017.
  */
 
-public class PageHolder extends RecyclerView.ViewHolder {
+public class ParcelHolder extends RecyclerView.ViewHolder {
 
     private static final String DIALOG_DATE = "DIALOG_DATE";
     private static final int REQUEST_DATE = 0;
-    private static final String TAG = "PageHolder";
+    private static final String TAG = "ParcelHolder";
+    private final DateUtils dateUtils = new DateUtils();
     TextView textClockDate;
     RadioButton mParcelRadioButton, mDocumentRadioButton;
     RadioButton mDomesticRadioButton, mInternationalRadioButton;
@@ -61,7 +63,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
     EditText mWeightEditText,/* mDescDocEditText,*/
             mInvoiceValueEditText, mPackageLengthParcelEditText, mPackageWidthParcelEditText, mHeightParcelEditText, mDescriptionEditText;
 
-    public PageHolder(View v, Context context) {
+    public ParcelHolder(View v, Context context) {
         super(v);
 
         this.context = context;
@@ -228,7 +230,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
 
         textClockDate.setOnClickListener(v -> {
             //todo textClockDate.setText(updateDate());
-            FragmentManager fragmentManager = ((AppCompatActivity) context).getFragmentManager();
+            FragmentManager fragmentManager = ((MainActivity) context).getSupportFragmentManager();
             DialogFragment dialogFragment = DatePickerFragment.newInstance(parcel);
             dialogFragment.setTargetFragment(fragmentManager.findFragmentByTag(CURRENT_TAG), REQUEST_DATE);
             dialogFragment.show(fragmentManager, DIALOG_DATE);
@@ -331,10 +333,6 @@ public class PageHolder extends RecyclerView.ViewHolder {
         return true;
     }
 
-    public CharSequence getFormattedDate(Date parcelDate) {
-        return DateFormat.format("EEE, MMM dd, yyyy ", parcelDate);
-    }
-
 
     private boolean isEmpty(TextView text) {
         return TextUtils.isEmpty(text.getText());
@@ -394,7 +392,7 @@ public class PageHolder extends RecyclerView.ViewHolder {
             pinDestinationAutoCompleteTextView.setText(destination.equals("null") ? null : destination);
             String dm = "";
             if (parcelDate != null) {
-                dm = getFormattedDate(parcelDate).toString();
+                dm = dateUtils.getFormattedDate(parcelDate).toString();
             }
             textClockDate.setText(dm);
 

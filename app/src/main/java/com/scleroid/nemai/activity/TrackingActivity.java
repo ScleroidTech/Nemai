@@ -15,7 +15,8 @@ import com.scleroid.nemai.R;
  * Created by scleroid on 28/8/17.
  */
 
-public class TrackingActivity extends AppCompatActivity {
+public class
+TrackingActivity extends AppCompatActivity {
 
 
     @Override
@@ -24,13 +25,10 @@ public class TrackingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tracking);
         final LinearLayout trackLinear = findViewById(R.id.trackLinear);
         Button btn_scan = findViewById(R.id.btn_scan);
-        btn_scan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                previouseWebService();
-                trackLinear.setVisibility(View.VISIBLE);
+        btn_scan.setOnClickListener(view -> {
+            previouseWebService();
+            trackLinear.setVisibility(View.VISIBLE);
 
-            }
         });
 
         LinearLayout parent = findViewById(R.id.linearExpand);

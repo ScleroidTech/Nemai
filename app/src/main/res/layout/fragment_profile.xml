@@ -65,7 +65,6 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/details_avatar_border"
-                android:background="@color/colorPrimaryDark"
                 android:scaleType="centerCrop" />
 
         </FrameLayout>
@@ -106,8 +105,8 @@
             app:layout_constraintRight_toRightOf="@+id/card"
             app:layout_constraintTop_toBottomOf="@+id/name_text_view" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/email_text_input_edit_text"
+        <TextView
+            android:id="@+id/email_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
@@ -124,8 +123,8 @@
             app:layout_constraintRight_toRightOf="@+id/card"
             app:layout_constraintTop_toBottomOf="@+id/agender_text_view" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/mobile_text_input_edit_text"
+        <TextView
+            android:id="@+id/mobile_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
@@ -139,29 +138,28 @@
             app:font='@{"SF-UI-Display-Semibold.ttf"}'
             app:layout_constraintLeft_toLeftOf="@+id/card"
             app:layout_constraintRight_toRightOf="@+id/card"
-            app:layout_constraintTop_toBottomOf="@+id/email_text_input_edit_text" />
+            app:layout_constraintTop_toBottomOf="@+id/email_text_view" />
 
-        <!-- TODO future implementation
-         <android.support.design.widget.TextInputEditText
-              android:id="@+id/date_of_birth_text_input_edit_text"
-              android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:layout_marginBottom="8dp"
-              android:layout_marginLeft="32dp"
-              android:layout_marginRight="32dp"
-              android:layout_marginTop="8dp"
-              android:ellipsize="end"
-              android:gravity="center"
-              android:maxLines="2"
-              android:text="21 Jan, 2018"
-              android:textColor="@color/details_status_color"
-              android:textSize="18.4sp"
-              app:font='@{"SF-UI-Display-Semibold.ttf"}'
-              app:layout_constraintBottom_toTopOf="@+id/update_profile_button"
-              app:layout_constraintHorizontal_bias="0.0"
-              app:layout_constraintLeft_toLeftOf="@+id/card"
-              app:layout_constraintRight_toRightOf="@+id/card"
-              app:layout_constraintTop_toBottomOf="@+id/mobile_text_input_edit_text" />-->
+        <Button
+            android:id="@+id/date_of_birth_button"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="32dp"
+            android:background="@null"
+            android:ellipsize="end"
+            android:gravity="center"
+
+            android:hint="Date of Birth"
+            android:maxLines="2"
+            android:textColor="@color/details_status_color"
+            android:textSize="18.4sp"
+            app:font='@{"SF-UI-Display-Semibold.ttf"}'
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/card"
+            app:layout_constraintRight_toRightOf="@+id/card"
+            app:layout_constraintTop_toBottomOf="@+id/mobile_text_view" />
 
         <Button
             android:id="@+id/update_profile_button"
@@ -181,14 +179,13 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:background="@drawable/green_corners_top"
             android:text="Change Password"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/update_profile_button"
             app:layout_constraintEnd_toEndOf="@+id/card"
             app:layout_constraintStart_toStartOf="@+id/card"
-            app:layout_constraintTop_toBottomOf="@+id/mobile_text_input_edit_text" />
+            app:layout_constraintTop_toBottomOf="@+id/date_of_birth_button" />
         <!--android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"

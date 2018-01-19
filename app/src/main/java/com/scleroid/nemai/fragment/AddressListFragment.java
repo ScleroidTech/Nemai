@@ -4,7 +4,10 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +21,6 @@ import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.viewmodels.AddressViewModel;
 
 import java.util.List;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,6 +46,7 @@ public class AddressListFragment extends Fragment {
     private TextView noAddressTitleTextView;
     private TextView noAddressSubtitleTextView;
     private AddressAdapter addressAdapter;
+    private FloatingActionButton mNewAddressButton;
 
     public AddressListFragment() {
         // Required empty public constructor
@@ -111,7 +114,14 @@ public class AddressListFragment extends Fragment {
 
         //list package
 
+        mNewAddressButton.setOnClickListener(m -> {
 
+
+            FragmentManager fm = getFragmentManager();
+            DialogFragment dialog = AddressFragment.newInstance();
+            dialog.show(fm, "addressView");
+
+        });
         return v;
     }
 

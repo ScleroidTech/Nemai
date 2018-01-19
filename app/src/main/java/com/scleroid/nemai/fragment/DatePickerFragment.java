@@ -1,11 +1,11 @@
 package com.scleroid.nemai.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,15 +40,28 @@ public class DatePickerFragment extends DialogFragment {
     private static final String EXTRA_HEIGHT = "height";
     private static final String EXTRA_WIDTH = "width";
     private static final String EXTRA_LENGTH = "length";
+    private static final String ARG_DATE = "birth_date";
     Date tempDate = new Date();
     long serialNo;
     String source, destination, deliveryType, packageType, desc;
     int height, weight, width, length, invoice;
     private DatePicker mDatePicker;
     private Parcel parcel;
+    private Date date;
 
     public static DatePickerFragment newInstance(Parcel parcel) {
         Bundle bundle = createBundle(parcel);
+
+        DatePickerFragment fragment = new DatePickerFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+
+
+    }
+
+    public static DatePickerFragment newInstance(Date date) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_DATE, date);
 
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.setArguments(bundle);
@@ -89,6 +102,8 @@ public class DatePickerFragment extends DialogFragment {
         final Bundle bundle = getArguments();
         if (bundle != null) {
             parcel = bundle.getParcelable(EXTRA_PARCEL);
+            tempDate = (Date) bundle.getSerializable(ARG_DATE);
+
             /*tempDate = (Date) bundle.getSerializable(EXTRA_DATE);
             serialNo = bundle.getLong(EXTRA_SERIAL);
             source = bundle.getString(EXTRA_SOURCE_PIN);
@@ -137,21 +152,34 @@ public class DatePickerFragment extends DialogFragment {
         }).setScrollable(true).setNegativeText(android.R.string.cancel).setPositiveText(android.R.string.ok).build();
         return dialog;
 */
+        if (parcel == null) return getDateofBirthDialog(v);
+        return getCourierPickupDialog(v);
+    }
 
-        return new AlertDialog.Builder(getActivity()).setTitle(R.string.date_picker_title).setView(v).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                int year = mDatePicker.getYear();
-                int month = mDatePicker.getMonth();
-                int day = mDatePicker.getDayOfMonth();
-                Date date = new GregorianCalendar(year, month, day).getTime();
+    public Dialog getDateofBirthDialog(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setTitle(R.string.date_picker_title_dob).setView(v).setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            int year1 = mDatePicker.getYear();
+            int month1 = mDatePicker.getMonth();
+            int day1 = mDatePicker.getDayOfMonth();
+            Date date = new GregorianCalendar(year1, month1, day1).getTime();
+            sendResult(Activity.RESULT_OK, date);
+        });
+        return builder.create();
+    }
+
+    public Dialog getCourierPickupDialog(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setTitle(R.string.date_picker_title_parcel).setView(v).setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            int year1 = mDatePicker.getYear();
+            int month1 = mDatePicker.getMonth();
+            int day1 = mDatePicker.getDayOfMonth();
+            Date date = new GregorianCalendar(year1, month1, day1).getTime();
                 parcel.setParcelDate(date);/*
-                Parcel parcel = new Parcel(source, destination, deliveryType, packageType, weight, invoice, length, width, height, desc, date, serialNo); */
-                Bundle bundle = createBundle(parcel);
+            Parcel parcel = new Parcel(source, destination, deliveryType, packageType, weight, invoice, length, width, height, desc, date, serialNo); */
+            Bundle bundle1 = createBundle(parcel);
                 //sendResult(Activity.RESULT_OK,date);
-                Events.DateMessage addressMessage = new Events.DateMessage(bundle);
+            Events.DateMessage addressMessage = new Events.DateMessage(bundle1);
                 GlobalBus.getBus().post(addressMessage);
-            }
-        }).create();
+        });
+        return builder.create();
     }
 }

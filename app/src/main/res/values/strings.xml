@@ -217,7 +217,8 @@
     <string name="shipment_title">Shipment %1d of %2d</string>
     <string name="selected_count">%1$s selected</string>
     <string name="action_remove">Remove</string>
-    <string name="date_picker_title">Courier Pickup Date</string>
+    <string name="date_picker_title_parcel">Courier Pickup Date</string>
+    <string name="date_picker_title_dob">Courier Pickup Date</string>
     <string name="next">Next</string>
 
     <!-- TODO: Remove or change this placeholder text -->
