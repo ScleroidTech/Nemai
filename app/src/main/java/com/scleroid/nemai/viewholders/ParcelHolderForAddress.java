@@ -1,11 +1,10 @@
 package com.scleroid.nemai.viewholders;
 
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +22,7 @@ import com.ramotion.garlandview.inner.InnerLayoutManager;
 import com.ramotion.garlandview.inner.InnerRecyclerView;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.adapter.recyclerview.AddressAdapter;
 import com.scleroid.nemai.controller.OrderLab;
 import com.scleroid.nemai.fragment.AddressFragment;
@@ -278,11 +278,12 @@ public class ParcelHolderForAddress extends HeaderItem {
         mNewAddressButton.setOnClickListener(v -> {
 
 
-            FragmentManager fm = ((FragmentActivity) getHeader().getContext()).getFragmentManager();
+            FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
             Parcel parcel1 = header;
             PinCode pincode = parcel1.getDestinationPinCode();
             DialogFragment dialog = AddressFragment.newInstance(pincode.getLocation(), pincode.getPincode(), pincode.getState());
-            dialog.show(fm, "adad");
+
+            dialog.show(fm, "anything");
 
         });
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -61,6 +62,7 @@ public class ProfileFragment extends Fragment {
     private String updateProfile = "Update Profile";
     private String editProfile = "Edit Profile";
     private String saveProfile = "Save Profile";
+    private TextInputEditText locationEditText;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -135,7 +137,9 @@ public class ProfileFragment extends Fragment {
             } else if (updateButton.getText().equals(editProfile)) {
                 updateButton.setText(saveProfile);
                 toggleEditing(false);
-            } else
+            } else if (updateButton.getText().equals(saveProfile)) {
+                session.getUser().setUserLocation(locationEditText.getText().toString());
+            }
                 updateButton.setText(updateProfile);
 
         });
@@ -168,6 +172,9 @@ public class ProfileFragment extends Fragment {
         if (date != null && date.compareTo(date1) != 0)
             updateDate(date);
 
+        if (session.getUser().getUserLocation() != null)
+            locationEditText.setText(session.getUser().getUserLocation());
+
     }
 
     private void setupValidation() {
@@ -195,6 +202,8 @@ public class ProfileFragment extends Fragment {
         changePasswordButton = view.findViewById(R.id.change_password);
 
         datePickerButton = view.findViewById(R.id.date_of_birth_button);
+
+        locationEditText = view.findViewById(R.id.location_edit_text);
 
     }
 
