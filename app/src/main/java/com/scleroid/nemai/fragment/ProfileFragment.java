@@ -1,28 +1,28 @@
 package com.scleroid.nemai.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.activity.PasswordChangeActivity;
 import com.scleroid.nemai.activity.SocialRegisterActivity;
+import com.scleroid.nemai.utils.DateUtils;
 import com.scleroid.nemai.utils.ProfileUtils;
 
+import java.util.Date;
 import java.util.regex.Pattern;
-
-import es.dmoral.toasty.Toasty;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
 import static com.scleroid.nemai.activity.MainActivity.session;
@@ -40,6 +40,9 @@ public class ProfileFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int REQUEST_DATE = 0;
+    private static final String DIALOG_DATE = "DIALOG_DATE";
+    private final DateUtils dateUtils = new DateUtils();
     private ProfileUtils profileUtils;
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -47,14 +50,17 @@ public class ProfileFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private ImageView avatar;
     private TextView nameTextView;
-    private TextInputEditText emailEditText;
-    private TextInputEditText mobileNumber;
+    private TextView emailTextView, mobileNumberTextView;
     private TextView genderTextView;
     private ImageView headerCover;
     private Button updateButton;
     private boolean toggle = false;
-    private Button changePassword;
+    private Button changePasswordButton;
     private AwesomeValidation mAwesomeValidation;
+    private Button datePickerButton;
+    private String updateProfile = "Update Profile";
+    private String editProfile = "Edit Profile";
+    private String saveProfile = "Save Profile";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -88,6 +94,22 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int result, Intent data) {
+        if (result != Activity.RESULT_OK) return;
+
+        if (requestCode == REQUEST_DATE) {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            session.getUser().setUserDateOfBirth(date);
+            updateDate(date);
+
+        }
+    }
+
+    public void updateDate(Date date) {
+        datePickerButton.setText(dateUtils.getFormattedDate(date));
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -95,23 +117,41 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         profileUtils = new ProfileUtils(getActivity());
         mAwesomeValidation = new AwesomeValidation(TEXT_INPUT_LAYOUT);
-        setupValidation();
+        // setupValidation();
         initializeViews(view);
         updateViews();
         updateButton.setOnClickListener((View l) -> {
-            if (toggle) {
-                if (mAwesomeValidation.validate()) {
-                    session.getUser().setUserMobileAndEmail(mobileNumber.getText().toString(), emailEditText.getText().toString());
-                    toggleEditing(false);
+            /*if (toggle) {*/
+                /*if (mAwesomeValidation.validate()) {
+                    session.getUser().setUserMobileAndEmail(mobileNumberTextView.getText().toString(), emailTextView.getText().toString());
+                   // toggleEditing(false);
                     Toasty.success(ProfileFragment.this.getContext(), "Your Details Have been Updated", Toast.LENGTH_LONG).show();
                 }
                 //TODO post this updates to server
-            } else toggleEditing(true);
+            } else //toggleEditing(true);*/
+            if (updateButton.getText().equals(updateProfile)) {
+                updateButton.setText(editProfile);
+                toggleEditing(true);
+            } else if (updateButton.getText().equals(editProfile)) {
+                updateButton.setText(saveProfile);
+                toggleEditing(false);
+            } else
+                updateButton.setText(updateProfile);
+
         });
-        changePassword.setOnClickListener(l -> {
+        changePasswordButton.setOnClickListener(l -> {
             Intent verification = new Intent(ProfileFragment.this.getContext(), PasswordChangeActivity.class);
-            verification.putExtra(SocialRegisterActivity.INTENT_PHONENUMBER, mobileNumber.getText().toString());
+            verification.putExtra(SocialRegisterActivity.INTENT_PHONENUMBER, mobileNumberTextView.getText().toString());
         });
+
+        datePickerButton.setOnClickListener((View l) -> {
+            FragmentManager fragmentManager = getFragmentManager();
+            Date date = session.getUser().getUserDateOfBirth();
+            DatePickerFragment dialogFragment = DatePickerFragment.newInstance(date);
+            dialogFragment.setTargetFragment(ProfileFragment.this, REQUEST_DATE);
+            dialogFragment.show(fragmentManager, DIALOG_DATE);
+        });
+
         toggleEditing(false);
         return view;
     }
@@ -121,17 +161,23 @@ public class ProfileFragment extends Fragment {
         profileUtils.setUserProfilePicture(avatar);
         profileUtils.setProfileName(nameTextView);
         genderTextView.setText(session.getUser().getUserGender());
-        emailEditText.setText(session.getUser().getUserEmail());
-        mobileNumber.setText(session.getUser().getUserPhone());
+        emailTextView.setText(session.getUser().getUserEmail());
+        mobileNumberTextView.setText(session.getUser().getUserPhone());
+        Date date = session.getUser().getUserDateOfBirth();
+        Date date1 = new Date(1970, 1, 1);
+        if (date != null && date.compareTo(date1) != 0)
+            updateDate(date);
 
     }
 
     private void setupValidation() {
         //adding validation to edit-texts
+        mAwesomeValidation.addValidation(this.getActivity(), R.id.name_text_view, "[a-zA-Z\\s]+", R.string.fnameerror);
 
         Pattern regexEmail = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-        mAwesomeValidation.addValidation(this.getActivity(), R.id.email_text_input_edit_text, regexEmail, R.string.emailerror);
-        mAwesomeValidation.addValidation(this.getActivity(), R.id.mobile_text_input_edit_text, "^[789]\\d{9}$", R.string.mobileerror);
+
+        mAwesomeValidation.addValidation(this.getActivity(), R.id.email_text_view, regexEmail, R.string.emailerror);
+        mAwesomeValidation.addValidation(this.getActivity(), R.id.mobile_text_view, "^[789]\\d{9}$", R.string.mobileerror);
 
 
     }
@@ -143,10 +189,12 @@ public class ProfileFragment extends Fragment {
         genderTextView = view.findViewById(R.id.agender_text_view);
         nameTextView = view.findViewById(R.id.name_text_view);
 
-        emailEditText = view.findViewById(R.id.email_text_input_edit_text);
-        mobileNumber = view.findViewById(R.id.mobile_text_input_edit_text);
+        emailTextView = view.findViewById(R.id.email_text_view);
+        mobileNumberTextView = view.findViewById(R.id.mobile_text_view);
         updateButton = view.findViewById(R.id.update_profile_button);
-        changePassword = view.findViewById(R.id.change_password);
+        changePasswordButton = view.findViewById(R.id.change_password);
+
+        datePickerButton = view.findViewById(R.id.date_of_birth_button);
 
     }
 
@@ -158,10 +206,17 @@ public class ProfileFragment extends Fragment {
     public void toggleEditing(boolean toggle) {
         this.toggle = toggle;
 
-        emailEditText.setEnabled(toggle);
-        mobileNumber.setEnabled(toggle);
-        if (toggle) updateButton.setText("Update Profile");
-        else updateButton.setText("Edit Profile");
+       /* emailTextView.setEnabled(toggle);
+        mobileNumberTextView.setEnabled(toggle);*/
+        datePickerButton.setEnabled(toggle);
+       /* if (toggle) {
+
+            updateButton.setText(updateProfile);
+        }
+        else {
+            editProfile = "Edit Profile";
+            updateButton.setText(editProfile);
+        }*/
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -202,4 +257,6 @@ public class ProfileFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
 }

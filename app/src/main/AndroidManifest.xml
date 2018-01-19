@@ -51,7 +51,6 @@
             android:name=".activity.CheckoutActivity"
             android:exported="true"
             android:label="Select Address" />
-        <activity android:name=".activity.TrackingActivity" />
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true"
@@ -97,6 +96,9 @@
         <activity android:name=".activity.OtpVerificationActivity" />
         <activity
             android:name=".activity.SelectCourierActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.TrackingActivity"
             android:exported="true" />
         <activity
             android:name=".activity.ResetPasswordActivity"

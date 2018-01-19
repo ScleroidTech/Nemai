@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.activity.MainActivity;
-import com.scleroid.nemai.other.CircleTransform;
 
 public class ProfileUtils {
     private final Context context;
@@ -23,20 +22,21 @@ public class ProfileUtils {
      * if doesn't, uses the default profile picture of the user
      */
     public void setUserProfilePicture(ImageView profilePicture) {
-        if (MainActivity.session.getUser().isUserImageExists()) {
+        /*if (MainActivity.session.getUser().isUserImageExists()) {*/
             String profileURl = MainActivity.session.getUser().getUserImageUrl();
             // Loading profile image
             Glide.with(context).load(profileURl)
                     .crossFade()
                     .thumbnail(0.5f)
+                    .placeholder(R.drawable.ic_person)
                     .bitmapTransform(new CircleTransform(context))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(profilePicture);
 
-        } else {
+       /* } else {
             Drawable d = context.getResources().getDrawable(R.drawable.ic_person);
             profilePicture.setImageDrawable(d);
-        }
+        }*/
     }
 
     /**
