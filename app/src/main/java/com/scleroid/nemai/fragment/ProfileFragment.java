@@ -218,6 +218,7 @@ public class ProfileFragment extends Fragment {
        /* emailTextView.setEnabled(toggle);
         mobileNumberTextView.setEnabled(toggle);*/
         datePickerButton.setEnabled(toggle);
+        locationEditText.setEnabled(toggle);
        /* if (toggle) {
 
             updateButton.setText(updateProfile);
