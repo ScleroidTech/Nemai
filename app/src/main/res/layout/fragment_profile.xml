@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.constraint.ConstraintLayout
-    android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
@@ -157,32 +157,11 @@
             android:textSize="18.4sp"
             app:font='@{"SF-UI-Display-Semibold.ttf"}'
             app:layout_constraintBottom_toTopOf="@+id/date_of_birth_button"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.234"
             app:layout_constraintLeft_toLeftOf="@+id/card"
             app:layout_constraintRight_toRightOf="@+id/card"
             app:layout_constraintTop_toBottomOf="@+id/mobile_text_view"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <Button
-            android:id="@+id/date_of_birth_button"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:background="@drawable/round_corners_bottom"
-            android:ellipsize="end"
-            android:gravity="center"
-
-            android:hint="Date of Birth"
-            android:maxLines="2"
-            android:textColor="@color/details_status_color"
-            android:textSize="18.4sp"
-            app:font='@{"SF-UI-Display-Semibold.ttf"}'
-            app:layout_constraintBottom_toBottomOf="@+id/location_edit_text"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="@+id/card"
-            app:layout_constraintRight_toRightOf="@+id/card"
-            tools:layout_editor_absoluteY="235dp" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/update_profile_button"
@@ -208,7 +187,27 @@
             app:layout_constraintBottom_toTopOf="@+id/update_profile_button"
             app:layout_constraintEnd_toEndOf="@+id/card"
             app:layout_constraintStart_toStartOf="@+id/card"
-            app:layout_constraintTop_toBottomOf="@+id/date_of_birth_button" />
+            app:layout_constraintTop_toBottomOf="@+id/date_of_birth_button"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <Button
+            android:id="@+id/date_of_birth_button"
+            android:layout_width="253dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+
+            android:background="@drawable/round_corners_bottom"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:hint="Date of Birth"
+            android:maxLines="2"
+            android:textColor="@color/details_status_color"
+            android:textSize="18.4sp"
+            app:font='@{"SF-UI-Display-Semibold.ttf"}'
+            app:layout_constraintEnd_toEndOf="@+id/card"
+            app:layout_constraintStart_toStartOf="@+id/card"
+            tools:layout_editor_absoluteY="271dp" />
         <!--android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
