@@ -4,11 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.adapter.recyclerview.OrderAdapter;
 
 
 /**
@@ -30,6 +34,7 @@ public class OrdersFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private OrderAdapter adapter;
 
     public OrdersFragment() {
         // Required empty public constructor
@@ -66,8 +71,49 @@ public class OrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_orders, container, false);
+        View v = inflater.inflate(R.layout.fragment_orders, container, false);
+        TextView noOrders = v.findViewById(R.id.no_orders_title);
+
+
+        RecyclerView recyclerView = v.findViewById(R.id.addressRecyclerView);
+        setupRecyclerView(recyclerView);
+
+        noOrders.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        /*AddressViewModel addressViewModel = ViewModelProviders.of(OrdersFragment.this).get(AddressViewModel.class);
+        addressViewModel.getAddressList().observe(OrdersFragment.this, addresses -> {
+         *//*   parcelAdapterForAddress.updateAddressList(addresses);
+            parcelAdapterForAddress.notifyDataSetChanged();*//*
+            if (addresses != null && !addresses.isEmpty()) {
+                adapter.setAddresses(addresses);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        if (addresses != null && !addresses.isEmpty()) {
+            noOrders.setVisibility(View.GONE);
+            noAddressSubtitleTextView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            setupRecyclerView(recyclerView);
+        } else {
+            noOrders.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+
+*/
+        //list package
+
+
+        return v;
     }
+
+    public void setupRecyclerView(RecyclerView recyclerView) {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new OrderAdapter();
+        recyclerView.setAdapter(adapter);
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

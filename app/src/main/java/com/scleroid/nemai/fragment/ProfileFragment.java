@@ -140,7 +140,6 @@ public class ProfileFragment extends Fragment {
             } else if (updateButton.getText().equals(saveProfile)) {
                 session.getUser().setUserLocation(locationEditText.getText().toString());
             }
-                updateButton.setText(updateProfile);
 
         });
         changePasswordButton.setOnClickListener(l -> {

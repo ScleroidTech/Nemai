@@ -132,7 +132,7 @@ public class DatePickerFragment extends DialogFragment {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date, null);
         mDatePicker = v.findViewById(R.id.dialog_date_picker);
         mDatePicker.init(year, month, day, null);
-        mDatePicker.setMinDate(System.currentTimeMillis() - 1000);
+
 
      /*   MaterialStyledDialog dialog = new MaterialStyledDialog.Builder(getActivity()).setTitle("Add Address").setStyle(Style.HEADER_WITH_TITLE).setCustomView(v).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
@@ -152,7 +152,11 @@ public class DatePickerFragment extends DialogFragment {
         }).setScrollable(true).setNegativeText(android.R.string.cancel).setPositiveText(android.R.string.ok).build();
         return dialog;
 */
-        if (parcel == null) return getDateofBirthDialog(v);
+        if (parcel == null) {
+            mDatePicker.setMaxDate(System.currentTimeMillis() - 1000);
+            return getDateofBirthDialog(v);
+        }
+        mDatePicker.setMinDate(System.currentTimeMillis() - 1000);
         return getCourierPickupDialog(v);
     }
 

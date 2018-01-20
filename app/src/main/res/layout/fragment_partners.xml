@@ -1,14 +1,36 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:id="@+id/frameLayout3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:orientation="vertical"
     tools:context="com.scleroid.nemai.fragment.PartnersFragment">
+
+    <TextView
+        android:id="@+id/text_view_partner_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Our Partners"
+        android:textAlignment="textEnd"
+        android:textSize="40sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/partner_recycler_view"
 
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        tools:listitem="@layout/list_partner_view" />
 
-</FrameLayout>
+</LinearLayout>
