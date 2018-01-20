@@ -17,12 +17,12 @@ public class PartnerViewHolder extends RecyclerView.ViewHolder {
     public PartnerViewHolder(View itemView) {
         super(itemView);
         partnerLogo = itemView.findViewById(R.id.logo);
-        partnerLogo.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
 
     }
 
     public void setPartnerLogo(int resId) {
         partnerLogo.setImageResource(resId);
-        partnerLogo.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        partnerLogo.setScaleType(ImageView.ScaleType.FIT_CENTER);
     }
 }

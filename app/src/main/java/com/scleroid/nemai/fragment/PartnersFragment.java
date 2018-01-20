@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.PartnerAdapter;
+import com.scleroid.nemai.other.SpanningGridLayoutManager;
 
 import java.util.ArrayList;
 
@@ -77,7 +77,7 @@ public class PartnersFragment extends Fragment {
 
         RecyclerView recyclerViewPartners = inflate.findViewById(R.id.partner_recycler_view);
         recyclerViewPartners.setHasFixedSize(true);
-        recyclerViewPartners.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
+        recyclerViewPartners.setLayoutManager(new SpanningGridLayoutManager(this.getContext(), 2, RecyclerView.VERTICAL, false));
         recyclerViewPartners.setAdapter(new PartnerAdapter(getContext(), partnerList));
         // Inflate the layout for this fragment
 
