@@ -25,6 +25,7 @@ import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.ParcelAdapterForAddress;
+import com.scleroid.nemai.controller.AddressLab;
 import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.OrderedCourier;
@@ -204,7 +205,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         List<Address> tempList = new ArrayList<>();
         for (int i = 0; i < OUTER_COUNT; i++) {
             ParcelLab.addParcel(createParcelData(faker), AppDatabase.getAppDatabase(context));
-            // AddressLab.addAddress(createInnerData(faker), AppDatabase.getAppDatabase(context));
+            AddressLab.addAddress(createInnerData(faker), AppDatabase.getAppDatabase(context));
         }
 
     }
