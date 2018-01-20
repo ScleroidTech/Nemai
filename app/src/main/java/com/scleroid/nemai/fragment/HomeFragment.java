@@ -144,8 +144,10 @@ public class HomeFragment extends Fragment {
             recycleViewPagerAdapter.updateParcelList(parcels);
 
             crimes = parcels;
+
             if ((parcels != null ? parcels.size() : 0) == 0)
                 createDefaultParcel();
+            setButtonsVisibility(recyclerViewPager.getCurrentPosition());
 
 
         });
@@ -172,6 +174,8 @@ public class HomeFragment extends Fragment {
         mSubmitButton = v.findViewById(R.id.btn_submit);
 
         mSubmitButton.setOnClickListener(view -> {
+            startActivity(new Intent(getContext(), SelectCourierActivity.class));
+            //TODO change this, temp
             if (submitData() != null)
                 sendCouriers();
 
@@ -320,18 +324,20 @@ public class HomeFragment extends Fragment {
 
     private Parcel submitData() {
         if (parcelCurrent == null) parcelCurrent = recycleViewPagerAdapter.holder.getParcel();
+        //TODO added on time
+        // ParcelLab.addParcel(parcelCurrent, AppDatabase.getAppDatabase(getContext()));
         for (Parcel parcel :
              crimes) {
             //TODO check for all blank values
             Parcel parcelNew = recycleViewPagerAdapter.holder.validateFields(parcel);
             if (parcelNew == null) {
-                recyclerViewPager.smoothScrollToPosition(crimes.indexOf(parcel));
+                recyclerViewPager.scrollToPosition(crimes.indexOf(parcel));
                 return null;
             }
         }
 
 
-        //  ParcelLab.addParcel(parcel, context);
+        ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(getContext()));
         parcelCurrent = ParcelLab.newParcel(context);
         return parcel;
         //    parcels = updateParcelList(context);
@@ -363,17 +369,13 @@ public class HomeFragment extends Fragment {
             rb.setText(stringList.get(i));
             rg.addView(rb);
         }
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        rg.setOnCheckedChangeListener((group, checkedId) -> {
+            int childCount = group.getChildCount();
+            for (int x = 0; x < childCount; x++) {
+                RadioButton btn = (RadioButton) group.getChildAt(x);
+                if (btn.getId() == checkedId) {
+                    Toast.makeText(getActivity(), btn.getText(), Toast.LENGTH_LONG).show();
 
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int childCount = group.getChildCount();
-                for (int x = 0; x < childCount; x++) {
-                    RadioButton btn = (RadioButton) group.getChildAt(x);
-                    if (btn.getId() == checkedId) {
-                        Toast.makeText(getActivity(), btn.getText(), Toast.LENGTH_LONG).show();
-
-                    }
                 }
             }
         });
