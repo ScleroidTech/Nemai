@@ -23,8 +23,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.scleroid.nemai.AppDatabase;
+import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.SessionManager;
+import com.scleroid.nemai.controller.AddressLab;
 import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.fragment.AddressListFragment;
 import com.scleroid.nemai.fragment.HomeFragment;
@@ -32,13 +34,17 @@ import com.scleroid.nemai.fragment.OrdersFragment;
 import com.scleroid.nemai.fragment.PartnersFragment;
 import com.scleroid.nemai.fragment.ProfileFragment;
 import com.scleroid.nemai.fragment.SettingsFragment;
+import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.utils.ProfileUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import io.bloco.faker.Faker;
+
+public class MainActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
 
     // urls to load navigation header background image
     // and profile image
@@ -434,5 +440,54 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+
+    @Override
+    public void onFakerReady(Faker faker) {
+        populateData(faker);
+    }
+
+    private void populateData(Faker faker) {
+        List<Address> innerData = new ArrayList<>();
+        List<Address> tempList = new ArrayList<>();
+        ParcelLab.addParcel(createParcelData(faker), AppDatabase.getAppDatabase(getApplicationContext()));
+        for (int i = 0; i < 5; i++) {
+            // ParcelLab.addParcel(createParcelData(faker), AppDatabase.getAppDatabase(context));
+            AddressLab.addAddress(createInnerData(faker), AppDatabase.getAppDatabase(getApplicationContext()));
+        }
+
+    }
+
+
+    private Address createInnerData(Faker faker) {
+        return new Address(
+                faker.name.name(),
+                faker.address.streetAddress(),
+                faker.address.streetName(),
+                faker.address.state(),
+                faker.address.city(),
+                (faker.number.between(111111, 999999)) + "",
+                faker.phoneNumber.phoneNumber()
+        );
+    }
+
+    private com.scleroid.nemai.models.Parcel createParcelData(Faker faker) {
+        String source = faker.address.city();
+        String dest = faker.address.city();
+        return new com.scleroid.nemai.models.Parcel(
+                source,
+                dest,
+                "Domestic",
+                "Parcel",
+                faker.number.positive(0, 10),
+                faker.number.positive(0, 1000),
+                faker.number.positive(),
+                faker.number.positive(),
+                faker.number.positive(),
+                faker.company.catchPhrase(),
+                faker.date.forward(),
+                new PinCode(source, (faker.number.between(111111, 999999)) + "", faker.address.state(), faker.address.streetName()),
+                new PinCode(dest, (faker.number.between(111111, 999999)) + "", faker.address.state(), faker.address.streetName())
+        );
+    }
 
 }
