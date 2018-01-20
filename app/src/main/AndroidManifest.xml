@@ -50,7 +50,8 @@
         <activity
             android:name=".activity.CheckoutActivity"
             android:exported="true"
-            android:label="Select Address" />
+            android:label="Select Address"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true"
