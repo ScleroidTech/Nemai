@@ -3,6 +3,7 @@ package com.scleroid.nemai.activity;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -46,8 +47,6 @@ import es.dmoral.toasty.Toasty;
 import hugo.weaving.DebugLog;
 import io.bloco.faker.Faker;
 import io.fabric.sdk.android.Fabric;
-
-import static com.google.common.util.concurrent.Runnables.doNothing;
 
 public class SelectCourierActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
 
@@ -261,14 +260,16 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
                 onBackPressed();
                 return true;
             case R.id.action_next:
-                if (orderedCourierList == null || orderedCourierList.isEmpty())
+                //TODO temp code, Uncomment below code
+                startActivity(new Intent(SelectCourierActivity.this, CheckoutActivity.class));
+             /*   if (orderedCourierList == null || orderedCourierList.isEmpty())
                 // outerRecyclerView.smoothScrollToPosition(0);
                 //This doesn't do anything
                 {
                     Runnable runnable = doNothing();
                 } else
                     isAllDone();
-
+*/
                 return true;
 
         }

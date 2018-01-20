@@ -205,8 +205,10 @@
             android:textColor="@color/details_status_color"
             android:textSize="18.4sp"
             app:font='@{"SF-UI-Display-Semibold.ttf"}'
+            app:layout_constraintBottom_toTopOf="@+id/change_password"
             app:layout_constraintEnd_toEndOf="@+id/card"
             app:layout_constraintStart_toStartOf="@+id/card"
+            app:layout_constraintTop_toBottomOf="@+id/location_edit_text"
             tools:layout_editor_absoluteY="271dp" />
         <!--android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"

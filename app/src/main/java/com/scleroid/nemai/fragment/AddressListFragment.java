@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.adapter.recyclerview.AddressAdapter;
+import com.scleroid.nemai.adapter.recyclerview.AddressAdapterInsideFragment;
 import com.scleroid.nemai.models.Address;
 import com.scleroid.nemai.viewmodels.AddressViewModel;
 
@@ -45,7 +45,7 @@ public class AddressListFragment extends Fragment {
     private List<Address> addresses;
     private TextView noAddressTitleTextView;
     private TextView noAddressSubtitleTextView;
-    private AddressAdapter addressAdapter;
+    private AddressAdapterInsideFragment addressAdapter;
     private FloatingActionButton mNewAddressButton;
 
     public AddressListFragment() {
@@ -86,6 +86,7 @@ public class AddressListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_address_list, container, false);
         noAddressTitleTextView = v.findViewById(R.id.no_address_title);
         noAddressSubtitleTextView = v.findViewById(R.id.no_address_subtitle);
+        mNewAddressButton = v.findViewById(R.id.new_address_button);
 
 
         RecyclerView addressRecyclerView = v.findViewById(R.id.addressRecyclerView);
@@ -129,7 +130,7 @@ public class AddressListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         addressRecyclerView.setLayoutManager(linearLayoutManager);
-        addressAdapter = new AddressAdapter();
+        addressAdapter = new AddressAdapterInsideFragment();
         addressRecyclerView.setAdapter(addressAdapter);
     }
 

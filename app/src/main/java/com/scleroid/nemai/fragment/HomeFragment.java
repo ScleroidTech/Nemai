@@ -18,6 +18,7 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
@@ -40,6 +41,7 @@ import android.widget.Toast;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.activity.SelectCourierActivity;
 import com.scleroid.nemai.adapter.recyclerview.PagerAdapter;
 import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.models.Parcel;
@@ -56,7 +58,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_PARCEL;
-import static com.scleroid.nemai.network.NetworkCalls.submitCouriers;
 
 
 //TODO CHange most activities to fragment if performance becomes a bottleneck
@@ -338,9 +339,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void sendCouriers() {
-        for (Parcel parcelTemp : crimes) {
+        //TODO Change this
+        startActivity(new Intent(getContext(), SelectCourierActivity.class));
+       /* for (Parcel parcelTemp : crimes) {
             submitCouriers(context, parcelTemp, TAG_COURIERS, loader);
-        }
+        }*/
     }
 
     private void showRadioButtonDialog() {
