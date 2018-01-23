@@ -22,7 +22,7 @@ import com.ramotion.garlandview.inner.InnerLayoutManager;
 import com.ramotion.garlandview.inner.InnerRecyclerView;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.activity.MainActivity;
+import com.scleroid.nemai.activity.CheckoutActivity;
 import com.scleroid.nemai.adapter.recyclerview.AddressAdapter;
 import com.scleroid.nemai.controller.OrderLab;
 import com.scleroid.nemai.fragment.AddressFragment;
@@ -280,7 +280,7 @@ public class ParcelHolderForAddress extends HeaderItem {
         mNewAddressButton.setOnClickListener(v -> {
 
 
-            FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
+            FragmentManager fm = ((CheckoutActivity) context).getSupportFragmentManager();
             Parcel parcel1 = header;
             PinCode pincode = parcel1.getDestinationPinCode();
             DialogFragment dialog = AddressFragment.newInstance(pincode.getLocation(), pincode.getPincode(), pincode.getState());

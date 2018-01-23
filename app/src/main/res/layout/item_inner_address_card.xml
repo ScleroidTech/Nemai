@@ -64,7 +64,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
-                        android:id="@+id/delivery_time"
+                        android:id="@+id/edit_image_button"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:text="Edit"
