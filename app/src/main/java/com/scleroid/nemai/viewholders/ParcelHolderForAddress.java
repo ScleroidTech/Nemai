@@ -160,6 +160,7 @@ public class ParcelHolderForAddress extends HeaderItem {
     public void initRecycerView(View itemView, RecyclerView.RecycledViewPool pool) {
         // Init RecyclerView
         innerRecyclerView = itemView.findViewById(R.id.recycler_view);
+//        Log.d("whatNull, " , "rerefhefef" + innerRecyclerView.toString());
         innerRecyclerView.setRecycledViewPool(pool);
         innerRecyclerView.setAdapter(new AddressAdapter());
 
@@ -240,6 +241,7 @@ public class ParcelHolderForAddress extends HeaderItem {
         header = parcel;
         tail = innerDataList;
         thatOrderedCourier = orderedCourier;
+        setupInsideRecyclerView();
         if (thatOrderedCourier != null && thatOrderedCourier.getAddress() != null)
             selectedAddressList.add(thatOrderedCourier.getAddress());
 
@@ -250,7 +252,7 @@ public class ParcelHolderForAddress extends HeaderItem {
             noAddressTitleTextView.setVisibility(View.GONE);
             noAddressSubtitleTextView.setVisibility(View.GONE);
             innerRecyclerView.setVisibility(View.VISIBLE);
-            setupInsideRecyclerView();
+
         } else {
             noAddressTitleTextView.setVisibility(View.VISIBLE);
             noAddressSubtitleTextView.setVisibility(View.VISIBLE);
