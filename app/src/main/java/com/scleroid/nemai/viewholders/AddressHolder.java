@@ -67,6 +67,7 @@ public class AddressHolder extends com.ramotion.garlandview.inner.InnerItem impl
                 dialog.show(fm, "adad");
             }
         });*/
+//
         editTextView.setOnClickListener(this);
         itemView.setOnClickListener(this);
 
