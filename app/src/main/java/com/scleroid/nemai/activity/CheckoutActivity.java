@@ -203,7 +203,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     private void populateData(Faker faker) {
         List<Address> innerData = new ArrayList<>();
         List<Address> tempList = new ArrayList<>();
-        for (int i = 0; i < OUTER_COUNT; i++) {
+        for (int i = 0; i < 5; i++) {
             ParcelLab.addParcel(createParcelData(faker), AppDatabase.getAppDatabase(context));
             AddressLab.addAddress(createInnerData(faker), AppDatabase.getAppDatabase(context));
         }

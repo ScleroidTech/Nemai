@@ -167,7 +167,7 @@ public class ParcelAdapterForAddress extends TailAdapter<ParcelHolderForAddress>
 
     @Override
     public ParcelHolderForAddress onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.outer_header, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_parcel_view, parent, false);
         //   binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_parcel_view, parent, false);
         Log.d("innerItem", "data " + addresses.size());
         //  binding.setDataset(addresses);
@@ -183,7 +183,8 @@ public class ParcelAdapterForAddress extends TailAdapter<ParcelHolderForAddress>
         //  holder.selectedAddressList = selectedAddress;
         OrderedCourier thatOrderedCourier = null;
         if (orderedCourierList != null && !orderedCourierList.isEmpty()) {
-            thatOrderedCourier = orderedCourierList.get(position);
+            //TODO there's an issue here
+            //  thatOrderedCourier = orderedCourierList.get(position);
         }
             if (addressesList.size() == 0)
                 holder.setContent(parcels.get(position), position, parcels.size(), thatOrderedCourier);
@@ -224,7 +225,7 @@ public class ParcelAdapterForAddress extends TailAdapter<ParcelHolderForAddress>
         List<List<Address>> outerData = new ArrayList<>();
         for (Parcel parcel : parcels) {
             for (Address address : innerData) {
-                if (parcel.getDestinationPin().equals(address.getPincode()))
+                // if (parcel.getDestinationPin().equals(address.getPincode()))
                     tempList.add(address);
 
             }

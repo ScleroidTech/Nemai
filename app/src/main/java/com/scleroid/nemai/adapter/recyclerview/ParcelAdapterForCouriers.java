@@ -193,7 +193,7 @@ public class ParcelAdapterForCouriers extends TailAdapter<ParcelHolderForCourier
         OrderedCourier thatOrderedCourier = null;
         if (orderedCourierList != null && !orderedCourierList.isEmpty()) {
             //TODO issue is here
-            thatOrderedCourier = orderedCourierList.get(position + 1);
+//            thatOrderedCourier = orderedCourierList.get(position);
         }
         if (courieresList.size() == 0)
             holder.setContent(parcels.get(position), position, parcels.size(), thatOrderedCourier);
