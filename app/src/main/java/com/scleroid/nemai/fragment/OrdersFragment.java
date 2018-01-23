@@ -1,5 +1,6 @@
 package com.scleroid.nemai.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,11 @@ import android.widget.TextView;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.OrderAdapter;
+import com.scleroid.nemai.models.OrderedCourier;
+import com.scleroid.nemai.viewmodels.OrderViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -76,41 +82,40 @@ public class OrdersFragment extends Fragment {
 
 
         RecyclerView recyclerView = v.findViewById(R.id.addressRecyclerView);
+
         setupRecyclerView(recyclerView);
 
-        noOrders.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
-        /*AddressViewModel addressViewModel = ViewModelProviders.of(OrdersFragment.this).get(AddressViewModel.class);
-        addressViewModel.getAddressList().observe(OrdersFragment.this, addresses -> {
-         *//*   parcelAdapterForAddress.updateAddressList(addresses);
-            parcelAdapterForAddress.notifyDataSetChanged();*//*
-            if (addresses != null && !addresses.isEmpty()) {
-                adapter.setAddresses(addresses);
-                adapter.notifyDataSetChanged();
-            }
-        });
-        if (addresses != null && !addresses.isEmpty()) {
-            noOrders.setVisibility(View.GONE);
-            noAddressSubtitleTextView.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-            setupRecyclerView(recyclerView);
-        } else {
-            noOrders.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        }
+        OrderViewModel parcelViewModel = ViewModelProviders.of(OrdersFragment.this).get(OrderViewModel.class);
 
-*/
+        parcelViewModel.getOrderList().observe(OrdersFragment.this, orders -> {
+
+            adapter.updateOrderList(orders);
+            updateUI(noOrders, recyclerView, orders);
+
+        });
+
+
         //list package
 
 
         return v;
     }
 
+    public void updateUI(TextView noOrders, RecyclerView recyclerView, List<OrderedCourier> orders) {
+        if (orders != null && !orders.isEmpty()) {
+            noOrders.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        } else {
+            noOrders.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+    }
+
     public void setupRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new OrderAdapter();
+        adapter = new OrderAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
     }
 

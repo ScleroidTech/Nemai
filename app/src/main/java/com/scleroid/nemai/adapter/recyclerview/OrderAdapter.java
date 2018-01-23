@@ -6,7 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.viewholders.OrderHolder;
+
+import java.util.List;
 
 /**
  * @author Ganesh Kaple
@@ -14,9 +17,15 @@ import com.scleroid.nemai.viewholders.OrderHolder;
  */
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderHolder> {
+    private List<OrderedCourier> orderedCouriers;
+
+    public OrderAdapter(List<OrderedCourier> orderedCouriers) {
+        this.orderedCouriers = orderedCouriers;
+    }
+
     @Override
     public OrderHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_partner_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order_view, parent, false);
         return new OrderHolder(view);
     }
 
@@ -27,6 +36,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderHolder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return orderedCouriers.size();
+    }
+
+    public void updateOrderList(List<OrderedCourier> parcels) {
+        this.orderedCouriers = parcels;
+        notifyDataSetChanged();
     }
 }

@@ -183,8 +183,7 @@ public class MainActivity extends AppCompatActivity implements GarlandApp.FakerR
 
         profileUtils.setUserProfilePicture(imgProfile);
 
-        // showing dot next to notifications label
-        navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
+
     }
 
 
