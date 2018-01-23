@@ -82,6 +82,7 @@ public class Parcel implements Parcelable {
         this(city, city1, domestic, parcel, positive, positive1, positive2, positive3, positive4, s, birthday, getRandomSerialNo(), sourcePinCode, destinationPinCode);
     }
 
+    @Ignore
     protected Parcel(android.os.Parcel in) {
         sourcePinCode = in.readParcelable(PinCode.class.getClassLoader());
         destinationPin = in.readParcelable(PinCode.class.getClassLoader());

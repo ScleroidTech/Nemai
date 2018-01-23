@@ -10,12 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.flexbox.FlexWrap;
-import com.google.android.flexbox.FlexboxLayoutManager;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.PartnerAdapter;
+import com.scleroid.nemai.utils.GridUtils;
 
 import java.util.ArrayList;
+
 
 
 /**
@@ -79,9 +79,11 @@ public class PartnersFragment extends Fragment {
 
         RecyclerView recyclerViewPartners = inflate.findViewById(R.id.partner_recycler_view);
         recyclerViewPartners.setHasFixedSize(true);
-        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager();
-        layoutManager.setFlexWrap(FlexWrap.WRAP);
-        recyclerViewPartners.setLayoutManager(new GridLayoutManager(this.getContext(), 2, RecyclerView.VERTICAL, false));
+
+
+        int mNoOfColumns = GridUtils.calculateNoOfColumns(getContext());
+        recyclerViewPartners.setLayoutManager(new GridLayoutManager(this.getContext(), mNoOfColumns, RecyclerView.VERTICAL, false));
+
         recyclerViewPartners.setAdapter(new PartnerAdapter(getContext(), partnerList));
         // Inflate the layout for this fragment
 
