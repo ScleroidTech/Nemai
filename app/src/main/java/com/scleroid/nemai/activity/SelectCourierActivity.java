@@ -187,8 +187,8 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
                 faker.commerce.price().doubleValue(),
                 faker.commerce.productName(),
                 faker.team.sport(),
-                faker.avatar.image()
-        );
+                faker.avatar.image(),
+                faker.number.between() + "", faker.internet.macAddress() + "");
     }
 
     private com.scleroid.nemai.models.Parcel createParcelData(Faker faker) {
