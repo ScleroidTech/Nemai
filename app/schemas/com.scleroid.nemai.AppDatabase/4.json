@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "2c8a9d8999a82b70149af6b55e5c1957",
+    "identityHash": "986045eba3ef9f9fd7dc71c749fc9e9c",
     "entities": [
       {
         "tableName": "Parcel",
@@ -202,7 +202,7 @@
       },
       {
         "tableName": "OrderedCourier",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serialNo` INTEGER, `parcel_serialNo` INTEGER, `parcel_sourcePin` TEXT, `parcel_destinationPin` TEXT, `parcel_deliveryType` TEXT, `parcel_packageType` TEXT, `parcel_weight` INTEGER, `parcel_invoice` INTEGER, `parcel_length` INTEGER, `parcel_width` INTEGER, `parcel_height` INTEGER, `parcel_description` TEXT, `parcel_parcelDate` INTEGER, `parcel_source_location` TEXT, `parcel_source_pincode` TEXT, `parcel_source_state` TEXT, `parcel_source_area` TEXT, `parcel_dest_location` TEXT, `parcel_dest_pincode` TEXT, `parcel_dest_state` TEXT, `parcel_dest_area` TEXT, `address_serialNo` INTEGER, `address_name` TEXT, `address_address_line_1` TEXT, `address_address_line_2` TEXT, `address_state` TEXT, `address_city` TEXT, `address_pincode` TEXT, `address_mobileNo` TEXT, `courier_serialNo` INTEGER, `courier_courierName` TEXT, `courier_price` REAL, `courier_serviceType` TEXT, `courier_deliveryTime` TEXT, `courier_courierImageUrl` TEXT, PRIMARY KEY(`serialNo`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serialNo` INTEGER, `parcel_serialNo` INTEGER, `parcel_sourcePin` TEXT, `parcel_destinationPin` TEXT, `parcel_deliveryType` TEXT, `parcel_packageType` TEXT, `parcel_weight` INTEGER, `parcel_invoice` INTEGER, `parcel_length` INTEGER, `parcel_width` INTEGER, `parcel_height` INTEGER, `parcel_description` TEXT, `parcel_parcelDate` INTEGER, `parcel_source_location` TEXT, `parcel_source_pincode` TEXT, `parcel_source_state` TEXT, `parcel_source_area` TEXT, `parcel_dest_location` TEXT, `parcel_dest_pincode` TEXT, `parcel_dest_state` TEXT, `parcel_dest_area` TEXT, `address_serialNo` INTEGER, `address_name` TEXT, `address_address_line_1` TEXT, `address_address_line_2` TEXT, `address_state` TEXT, `address_city` TEXT, `address_pincode` TEXT, `address_mobileNo` TEXT, `courier_serialNo` INTEGER, `courier_courierName` TEXT, `courier_price` REAL, `courier_serviceType` TEXT, `courier_deliveryTime` TEXT, `courier_courierImageUrl` TEXT, `courier_trackingID` TEXT, `courier_referenceNo` TEXT, PRIMARY KEY(`serialNo`))",
         "fields": [
           {
             "fieldPath": "serialNo",
@@ -413,6 +413,18 @@
             "columnName": "courier_courierImageUrl",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "courier.trackingID",
+            "columnName": "courier_trackingID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "courier.referenceNo",
+            "columnName": "courier_referenceNo",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -426,7 +438,7 @@
       },
       {
         "tableName": "Courier",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serialNo` INTEGER NOT NULL, `courierName` TEXT, `price` REAL NOT NULL, `serviceType` TEXT, `deliveryTime` TEXT, `courierImageUrl` TEXT, PRIMARY KEY(`serialNo`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serialNo` INTEGER NOT NULL, `courierName` TEXT, `price` REAL NOT NULL, `serviceType` TEXT, `deliveryTime` TEXT, `courierImageUrl` TEXT, `trackingID` TEXT, `referenceNo` TEXT, PRIMARY KEY(`serialNo`))",
         "fields": [
           {
             "fieldPath": "serialNo",
@@ -463,6 +475,18 @@
             "columnName": "courierImageUrl",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "trackingID",
+            "columnName": "trackingID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "referenceNo",
+            "columnName": "referenceNo",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -477,7 +501,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2c8a9d8999a82b70149af6b55e5c1957\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"986045eba3ef9f9fd7dc71c749fc9e9c\")"
     ]
   }
 }

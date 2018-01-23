@@ -55,7 +55,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_PARCEL;
 
@@ -202,9 +201,9 @@ public class HomeFragment extends Fragment {
     }
 
 
-
-    public void createDefaultParcel() {
-        ParcelLab.newParcel(context);
+    public Parcel createDefaultParcel() {
+        Parcel parcel = ParcelLab.newParcel(context);
+        return parcel;
     }
 
     private void setupRecyclerView(View v, LayoutInflater inflater, Context context) {
@@ -257,12 +256,7 @@ public class HomeFragment extends Fragment {
             }
         });
         //TODO implement this on empty address
-        //
-        //
-        //
-        //
-        //
-        //
+
         // recyclerViewPager.scrollToPosition();
         recyclerViewPager.addOnPageChangedListener((oldPosition, newPosition) -> {
 
@@ -337,8 +331,8 @@ public class HomeFragment extends Fragment {
         }
 
 
-        ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(getContext()));
-        parcelCurrent = ParcelLab.newParcel(context);
+        /*ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(getContext()));*/
+        parcelCurrent = createDefaultParcel();
         return parcel;
         //    parcels = updateParcelList(context);
 
@@ -398,31 +392,6 @@ public class HomeFragment extends Fragment {
         // updateSubtitle();
     }
 
-    private List<Parcel> updateParcelList(Context context) {
-
-        ParcelLab.GetAllAsync task = new ParcelLab.GetAllAsync(AppDatabase.getAppDatabase(context), context);
-//        task.setOnResultsListener(new ResultAsyncListener() {
-//            @Override
-//            public void onResultsReceived(List<Parcel> result) {
-//                crimes = result;
-//            }
-//        });
-        try {
-            crimes = task.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        Log.d(TAG, "crimes" + crimes + crimes.size());
-        if (crimes == null || crimes.size() < 1) {
-            ParcelLab.newParcel(context);
-            crimes = ParcelLab.getAllParcels(context);
-            // task.execute();
-            Log.d(TAG, "crimes2" + crimes);
-        }
-        return crimes;
-    }
 
     private void updateSubtitle() {
     }

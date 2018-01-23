@@ -90,7 +90,7 @@ public class AddressListFragment extends Fragment {
 
 
         RecyclerView addressRecyclerView = v.findViewById(R.id.addressRecyclerView);
-
+        setupRecyclerView(addressRecyclerView);
 
         AddressViewModel addressViewModel = ViewModelProviders.of(AddressListFragment.this).get(AddressViewModel.class);
         addressViewModel.getAddressList().observe(AddressListFragment.this, addresses -> {
@@ -105,7 +105,7 @@ public class AddressListFragment extends Fragment {
             noAddressTitleTextView.setVisibility(View.GONE);
             noAddressSubtitleTextView.setVisibility(View.GONE);
             addressRecyclerView.setVisibility(View.VISIBLE);
-            setupRecyclerView(addressRecyclerView);
+
         } else {
             noAddressTitleTextView.setVisibility(View.VISIBLE);
             noAddressSubtitleTextView.setVisibility(View.VISIBLE);
