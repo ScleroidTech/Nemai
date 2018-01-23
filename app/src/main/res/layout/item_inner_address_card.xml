@@ -64,16 +64,16 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
-                        android:id="@+id/edit_image_button"
+                        android:id="@+id/delivery_time"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:src="@drawable/ic_edit_location_black_24dp"
                         android:text="Edit"
                         android:textAlignment="center"
                         android:textColor="#00f"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_edit_location_black_24dp" />
 
                     <RadioButton
                         android:id="@+id/select_address_radio"

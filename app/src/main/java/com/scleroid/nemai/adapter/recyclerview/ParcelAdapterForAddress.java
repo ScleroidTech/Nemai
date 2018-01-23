@@ -167,7 +167,7 @@ public class ParcelAdapterForAddress extends TailAdapter<ParcelHolderForAddress>
 
     @Override
     public ParcelHolderForAddress onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_parcel_view, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.outer_header, parent, false);
         //   binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_parcel_view, parent, false);
         Log.d("innerItem", "data " + addresses.size());
         //  binding.setDataset(addresses);
