@@ -47,6 +47,7 @@ public class AddressListFragment extends Fragment {
     private TextView noAddressSubtitleTextView;
     private AddressAdapterInsideFragment addressAdapter;
     private FloatingActionButton mNewAddressButton;
+    private RecyclerView addressRecyclerView;
 
     public AddressListFragment() {
         // Required empty public constructor
@@ -89,28 +90,21 @@ public class AddressListFragment extends Fragment {
         mNewAddressButton = v.findViewById(R.id.new_address_button);
 
 
-        RecyclerView addressRecyclerView = v.findViewById(R.id.addressRecyclerView);
+        addressRecyclerView = v.findViewById(R.id.addressRecyclerView);
         setupRecyclerView(addressRecyclerView);
 
         AddressViewModel addressViewModel = ViewModelProviders.of(AddressListFragment.this).get(AddressViewModel.class);
         addressViewModel.getAddressList().observe(AddressListFragment.this, addresses -> {
          /*   parcelAdapterForAddress.updateAddressList(addresses);
             parcelAdapterForAddress.notifyDataSetChanged();*/
+            this.addresses = addresses;
             if (addresses != null && !addresses.isEmpty()) {
                 addressAdapter.setAddresses(addresses);
                 addressAdapter.notifyDataSetChanged();
+                setVisibility();
             }
         });
-        if (addresses != null && !addresses.isEmpty()) {
-            noAddressTitleTextView.setVisibility(View.GONE);
-            noAddressSubtitleTextView.setVisibility(View.GONE);
-            addressRecyclerView.setVisibility(View.VISIBLE);
-
-        } else {
-            noAddressTitleTextView.setVisibility(View.VISIBLE);
-            noAddressSubtitleTextView.setVisibility(View.VISIBLE);
-            addressRecyclerView.setVisibility(View.GONE);
-        }
+        setVisibility();
 
 
         //list package
@@ -124,6 +118,19 @@ public class AddressListFragment extends Fragment {
 
         });
         return v;
+    }
+
+    public void setVisibility() {
+        if (addresses != null && !addresses.isEmpty()) {
+            noAddressTitleTextView.setVisibility(View.GONE);
+            noAddressSubtitleTextView.setVisibility(View.GONE);
+            addressRecyclerView.setVisibility(View.VISIBLE);
+
+        } else {
+            noAddressTitleTextView.setVisibility(View.VISIBLE);
+            noAddressSubtitleTextView.setVisibility(View.VISIBLE);
+            addressRecyclerView.setVisibility(View.GONE);
+        }
     }
 
     public void setupRecyclerView(RecyclerView addressRecyclerView) {
