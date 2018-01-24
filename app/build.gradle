@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.1'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId 'com.scleroid.nemai'
         minSdkVersion 19
@@ -46,7 +46,7 @@ android {
 
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-   /* implementation 'com.android.support:support-v4:27.0.2'*/
+    /* implementation 'com.android.support:support-v4:27.0.2'*/
     compile 'com.android.support:multidex:1.0.2'
     testCompile 'junit:junit:4.12'
     // Glide image library
@@ -65,7 +65,6 @@ dependencies {
     compile 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
-
     compile 'com.google.android:flexbox:0.3.0-alpha2'
     //compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     // compile 'com.facebook.stetho:stetho:1.5.0'
