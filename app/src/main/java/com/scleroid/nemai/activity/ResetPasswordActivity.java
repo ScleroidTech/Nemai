@@ -49,12 +49,7 @@ public class ResetPasswordActivity extends EmailAutoCompleteActivity {
 
         populateAutoComplete();
         Button mResetPassword = findViewById(R.id.reset_password_button);
-        mResetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptResetPassword();
-            }
-        });
+        mResetPassword.setOnClickListener(v -> attemptResetPassword());
     }
 
 
@@ -101,13 +96,10 @@ public class ResetPasswordActivity extends EmailAutoCompleteActivity {
                 resetPassword(email);
                 Button mLoginButton = findViewById(R.id.back_to_login_button);
                 mLoginButton.setVisibility(View.VISIBLE);
-                mLoginButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
+                mLoginButton.setOnClickListener(v -> {
+                    Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 });
             } else {
                 Intent intent = new Intent(ResetPasswordActivity.this, OtpVerificationActivity.class);

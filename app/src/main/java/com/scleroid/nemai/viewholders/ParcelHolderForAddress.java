@@ -157,7 +157,7 @@ public class ParcelHolderForAddress extends HeaderItem {
         this.selectedAddressList.add(selectedAddressList);
     }
 
-    public void initRecycerView(View itemView, RecyclerView.RecycledViewPool pool) {
+    private void initRecycerView(View itemView, RecyclerView.RecycledViewPool pool) {
         // Init RecyclerView
         innerRecyclerView = itemView.findViewById(R.id.recycler_view);
 //        Log.d("whatNull, " , "rerefhefef" + innerRecyclerView.toString());
@@ -248,17 +248,7 @@ public class ParcelHolderForAddress extends HeaderItem {
 
         //  Crashlytics.getInstance().crash(); // Force a crash
 
-        if (tail != null && !tail.isEmpty()) {
-            noAddressTitleTextView.setVisibility(View.GONE);
-            noAddressSubtitleTextView.setVisibility(View.GONE);
-            innerRecyclerView.setVisibility(View.VISIBLE);
-
-        } else {
-            noAddressTitleTextView.setVisibility(View.VISIBLE);
-            noAddressSubtitleTextView.setVisibility(View.VISIBLE);
-            innerRecyclerView.setVisibility(View.GONE);
-
-        }
+        // setVisibility();
 
         //gestureDetector = new GestureDetectorCompat(this.getHeader().getContext(), new RecyclerViewDemoOnGestureListener());
 
@@ -274,7 +264,7 @@ public class ParcelHolderForAddress extends HeaderItem {
 
         source.setText(parcel.getSourcePin());//TODO COnvert Pincode to room , get source city instead of pincod,e & store selected object instead of text
         destination.setText(parcel.getDestinationPin());
-        cost.setText("Rs. " + parcel.getInvoice());//TODO get delivery price, not invoice
+        cost.setText(String.format(context.getString(R.string.currency_symbol), parcel.getInvoice()));//TODO get delivery price, not invoice
 
 
         mNewAddressButton.setOnClickListener(v -> {
@@ -289,6 +279,20 @@ public class ParcelHolderForAddress extends HeaderItem {
 
         });
 
+    }
+
+    public void setVisibility() {
+        if (tail != null && !tail.isEmpty()) {
+            noAddressTitleTextView.setVisibility(View.GONE);
+            noAddressSubtitleTextView.setVisibility(View.GONE);
+            innerRecyclerView.setVisibility(View.VISIBLE);
+
+        } else {
+            noAddressTitleTextView.setVisibility(View.VISIBLE);
+            noAddressSubtitleTextView.setVisibility(View.VISIBLE);
+            innerRecyclerView.setVisibility(View.GONE);
+
+        }
     }
 
     private void setupInsideRecyclerView() {

@@ -134,18 +134,18 @@
                 android:background="@color/item_separator_color"
                 app:layout_constraintBottom_toTopOf="@+id/tv_select"
                 app:layout_constraintRight_toRightOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_select"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@string/connect"
-                android:textColor="@color/header_green"
-                android:textSize="@dimen/item_footer_text_size"
-                app:font='@{"SF-UI-Display-Semibold.ttf"}'
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/line" />
+            <!--
+                        <TextView
+                            android:id="@+id/tv_select"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:text="@string/connect"
+                            android:textColor="@color/header_green"
+                            android:textSize="@dimen/item_footer_text_size"
+                            app:font='@{"SF-UI-Display-Semibold.ttf"}'
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/line" />-->
 
 
         </android.support.constraint.ConstraintLayout>
