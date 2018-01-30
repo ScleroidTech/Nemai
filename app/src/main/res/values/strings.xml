@@ -221,8 +221,8 @@
     <string name="date_picker_title_dob">Courier Pickup Date</string>
     <string name="next">Next</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="error_occurred">Oh no! Something bad happened</string>
     <string name="currency_symbol">Rs. %d</string>
 
 </resources>

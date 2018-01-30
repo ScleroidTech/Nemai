@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="com.scleroid.nemai.viewpager.CourierFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_courier_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/no_wifi_icon_courier_fragment"
+        android:layout_width="130dp"
+        android:layout_height="119dp"
+        android:layout_gravity="center"
+        android:contentDescription="TODO"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_signal_wifi_off_black_24dp" />
+
+    <TextView
+        android:id="@+id/error_msg_text_view_courier_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/error_occurred"
+        android:textSize="20sp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/retry_button_courier_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_rounded"
+        android:text="Retry"
+        android:visibility="gone" />
+
+</LinearLayout>

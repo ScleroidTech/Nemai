@@ -30,6 +30,7 @@
 
     <dimen name="inner_item_offset">16dp</dimen>
     <dimen name="inner_item_height">210dp</dimen>
+    <dimen name="inner_courier_height">100dp</dimen>
     <dimen name="inner_item_height_decoration">210dp</dimen>
 
     <dimen name="dp10">10dp</dimen>
