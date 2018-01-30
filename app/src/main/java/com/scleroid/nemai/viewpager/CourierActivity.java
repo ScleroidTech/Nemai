@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.ramotion.garlandview.TailLayoutManager;
 import com.ramotion.garlandview.TailRecyclerView;
@@ -47,7 +46,6 @@ import java.util.List;
 import es.dmoral.toasty.Toasty;
 import hugo.weaving.DebugLog;
 import io.bloco.faker.Faker;
-import io.fabric.sdk.android.Fabric;
 
 public class CourierActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
 
@@ -85,11 +83,7 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Fabric fabric = new Fabric.Builder(this)
-                .kits(new Crashlytics())
-                .debuggable(true)           // Enables Crashlytics debugger
-                .build();
-        Fabric.with(fabric);
+
         setContentView(R.layout.activity_courier_viewpager);
 
         FacebookSdk.sdkInitialize(CourierActivity.this);
