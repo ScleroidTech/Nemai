@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,9 +63,9 @@ AddressFragment extends DialogFragment {
 
     }
 
-    public static void show(AppCompatActivity context) {
+ /*   public static void show(AppCompatActivity context) {
         AddressFragment dialog = new AddressFragment();
-    }
+    }*/
 
     @NonNull
     private static Bundle createBundle(Address address) {

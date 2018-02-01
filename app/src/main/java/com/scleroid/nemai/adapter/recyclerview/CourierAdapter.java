@@ -37,8 +37,8 @@ public class CourierAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
      */
 
     int selectedItemPosition = -1;
-    private List<Courier> mData = new ArrayList<>();
-    private List<Courier> mDataSelected = new ArrayList<>();
+    private List<Courier> couriers = new ArrayList<>();
+    private List<Courier> selectedCourierList = new ArrayList<>();
     private View mEmptyView;
     private View innerLayout;
     private RadioButton lastChecked = null;
@@ -85,12 +85,13 @@ public class CourierAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
             final ItemEmptyCourierViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_empty_courier_view,parent,false);
             return new EmptyViewHolder(binding.getRoot());
         }*/
-        //    mData = new ArrayList<>();
-        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_inner_courier_card, parent, false);
-        //    Log.d("innerItem", "data " + mData.size());
+        //    couriers = new ArrayList<>();
+        //TODO remove when reverting Changed this for testing
+        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_courier_card_view, parent, false);
+        //    Log.d("innerItem", "data " + couriers.size());
 
         selectedItems = new SparseBooleanArray();
-        //    Log.d("innerItem", "is it here? onCreateViewHolder" + mData.size());
+        //    Log.d("innerItem", "is it here? onCreateViewHolder" + couriers.size());
         return new CourierHolder(binding.getRoot());
     }
 
@@ -98,9 +99,9 @@ public class CourierAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
     public void onBindViewHolder(final CourierHolder holder, final int position) {
 
         //   holder.setIsRecyclable(false);
-        Courier courier = mData.get(position);
-        // Log.d("innerItem", "is it here? onBindViewHolder" + mData.size() + "  position " + position);
-        // if (position < mData.size() && !mData.isEmpty())
+        Courier courier = couriers.get(position);
+        // Log.d("innerItem", "is it here? onBindViewHolder" + couriers.size() + "  position " + position);
+        // if (position < couriers.size() && !couriers.isEmpty())
 
         context = holder.getInnerLayout().getContext();
         holder.setContent(courier, context);
@@ -109,7 +110,7 @@ public class CourierAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
 
         //  setSelectedCourier();
 
-        if (mDataSelected.contains(mData.get(position))) {
+        if (selectedCourierList.contains(couriers.get(position))) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.list_item_selected_state));
             holder.itemView.setActivated(true);
             holder.radioButton.setChecked(true);
@@ -141,13 +142,13 @@ public class CourierAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
         //make sure to check if dataset is null and if itemA and itemB are valid indexes.
         //      List<Courier> temp = new ArrayList<>();
         try {
-            if (position != 0 && mDataSelected.contains(mData.get(position))) {
-                Courier itemA = mData.get(position);
-                Courier itemB = mData.get(0);
-                mData.set(position, itemB);
-                mData.set(0, itemA);
-           /* mData.add(0, itemA);
-            mData.remove(tail.lastIndexOf(itemA));*/
+            if (position != 0 && selectedCourierList.contains(couriers.get(position))) {
+                Courier itemA = couriers.get(position);
+                Courier itemB = couriers.get(0);
+                couriers.set(position, itemB);
+                couriers.set(0, itemA);
+           /* couriers.add(0, itemA);
+            couriers.remove(tail.lastIndexOf(itemA));*/
 
                 //   notifyItemMoved(position, 0);
             }//This will trigger onBindViewHolder method from the adapter.
@@ -170,8 +171,8 @@ public class CourierAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
     @Override
     public int getItemCount() {
 
-        //       Log.d("innerItem", "is it here? getItemCOunt" + mData.size());
-        return mData.size();
+        //       Log.d("innerItem", "is it here? getItemCOunt" + couriers.size());
+        return couriers.size();
     }
 
     /**
@@ -183,18 +184,18 @@ public class CourierAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
      */
     @Override
     public int getItemViewType(int position) {
-        //     Log.d("innerItem", "is it here? getItemViewType" + mData.size());
+        //     Log.d("innerItem", "is it here? getItemViewType" + couriers.size());
         return position;
         //return R.layout.item_inner_courier_card;
     }
 
     public void addData(@Nullable List<Courier> innerDataList, List<Courier> selected) {
-        final int size = mData.size();
-        mData = innerDataList;
+        final int size = couriers.size();
+        couriers = innerDataList;
         if (selected != null && !selected.isEmpty())
-            mDataSelected = selected;
-        // swapItems(mData.indexOf(selected.get(0)));
-        Log.d("innerItem", "is it here? addData" + mData.size());
+            selectedCourierList = selected;
+        // swapItems(couriers.indexOf(selected.get(0)));
+        Log.d("innerItem", "is it here? addData" + couriers.size());
 
         notifyDataSetChanged();
         //notifyItemRangeInserted(size, innerDataList.size());
@@ -203,9 +204,9 @@ public class CourierAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
     public void updateSelectedData(int position, List<Courier> selected) {
 
 
-        mDataSelected = selected;
+        selectedCourierList = selected;
         // swapItems(position);
-        //      Log.d("innerItem", "is it here? addData" + mData.size());
+        //      Log.d("innerItem", "is it here? addData" + couriers.size());
 
         notifyDataSetChanged();
         //notifyItemRangeInserted(size, innerDataList.size());
@@ -213,7 +214,7 @@ public class CourierAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
 
 
     public void clearData() {
-        mData.clear();
+        couriers.clear();
         notifyDataSetChanged();
     }
 
