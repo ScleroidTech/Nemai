@@ -12,6 +12,7 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
+import com.facebook.FacebookSdk;
 
 /**
  * Created by Ganesh on 14-Mar-17.
@@ -45,6 +46,7 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        FacebookSdk.sdkInitialize(mInstance);
         MultiDex.install(this);
     }
 

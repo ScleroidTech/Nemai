@@ -5,6 +5,9 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,26 +16,20 @@ import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.facebook.FacebookSdk;
-import com.ramotion.garlandview.TailLayoutManager;
-import com.ramotion.garlandview.TailRecyclerView;
-import com.ramotion.garlandview.TailSnapHelper;
-import com.ramotion.garlandview.header.HeaderTransformer;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.activity.CheckoutActivity;
-import com.scleroid.nemai.adapter.recyclerview.ParcelAdapterForCouriers;
+import com.scleroid.nemai.adapter.recyclerview.ParcelAdapterForAddress;
 import com.scleroid.nemai.controller.CourierLab;
 import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.utils.EventBusUtils;
 import com.scleroid.nemai.utils.Events;
-import com.scleroid.nemai.utils.GlobalBus;
 import com.scleroid.nemai.viewmodels.CourierViewModel;
 import com.scleroid.nemai.viewmodels.OrderViewModel;
 import com.scleroid.nemai.viewmodels.ParcelViewModel;
@@ -49,14 +46,14 @@ import io.bloco.faker.Faker;
 
 public class CourierActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
 
-    private final static int OUTER_COUNT = 5;
-    private final static int INNER_COUNT = 5;
+
     /**
      * Value used to generate Log
      */
-    private static final String TAG = "com.scleroid.nemai.activity.checkoutActivity";
+    private static final String TAG = CourierActivity.class.getSimpleName();
+    private static final int OUTER_COUNT = 5;
+    private final EventBusUtils eventBusUtils = new EventBusUtils();
     Context context;
-    List<List<Courier>> outerData = new ArrayList<>();
 
     List<OrderedCourier> orderedCourierList = new ArrayList<>();
     /**
@@ -65,10 +62,9 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
      */
     SparseBooleanArray selectedPositions = new SparseBooleanArray();
 
-
     private ParcelViewModel parcelViewModel;
-    private ParcelAdapterForCouriers parcelAdapter;
-    private TailRecyclerView outerRecyclerView;
+
+
     private ActionMode mActionMode;
     private Menu context_menu;
     private OrderViewModel orderViewModel;
@@ -76,7 +72,8 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
     private Toolbar toolbar;
     private ActionBar actionBar;
     private MenuItem nextItem;
-    private List<Parcel> parcels;
+    private List<Parcel> parcels = new ArrayList<>();
+    private ViewPager viewPager;
 
 
     @SuppressLint("LongLogTag")
@@ -85,36 +82,59 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_courier_viewpager);
+        viewPager = findViewById(R.id.viewpager);
 
-        FacebookSdk.sdkInitialize(CourierActivity.this);
-        context = CourierActivity.this;
-        ((GarlandApp) getApplication()).addListener(this);
-        initRecyclerView(new ArrayList<>(), new ArrayList<>());
+
+        // ((GarlandApp) getApplication()).addListener(this);
+        setupViewModels();
+        setupViewPager();
+    }
+
+    private void setupViewPager() {
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        viewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
+            @Override
+            public Fragment getItem(int position) {
+                Parcel parcel = parcels.get(position);
+                return CourierFragment.newInstance(parcel);
+            }
+
+            @Override
+            public int getCount() {
+                return parcels.size();
+            }
+        });
+        viewPager.setCurrentItem(0);
+    }
+
+    private void setupViewModels() {
         orderViewModel = ViewModelProviders.of(CourierActivity.this).get(OrderViewModel.class);
 
         orderViewModel.getOrderList().observe(CourierActivity.this, orderedCouriers -> {
             orderedCourierList = orderedCouriers;
-            parcelAdapter.setOrderedCourierList(orderedCouriers);
+
             Log.d(TAG, "Courier List updated, Yo" + orderedCouriers.size());
-            isFinalized = orderedCouriers.size() == parcelAdapter.getParcels().size();
+            //TODO what to do?
+            // isFinalized = orderedCouriers.size() == parcels.getParcels().size();
 
         });
         parcelViewModel = ViewModelProviders.of(CourierActivity.this).get(ParcelViewModel.class);
 
 
         parcelViewModel.getParcelList().observe(CourierActivity.this, parcels -> {
-
-            parcelAdapter.setParcels(parcels);
+            this.parcels = parcels;
+            viewPager.getAdapter().notifyDataSetChanged();
+            /*parcelAdapter.setParcels(parcels);
             parcelAdapter.notifyDataSetChanged();
-            if (selectedPositions.size() != parcelAdapter.getItemCount()) populateSelectionMap();
+            if (selectedPositions.size() != parcelAdapter.getItemCount()) populateSelectionMap();*/
 
         });
 
         CourierViewModel courierViewModel = ViewModelProviders.of(CourierActivity.this).get(CourierViewModel.class);
 
         courierViewModel.getCourierList().observe(CourierActivity.this, couriers -> {
-            parcelAdapter.updateCourierList(couriers);
-            parcelAdapter.notifyDataSetChanged();
+           /* parcelAdapter.updateCourierList(couriers);
+            parcelAdapter.notifyDataSetChanged();*/
         });
     }
 
@@ -127,6 +147,7 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
      */
     @DebugLog
     private void populateSelectionMap() {
+        CourierListAdapter parcelAdapter = null;
         for (int i = 0; i < parcelAdapter.getItemCount(); i++) {
 
             selectedPositions.put(i, false);
@@ -137,19 +158,19 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
     @Override
     protected void onStart() {
         super.onStart();
-        GlobalBus.getBus().register(this);
+        //  eventBusUtils.registerEventBus(CourierActivity.this);
     }
-
     @Override
     protected void onStop() {
         super.onStop();
-        GlobalBus.getBus().unregister(this);
+        //eventBusUtils.deRegisterEventBus(CourierActivity.this);
     }
+
 
     @Override
     public void onFakerReady(Faker faker) {
 
-        populateData(faker);
+        //  populateData(faker);
 
     }
 
@@ -165,16 +186,7 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
 
     }
 
-    private void initRecyclerView(List<Courier> data, List<Parcel> parcels) {
-        findViewById(R.id.progressBar).setVisibility(View.GONE);
 
-        outerRecyclerView = findViewById(R.id.recycler_view);
-        ((TailLayoutManager) outerRecyclerView.getLayoutManager()).setPageTransformer(new HeaderTransformer());
-        parcelAdapter = new ParcelAdapterForCouriers(data, parcels);
-        outerRecyclerView.setAdapter(parcelAdapter);
-        outerRecyclerView.setOnFlingListener(null);
-        new TailSnapHelper().attachToRecyclerView(outerRecyclerView);
-    }
 
     private Courier createInnerData(Faker faker) {
         return new Courier(
@@ -282,6 +294,8 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
         invalidateOptionsMenu();
         if (nextItem == null) return;
 
+        ParcelAdapterForAddress parcelAdapter
+                = null;
         if (orderedCourierList.size() != parcelAdapter.getParcels().size()) {
 
 
