@@ -30,7 +30,6 @@ import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.utils.EventBusUtils;
 import com.scleroid.nemai.utils.Events;
-import com.scleroid.nemai.viewmodels.CourierViewModel;
 import com.scleroid.nemai.viewmodels.OrderViewModel;
 import com.scleroid.nemai.viewmodels.ParcelViewModel;
 
@@ -107,17 +106,13 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
         viewPager.setCurrentItem(0);
     }
 
+    /**
+     * Setting Up ViewModels,
+     * Which will provide the lists of data whenever needed from the database on demand
+     * in realtime(with milliseconds late, I mean't)
+     */
     private void setupViewModels() {
-        orderViewModel = ViewModelProviders.of(CourierActivity.this).get(OrderViewModel.class);
-
-        orderViewModel.getOrderList().observe(CourierActivity.this, orderedCouriers -> {
-            orderedCourierList = orderedCouriers;
-
-            Log.d(TAG, "Courier List updated, Yo" + orderedCouriers.size());
-            //TODO what to do?
-            // isFinalized = orderedCouriers.size() == parcels.getParcels().size();
-
-        });
+        setupOrderViewModel();
         parcelViewModel = ViewModelProviders.of(CourierActivity.this).get(ParcelViewModel.class);
 
 
@@ -130,11 +125,24 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
 
         });
 
-        CourierViewModel courierViewModel = ViewModelProviders.of(CourierActivity.this).get(CourierViewModel.class);
+       /* CourierViewModel courierViewModel = ViewModelProviders.of(CourierActivity.this).get(CourierViewModel.class);
 
         courierViewModel.getCourierList().observe(CourierActivity.this, couriers -> {
-           /* parcelAdapter.updateCourierList(couriers);
-            parcelAdapter.notifyDataSetChanged();*/
+           *//* parcelAdapter.updateCourierList(couriers);
+            parcelAdapter.notifyDataSetChanged();*//*
+        });*/
+    }
+
+    private void setupOrderViewModel() {
+        orderViewModel = ViewModelProviders.of(CourierActivity.this).get(OrderViewModel.class);
+
+        orderViewModel.getOrderList().observe(CourierActivity.this, orderedCouriers -> {
+            orderedCourierList = orderedCouriers;
+
+            Log.d(TAG, "Courier List updated, Yo" + orderedCouriers.size());
+            //TODO what to do?
+            // isFinalized = orderedCouriers.size() == parcels.getParcels().size();
+
         });
     }
 

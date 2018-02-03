@@ -11,10 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.scleroid.nemai.AppDatabase;
+import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.CourierAdapter;
+import com.scleroid.nemai.controller.CourierLab;
+import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.utils.DateUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.bloco.faker.Faker;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,16 +33,17 @@ import com.scleroid.nemai.utils.DateUtils;
  * Use the {@link CourierFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CourierFragment extends Fragment {
+public class CourierFragment extends Fragment implements GarlandApp.FakerReadyListener {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARCEL = "parcel";
-
-
-    private Parcel parcel;
-
     private OnFragmentInteractionListener mListener;
-
+    /**
+     * List of all couriers,
+     * Should be Retained over the app orientation
+     */
+    private List<Courier> courierList;
+    private Parcel parcel;
     public CourierFragment() {
         // Required empty public constructor
     }
@@ -55,6 +65,17 @@ public class CourierFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+       /* if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }*/
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
@@ -69,7 +90,6 @@ public class CourierFragment extends Fragment {
         // Inflate the layout for this fragment
         updateActionBar();
 
-
         View view = inflater.inflate(R.layout.fragment_courier, container, false);
         initializeRecyclerView(view);
 
@@ -77,11 +97,10 @@ public class CourierFragment extends Fragment {
         return view;
     }
 
-    private void initializeRecyclerView(View view) {
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_courier_fragment);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new CourierAdapter());
-
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -91,21 +110,54 @@ public class CourierFragment extends Fragment {
         }
     }
 
+    /**
+     * FakerListener, Listens to the fake data creation API,
+     * & called when it's ready
+     *
+     * @param faker object of the Faker class
+     */
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public void onFakerReady(Faker faker) {
+        populateCouriers(faker);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    /**
+     * Returns one fake courier at a time,
+     *
+     * @deprecated
+     */
+    private Courier createFakeCourierData(Faker faker) {
+        return new Courier(
+                faker.name.name(),
+                faker.commerce.price().doubleValue(),
+                faker.commerce.productName(),
+                faker.team.sport(),
+                faker.avatar.image(),
+                faker.number.between() + "", faker.internet.macAddress() + "");
+    }
+
+    private void initializeRecyclerView(View view) {
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_courier_fragment);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new CourierAdapter());
+
+    }
+
+    /**
+     * Used to populate the view with garbage data,
+     *
+     * @deprecated to be removed when actual data comes
+     */
+    private void populateCouriers(Faker faker) {
+        List<Courier> couriers = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+
+            Courier fakeCourierData = createFakeCourierData(faker);
+            CourierLab.addCourier(fakeCourierData, AppDatabase.getAppDatabase(getContext()));
+            couriers.add(fakeCourierData);
+        }
+
+        courierList = couriers;
     }
 
     private void updateActionBar() {
@@ -117,7 +169,9 @@ public class CourierFragment extends Fragment {
         activity.getSupportActionBar().setSubtitle(dateUtils.getFormattedDate(parcel.getParcelDate()));
     }
 
+
     /**
+     * TODO
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -128,6 +182,7 @@ public class CourierFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
+
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
