@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.databinding.ItemInnerCourierCardBinding;
+import com.scleroid.nemai.databinding.ItemCourierCardViewBinding;
 import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.viewholders.CourierHolder;
@@ -31,7 +31,7 @@ public class CourierAdapter extends com.ramotion.garlandview.inner.InnerAdapter<
     private static final int EMPTY_VIEW = 10;
     private static final String TAG = "innerAdapter";
     public static int lastSelectedPosition = -1;
-    ItemInnerCourierCardBinding binding;
+    ItemCourierCardViewBinding binding;
     /**
      * variable to hold selected Item position
      */

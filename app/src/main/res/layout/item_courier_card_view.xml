@@ -14,7 +14,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/inner_courier_height"
+        android:layout_height="105dp"
         android:layout_gravity="center"
         android:transitionGroup="false">
 

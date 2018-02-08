@@ -1,10 +1,12 @@
 package com.scleroid.nemai.viewpager;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,11 +21,14 @@ import com.scleroid.nemai.controller.CourierLab;
 import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.utils.DateUtils;
+import com.scleroid.nemai.viewmodels.CourierViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.bloco.faker.Faker;
+
+import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,6 +49,8 @@ public class CourierFragment extends Fragment implements GarlandApp.FakerReadyLi
      */
     private List<Courier> courierList;
     private Parcel parcel;
+    private CourierAdapter courierAdapter;
+
     public CourierFragment() {
         // Required empty public constructor
     }
@@ -93,6 +100,12 @@ public class CourierFragment extends Fragment implements GarlandApp.FakerReadyLi
         View view = inflater.inflate(R.layout.fragment_courier, container, false);
         initializeRecyclerView(view);
 
+        CourierViewModel courierViewModel = ViewModelProviders.of(CourierFragment.this).get(CourierViewModel.class);
+
+        courierViewModel.getCourierList().observe(CourierFragment.this, couriers -> {
+            courierAdapter.addData(couriers, null);
+            courierAdapter.notifyDataSetChanged();
+        });
         //TODO hide & un hide views according to data received
         return view;
     }
@@ -139,7 +152,10 @@ public class CourierFragment extends Fragment implements GarlandApp.FakerReadyLi
     private void initializeRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_courier_fragment);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new CourierAdapter());
+        courierAdapter = new CourierAdapter();
+        recyclerView.setAdapter(courierAdapter);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), HORIZONTAL);
+        recyclerView.addItemDecoration(itemDecor);
 
     }
 
