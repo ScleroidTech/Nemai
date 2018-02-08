@@ -125,12 +125,7 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
 
         });
 
-       /* CourierViewModel courierViewModel = ViewModelProviders.of(CourierActivity.this).get(CourierViewModel.class);
 
-        courierViewModel.getCourierList().observe(CourierActivity.this, couriers -> {
-           *//* parcelAdapter.updateCourierList(couriers);
-            parcelAdapter.notifyDataSetChanged();*//*
-        });*/
     }
 
     private void setupOrderViewModel() {
