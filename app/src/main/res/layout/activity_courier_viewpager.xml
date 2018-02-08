@@ -21,8 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="750dp"
                 android:layout_below="@+id/textView3"
-                android:layout_marginLeft="22dp"
-                android:layout_marginRight="22dp"
+
                 android:elevation="4dp"
 
                 >
@@ -30,26 +29,26 @@
 
             </android.support.v4.view.ViewPager>
 
-            <ImageView
-                android:id="@+id/back_arrow"
-                android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="180dp"
-                android:src="@drawable/arrowl"
+            <!--  <ImageView
+                  android:id="@+id/back_arrow"
+                  android:layout_width="22dp"
+                  android:layout_height="25dp"
+                  android:layout_marginTop="180dp"
+                  android:src="@drawable/arrowl"
 
-                />
-            <!-- android:layout_marginLeft="30dp"
-             android:layout_marginRight="30dp"-->
-            <ImageView
-                android:id="@+id/back_arrow1"
-                android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="180dp"
-                android:src="@drawable/arrowr"
+                  />
+              &lt;!&ndash; android:layout_marginLeft="30dp"
+               android:layout_marginRight="30dp"&ndash;&gt;
+              <ImageView
+                  android:id="@+id/back_arrow1"
+                  android:layout_width="22dp"
+                  android:layout_height="25dp"
+                  android:layout_alignParentRight="true"
+                  android:layout_marginTop="180dp"
+                  android:src="@drawable/arrowr"
 
-                />
-            <!--RelativeLayout
+                  />
+         -->     <!--RelativeLayout
                 android:layout_below="@+id/viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
