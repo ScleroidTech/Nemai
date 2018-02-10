@@ -95,7 +95,11 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
             @Override
             public Fragment getItem(int position) {
                 Parcel parcel = parcels.get(position);
-                return CourierFragment.newInstance(parcel);
+                Log.d(TAG, parcel.toString() + " size " + parcels.size());
+                if (!parcel.getSourcePin().equals("null"))
+                    return CourierFragment.newInstance(parcel);
+                else Toasty.error(context, "The list ends here").show();
+                return null;
             }
 
             @Override
