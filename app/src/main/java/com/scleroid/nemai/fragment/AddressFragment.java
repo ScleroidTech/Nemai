@@ -118,7 +118,7 @@ AddressFragment extends DialogFragment {
             stateEditText.setText(address.getState());
             serialNo = address.getSerialNo();
             isNewAddress = bundle.getBoolean(EXTRA_NEW_ADDRESS);
-            if (bundle.getBoolean(EXTRA_NEW_ADDRESS)) {
+            if (!isNewAddress) {
                 nameEditText.setText(address.getName());
                 mobileEditText.setText(address.getMobileNo());
                 addressLine1EditText.setText(address.getAddress_line_1());
