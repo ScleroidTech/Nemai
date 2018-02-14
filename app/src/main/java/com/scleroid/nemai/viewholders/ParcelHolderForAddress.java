@@ -113,7 +113,7 @@ public class ParcelHolderForAddress extends HeaderItem {
     private TextView cost;
     private TextView edit;
     private View mMiddle;
-    private View mMiddleEdit;
+
     private View mFooter;
     private int m10dp;
     private int m120dp;
@@ -205,7 +205,7 @@ public class ParcelHolderForAddress extends HeaderItem {
 
 
         mMiddle = itemView.findViewById(R.id.header_middle);
-        mMiddleEdit = itemView.findViewById(R.id.header_middle_edit);
+        // mMiddleEdit = itemView.findViewById(R.id.header_middle_edit);
         mFooter = itemView.findViewById(R.id.header_footer);
 
 
@@ -421,10 +421,11 @@ public class ParcelHolderForAddress extends HeaderItem {
         ViewCompat.setScaleY(mFooter, footerRatio);
         ViewCompat.setAlpha(mFooter, footerRatio);
 
-        ViewCompat.setPivotY(mMiddleEdit, mMiddleEdit.getHeight());
+      /* Disabled to remove the edit button
+       ViewCompat.setPivotY(mMiddleEdit, mMiddleEdit.getHeight());
         ViewCompat.setScaleY(mMiddleEdit, 1f - answerRatio);
         ViewCompat.setAlpha(mMiddleEdit, 0.5f - answerRatio);
-
+*/
         ViewCompat.setAlpha(mHeaderCaption1, answerRatio);
         ViewCompat.setAlpha(mHeaderCaption2, 1f - answerRatio);
 

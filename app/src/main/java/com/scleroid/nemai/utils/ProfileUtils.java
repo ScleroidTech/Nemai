@@ -5,16 +5,16 @@ import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.activity.MainActivity;
 
 public class ProfileUtils {
     private final Context context;
+    private final ImageUtils imageUtils;
 
     public ProfileUtils(Context context) {
         this.context = context;
+        this.imageUtils = new ImageUtils(context);
     }
 
     /**
@@ -23,20 +23,16 @@ public class ProfileUtils {
      */
     public void setUserProfilePicture(ImageView profilePicture) {
         /*if (MainActivity.session.getUser().isUserImageExists()) {*/
-            String profileURl = MainActivity.session.getUser().getUserImageUrl();
-            // Loading profile image
-            Glide.with(context).load(profileURl)
-                    .crossFade()
-                    .thumbnail(0.5f)
-                    .placeholder(R.drawable.ic_person)
-                    .bitmapTransform(new CircleTransform(context))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(profilePicture);
+        // Loading profile image
 
        /* } else {
             Drawable d = context.getResources().getDrawable(R.drawable.ic_person);
             profilePicture.setImageDrawable(d);
         }*/
+        String profileURl = MainActivity.session.getUser().getUserImageUrl();
+        // Loading profile image
+        int ic_person = R.drawable.ic_person;
+        imageUtils.loadImageIntoImageView(profilePicture, profileURl, ic_person);
     }
 
     /**

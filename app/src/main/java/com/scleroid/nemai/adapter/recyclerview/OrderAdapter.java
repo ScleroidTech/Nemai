@@ -31,6 +31,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderHolder> {
 
     @Override
     public void onBindViewHolder(OrderHolder holder, int position) {
+        holder.setData(orderedCouriers.get(position));
 
     }
 
