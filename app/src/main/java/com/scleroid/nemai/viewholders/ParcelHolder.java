@@ -265,12 +265,24 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
             noSubmit = true;
         } else mPinDestTIL.setErrorEnabled(false);
 
-        if (isEmpty(mWeightEditText) && (Integer.valueOf(mWeightEditText.getText().toString())>20)) {
+        if (isEmpty(mWeightEditText)) {
+
             mWeightTIL.setErrorEnabled(true);
-            mWeightTIL.setError("Enter the Weight and not greater than 20");
+            mWeightTIL.setError("Enter the Weight ");
             noSubmit = true;
 
-        } else mWeightTIL.setErrorEnabled(false);
+        } else {
+            if(Integer.valueOf(mWeightEditText.getText().toString())>20){
+                mWeightTIL.setErrorEnabled(true);
+                mWeightTIL.setError("Enter the Weight and not greater than 20");
+                noSubmit = true;
+
+
+            }else {
+                mWeightTIL.setErrorEnabled(false);}
+
+
+            mWeightTIL.setErrorEnabled(false);}
 
         if (isEmpty(mInvoiceValueEditText)) {
             mInvoiceTIL.setErrorEnabled(true);
