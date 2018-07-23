@@ -164,7 +164,7 @@ public class HomeFragment extends Fragment {
 
             //validateFields(false);
             //submitRequest(null, false);
-            submitData();
+            //      submitData();
 
 
         });
