@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.ramotion.garlandview.TailLayoutManager;
 import com.ramotion.garlandview.TailRecyclerView;
@@ -44,9 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
-import hugo.weaving.DebugLog;
 import io.bloco.faker.Faker;
-import io.fabric.sdk.android.Fabric;
 
 public class SelectCourierActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
 
@@ -84,11 +81,11 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Fabric fabric = new Fabric.Builder(this)
+       /* final Fabric fabric = new Fabric.Builder(this)
                 .kits(new Crashlytics())
                 .debuggable(true)           // Enables Crashlytics debugger
                 .build();
-        Fabric.with(fabric);
+        Fabric.with(fabric);*/
         setContentView(R.layout.activity_select_courier);
 
         FacebookSdk.sdkInitialize(SelectCourierActivity.this);
@@ -130,7 +127,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
      * @see SparseBooleanArray
      * @deprecated no longer necessary, because we're now using
      */
-    @DebugLog
+
     private void populateSelectionMap() {
         for (int i = 0; i < parcelAdapter.getItemCount(); i++) {
 
@@ -154,7 +151,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
     @Override
     public void onFakerReady(Faker faker) {
 
-        populateData(faker);
+	    //   populateData(faker);
 
     }
 
@@ -222,7 +219,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
      * .
      * which provides which items are selected & which aren't
      */
-    @DebugLog
+
     @SuppressLint("LongLogTag")
     @Subscribe
     public void onSelection(Events.selectionMap selectionMap) {
