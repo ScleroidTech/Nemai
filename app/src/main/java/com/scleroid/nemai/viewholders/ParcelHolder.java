@@ -280,9 +280,7 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
 
             }else {
                 mWeightTIL.setErrorEnabled(false);}
-
-
-            mWeightTIL.setErrorEnabled(false);}
+}
 
         if (isEmpty(mInvoiceValueEditText)) {
             mInvoiceTIL.setErrorEnabled(true);
