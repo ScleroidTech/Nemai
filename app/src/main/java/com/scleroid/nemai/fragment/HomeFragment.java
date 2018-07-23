@@ -57,6 +57,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_PARCEL;
+import static com.scleroid.nemai.network.NetworkCalls.submitCouriers;
 
 
 //TODO CHange most activities to fragment if performance becomes a bottleneck
@@ -164,7 +165,7 @@ public class HomeFragment extends Fragment {
 
             //validateFields(false);
             //submitRequest(null, false);
-            //      submitData();
+            submitData();
 
 
         });
@@ -341,9 +342,9 @@ public class HomeFragment extends Fragment {
     private void sendCouriers() {
         //TODO Change this
         startActivity(new Intent(getContext(), SelectCourierActivity.class));
-       /* for (Parcel parcelTemp : crimes) {
+        for (Parcel parcelTemp : crimes) {
             submitCouriers(context, parcelTemp, TAG_COURIERS, loader);
-        }*/
+        }
     }
 
     private void showRadioButtonDialog() {
