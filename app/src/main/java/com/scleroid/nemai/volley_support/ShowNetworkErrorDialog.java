@@ -1,8 +1,6 @@
 package com.scleroid.nemai.volley_support;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -10,6 +8,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.network.LiveNetworkMonitor;
+import com.scleroid.nemai.network.NetworkMonitor;
 
 
 public class ShowNetworkErrorDialog {
@@ -17,6 +17,7 @@ public class ShowNetworkErrorDialog {
     private MaterialStyledDialog dialog;
     private Context context;
     private boolean flag;
+    private NetworkMonitor networkMonitor;
 
     public ShowNetworkErrorDialog(Context context) {
         this.context = context;
@@ -92,18 +93,9 @@ public class ShowNetworkErrorDialog {
     }
 
     private boolean isNetworkAvailable() {
+        networkMonitor = new LiveNetworkMonitor(context);
 
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null)
-                for (int i = 0; i < info.length; i++)
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
-                    }
-        }
+        return networkMonitor.isConnected();
 
-
-        return false;
     }
 }
