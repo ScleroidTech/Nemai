@@ -11,6 +11,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
 import com.scleroid.nemai.utils.DateConverter;
 
 import java.util.Date;
@@ -21,294 +22,346 @@ import static com.scleroid.nemai.utils.RandomSerialNumberGen.getRandomSerialNo;
 public class Parcel implements Parcelable {
 
 
-    public static final Creator<Parcel> CREATOR = new Creator<Parcel>() {
-        @Override
-        public Parcel createFromParcel(android.os.Parcel in) {
-            return new Parcel(in);
-        }
+	public static final Creator<Parcel> CREATOR = new Creator<Parcel>() {
+		@Override
+		public Parcel createFromParcel(android.os.Parcel in) {
+			return new Parcel(in);
+		}
 
-        @Override
-        public Parcel[] newArray(int size) {
-            return new Parcel[size];
-        }
-    };
-    @PrimaryKey
-    private long serialNo;
-    private String sourcePin;
-    private String destinationPin;
-    private String deliveryType;
-    private String packageType;
-    private int weight;
-    private int invoice;
-    private int length;
-    private int width;
-    private int height;
-    private String description;
-    @TypeConverters(DateConverter.class)
-    private Date parcelDate;
-    //  @TypeConverters(PinConverter.class)
-    @Embedded(prefix = "source_")
-    private PinCode sourcePinCode;
-    // @TypeConverters(PinConverter.class)
-    @Embedded(prefix = "dest_")
-    private PinCode destinationPinCode;
-    public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo, PinCode sourcePinCode, PinCode destinationPinCode) {
-        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo, sourcePinCode, destinationPinCode);
+		@Override
+		public Parcel[] newArray(int size) {
+			return new Parcel[size];
+		}
+	};
 
-    }
+	@SerializedName("id")
+	@PrimaryKey
+	private long serialNo;
 
-    /*
-    public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo) {
-        this(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo, null, null);
+	@SerializedName("source")
+	private String sourcePin;
 
-    }
+	@SerializedName("destination")
+	private String destinationPin;
+
+	@SerializedName("delivery_type")
+	private String deliveryType;
+
+	@SerializedName("package_type")
+	private String packageType;
+
+	@SerializedName("weight")
+	private int weight;
+
+	@SerializedName("invoice")
+	private int invoice;
+
+	@SerializedName("length")
+	private int length;
+
+	@SerializedName("width")
+	private int width;
+
+	@SerializedName("height")
+	private int height;
+
+	@SerializedName("description")
+	private String description;
+
+	@SerializedName("parcel_date")
+	@TypeConverters(DateConverter.class)
+	private Date parcelDate;
+
+	@SerializedName("source")
+	@Embedded(prefix = "source_")
+	private PinCode sourcePinCode;
+
+	@SerializedName("destination")
+	@Embedded(prefix = "dest_")
+	private PinCode destinationPinCode;
+
+	/*
+	public Parcel(String sourcePin, String destinationPin, String deliveryType, String
+	packageType, int weight, int invoice, int length, int width, int height, String description,
+	Date parcelDate, long serialNo) {
+		this(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width,
+		 height, description, parcelDate, serialNo, null, null);
+
+	}
 */
-    //TODO handle data through serial no, implement viewmodel if things doesn't work. & Make changes(whatever that means)
-    @Ignore
-    public Parcel() {
+	//TODO handle data through serial no, implement viewmodel if things doesn't work. & Make
+	// changes(whatever that means)
+	@Ignore
+	public Parcel() {
         /*this.sourcePin = "null";
         this.destinationPin = "null";
         this.deliveryType = "Domestic";
         this.packageType = "Document";
         this.description = "null";
         this.serialNo = UUID.randomUUID();*/
-        this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", new Date(), getRandomSerialNo(), null, null);
+		this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", new Date(),
+				getRandomSerialNo(), null, null);
 
-    }
+	}
 
-    //TODO remove this constructor, only for dummy data
-    @Ignore
-    public Parcel(String city, String city1, String domestic, String parcel, int positive, int positive1, int positive2, int positive3, int positive4, String s, Date birthday, PinCode sourcePinCode, PinCode destinationPinCode) {
-        this(city, city1, domestic, parcel, positive, positive1, positive2, positive3, positive4, s, birthday, getRandomSerialNo(), sourcePinCode, destinationPinCode);
-    }
+	public Parcel(String sourcePin, String destinationPin, String deliveryType, String packageType,
+	              int weight, int invoice, int length, int width, int height, String description,
+	              Date parcelDate, long serialNo, PinCode sourcePinCode,
+	              PinCode destinationPinCode) {
+		initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice,
+				length, width, height, description, parcelDate, serialNo, sourcePinCode,
+				destinationPinCode);
 
-    @Ignore
-    protected Parcel(android.os.Parcel in) {
-        sourcePinCode = in.readParcelable(PinCode.class.getClassLoader());
-        destinationPin = in.readParcelable(PinCode.class.getClassLoader());
-        serialNo = in.readLong();
-        sourcePin = in.readString();
-        destinationPin = in.readString();
-        deliveryType = in.readString();
-        packageType = in.readString();
-        weight = in.readInt();
-        invoice = in.readInt();
-        length = in.readInt();
-        width = in.readInt();
-        height = in.readInt();
-        description = in.readString();
+	}
 
-    }
+	private void initializeObject(String sourcePin, String destinationPin, String deliveryType,
+	                              String packageType, int weight, int invoice, int length,
+	                              int width, int height, String description, Date parcelDate,
+	                              long serialNo, PinCode sourcePinCode,
+	                              PinCode destinationPinCode) {
+		this.sourcePin = sourcePin;
+		this.destinationPin = destinationPin;
+		this.deliveryType = deliveryType;
+		this.packageType = packageType;
+		this.weight = weight;
+		this.invoice = invoice;
+		this.length = length;
+		this.width = width;
+		this.height = height;
+		this.description = description;
+		this.parcelDate = parcelDate;
+		this.serialNo = serialNo;
+		this.sourcePinCode = sourcePinCode;
+		this.destinationPinCode = destinationPinCode;
+	}
 
-    public PinCode getSourcePinCode() {
-        return sourcePinCode;
-    }
+	//TODO remove this constructor, only for dummy data
+	@Ignore
+	public Parcel(String city, String city1, String domestic, String parcel, int positive,
+	              int positive1, int positive2, int positive3, int positive4, String s,
+	              Date birthday, PinCode sourcePinCode, PinCode destinationPinCode) {
+		this(city, city1, domestic, parcel, positive, positive1, positive2, positive3,
+				positive4, s,
+				birthday, getRandomSerialNo(), sourcePinCode, destinationPinCode);
+	}
 
-    public void setSourcePinCode(PinCode sourcePinCode) {
-        this.sourcePinCode = sourcePinCode;
-    }
+	@Ignore
+	protected Parcel(android.os.Parcel in) {
+		sourcePinCode = in.readParcelable(PinCode.class.getClassLoader());
+		destinationPin = in.readParcelable(PinCode.class.getClassLoader());
+		serialNo = in.readLong();
+		sourcePin = in.readString();
+		destinationPin = in.readString();
+		deliveryType = in.readString();
+		packageType = in.readString();
+		weight = in.readInt();
+		invoice = in.readInt();
+		length = in.readInt();
+		width = in.readInt();
+		height = in.readInt();
+		description = in.readString();
 
-    public PinCode getDestinationPinCode() {
-        return destinationPinCode;
-    }
+	}
 
-    public void setDestinationPinCode(PinCode destinationPinCode) {
-        this.destinationPinCode = destinationPinCode;
-    }
+	public Parcel updateInstance(String sourcePin, String destinationPin, String deliveryType,
+	                             String packageType, int weight, int invoice, int length, int
+			                             width,
+	                             int height, String description, Date parcelDate, long serialNo,
+	                             PinCode sourcePinCode, PinCode destinationPinCode) {
+		initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice,
+				length, width, height, description, parcelDate, serialNo, sourcePinCode,
+				destinationPinCode);
+		return this;
 
-    public Parcel updateInstance(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo, PinCode sourcePinCode, PinCode destinationPinCode) {
-        initializeObject(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width, height, description, parcelDate, serialNo, sourcePinCode, destinationPinCode);
-        return this;
+	}
 
-    }
+	@Override
+	public int describeContents() {
+		return 0;
+	}
 
-    private void initializeObject(String sourcePin, String destinationPin, String deliveryType, String packageType, int weight, int invoice, int length, int width, int height, String description, Date parcelDate, long serialNo, PinCode sourcePinCode, PinCode destinationPinCode) {
-        this.sourcePin = sourcePin;
-        this.destinationPin = destinationPin;
-        this.deliveryType = deliveryType;
-        this.packageType = packageType;
-        this.weight = weight;
-        this.invoice = invoice;
-        this.length = length;
-        this.width = width;
-        this.height = height;
-        this.description = description;
-        this.parcelDate = parcelDate;
-        this.serialNo = serialNo;
-        this.sourcePinCode = sourcePinCode;
-        this.destinationPinCode = destinationPinCode;
-    }
+	@Override
+	public void writeToParcel(android.os.Parcel parcel, int i) {
+		parcel.writeLong(serialNo);
+		parcel.writeString(sourcePin);
+		parcel.writeString(destinationPin);
+		parcel.writeString(deliveryType);
+		parcel.writeString(packageType);
+		parcel.writeInt(weight);
+		parcel.writeInt(invoice);
+		parcel.writeInt(length);
+		parcel.writeInt(width);
+		parcel.writeInt(height);
+		parcel.writeString(description);
+		parcel.writeParcelable(sourcePinCode, 0);
+		parcel.writeParcelable(destinationPinCode, 0);
+	}
 
-    public long getSerialNo() {
-        return serialNo;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Parcel)) return false;
 
-    void setSerialNo(long pSerialNo) {
-        serialNo = pSerialNo;
-    }
+		Parcel parcel = (Parcel) o;
 
-    public String getSourcePin() {
-        return sourcePin;
-    }
+		if (getSerialNo() != parcel.getSerialNo()) return false;
+		if (getWeight() != parcel.getWeight()) return false;
+		if (getInvoice() != parcel.getInvoice()) return false;
+		if (getLength() != parcel.getLength()) return false;
+		if (getWidth() != parcel.getWidth()) return false;
+		if (getHeight() != parcel.getHeight()) return false;
+		if (getSourcePin() != null ? !getSourcePin().equals(
+				parcel.getSourcePin()) : parcel.getSourcePin() != null) { return false; }
+		if (getDestinationPin() != null ? !getDestinationPin().equals(
+				parcel.getDestinationPin()) : parcel.getDestinationPin() != null) { return false; }
+		if (getDeliveryType() != null ? !getDeliveryType().equals(parcel.getDeliveryType()) :
+				parcel
+						.getDeliveryType() != null) { return false; }
+		if (getPackageType() != null ? !getPackageType().equals(
+				parcel.getPackageType()) : parcel.getPackageType() != null) { return false; }
+		if (getDescription() != null ? !getDescription().equals(
+				parcel.getDescription()) : parcel.getDescription() != null) { return false; }
+		if (getParcelDate() != null ? !getParcelDate().equals(
+				parcel.getParcelDate()) : parcel.getParcelDate() != null) { return false; }
+		if (getSourcePinCode() != null ? !getSourcePinCode().equals(
+				parcel.getSourcePinCode()) : parcel.getSourcePinCode() != null) { return false; }
+		return getDestinationPinCode() != null ? getDestinationPinCode().equals(
+				parcel.getDestinationPinCode()) : parcel.getDestinationPinCode() == null;
+	}
 
-    void setSourcePin(String pSourcePin) {
-        sourcePin = pSourcePin;
-    }
+	public PinCode getSourcePinCode() {
+		return sourcePinCode;
+	}
 
-    public String getDestinationPin() {
-        return destinationPin;
-    }
+	public void setSourcePinCode(PinCode sourcePinCode) {
+		this.sourcePinCode = sourcePinCode;
+	}
 
-    void setDestinationPin(String pDestinationPin) {
-        destinationPin = pDestinationPin;
-    }
+	public PinCode getDestinationPinCode() {
+		return destinationPinCode;
+	}
 
-    public String getDeliveryType() {
-        return deliveryType;
-    }
+	public void setDestinationPinCode(PinCode destinationPinCode) {
+		this.destinationPinCode = destinationPinCode;
+	}
 
-    void setDeliveryType(String pDeliveryType) {
-        deliveryType = pDeliveryType;
-    }
+	public long getSerialNo() {
+		return serialNo;
+	}
 
-    public String getPackageType() {
-        return packageType;
-    }
+	void setSerialNo(long pSerialNo) {
+		serialNo = pSerialNo;
+	}
 
-    void setPackageType(String pPackageType) {
-        packageType = pPackageType;
-    }
+	public String getSourcePin() {
+		return sourcePin;
+	}
 
-    public int getWeight() {
-        return weight;
-    }
+	void setSourcePin(String pSourcePin) {
+		sourcePin = pSourcePin;
+	}
 
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
+	public String getDestinationPin() {
+		return destinationPin;
+	}
 
-    public int getInvoice() {
-        return invoice;
-    }
+	void setDestinationPin(String pDestinationPin) {
+		destinationPin = pDestinationPin;
+	}
 
-    public void setInvoice(int invoice) {
-        this.invoice = invoice;
-    }
+	public String getDeliveryType() {
+		return deliveryType;
+	}
 
-    public int getLength() {
-        return length;
-    }
+	void setDeliveryType(String pDeliveryType) {
+		deliveryType = pDeliveryType;
+	}
 
-    public void setLength(int length) {
-        this.length = length;
-    }
+	public String getPackageType() {
+		return packageType;
+	}
 
-    public int getWidth() {
-        return width;
-    }
+	void setPackageType(String pPackageType) {
+		packageType = pPackageType;
+	}
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
+	public int getWeight() {
+		return weight;
+	}
 
-    public int getHeight() {
-        return height;
-    }
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
+	public int getInvoice() {
+		return invoice;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setInvoice(int invoice) {
+		this.invoice = invoice;
+	}
 
-    public void setDescription(String pkgDesc) {
-        this.description = pkgDesc;
-    }
+	public int getLength() {
+		return length;
+	}
 
-    public Date getParcelDate() {
-        return parcelDate;
-    }
+	public void setLength(int length) {
+		this.length = length;
+	}
 
-    public void setParcelDate(Date parcelDate) {
-        this.parcelDate = parcelDate;
-    }
+	public int getWidth() {
+		return width;
+	}
 
+	public void setWidth(int width) {
+		this.width = width;
+	}
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
+	public int getHeight() {
+		return height;
+	}
 
-    @Override
-    public void writeToParcel(android.os.Parcel parcel, int i) {
-        parcel.writeLong(serialNo);
-        parcel.writeString(sourcePin);
-        parcel.writeString(destinationPin);
-        parcel.writeString(deliveryType);
-        parcel.writeString(packageType);
-        parcel.writeInt(weight);
-        parcel.writeInt(invoice);
-        parcel.writeInt(length);
-        parcel.writeInt(width);
-        parcel.writeInt(height);
-        parcel.writeString(description);
-        parcel.writeParcelable(sourcePinCode, 0);
-        parcel.writeParcelable(destinationPinCode, 0);
-    }
+	public void setHeight(int height) {
+		this.height = height;
+	}
 
-    @Override
-    public String toString() {
-        return "Parcel{" +
-                "serialNo=" + serialNo +
-                ", sourcePin='" + sourcePin + '\'' +
-                ", destinationPin='" + destinationPin + '\'' +
-                ", deliveryType='" + deliveryType + '\'' +
-                ", packageType='" + packageType + '\'' +
-                ", weight=" + weight +
-                ", invoice=" + invoice +
-                ", length=" + length +
-                ", width=" + width +
-                ", height=" + height +
-                ", description='" + description + '\'' +
-                ", parcelDate=" + parcelDate +
-                ", sourcePinCode=" + sourcePinCode +
-                ", destinationPinCode=" + destinationPinCode +
-                '}';
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Parcel)) return false;
+	public void setDescription(String pkgDesc) {
+		this.description = pkgDesc;
+	}
 
-        Parcel parcel = (Parcel) o;
+	public Date getParcelDate() {
+		return parcelDate;
+	}
 
-        if (getSerialNo() != parcel.getSerialNo()) return false;
-        if (getWeight() != parcel.getWeight()) return false;
-        if (getInvoice() != parcel.getInvoice()) return false;
-        if (getLength() != parcel.getLength()) return false;
-        if (getWidth() != parcel.getWidth()) return false;
-        if (getHeight() != parcel.getHeight()) return false;
-        if (getSourcePin() != null ? !getSourcePin().equals(parcel.getSourcePin()) : parcel.getSourcePin() != null)
-            return false;
-        if (getDestinationPin() != null ? !getDestinationPin().equals(parcel.getDestinationPin()) : parcel.getDestinationPin() != null)
-            return false;
-        if (getDeliveryType() != null ? !getDeliveryType().equals(parcel.getDeliveryType()) : parcel.getDeliveryType() != null)
-            return false;
-        if (getPackageType() != null ? !getPackageType().equals(parcel.getPackageType()) : parcel.getPackageType() != null)
-            return false;
-        if (getDescription() != null ? !getDescription().equals(parcel.getDescription()) : parcel.getDescription() != null)
-            return false;
-        if (getParcelDate() != null ? !getParcelDate().equals(parcel.getParcelDate()) : parcel.getParcelDate() != null)
-            return false;
-        if (getSourcePinCode() != null ? !getSourcePinCode().equals(parcel.getSourcePinCode()) : parcel.getSourcePinCode() != null)
-            return false;
-        return getDestinationPinCode() != null ? getDestinationPinCode().equals(parcel.getDestinationPinCode()) : parcel.getDestinationPinCode() == null;
-    }
+	public void setParcelDate(Date parcelDate) {
+		this.parcelDate = parcelDate;
+	}
 
-    //TODO
+	@Override
+	public String toString() {
+		return "Parcel{" +
+				"serialNo=" + serialNo +
+				", sourcePin='" + sourcePin + '\'' +
+				", destinationPin='" + destinationPin + '\'' +
+				", deliveryType='" + deliveryType + '\'' +
+				", packageType='" + packageType + '\'' +
+				", weight=" + weight +
+				", invoice=" + invoice +
+				", length=" + length +
+				", width=" + width +
+				", height=" + height +
+				", description='" + description + '\'' +
+				", parcelDate=" + parcelDate +
+				", sourcePinCode=" + sourcePinCode +
+				", destinationPinCode=" + destinationPinCode +
+				'}';
+	}
+
+	//TODO
 // Create this & use this
 
 }

@@ -3,6 +3,7 @@ package com.scleroid.nemai.models;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
 import com.scleroid.nemai.utils.RandomSerialNumberGen;
 
 /**
@@ -11,8 +12,9 @@ import com.scleroid.nemai.utils.RandomSerialNumberGen;
  */
 @Entity
 public class Courier {
-    @PrimaryKey
-    private long serialNo;
+	@SerializedName("")
+	@PrimaryKey
+	private long serialNo;
     private String courierName;
     private double price;
     private String serviceType;
