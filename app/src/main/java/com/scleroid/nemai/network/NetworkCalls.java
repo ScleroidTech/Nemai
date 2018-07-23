@@ -231,48 +231,6 @@ public class NetworkCalls {
         params.put("email_id", userName);
         new VolleyPostJSONMethod(context, volleyCompleteListener, params, loader, requestTag);
 
-  /*      RequestFuture<JSONObject> future = RequestFuture.newFuture();
-
-        Map<String, String> params = new HashMap<String, String>();
-     //   params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_VALID_USER);
-        params.put("email_id", userName);
-*/
-       /*     JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_VALID_USER, new JSONObject(params),future,future);*//* new Response.Listener<JSONObject>() {
-                */
-      /*      AppController.getInstance().addToRequestQueue(strReq, requestTag);
-        JSONObject response;
-
-        ShowLoader loader = new ShowLoader(context);
-      //  loader.showDialog();
-        try {
-           response = future.get(10, TimeUnit.SECONDS );
-          // loader.dismissDialog();
-            return response.getBoolean("status");
-        } catch (InterruptedException e) {
-            // exception handling
-
-            loader.dismissDialog();
-            Log.e(TAG, "InterruptedException " + e.getMessage());
-            return false;
-            //return buildErrorMessage(e.getMessage());
-        } catch (ExecutionException e) {
-            // exception handling
-            loader.dismissDialog();
-            Log.e(TAG, "ExecutionException " + e.getMessage());
-            return false;
-          //  return buildErrorMessage(e.getMessage());
-        } catch (TimeoutException e) {
-            // exception handling
-            loader.dismissDialog();
-            Log.e(TAG, "TimeoutException " + e.getMessage());
-            return false;
-          //  return buildErrorMessage(e.getMessage());
-        } catch (JSONException e) {
-            loader.dismissDialog();
-            jsonErrorToast(e,context);
-            return false;
-        }*/
 
 
         return isUserExists[0];
