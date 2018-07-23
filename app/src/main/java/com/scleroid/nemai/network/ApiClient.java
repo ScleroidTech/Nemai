@@ -63,7 +63,7 @@ public class ApiClient {
 	public static Gson getGson() {
 		if (gson == null) {
 			gson = new GsonBuilder()
-					.serializeNulls()
+					//	.serializeNulls()
 					.create();
 		}
 		return gson;
