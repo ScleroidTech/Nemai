@@ -14,7 +14,8 @@ import java.util.List;
  * Created by Ganesh on 13-12-2017.
  */
 
-public class ParcelViewModel extends AndroidViewModel {
+public class
+ParcelViewModel extends AndroidViewModel {
     private LiveData<List<Parcel>> parcelList;
     private AppDatabase appDatabase;
 

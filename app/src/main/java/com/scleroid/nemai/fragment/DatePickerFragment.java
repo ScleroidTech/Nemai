@@ -100,9 +100,14 @@ public class DatePickerFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final Bundle bundle = getArguments();
+        Calendar calendar = Calendar.getInstance();
+        Log.d(TAG, calendar.toString());
         if (bundle != null) {
             parcel = bundle.getParcelable(EXTRA_PARCEL);
             tempDate = (Date) bundle.getSerializable(ARG_DATE);
+
+            Log.d(TAG, tempDate + "THis should not be empty ");
+          /*  calendar.setTime(tempDate);*/
 
             /*tempDate = (Date) bundle.getSerializable(EXTRA_DATE);
             serialNo = bundle.getLong(EXTRA_SERIAL);
@@ -119,10 +124,7 @@ public class DatePickerFragment extends DialogFragment {
 
         }
 
-        Calendar calendar = Calendar.getInstance();
-        Log.d(TAG, calendar.toString());
-        Log.d(TAG, tempDate + "THis should not be empty ");
-        calendar.setTime(tempDate);
+
 
 
         int year = calendar.get(Calendar.YEAR);
