@@ -235,7 +235,9 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
             dialogFragment.setTargetFragment(fragmentManager.findFragmentByTag(CURRENT_TAG), REQUEST_DATE);
             dialogFragment.show(fragmentManager, DIALOG_DATE);
         });
+
     }
+
 
     public Parcel validateFields(Parcel parcel) {
         boolean noSubmit = false;
@@ -257,15 +259,17 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
         } else mPinSourceTIL.setErrorEnabled(false);
 
         if (isEmpty(pinDestinationAutoCompleteTextView)) {
+
             mPinDestTIL.setErrorEnabled(true);
             mPinDestTIL.setError("Enter the Destination too");
             noSubmit = true;
         } else mPinDestTIL.setErrorEnabled(false);
 
-        if (isEmpty(mWeightEditText)) {
+        if (isEmpty(mWeightEditText) && (Integer.valueOf(mWeightEditText.getText().toString())>20)) {
             mWeightTIL.setErrorEnabled(true);
-            mWeightTIL.setError("Enter the Weight");
+            mWeightTIL.setError("Enter the Weight and not greater than 20");
             noSubmit = true;
+
         } else mWeightTIL.setErrorEnabled(false);
 
         if (isEmpty(mInvoiceValueEditText)) {
@@ -279,7 +283,7 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
         if (toggleDocParcel) {
 
 
-            if (isEmpty(mPackageWidthParcelEditText)) {
+            if (isEmpty(mPackageWidthParcelEditText)){
                 mWidthTIL.setErrorEnabled(true);
                 mWidthTIL.setError("Enter the Width");
                 noSubmit = true;
@@ -356,6 +360,7 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
         return parcel.updateInstance(source, destination, deliveryType, "Document", weight, invoice, 0, 0, 0, description, parcelDate, parcel.getSerialNo(), mPinCodeSource, mPinCodeDestination);
 
     }
+
 
     public void bindParcels(Parcel parcel) {
         this.parcel = parcel;

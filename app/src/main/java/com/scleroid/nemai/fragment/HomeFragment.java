@@ -138,7 +138,7 @@ public class HomeFragment extends Fragment {
 
         parcelViewModel = ViewModelProviders.of(HomeFragment.this).get(ParcelViewModel.class);
 
-        parcelViewModel.getParcelList().observe(HomeFragment.this, parcels -> {
+        parcelViewModel.getParcelList().observe(HomeFragment.this, (List<Parcel> parcels) -> {
 
             recycleViewPagerAdapter.updateParcelList(parcels);
 
@@ -251,7 +251,8 @@ public class HomeFragment extends Fragment {
                             rate = (recyclerView.getWidth() - padding - v.getLeft()) * 1f / v.getWidth();
                         }
                         v.setScaleY(0.9f + rate * 0.1f);
-                    }
+                    }                        v.setScaleY(0.9f + rate * 0.1f);
+
                 }
             }
         });
