@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
@@ -409,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements GarlandApp.FakerR
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-       /* if (id == R.id.action_logout) {
+        if (id == R.id.action_logout) {
 
             Intent i = new Intent(MainActivity.this, TrackingActivity.class);
             startActivity(i);
@@ -427,7 +428,6 @@ public class MainActivity extends AppCompatActivity implements GarlandApp.FakerR
         if (id == R.id.action_clear_notifications) {
             Toast.makeText(getApplicationContext(), "Clear all notifications!", Toast.LENGTH_LONG).show();
         }
-*/
         return super.onOptionsItemSelected(item);
     }
 

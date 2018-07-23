@@ -249,7 +249,8 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
         if (isEmpty(pinSourceAutoCompleteTextView)) {
             mPinSourceTIL.setErrorEnabled(true);
             mPinSourceTIL.setError("Enter the Source first");
-            noSubmit = true;/*else if (!isValidDate(textClockDate)) {
+            noSubmit = true;
+            /*else if (!isValidDate(textClockDate)) {
             mDateTIL.setErrorEnabled(true);
             mDateTIL.setError("Dude, That's in the past. Please Enter a Date after today");
             noSubmit = true;
