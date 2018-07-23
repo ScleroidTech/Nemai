@@ -310,6 +310,7 @@ public class HomeFragment extends Fragment {
             else fabDeleteCourier.setVisibility(View.VISIBLE);
             if (newPosition == crimes.size() - 1) fabNewCourier.setVisibility(View.VISIBLE);
             else fabNewCourier.setVisibility(View.GONE);
+            if (crimes.size() >= 5) fabNewCourier.setVisibility(View.GONE);
         } else {
             fabDeleteCourier.setVisibility(View.GONE);
             fabNewCourier.setVisibility(View.VISIBLE);
