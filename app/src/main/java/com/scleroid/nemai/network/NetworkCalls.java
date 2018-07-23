@@ -177,7 +177,8 @@ public class NetworkCalls {
 
     }
 
-    public static boolean isAlreadyUser(final Context context, final String userName, String requestTag, ShowLoader loader) {
+
+	public static boolean isAlreadyUser(final Context context, final String userName, String requestTag, ShowLoader loader) {
 //TODO add volley complete listener instead of this, & change all of this code because the Main thread is not waiting for the response
         final boolean[] isUserExists = new boolean[1];
 //        return false;

@@ -29,6 +29,9 @@ android {
             }
         }
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'API_BASE_URL', "\" https://ec2-54-226-111-62.compute-1.amazonaws.com:3306/\""
+    }
     productFlavors {
     }
     dataBinding {
@@ -77,8 +80,11 @@ dependencies {
     compile 'com.ramotion.garlandview:garland-view:0.2.1'
     compile 'org.greenrobot:eventbus:3.1.1'
     compile 'com.github.blocoio:faker:1.2.7'
+
+
     compile 'io.reactivex.rxjava2:rxandroid:2.0.2'
     compile 'io.reactivex.rxjava2:rxjava:2.1.9'
+    compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
   /*  compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }*/
@@ -90,6 +96,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    // OkHttp Logging Interceptor
+    implementation "com.squareup.okhttp3:okhttp:3.10.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.8.1"
 }
 
 

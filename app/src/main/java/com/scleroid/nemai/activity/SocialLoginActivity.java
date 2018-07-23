@@ -24,7 +24,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.network.NetworkCalls;
+import com.scleroid.nemai.network.ApiClient;
+import com.scleroid.nemai.network.ApiService;
+import com.scleroid.nemai.network.NoNetworkException;
 import com.scleroid.nemai.volley_support.AppController;
 import com.scleroid.nemai.volley_support.ShowLoader;
 import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
@@ -34,6 +36,9 @@ import org.json.JSONException;
 import java.util.Arrays;
 
 import es.dmoral.toasty.Toasty;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.scleroid.nemai.activity.MainActivity.session;
 
@@ -90,7 +95,8 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
                         R.dimen.fb_margin_override_lr),
                 hostActivity.getResources().getDimensionPixelSize(
                         R.dimen.fb_margin_override_bottom));*/
-        mFacebookLoginButton.setReadPermissions(Arrays.asList(new String[]{"email", "public_profile"/*TODO review app permission from fb birthday  location*/}));
+	    mFacebookLoginButton.setReadPermissions(Arrays.asList("email",
+			    "public_profile"/*TODO review app permission from fb birthday  location*/));
         mFacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -268,23 +274,56 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
 
     private void isAlreadyUser(Context context) {
         loader.showDialog();
-        if (NetworkCalls.isAlreadyUser(this, email, TAG_USER_EXISTS, loader)) {
-            Log.d(LoginActivity.TAG, "already a user");
-            Toasty.info(context, "Welcome Back!", Toast.LENGTH_SHORT, true).show();
+	    ApiService apiService = ApiClient.getService();
+	    isUserExists(context, apiService);
 
-            Intent intent = MainActivity.newIntent(this);
-            startActivity(intent);
-            loader.dismissDialog();
-            finish();
-        } else {
-            Toasty.info(context, "It's your first time, Let's register first", Toast.LENGTH_SHORT, true).show();
-            Log.d(LoginActivity.TAG, "Not a user, registering");
-            loader.dismissDialog();
-            socialRegisterUser(firstName, lastName, email, null, session.getLoggedInMethod());
-        }
     }
 
-    private void singInFailedGoogle(Context context) {
+	private void isUserExists(final Context context, final ApiService apiService) {
+		apiService.isAUser(email).subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeWith(new DisposableSingleObserver<Boolean>() {
+					@Override
+					public void onSuccess(final Boolean aBoolean) {
+						loader.dismissDialog();
+						if (aBoolean) {
+							Log.d(LoginActivity.TAG, "already a user");
+							Toasty.info(context, "Welcome Back!", Toast.LENGTH_SHORT, true).show();
+
+							Intent intent = MainActivity.newIntent(SocialLoginActivity.this);
+							startActivity(intent);
+							// loader.dismissDialog();
+							finish();
+						} else {
+
+							Toasty.info(context, "It's your first time, Let's register first",
+									Toast.LENGTH_SHORT, true).show();
+							Log.d(LoginActivity.TAG, "Not a user, registering");
+
+							socialRegisterUser(firstName, lastName, email, null,
+									session.getLoggedInMethod());
+						}
+
+					}
+
+					@Override
+					public void onError(final Throwable e) {
+						// on Error
+						if (e instanceof NoNetworkException) {
+							// handle 'no network'
+							Toasty.error(SocialLoginActivity.this, "No Network Connection",
+									Toast.LENGTH_SHORT)
+									.show();
+						} else {
+							Toasty.error(SocialLoginActivity.this, "Something went Wrong",
+									Toast.LENGTH_SHORT)
+									.show();
+						}
+					}
+				});
+	}
+
+	private void singInFailedGoogle(Context context) {
         Toasty.error(context, "There's an error with Google Sign-in, Try another way", Toast.LENGTH_SHORT, true).show();
         mGoogleSignInButton.setClickable(false);
         mGoogleSignInButton.setEnabled(false);
@@ -311,32 +350,6 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-/*
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-        if (opr.isDone()) {
-            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-            // and the GoogleSignInResult will be available instantly.
-            Log.d(TAG, "Got cached sign-in");
-            GoogleSignInResult result = opr.get();
-            handleGoogleSignIn(result);
-        } else {
-            // If the user has not previously signed in on this device or the sign-in has expired,
-            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-            // single sign-on will occur in this branch.
-            showProgress(context, true);
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
-                    showProgress(context, false);
-                    handleGoogleSignIn(googleSignInResult);
-                }
-            });
-        }
-  */
-    }
 
     @Override
     protected void onResume() {
