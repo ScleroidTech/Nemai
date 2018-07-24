@@ -13,6 +13,9 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.facebook.FacebookSdk;
+import com.scleroid.nemai.BuildConfig;
+
+import timber.log.Timber;
 
 /**
  * Created by Ganesh on 14-Mar-17.
@@ -48,6 +51,11 @@ public class AppController extends Application {
         mInstance = this;
         FacebookSdk.sdkInitialize(mInstance);
         MultiDex.install(this);
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
+
     }
 
 

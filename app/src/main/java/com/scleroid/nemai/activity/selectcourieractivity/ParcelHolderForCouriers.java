@@ -41,6 +41,7 @@ import java.util.List;
 import es.dmoral.toasty.Toasty;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
 
@@ -348,6 +349,7 @@ public class ParcelHolderForCouriers extends HeaderItem {
                         dialog.dismissDialog();
                     }, error -> {
                         dialog.dismissDialog();
+                        Timber.e("Error Occured loading couriers" + error.toString());
                         if (error instanceof NoNetworkException) {
                             Toasty.error(context, "Network Connectivity seems not working proparly")
                                     .show();

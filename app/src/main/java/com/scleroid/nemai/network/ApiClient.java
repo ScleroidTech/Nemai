@@ -14,6 +14,7 @@ import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import timber.log.Timber;
 
 /**
  * Copyright (C) 2018
@@ -99,34 +100,28 @@ public class ApiClient {
 				.readTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
 				.writeTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS);
 
-		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+		HttpLoggingInterceptor interceptor =
+				new HttpLoggingInterceptor(
+						message -> Timber.tag("OkHttp").d("Retrofit Logging " + message));
 		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
 		httpClient.addInterceptor(interceptor);
 		// LOOK HERE !!!! add network monitor interceptor:
-		httpClient.addInterceptor(chain -> {
+		httpClient.addNetworkInterceptor(chain -> {
 			if (networkMonitor.isConnected()) {
-				return chain.proceed(chain.request());
+				Request original = chain.request();
+				Request.Builder requestBuilder = original.newBuilder()
+						.addHeader("Accept", "application/json")
+						.addHeader("Content-Type", "application/json");
+
+
+				Request request = requestBuilder.build();
+				return chain.proceed(request);
 			} else {
 				throw new NoNetworkException();
 			}
 		});
 
-		httpClient.addInterceptor(chain -> {
-			Request original = chain.request();
-			Request.Builder requestBuilder = original.newBuilder()
-					.addHeader("Accept", "application/json")
-					.addHeader("Content-Type", "application/json");
-
-		/*	// Adding Authorization token (API Key)
-			// Requests will be denied without API key
-			if (!TextUtils.isEmpty(PrefUtils.getApiKey(context))) {
-				requestBuilder.addHeader("Authorization", PrefUtils.getApiKey(context));
-			}*/
-
-			Request request = requestBuilder.build();
-			return chain.proceed(request);
-		});
 
 		okHttpClient = httpClient.build();
 	}
