@@ -26,7 +26,6 @@ import com.scleroid.nemai.viewmodels.CourierViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import hugo.weaving.DebugLog;
 import io.bloco.faker.Faker;
 
 import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
@@ -177,7 +176,6 @@ public class CourierFragment extends Fragment implements GarlandApp.FakerReadyLi
         courierList = couriers;
     }
 
-    @DebugLog
     private void updateActionBar() {
 
         String sub = parcel.getSourcePinCode().getLocation() + " - " + parcel.getDestinationPinCode().getLocation();

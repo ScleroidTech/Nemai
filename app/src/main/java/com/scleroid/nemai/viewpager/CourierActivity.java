@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
-import hugo.weaving.DebugLog;
 import io.bloco.faker.Faker;
 
 public class CourierActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
@@ -152,7 +151,7 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
      * @see SparseBooleanArray
      * @deprecated no longer necessary, because we're now using
      */
-    @DebugLog
+
     private void populateSelectionMap() {
         CourierListAdapter parcelAdapter = null;
         for (int i = 0; i < parcelAdapter.getItemCount(); i++) {
@@ -236,7 +235,7 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
      * .
      * which provides which items are selected & which aren't
      */
-    @DebugLog
+
     @SuppressLint("LongLogTag")
     @Subscribe
     public void onSelection(Events.selectionMap selectionMap) {
