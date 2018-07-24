@@ -26,6 +26,7 @@ import com.scleroid.nemai.controller.OrderLab;
 import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.network.ApiClient;
 import com.scleroid.nemai.outer.RecyclerItemClickListener;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
@@ -34,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
 
@@ -227,56 +230,43 @@ public class ParcelHolderForCouriers extends HeaderItem {
         return innerRecyclerView;
     }
 
-    public void setContent(@NonNull List<Courier> innerDataList, final Parcel parcel, int position, int size, OrderedCourier orderedCourier) {
-        final Context context = itemView.getContext();
-        itemView.setTag(parcel);
-        //TODO find position & re assign the value to it, to retain from the view changes
+    public List<Courier> getTail() {
+        if (tail.isEmpty()) fetchTail();
+        return tail;
+    }
 
-        header = parcel;
-        tail = innerDataList;
-        thatOrderedCourier = orderedCourier;
-        if (thatOrderedCourier != null && thatOrderedCourier.getCourier() != null)
-            selectedCourierList.add(thatOrderedCourier.getCourier());
+    public void fetchTail() {
+        if (header == null) return;
+        ApiClient.getService().getCouriers(header)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(couriers -> {
+                    tail.addAll(couriers);
+                    updateInnerView();
 
 
-        //  Crashlytics.getInstance().crash(); // Force a crash
+                });
 
+    }
+
+    public void updateInnerView() {
+        setupInsideRecyclerView();
         if (tail != null && !tail.isEmpty()) {
             noDataReceived.setVisibility(View.GONE);
 
             innerRecyclerView.setVisibility(View.VISIBLE);
-            setupInsideRecyclerView();
+            addCourierList();
         } else {
             noDataReceived.setVisibility(View.VISIBLE);
             innerRecyclerView.setVisibility(View.GONE);
 
         }
-
-        //gestureDetector = new GestureDetectorCompat(this.getHeader().getContext(), new RecyclerViewDemoOnGestureListener());
-
-        final String title1 = bindNumber(position, size);
-
-        final Spannable title2 = new SpannableString(title1 + " - Rs. " + parcel.getInvoice());
-        title2.setSpan(new AbsoluteSizeSpan(mTitleSize1), 0, title1.length(), SPAN_INCLUSIVE_INCLUSIVE);
-        title2.setSpan(new AbsoluteSizeSpan(mTitleSize2), title1.length(), title2.length(), SPAN_INCLUSIVE_INCLUSIVE);
-        title2.setSpan(new ForegroundColorSpan(Color.argb(204, 255, 255, 255)), title1.length(), title2.length(), SPAN_INCLUSIVE_INCLUSIVE);
-
-        mHeaderCaption1.setText(title1);
-        mHeaderCaption2.setText(title2);
-
-        source.setText(parcel.getSourcePin());//TODO COnvert Pincode to room , get source city instead of pincod,e & store selected object instead of text
-        destination.setText(parcel.getDestinationPin());
-        cost.setText(String.format("Rs. %d", parcel.getInvoice()));//TODO get delivery price, not invoice
-
-
-        mNewCourierButton.setVisibility(View.GONE);
-
     }
 
     private void setupInsideRecyclerView() {
         innerRecyclerView.setLayoutManager(new InnerLayoutManager());
         adapter = (CourierAdapter) innerRecyclerView.getAdapter();
-        adapter.addData(tail, selectedCourierList);
+
 
         innerRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), innerRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -298,6 +288,57 @@ public class ParcelHolderForCouriers extends HeaderItem {
 
             }
         }));
+    }
+
+    private void addCourierList() {
+        adapter.addData(tail, selectedCourierList);
+    }
+
+    public void setContent(@NonNull List<Courier> innerDataList, final Parcel parcel, int position,
+                           int size, OrderedCourier orderedCourier) {
+        final Context context = itemView.getContext();
+        itemView.setTag(parcel);
+        //TODO find position & re assign the value to it, to retain from the view changes
+
+        header = parcel;
+        tail = innerDataList;
+        fetchTail();
+        thatOrderedCourier = orderedCourier;
+        if (thatOrderedCourier != null && thatOrderedCourier.getCourier() != null) {
+            selectedCourierList.add(thatOrderedCourier.getCourier());
+        }
+
+
+        //  Crashlytics.getInstance().crash(); // Force a crash
+
+        updateInnerView();
+
+        //gestureDetector = new GestureDetectorCompat(this.getHeader().getContext(), new
+        // RecyclerViewDemoOnGestureListener());
+
+        final String title1 = bindNumber(position, size);
+
+        final Spannable title2 = new SpannableString(title1 + " - Rs. " + parcel.getInvoice());
+        title2.setSpan(new AbsoluteSizeSpan(mTitleSize1), 0, title1.length(),
+                SPAN_INCLUSIVE_INCLUSIVE);
+        title2.setSpan(new AbsoluteSizeSpan(mTitleSize2), title1.length(), title2.length(),
+                SPAN_INCLUSIVE_INCLUSIVE);
+        title2.setSpan(new ForegroundColorSpan(Color.argb(204, 255, 255, 255)), title1.length(),
+                title2.length(), SPAN_INCLUSIVE_INCLUSIVE);
+
+        mHeaderCaption1.setText(title1);
+        mHeaderCaption2.setText(title2);
+
+        source.setText(
+                parcel.getSourcePin());//TODO COnvert Pincode to room , get source city instead
+        // of pincod,e & store selected object instead of text
+        destination.setText(parcel.getDestinationPin());
+        cost.setText(
+                String.format("Rs. %d", parcel.getInvoice()));//TODO get delivery price, not invoice
+
+
+        mNewCourierButton.setVisibility(View.GONE);
+
     }
 
     /**

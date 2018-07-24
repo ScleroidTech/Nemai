@@ -1,10 +1,12 @@
 package com.scleroid.nemai.network;
 
 import com.scleroid.nemai.models.Courier;
+import com.scleroid.nemai.models.Parcel;
 
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
@@ -29,4 +31,9 @@ public interface ApiService {
 	//TODO Need to test this call first
 	@FormUrlEncoded
 	Completable subMitCouriers(@Body List<Courier> couriers);
+
+
+	@FormUrlEncoded
+	@POST("/insert")
+	Flowable<List<Courier>> getCouriers(@Body Parcel header);
 }
