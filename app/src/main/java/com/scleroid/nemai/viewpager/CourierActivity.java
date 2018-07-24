@@ -21,6 +21,7 @@ import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.activity.CheckoutActivity;
+import com.scleroid.nemai.activity.selectcourieractivity.ParcelHolderForCouriers;
 import com.scleroid.nemai.adapter.recyclerview.ParcelAdapterForAddress;
 import com.scleroid.nemai.controller.CourierLab;
 import com.scleroid.nemai.controller.ParcelLab;
@@ -42,6 +43,7 @@ import java.util.List;
 import es.dmoral.toasty.Toasty;
 import io.bloco.faker.Faker;
 
+@Deprecated
 public class CourierActivity extends AppCompatActivity implements GarlandApp.FakerReadyListener {
 
 
@@ -231,7 +233,7 @@ public class CourierActivity extends AppCompatActivity implements GarlandApp.Fak
      * @param selectionMap
      * @see EventBus
      * Handles the message sent by An event sent at
-     * @see com.scleroid.nemai.viewholders.ParcelHolderForCouriers
+     * @see ParcelHolderForCouriers
      * .
      * which provides which items are selected & which aren't
      */

@@ -215,7 +215,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
      * @param selectionMap
      * @see EventBus
      * Handles the message sent by An event sent at
-     * @see com.scleroid.nemai.viewholders.ParcelHolderForCouriers
+     * @see ParcelHolderForCouriers
      * .
      * which provides which items are selected & which aren't
      */

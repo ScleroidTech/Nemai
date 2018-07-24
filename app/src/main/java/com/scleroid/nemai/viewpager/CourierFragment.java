@@ -38,6 +38,7 @@ import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
  * Use the {@link CourierFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+@Deprecated
 public class CourierFragment extends Fragment implements GarlandApp.FakerReadyListener {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
