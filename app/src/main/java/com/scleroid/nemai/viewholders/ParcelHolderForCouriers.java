@@ -1,5 +1,6 @@
 package com.scleroid.nemai.viewholders;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -230,69 +231,7 @@ public class ParcelHolderForCouriers extends HeaderItem {
         return innerRecyclerView;
     }
 
-    public List<Courier> getTail() {
-        if (tail.isEmpty()) fetchTail();
-        return tail;
-    }
 
-    public void fetchTail() {
-        if (header == null) return;
-        ApiClient.getService().getCouriers(header)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(couriers -> {
-                    tail.addAll(couriers);
-                    updateInnerView();
-
-
-                });
-
-    }
-
-    public void updateInnerView() {
-        setupInsideRecyclerView();
-        if (tail != null && !tail.isEmpty()) {
-            noDataReceived.setVisibility(View.GONE);
-
-            innerRecyclerView.setVisibility(View.VISIBLE);
-            addCourierList();
-        } else {
-            noDataReceived.setVisibility(View.VISIBLE);
-            innerRecyclerView.setVisibility(View.GONE);
-
-        }
-    }
-
-    private void setupInsideRecyclerView() {
-        innerRecyclerView.setLayoutManager(new InnerLayoutManager());
-        adapter = (CourierAdapter) innerRecyclerView.getAdapter();
-
-
-        innerRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getHeader().getContext(), innerRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-                if (view.getId() == R.id.edit_image_button) {
-                    Toasty.error(getHeader().getContext(), "It works ").show();
-                }
-                //adapter.toggleSelection(position);
-                multi_select(position);
-
-                //  Toasty.makeText(getHeader().getContext(), "Details Page", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-                //multi_select(position);
-
-            }
-        }));
-    }
-
-    private void addCourierList() {
-        adapter.addData(tail, selectedCourierList);
-    }
 
     public void setContent(@NonNull List<Courier> innerDataList, final Parcel parcel, int position,
                            int size, OrderedCourier orderedCourier) {
@@ -302,7 +241,7 @@ public class ParcelHolderForCouriers extends HeaderItem {
 
         header = parcel;
         tail = innerDataList;
-        fetchTail();
+	    fetchTail(context);
         thatOrderedCourier = orderedCourier;
         if (thatOrderedCourier != null && thatOrderedCourier.getCourier() != null) {
             selectedCourierList.add(thatOrderedCourier.getCourier());
@@ -340,6 +279,70 @@ public class ParcelHolderForCouriers extends HeaderItem {
         mNewCourierButton.setVisibility(View.GONE);
 
     }
+
+	public void updateInnerView() {
+		setupInsideRecyclerView();
+		if (tail != null && !tail.isEmpty()) {
+			noDataReceived.setVisibility(View.GONE);
+
+			innerRecyclerView.setVisibility(View.VISIBLE);
+			addCourierList();
+		} else {
+			noDataReceived.setVisibility(View.VISIBLE);
+			innerRecyclerView.setVisibility(View.GONE);
+
+		}
+	}
+
+	private void setupInsideRecyclerView() {
+		innerRecyclerView.setLayoutManager(new InnerLayoutManager());
+		adapter = (CourierAdapter) innerRecyclerView.getAdapter();
+
+
+		innerRecyclerView.addOnItemTouchListener(
+				new RecyclerItemClickListener(getHeader().getContext(), innerRecyclerView,
+						new RecyclerItemClickListener.OnItemClickListener() {
+							@Override
+							public void onItemClick(View view, int position) {
+
+								if (view.getId() == R.id.edit_image_button) {
+									Toasty.error(getHeader().getContext(), "It works ").show();
+								}
+								//adapter.toggleSelection(position);
+								multi_select(position);
+
+								//  Toasty.makeText(getHeader().getContext(), "Details Page",
+								// Toast.LENGTH_SHORT).show();
+							}
+
+							@Override
+							public void onItemLongClick(View view, int position) {
+
+								//multi_select(position);
+
+							}
+						}));
+	}
+
+	private void addCourierList() {
+		adapter.addData(tail, selectedCourierList);
+	}
+
+	public void fetchTail(final Context context) {
+		if (header == null) return;
+
+		ProgressDialog dialog = new ProgressDialog(context);
+		ApiClient.getService().getCouriers(header)
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(couriers -> {
+					tail.addAll(couriers);
+					updateInnerView();
+
+
+				});
+
+	}
 
     /**
      * Sets the selected position in the
