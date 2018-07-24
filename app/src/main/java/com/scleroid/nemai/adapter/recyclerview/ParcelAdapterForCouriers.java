@@ -17,8 +17,6 @@ import com.scleroid.nemai.viewholders.ParcelHolderForCouriers;
 import java.util.ArrayList;
 import java.util.List;
 
-import hugo.weaving.DebugLog;
-
 
 /**
  * Adapter which holds the outer Recyclerview
@@ -49,7 +47,7 @@ public class ParcelAdapterForCouriers extends TailAdapter<ParcelHolderForCourier
      * @param courieres list of courieres
      * @param parcels   list of parcels
      */
-    @DebugLog
+
     public ParcelAdapterForCouriers(List<Courier> courieres, List<Parcel> parcels) {
         this.courieres = courieres;
         this.parcels = parcels;
