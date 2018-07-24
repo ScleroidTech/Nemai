@@ -1,16 +1,17 @@
 package com.scleroid.nemai.controller;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.models.Parcel;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 
 public class ParcelLab {
@@ -26,15 +27,17 @@ public class ParcelLab {
 
     }
 
-    private static Parcel addParcel(final AppDatabase db, Parcel parcel) {
-        db.parcelDao().insert(parcel);
-        return parcel;
+    public static Single<Parcel> newParcel(final Context context) {
+
+        return addParcel(new Parcel(), AppDatabase.getAppDatabase(context));
+
     }
 
-    private static List<Parcel> getAllParcels(final AppDatabase db) {
+
+   /* private static List<Parcel> getAllParcels(final AppDatabase db) {
         List<Parcel> parcels = db.parcelDao().getAll();
         return parcels;
-    }
+    }*/
 
     private static Parcel getParcel(final AppDatabase db, int serialNo) {
         Parcel parcel = db.parcelDao().findById(serialNo);
@@ -60,18 +63,14 @@ public class ParcelLab {
         db.parcelDao().updateParcel(parcel);
     }
 
-    public static Parcel newParcel(final Context context) {
+    public static Single<Parcel> addParcel(final Parcel parcel, final AppDatabase appDatabase) {
 
-        AddParcelAsync task = new AddParcelAsync(AppDatabase.getAppDatabase(context), new Parcel());
+        return Single.fromCallable(() -> {
+            long rowId = appDatabase.parcelDao().insert(parcel);
+            Timber.d("Parcel stored " + rowId);
+            return parcel;
+        }).subscribeOn(Schedulers.io());
 
-        try {
-            return task.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public static void updateParcel(final Context context, Parcel parcel) {
@@ -83,6 +82,7 @@ public class ParcelLab {
 
     }
 
+/*
     public static List<Parcel> getAllParcels(final Context context) {
 
         GetAllAsync task = new GetAllAsync(AppDatabase.getAppDatabase(context), context);
@@ -99,13 +99,7 @@ public class ParcelLab {
         return null;
     }
 
-    public static void addParcel(final Parcel parcel, final AppDatabase appDatabase) {
-
-
-        AddParcelAsync task = new AddParcelAsync(appDatabase, parcel);
-        task.execute();
-
-    }
+*/
 
     public static void boomTable(final Context context) {
 
@@ -118,49 +112,49 @@ public class ParcelLab {
         task.execute();
     }
 
-    public static class GetAllAsync extends AsyncTask<Void, Void, List<Parcel>> {
+    /* public static class GetAllAsync extends AsyncTask<Void, Void, List<Parcel>> {
 
-        private final AppDatabase mDb;
+		 private final AppDatabase mDb;
 
-        ProgressDialog dialog;
-        Context context;
-        private List<Parcel> parcels;
+		 ProgressDialog dialog;
+		 Context context;
+		 private List<Parcel> parcels;
 
-        public GetAllAsync(AppDatabase db, Context context) {
-            mDb = db;
-            this.context = context;
+		 public GetAllAsync(AppDatabase db, Context context) {
+			 mDb = db;
+			 this.context = context;
 
-        }
+		 }
 
-        @Override
-        protected void onPreExecute() {
-            dialog = new ProgressDialog(context);
-            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            dialog.setCancelable(false);
-            dialog.setMessage("Retrieving...");
-            dialog.show();
-        }
+		 @Override
+		 protected void onPreExecute() {
+			 dialog = new ProgressDialog(context);
+			 dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			 dialog.setCancelable(false);
+			 dialog.setMessage("Retrieving...");
+			 dialog.show();
+		 }
 
-        @Override
-        protected void onPostExecute(List<Parcel> parcels) {
-            //    listener.onResultsReceived(parcels);
-            super.onPostExecute(parcels);
+		 @Override
+		 protected void onPostExecute(List<Parcel> parcels) {
+			 //    listener.onResultsReceived(parcels);
+			 super.onPostExecute(parcels);
 
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
-        }
+			 if (dialog.isShowing()) {
+				 dialog.dismiss();
+			 }
+		 }
 
-        @Override
-        protected List<Parcel> doInBackground(final Void... params) {
-            parcels = getAllParcels(mDb);
-            Log.d(TAG, "parcels asynctask " + getAllParcels(mDb));
-            return parcels;
-        }
+		 @Override
+		 protected List<Parcel> doInBackground(final Void... params) {
+			 parcels = getAllParcels(mDb);
+			 Log.d(TAG, "parcels asynctask " + getAllParcels(mDb));
+			 return parcels;
+		 }
 
 
-    }
-
+	 }
+ */
     private static class DeleteAllAsync extends AsyncTask<Void, Void, Void> {
 
         private final AppDatabase mDb;
@@ -198,25 +192,25 @@ public class ParcelLab {
     }
 
 
-    private static class AddParcelAsync extends AsyncTask<Void, Void, Parcel> {
+    /*  private static class AddParcelAsync extends AsyncTask<Void, Void, Parcel> {
 
-        private final AppDatabase mDb;
-        private final Parcel parcel;
+		  private final AppDatabase mDb;
+		  private final Parcel parcel;
 
-        AddParcelAsync(AppDatabase db, Parcel parcel) {
-            mDb = db;
-            this.parcel = parcel;
-        }
+		  AddParcelAsync(AppDatabase db, Parcel parcel) {
+			  mDb = db;
+			  this.parcel = parcel;
+		  }
 
-        @Override
-        protected Parcel doInBackground(final Void... params) {
-            addParcel(mDb, parcel);
+		  @Override
+		  protected Parcel doInBackground(final Void... params) {
+			  addParcel(mDb, parcel);
 
-            return parcel;
-        }
+			  return parcel;
+		  }
 
-    }
-
+	  }
+  */
     private static class UpdateParcelAsync extends AsyncTask<Void, Void, Parcel> {
 
         private final AppDatabase mDb;

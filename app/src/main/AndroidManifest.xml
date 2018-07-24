@@ -96,7 +96,7 @@
 
         <activity android:name=".activity.OtpVerificationActivity" />
         <activity
-            android:name=".activity.SelectCourierActivity"
+            android:name=".activity.selectcourieractivity.SelectCourierActivity"
             android:exported="true" />
         <activity
             android:name=".activity.TrackingActivity"

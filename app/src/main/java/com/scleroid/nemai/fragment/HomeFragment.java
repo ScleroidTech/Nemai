@@ -36,7 +36,6 @@ https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
@@ -59,7 +58,6 @@ import android.widget.Toast;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.activity.SelectCourierActivity;
 import com.scleroid.nemai.adapter.recyclerview.PagerAdapter;
 import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.models.Parcel;
@@ -73,6 +71,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_PARCEL;
 import static com.scleroid.nemai.network.NetworkCalls.submitCouriers;
@@ -179,9 +179,9 @@ public class HomeFragment extends Fragment {
 		mSubmitButton = v.findViewById(R.id.btn_submit);
 
 		mSubmitButton.setOnClickListener(view -> {
-			startActivity(new Intent(getContext(), SelectCourierActivity.class));
+			//startActivity(new Intent(getContext(), SelectCourierActivity.class));
 			//TODO change this, temp
-			if (submitData() != null) { sendCouriers(); }
+			if (submitData()) { sendCouriers(); }
 
 
 			// Intent i = new Intent(getActivity(), PartnerActivity.class);
@@ -198,9 +198,12 @@ public class HomeFragment extends Fragment {
 		ParcelLab.deleteCurrentParcel(AppDatabase.getAppDatabase(context), parcel);
 	}
 
-	public Parcel createDefaultParcel() {
-		Parcel parcel = ParcelLab.newParcel(context);
-		return parcel;
+	public void createDefaultParcel() {
+
+		Disposable subscribe = ParcelLab.newParcel(context).subscribe(parcel1 -> {
+			parcel = parcel1;
+			parcelCurrent = parcel1;
+		});
 	}
 
 	private void setupRecyclerView(View v, LayoutInflater inflater, Context context) {
@@ -331,31 +334,30 @@ public class HomeFragment extends Fragment {
 		}
 	}
 
-	private Parcel submitData() {
+	private boolean submitData() {
 		if (parcelCurrent == null) parcelCurrent = recycleViewPagerAdapter.holder.getParcel();
-		//TODO added on time
-		// ParcelLab.addParcel(parcelCurrent, AppDatabase.getAppDatabase(getContext()));
+
 		for (Parcel parcel :
 				crimes) {
 			//TODO check for all blank values
 			Parcel parcelNew = recycleViewPagerAdapter.holder.validateFields(parcel);
 			if (parcelNew == null) {
 				recyclerViewPager.scrollToPosition(crimes.indexOf(parcel));
-				return null;
+				return false;
 			}
 		}
 
 
-		/*ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(getContext()));*/
-		parcelCurrent = createDefaultParcel();
-		return parcel;
-		//    parcels = updateParcelList(context);
+		ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(getContext()));
+		createDefaultParcel();
+		return true;
+
 
 	}
 
 	private void sendCouriers() {
 		//TODO Change this
-		startActivity(new Intent(getContext(), SelectCourierActivity.class));
+		//startActivity(new Intent(getContext(), SelectCourierActivity.class));
 		for (Parcel parcelTemp : crimes) {
 			submitCouriers(context, parcelTemp, TAG_COURIERS, loader);
 		}

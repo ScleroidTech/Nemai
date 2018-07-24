@@ -442,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements GarlandApp.FakerR
 
     @Override
     public void onFakerReady(Faker faker) {
-        populateData(faker);
+        //populateData(faker);
     }
 
     private void populateData(Faker faker) {
