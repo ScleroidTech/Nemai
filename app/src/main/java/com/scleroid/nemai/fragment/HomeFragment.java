@@ -57,13 +57,13 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
-import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.activity.selectcourieractivity.SelectCourierActivity;
 import com.scleroid.nemai.adapter.recyclerview.PagerAdapter;
+import com.scleroid.nemai.data.AppDatabase;
 import com.scleroid.nemai.data.controller.ParcelLab;
+import com.scleroid.nemai.data.localdb.PinCode;
 import com.scleroid.nemai.data.models.Parcel;
-import com.scleroid.nemai.data.models.PinCode;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
 import com.scleroid.nemai.utils.ShowLoader;

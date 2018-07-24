@@ -102,6 +102,10 @@ dependencies {
     // OkHttp Logging Interceptor
     implementation "com.squareup.okhttp3:okhttp:3.10.0"
     implementation "com.squareup.okhttp3:logging-interceptor:3.8.1"
+
+
+
+    implementation 'com.github.humazed:RoomAsset:1.0.3'
 }
 
 

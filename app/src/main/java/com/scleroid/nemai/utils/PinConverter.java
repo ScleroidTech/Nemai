@@ -4,7 +4,7 @@ import android.arch.persistence.room.TypeConverter;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.scleroid.nemai.data.models.PinCode;
+import com.scleroid.nemai.data.localdb.PinCode;
 
 import java.lang.reflect.Type;
 

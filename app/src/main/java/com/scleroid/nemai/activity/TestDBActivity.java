@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
-import com.scleroid.nemai.adapter.PinDatabaseHelper;
-import com.scleroid.nemai.data.models.PinCode;
+import com.scleroid.nemai.data.localdb.PinCode;
+import com.scleroid.nemai.data.localdb.PinDatabaseHelper;
 import com.scleroid.nemai.other.DelayedAutoCompleteTextView;
 
 import java.util.List;

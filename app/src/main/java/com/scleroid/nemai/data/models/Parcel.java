@@ -12,6 +12,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+import com.scleroid.nemai.data.localdb.PinCode;
 import com.scleroid.nemai.utils.DateConverter;
 
 import java.util.Date;
