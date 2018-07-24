@@ -8,7 +8,6 @@ import android.widget.Toast;
 import com.scleroid.nemai.ServerConstants;
 import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.activity.OtpVerificationActivity;
-import com.scleroid.nemai.activity.PartnerActivity;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.volley_support.ShowLoader;
 import com.scleroid.nemai.volley_support.VolleyCompleteListener;
@@ -49,7 +48,7 @@ public class NetworkCalls {
                         Log.d(TAG, "Succcess Login " + success);
                         // Toast.makeText(context, success, Toast.LENGTH_LONG).show();
                         Toasty.info(context, "Fetching Information, Hang on", Toast.LENGTH_LONG, true).show();
-                        PartnerActivity.newIntent(context);
+                        //      PartnerActivity.newIntent(context);
 
                         // Launch login activity
                     /*Intent intent = new Intent(

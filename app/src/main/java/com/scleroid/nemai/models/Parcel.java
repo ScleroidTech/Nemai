@@ -80,25 +80,12 @@ public class Parcel implements Parcelable {
 	@Embedded(prefix = "dest_")
 	private PinCode destinationPinCode;
 
-	/*
-	public Parcel(String sourcePin, String destinationPin, String deliveryType, String
-	packageType, int weight, int invoice, int length, int width, int height, String description,
-	Date parcelDate, long serialNo) {
-		this(sourcePin, destinationPin, deliveryType, packageType, weight, invoice, length, width,
-		 height, description, parcelDate, serialNo, null, null);
 
-	}
-*/
 	//TODO handle data through serial no, implement viewmodel if things doesn't work. & Make
 	// changes(whatever that means)
 	@Ignore
 	public Parcel() {
-        /*this.sourcePin = "null";
-        this.destinationPin = "null";
-        this.deliveryType = "Domestic";
-        this.packageType = "Document";
-        this.description = "null";
-        this.serialNo = UUID.randomUUID();*/
+
 		this("null", "null", "Domestic", "Document", 0, 0, 0, 0, 0, "null", new Date(),
 				getRandomSerialNo(), null, null);
 
