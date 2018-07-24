@@ -13,10 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.CourierAdapter;
+import com.scleroid.nemai.data.AppDatabase;
 import com.scleroid.nemai.data.controller.CourierLab;
 import com.scleroid.nemai.data.models.Courier;
 import com.scleroid.nemai.data.models.Parcel;

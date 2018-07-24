@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.scleroid.nemai.AppDatabase;
+import com.scleroid.nemai.data.AppDatabase;
 import com.scleroid.nemai.data.models.OrderedCourier;
 
 import java.util.List;

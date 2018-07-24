@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import com.scleroid.nemai.AppDatabase;
+import com.scleroid.nemai.data.AppDatabase;
 import com.scleroid.nemai.data.models.Parcel;
 
 import java.util.List;

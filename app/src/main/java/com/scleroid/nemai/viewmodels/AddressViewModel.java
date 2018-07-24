@@ -5,7 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-import com.scleroid.nemai.AppDatabase;
+import com.scleroid.nemai.data.AppDatabase;
 import com.scleroid.nemai.data.controller.AddressLab;
 import com.scleroid.nemai.data.models.Address;
 
