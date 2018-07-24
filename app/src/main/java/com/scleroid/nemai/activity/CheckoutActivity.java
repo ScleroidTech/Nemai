@@ -15,7 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.ramotion.garlandview.TailLayoutManager;
 import com.ramotion.garlandview.TailRecyclerView;
@@ -45,9 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
-import hugo.weaving.DebugLog;
 import io.bloco.faker.Faker;
-import io.fabric.sdk.android.Fabric;
 
 import static com.google.common.util.concurrent.Runnables.doNothing;
 
@@ -126,11 +123,11 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Fabric fabric = new Fabric.Builder(this)
+      /*  final Fabric fabric = new Fabric.Builder(this)
                 .kits(new Crashlytics())
                 .debuggable(true)           // Enables Crashlytics debugger
                 .build();
-        Fabric.with(fabric);
+        Fabric.with(fabric);*/
         setContentView(R.layout.activity_checkout);
         FacebookSdk.sdkInitialize(CheckoutActivity.this);
         context = CheckoutActivity.this;
@@ -171,7 +168,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
      * @see SparseBooleanArray
      * @deprecated no longer necessary, because we're now using
      */
-    @DebugLog
+
     private void populateSelectionMap() {
         for (int i = 0; i < parcelAdapterForAddress.getItemCount(); i++) {
 
@@ -289,7 +286,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
      * @see ParcelHolderForAddress
      * which provides which items are selected & which aren't
      */
-    @DebugLog
+
     @SuppressLint("LongLogTag")
     @Subscribe
     public void onSelection(Events.selectionMap selectionMap) {

@@ -17,8 +17,6 @@ import com.scleroid.nemai.viewholders.ParcelHolderForAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import hugo.weaving.DebugLog;
-
 /**
  * Adapter which holds the outer Recyclerview
  * @see com.ramotion.garlandview.TailRecyclerView
@@ -47,7 +45,7 @@ public class ParcelAdapterForAddress extends TailAdapter<ParcelHolderForAddress>
      * @param addresses list of addresses
      * @param parcels   list of parcels
      */
-    @DebugLog
+
     public ParcelAdapterForAddress(List<Address> addresses, List<Parcel> parcels) {
         this.addresses = addresses;
         this.parcels = parcels;
