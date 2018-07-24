@@ -1,4 +1,4 @@
-package com.scleroid.nemai.activity;
+package com.scleroid.nemai.activity.registration;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,14 +16,14 @@ import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.hbb20.CountryCodePicker;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.volley_support.ShowLoader;
-import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
+import com.scleroid.nemai.utils.ShowLoader;
+import com.scleroid.nemai.utils.ShowNetworkErrorDialog;
 
 import java.util.regex.Pattern;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
 import static com.scleroid.nemai.activity.MainActivity.session;
-import static com.scleroid.nemai.activity.SocialRegisterActivity.TAG_REGISTER_USER;
+import static com.scleroid.nemai.activity.registration.SocialRegisterActivity.TAG_REGISTER_USER;
 import static com.scleroid.nemai.network.NetworkCalls.registerUser;
 
 /**

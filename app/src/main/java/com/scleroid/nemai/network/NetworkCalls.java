@@ -7,9 +7,9 @@ import android.widget.Toast;
 
 import com.scleroid.nemai.ServerConstants;
 import com.scleroid.nemai.activity.MainActivity;
-import com.scleroid.nemai.activity.OtpVerificationActivity;
+import com.scleroid.nemai.activity.registration.OtpVerificationActivity;
 import com.scleroid.nemai.models.Parcel;
-import com.scleroid.nemai.volley_support.ShowLoader;
+import com.scleroid.nemai.utils.ShowLoader;
 import com.scleroid.nemai.volley_support.VolleyCompleteListener;
 import com.scleroid.nemai.volley_support.VolleyPostJSONMethod;
 
@@ -21,8 +21,8 @@ import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 
-import static com.scleroid.nemai.activity.LoginActivity.TAG;
 import static com.scleroid.nemai.activity.MainActivity.session;
+import static com.scleroid.nemai.activity.registration.LoginActivity.TAG;
 
 /**
  * Created by Ganesh on 31-10-2017.

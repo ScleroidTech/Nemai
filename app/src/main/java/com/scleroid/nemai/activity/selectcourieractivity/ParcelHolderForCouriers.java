@@ -1,6 +1,6 @@
 package com.scleroid.nemai.activity.selectcourieractivity;
 
-import android.app.ProgressDialog;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -28,9 +28,12 @@ import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.network.ApiClient;
+import com.scleroid.nemai.network.NoNetworkException;
 import com.scleroid.nemai.outer.RecyclerItemClickListener;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
+import com.scleroid.nemai.utils.ShowLoader;
+import com.scleroid.nemai.utils.ShowNetworkErrorDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -328,23 +331,31 @@ public class ParcelHolderForCouriers extends HeaderItem {
 		adapter.addData(tail, selectedCourierList);
 	}
 
-	public void fetchTail(final Context context) {
+    @SuppressLint("CheckResult")
+    public void fetchTail(final Context context) {
 		if (header == null) return;
 
-		ProgressDialog dialog = new ProgressDialog(context);
-        dialog.show();
-		ApiClient.getService().getCouriers(header)
-				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(couriers -> {
-					tail.addAll(couriers);
-					updateInnerView();
-                    dialog.hide();
-                }, error -> {
-                    dialog.hide();
-                    Toasty.error(context, "Something Went Wrong, Try Again Later").show();
-                });
-
+        ShowNetworkErrorDialog networkErrorDialog = new ShowNetworkErrorDialog(context);
+        ShowLoader dialog = new ShowLoader(context);
+        dialog.showDialog();
+        if (networkErrorDialog.showDialog()) {
+            ApiClient.getService(context).getCouriers(header)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(couriers -> {
+                        tail.addAll(couriers);
+                        updateInnerView();
+                        dialog.dismissDialog();
+                    }, error -> {
+                        dialog.dismissDialog();
+                        if (error instanceof NoNetworkException) {
+                            Toasty.error(context, "Network Connectivity seems not working proparly")
+                                    .show();
+                        } else {
+                            Toasty.error(context, "Something Went Wrong, Try Again Later").show();
+                        }
+                    });
+        }
 	}
 
     /**

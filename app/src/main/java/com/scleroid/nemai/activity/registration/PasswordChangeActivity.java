@@ -1,4 +1,4 @@
-package com.scleroid.nemai.activity;
+package com.scleroid.nemai.activity.registration;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.volley_support.ShowLoader;
-import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
+import com.scleroid.nemai.utils.ShowLoader;
+import com.scleroid.nemai.utils.ShowNetworkErrorDialog;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.TEXT_INPUT_LAYOUT;
 

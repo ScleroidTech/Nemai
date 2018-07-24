@@ -1,4 +1,4 @@
-package com.scleroid.nemai.activity;
+package com.scleroid.nemai.activity.registration;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,12 +24,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.network.ApiClient;
 import com.scleroid.nemai.network.ApiService;
 import com.scleroid.nemai.network.NoNetworkException;
+import com.scleroid.nemai.utils.ShowLoader;
+import com.scleroid.nemai.utils.ShowNetworkErrorDialog;
 import com.scleroid.nemai.volley_support.AppController;
-import com.scleroid.nemai.volley_support.ShowLoader;
-import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
 
 import org.json.JSONException;
 
@@ -274,7 +275,7 @@ abstract class SocialLoginActivity extends EmailAutoCompleteActivity implements 
 
     private void isAlreadyUser(Context context) {
         loader.showDialog();
-	    ApiService apiService = ApiClient.getService();
+        ApiService apiService = ApiClient.getService(context);
 	    isUserExists(context, apiService);
 
     }

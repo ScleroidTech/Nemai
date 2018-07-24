@@ -27,6 +27,8 @@ import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.SessionManager;
+import com.scleroid.nemai.activity.registration.LoginActivity;
+import com.scleroid.nemai.activity.registration.SocialRegisterActivity;
 import com.scleroid.nemai.controller.AddressLab;
 import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.fragment.AddressListFragment;

@@ -53,15 +53,15 @@
             android:label="Select Address"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.registration.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".activity.RegisterActivity"
+            android:name=".activity.registration.RegisterActivity"
             android:exported="true"
             android:label="@string/title_activity_register" />
         <activity
-            android:name=".activity.SocialRegisterActivity"
+            android:name=".activity.registration.SocialRegisterActivity"
             android:exported="true"
             android:label="@string/title_activity_password" />
         <activity
@@ -94,7 +94,7 @@
             android:name="sendotp.key"
             android:value="@string/sendotp_key" />
 
-        <activity android:name=".activity.OtpVerificationActivity" />
+        <activity android:name=".activity.registration.OtpVerificationActivity" />
         <activity
             android:name=".activity.selectcourieractivity.SelectCourierActivity"
             android:exported="true" />
@@ -102,11 +102,11 @@
             android:name=".activity.TrackingActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.ResetPasswordActivity"
+            android:name=".activity.registration.ResetPasswordActivity"
             android:exported="true"
             android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.PasswordChangeActivity" />
+        <activity android:name=".activity.registration.PasswordChangeActivity" />
         <activity android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity" />
         <activity
             android:name=".viewpager.CourierActivity"

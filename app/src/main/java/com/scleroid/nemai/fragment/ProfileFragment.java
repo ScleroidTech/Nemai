@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.activity.PasswordChangeActivity;
-import com.scleroid.nemai.activity.SocialRegisterActivity;
+import com.scleroid.nemai.activity.registration.PasswordChangeActivity;
+import com.scleroid.nemai.activity.registration.SocialRegisterActivity;
 import com.scleroid.nemai.utils.DateUtils;
 import com.scleroid.nemai.utils.ProfileUtils;
 
