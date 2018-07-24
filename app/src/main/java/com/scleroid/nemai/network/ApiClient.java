@@ -1,5 +1,7 @@
 package com.scleroid.nemai.network;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -27,6 +29,7 @@ public class ApiClient {
 	private static ApiClient instance;
 	private static ApiService service;
 	private static Gson gson;
+	private static LiveNetworkMonitor networkMonitor;
 
 	public static synchronized ApiClient getInstance() {
 		if (instance == null) {
@@ -35,10 +38,10 @@ public class ApiClient {
 		return instance;
 	}
 
-	public static synchronized ApiService getService() {
-		/*if (networkMonitor == null)
+	public static synchronized ApiService getService(Context context) {
+		if (networkMonitor == null)
 		networkMonitor = new LiveNetworkMonitor(context);
-*/
+
 		if (service == null) {
 			service = getClient().create(ApiService.class);
 		}
@@ -100,14 +103,14 @@ public class ApiClient {
 		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
 		httpClient.addInterceptor(interceptor);
-	/*	// LOOK HERE !!!! add network monitor interceptor:
+		// LOOK HERE !!!! add network monitor interceptor:
 		httpClient.addInterceptor(chain -> {
 			if (networkMonitor.isConnected()) {
 				return chain.proceed(chain.request());
 			} else {
 				throw new NoNetworkException();
 			}
-		});*/
+		});
 
 		httpClient.addInterceptor(chain -> {
 			Request original = chain.request();

@@ -6,7 +6,7 @@
 
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.scleroid.nemai.activity.LoginActivity">
+    tools:context="com.scleroid.nemai.activity.registration.LoginActivity">
 
     <!-- Login progress -->
 

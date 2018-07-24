@@ -1,4 +1,4 @@
-package com.scleroid.nemai.activity;
+package com.scleroid.nemai.activity.registration;
 
 import android.Manifest;
 import android.content.Context;
@@ -23,9 +23,9 @@ import com.msg91.sendotp.library.PhoneNumberFormattingTextWatcher;
 import com.msg91.sendotp.library.PhoneNumberUtils;
 import com.msg91.sendotp.library.internal.Iso2Phone;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.utils.ShowLoader;
+import com.scleroid.nemai.utils.ShowNetworkErrorDialog;
 import com.scleroid.nemai.volley_support.AppController;
-import com.scleroid.nemai.volley_support.ShowLoader;
-import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
 
 import java.util.Locale;
 

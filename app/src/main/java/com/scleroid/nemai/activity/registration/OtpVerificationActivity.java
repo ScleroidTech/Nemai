@@ -1,4 +1,4 @@
-package com.scleroid.nemai.activity;
+package com.scleroid.nemai.activity.registration;
 
 import android.Manifest;
 import android.content.Context;
@@ -22,10 +22,11 @@ import com.msg91.sendotp.library.SendOtpVerification;
 import com.msg91.sendotp.library.Verification;
 import com.msg91.sendotp.library.VerificationListener;
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.activity.MainActivity;
 
 import static com.scleroid.nemai.activity.MainActivity.session;
-import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_COUNTRY_CODE;
-import static com.scleroid.nemai.activity.SocialRegisterActivity.INTENT_PHONENUMBER;
+import static com.scleroid.nemai.activity.registration.SocialRegisterActivity.INTENT_COUNTRY_CODE;
+import static com.scleroid.nemai.activity.registration.SocialRegisterActivity.INTENT_PHONENUMBER;
 
 //TODO Add multiple parcel options
 public class OtpVerificationActivity extends AppCompatActivity implements

@@ -1,4 +1,4 @@
-package com.scleroid.nemai.activity;
+package com.scleroid.nemai.activity.registration;
 
 import android.annotation.TargetApi;
 import android.app.LoaderManager;
@@ -18,7 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.volley_support.ShowLoader;
+import com.scleroid.nemai.utils.ShowLoader;
 
 import java.util.ArrayList;
 import java.util.List;

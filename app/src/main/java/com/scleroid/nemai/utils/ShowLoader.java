@@ -1,4 +1,4 @@
-package com.scleroid.nemai.volley_support;
+package com.scleroid.nemai.utils;
 
 import android.content.Context;
 import android.support.v7.app.AlertDialog;

@@ -64,8 +64,8 @@ import com.scleroid.nemai.models.Parcel;
 import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
+import com.scleroid.nemai.utils.ShowLoader;
 import com.scleroid.nemai.viewmodels.ParcelViewModel;
-import com.scleroid.nemai.volley_support.ShowLoader;
 
 import org.greenrobot.eventbus.Subscribe;
 

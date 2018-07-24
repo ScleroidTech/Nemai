@@ -1,4 +1,4 @@
-package com.scleroid.nemai.activity;
+package com.scleroid.nemai.activity.registration;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,8 @@ import com.facebook.FacebookSdk;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.SessionManager;
 import com.scleroid.nemai.network.NetworkCalls;
-import com.scleroid.nemai.volley_support.ShowLoader;
-import com.scleroid.nemai.volley_support.ShowNetworkErrorDialog;
+import com.scleroid.nemai.utils.ShowLoader;
+import com.scleroid.nemai.utils.ShowNetworkErrorDialog;
 
 import java.util.regex.Pattern;
 

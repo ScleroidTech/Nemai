@@ -1,4 +1,4 @@
-package com.scleroid.nemai.activity;
+package com.scleroid.nemai.activity.registration;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
