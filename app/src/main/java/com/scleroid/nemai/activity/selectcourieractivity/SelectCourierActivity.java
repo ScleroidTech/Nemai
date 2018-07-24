@@ -1,4 +1,4 @@
-package com.scleroid.nemai.activity;
+package com.scleroid.nemai.activity.selectcourieractivity;
 
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
@@ -23,7 +23,7 @@ import com.ramotion.garlandview.header.HeaderTransformer;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.adapter.recyclerview.ParcelAdapterForCouriers;
+import com.scleroid.nemai.activity.CheckoutActivity;
 import com.scleroid.nemai.controller.CourierLab;
 import com.scleroid.nemai.controller.ParcelLab;
 import com.scleroid.nemai.models.Courier;
@@ -34,7 +34,6 @@ import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
 import com.scleroid.nemai.viewmodels.CourierViewModel;
 import com.scleroid.nemai.viewmodels.OrderViewModel;
-import com.scleroid.nemai.viewmodels.ParcelViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,7 +63,7 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
     SparseBooleanArray selectedPositions = new SparseBooleanArray();
 
 
-    private ParcelViewModel parcelViewModel;
+    private SelectCourierViewModel selectCourierViewModel;
     private ParcelAdapterForCouriers parcelAdapter;
     private TailRecyclerView outerRecyclerView;
     private ActionMode mActionMode;
@@ -101,10 +100,11 @@ public class SelectCourierActivity extends AppCompatActivity implements GarlandA
             isFinalized = orderedCouriers.size() == parcelAdapter.getParcels().size();
 
         });
-        parcelViewModel = ViewModelProviders.of(SelectCourierActivity.this).get(ParcelViewModel.class);
+        selectCourierViewModel =
+                ViewModelProviders.of(SelectCourierActivity.this).get(SelectCourierViewModel.class);
 
 
-        parcelViewModel.getParcelList().observe(SelectCourierActivity.this, parcels -> {
+        selectCourierViewModel.getParcelList().observe(SelectCourierActivity.this, parcels -> {
 
             parcelAdapter.setParcels(parcels);
             parcelAdapter.notifyDataSetChanged();

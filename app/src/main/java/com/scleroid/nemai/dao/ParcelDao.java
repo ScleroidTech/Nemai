@@ -31,7 +31,7 @@ public interface ParcelDao {
     int countParcels();
 
     @Insert(onConflict = REPLACE)
-    void insert(Parcel parcel);
+    long insert(Parcel parcel);
 
     @Insert
     void insertAll(Parcel... parcels);

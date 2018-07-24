@@ -1,4 +1,4 @@
-package com.scleroid.nemai.adapter.recyclerview;
+package com.scleroid.nemai.activity.selectcourieractivity;
 
 import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;

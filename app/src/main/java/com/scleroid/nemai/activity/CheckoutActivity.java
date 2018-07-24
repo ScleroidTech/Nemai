@@ -192,7 +192,7 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
     @Override
     public void onFakerReady(Faker faker) {
 
-        populateData(faker);
+        //  populateData(faker);
 
     }
 
