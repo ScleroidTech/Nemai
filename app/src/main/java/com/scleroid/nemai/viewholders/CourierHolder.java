@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.models.Courier;
+import com.scleroid.nemai.data.models.Courier;
 
 /**
  * @author Ganesh Kaple

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.OrderAdapter;
-import com.scleroid.nemai.models.OrderedCourier;
+import com.scleroid.nemai.data.models.OrderedCourier;
 import com.scleroid.nemai.viewmodels.OrderViewModel;
 
 import java.util.ArrayList;

@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 
 import com.ramotion.garlandview.TailAdapter;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.models.Courier;
-import com.scleroid.nemai.models.OrderedCourier;
-import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.data.models.Courier;
+import com.scleroid.nemai.data.models.OrderedCourier;
+import com.scleroid.nemai.data.models.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;

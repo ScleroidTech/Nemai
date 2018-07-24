@@ -16,8 +16,8 @@ import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.controller.AddressLab;
-import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.data.controller.AddressLab;
+import com.scleroid.nemai.data.models.Address;
 
 /**
  * Created by Ganesh on 20-11-2017.

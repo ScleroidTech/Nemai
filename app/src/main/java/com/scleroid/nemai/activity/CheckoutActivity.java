@@ -24,12 +24,12 @@ import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.ParcelAdapterForAddress;
-import com.scleroid.nemai.controller.AddressLab;
-import com.scleroid.nemai.controller.ParcelLab;
-import com.scleroid.nemai.models.Address;
-import com.scleroid.nemai.models.OrderedCourier;
-import com.scleroid.nemai.models.Parcel;
-import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.data.controller.AddressLab;
+import com.scleroid.nemai.data.controller.ParcelLab;
+import com.scleroid.nemai.data.models.Address;
+import com.scleroid.nemai.data.models.OrderedCourier;
+import com.scleroid.nemai.data.models.Parcel;
+import com.scleroid.nemai.data.models.PinCode;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
 import com.scleroid.nemai.viewholders.ParcelHolderForAddress;
@@ -230,10 +230,10 @@ public class CheckoutActivity extends AppCompatActivity implements GarlandApp.Fa
         );
     }
 
-    private com.scleroid.nemai.models.Parcel createParcelData(Faker faker) {
+	private com.scleroid.nemai.data.models.Parcel createParcelData(Faker faker) {
         String source = faker.address.city();
         String dest = faker.address.city();
-        return new com.scleroid.nemai.models.Parcel(
+		return new com.scleroid.nemai.data.models.Parcel(
                 source,
                 dest,
                 "Domestic",

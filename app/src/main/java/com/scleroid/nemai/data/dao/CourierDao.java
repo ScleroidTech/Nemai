@@ -1,4 +1,4 @@
-package com.scleroid.nemai.dao;
+package com.scleroid.nemai.data.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -7,7 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.scleroid.nemai.models.Courier;
+import com.scleroid.nemai.data.models.Courier;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import com.scleroid.nemai.AppDatabase;
-import com.scleroid.nemai.models.OrderedCourier;
+import com.scleroid.nemai.data.models.OrderedCourier;
 
 import java.util.List;
 

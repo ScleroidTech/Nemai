@@ -2,7 +2,7 @@ package com.scleroid.nemai.utils;
 
 import android.os.Bundle;
 
-import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.data.models.Address;
 
 /**
  * The class used to provide events that need to be handled by
@@ -20,7 +20,7 @@ public class Events {
      * This class is used to display the selected & unselected Couriers from
      * the list of
      *
-     * @see com.scleroid.nemai.models.OrderedCourier
+     * @see com.scleroid.nemai.data.models.OrderedCourier
      */
     public static class selectionMap {
         /**

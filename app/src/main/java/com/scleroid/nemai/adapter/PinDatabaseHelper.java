@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.data.models.PinCode;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,7 +49,8 @@ public class PinDatabaseHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, pathToSaveDBFile);
     }
-    public void prepareDatabase() throws IOException {
+
+	public void prepareDatabase() {
         boolean dbExist = checkDatabase();
         if (dbExist) {
             Log.d(TAG, "Database Exists");

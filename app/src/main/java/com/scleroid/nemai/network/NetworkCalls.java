@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.scleroid.nemai.ServerConstants;
 import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.activity.registration.OtpVerificationActivity;
-import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.data.models.Parcel;
 import com.scleroid.nemai.utils.ShowLoader;
 import com.scleroid.nemai.volley_support.VolleyCompleteListener;
 import com.scleroid.nemai.volley_support.VolleyPostJSONMethod;

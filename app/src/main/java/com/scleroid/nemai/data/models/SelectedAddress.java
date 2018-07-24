@@ -1,4 +1,4 @@
-package com.scleroid.nemai.models;
+package com.scleroid.nemai.data.models;
 
 /**
  * Stores Selected Address with the position at which they are selected,

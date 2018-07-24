@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.AddressAdapterInsideFragment;
-import com.scleroid.nemai.models.Address;
+import com.scleroid.nemai.data.models.Address;
 import com.scleroid.nemai.viewmodels.AddressViewModel;
 
 import java.util.List;

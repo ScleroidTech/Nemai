@@ -1,4 +1,4 @@
-package com.scleroid.nemai.controller;
+package com.scleroid.nemai.data.controller;
 
 /**
  * Copyright (C) 2018

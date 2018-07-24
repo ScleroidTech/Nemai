@@ -29,17 +29,17 @@ import com.scleroid.nemai.R;
 import com.scleroid.nemai.SessionManager;
 import com.scleroid.nemai.activity.registration.LoginActivity;
 import com.scleroid.nemai.activity.registration.SocialRegisterActivity;
-import com.scleroid.nemai.controller.AddressLab;
-import com.scleroid.nemai.controller.ParcelLab;
+import com.scleroid.nemai.data.controller.AddressLab;
+import com.scleroid.nemai.data.controller.ParcelLab;
+import com.scleroid.nemai.data.models.Address;
+import com.scleroid.nemai.data.models.Parcel;
+import com.scleroid.nemai.data.models.PinCode;
 import com.scleroid.nemai.fragment.AddressListFragment;
 import com.scleroid.nemai.fragment.HomeFragment;
 import com.scleroid.nemai.fragment.OrdersFragment;
 import com.scleroid.nemai.fragment.PartnersFragment;
 import com.scleroid.nemai.fragment.ProfileFragment;
 import com.scleroid.nemai.fragment.SettingsFragment;
-import com.scleroid.nemai.models.Address;
-import com.scleroid.nemai.models.Parcel;
-import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.utils.ProfileUtils;
 
 import java.util.ArrayList;
@@ -471,10 +471,10 @@ public class MainActivity extends AppCompatActivity implements GarlandApp.FakerR
         );
     }
 
-    private com.scleroid.nemai.models.Parcel createParcelData(Faker faker) {
+	private com.scleroid.nemai.data.models.Parcel createParcelData(Faker faker) {
         String source = faker.address.city();
         String dest = faker.address.city();
-        return new com.scleroid.nemai.models.Parcel(
+		return new com.scleroid.nemai.data.models.Parcel(
                 source,
                 dest,
                 "Domestic",
