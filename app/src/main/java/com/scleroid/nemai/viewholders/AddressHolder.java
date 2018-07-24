@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.activity.MainActivity;
+import com.scleroid.nemai.data.models.Address;
 import com.scleroid.nemai.fragment.AddressFragment;
-import com.scleroid.nemai.models.Address;
 
 /**
  * Created by Ganesh on 15-11-2017.

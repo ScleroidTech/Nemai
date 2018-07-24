@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.models.OrderedCourier;
+import com.scleroid.nemai.data.models.OrderedCourier;
 import com.scleroid.nemai.viewholders.OrderHolder;
 
 import java.util.List;

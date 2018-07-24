@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.models.Courier;
+import com.scleroid.nemai.data.models.Courier;
 
 import java.util.List;
 

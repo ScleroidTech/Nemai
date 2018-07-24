@@ -5,14 +5,14 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.scleroid.nemai.dao.AddressDao;
-import com.scleroid.nemai.dao.CourierDao;
-import com.scleroid.nemai.dao.OrderDao;
-import com.scleroid.nemai.dao.ParcelDao;
-import com.scleroid.nemai.models.Address;
-import com.scleroid.nemai.models.Courier;
-import com.scleroid.nemai.models.OrderedCourier;
-import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.data.dao.AddressDao;
+import com.scleroid.nemai.data.dao.CourierDao;
+import com.scleroid.nemai.data.dao.OrderDao;
+import com.scleroid.nemai.data.dao.ParcelDao;
+import com.scleroid.nemai.data.models.Address;
+import com.scleroid.nemai.data.models.Courier;
+import com.scleroid.nemai.data.models.OrderedCourier;
+import com.scleroid.nemai.data.models.Parcel;
 
 /**
  *
@@ -88,8 +88,8 @@ public abstract class AppDatabase extends RoomDatabase {
      * For Room Library
      *
      * @return an object of
-     * @see com.scleroid.nemai.dao.CourierDao
-     * @see com.scleroid.nemai.dao.CourierDao
+     * @see com.scleroid.nemai.data.dao.CourierDao
+     * @see com.scleroid.nemai.data.dao.CourierDao
      */
     public abstract CourierDao courierDao();
 

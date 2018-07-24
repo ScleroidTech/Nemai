@@ -19,9 +19,9 @@ import android.widget.TextView;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
+import com.scleroid.nemai.data.models.Parcel;
+import com.scleroid.nemai.data.models.PinCode;
 import com.scleroid.nemai.fragment.DatePickerFragment;
-import com.scleroid.nemai.models.Parcel;
-import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.other.DelayedAutoCompleteTextView;
 import com.scleroid.nemai.utils.DateUtils;
 

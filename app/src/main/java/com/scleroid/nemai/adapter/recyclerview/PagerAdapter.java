@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.data.models.Parcel;
 import com.scleroid.nemai.viewholders.ParcelHolder;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.scleroid.nemai.models;
+package com.scleroid.nemai.data.models;
 
 /**
  * Created by Ganesh on 22/07/2017.

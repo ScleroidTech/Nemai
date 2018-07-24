@@ -1,7 +1,7 @@
 package com.scleroid.nemai.utils;
 
-import com.scleroid.nemai.models.Address;
-import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.data.models.Address;
+import com.scleroid.nemai.data.models.Parcel;
 
 import java.util.List;
 

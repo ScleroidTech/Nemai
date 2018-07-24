@@ -11,10 +11,9 @@ import android.widget.TextView;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
 import com.scleroid.nemai.adapter.PinDatabaseHelper;
-import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.data.models.PinCode;
 import com.scleroid.nemai.other.DelayedAutoCompleteTextView;
 
-import java.io.IOException;
 import java.util.List;
 
 import static com.scleroid.nemai.fragment.HomeFragment.THRESHOLD;
@@ -31,12 +30,14 @@ public class TestDBActivity extends Activity {
 
         dbHelper = new PinDatabaseHelper(this);
         Log.d(TAG, getFilesDir().getAbsolutePath());
-        try {
+        /*try {
             dbHelper.prepareDatabase();
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
         }
-        textView = findViewById(R.id.bodytext);
+*/
+	    dbHelper.prepareDatabase();
+	    textView = findViewById(R.id.bodytext);
         editText = findViewById(R.id.test_input);
         editText.setThreshold(THRESHOLD);
         PinAutoCompleteAdapter pinAutoCompleteAdapter1 = new PinAutoCompleteAdapter(getApplicationContext());

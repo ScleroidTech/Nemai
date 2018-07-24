@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.DatePicker;
 
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.data.models.Parcel;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
 

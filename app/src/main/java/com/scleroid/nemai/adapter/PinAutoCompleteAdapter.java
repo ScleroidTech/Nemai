@@ -12,14 +12,13 @@ import android.widget.TextView;
 
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.ServerConstants;
-import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.data.models.PinCode;
 import com.scleroid.nemai.volley_support.VolleyCompleteListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,15 +122,16 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
      */
     private List<PinCode> findPins(String input, Context mContext) {
         PinDatabaseHelper dbHelper = new PinDatabaseHelper(mContext);
-        try {
-            dbHelper.prepareDatabase();
-            return dbHelper.getPincodes(input);
-        } catch (IOException e) {
-            Log.d(TAG, "IOException" + e.getMessage());
-            return null;
-        }
-
-
+	    dbHelper.prepareDatabase();
+	    return dbHelper.getPincodes(input);
+	   /* try {
+		    dbHelper.prepareDatabase();
+		    return dbHelper.getPincodes(input);
+	    } catch (IOException e) {
+		    Log.d(TAG, "IOException" + e.getMessage());
+		    return null;
+	    }
+*/
     }
 
 

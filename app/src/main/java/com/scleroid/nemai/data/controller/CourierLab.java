@@ -1,4 +1,4 @@
-package com.scleroid.nemai.controller;
+package com.scleroid.nemai.data.controller;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.scleroid.nemai.AppDatabase;
-import com.scleroid.nemai.models.Courier;
+import com.scleroid.nemai.data.models.Courier;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

@@ -14,9 +14,9 @@ import android.widget.Button;
 import android.widget.RadioButton;
 
 import com.scleroid.nemai.R;
+import com.scleroid.nemai.data.models.Address;
+import com.scleroid.nemai.data.models.OrderedCourier;
 import com.scleroid.nemai.databinding.ItemInnerAddressCardBinding;
-import com.scleroid.nemai.models.Address;
-import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.viewholders.AddressHolder;
 
 import java.util.ArrayList;

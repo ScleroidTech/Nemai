@@ -17,9 +17,9 @@ import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.GarlandApp;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.adapter.recyclerview.CourierAdapter;
-import com.scleroid.nemai.controller.CourierLab;
-import com.scleroid.nemai.models.Courier;
-import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.data.controller.CourierLab;
+import com.scleroid.nemai.data.models.Courier;
+import com.scleroid.nemai.data.models.Parcel;
 import com.scleroid.nemai.utils.DateUtils;
 import com.scleroid.nemai.viewmodels.CourierViewModel;
 

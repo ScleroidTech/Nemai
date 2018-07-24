@@ -1,7 +1,7 @@
 package com.scleroid.nemai.network;
 
-import com.scleroid.nemai.models.Courier;
-import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.data.models.Courier;
+import com.scleroid.nemai.data.models.Parcel;
 
 import java.util.List;
 
