@@ -1,4 +1,4 @@
-package com.scleroid.nemai.viewholders;
+package com.scleroid.nemai.activity.selectcourieractivity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -332,15 +332,18 @@ public class ParcelHolderForCouriers extends HeaderItem {
 		if (header == null) return;
 
 		ProgressDialog dialog = new ProgressDialog(context);
+        dialog.show();
 		ApiClient.getService().getCouriers(header)
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(couriers -> {
 					tail.addAll(couriers);
 					updateInnerView();
-
-
-				});
+                    dialog.hide();
+                }, error -> {
+                    dialog.hide();
+                    Toasty.error(context, "Something Went Wrong, Try Again Later").show();
+                });
 
 	}
 

@@ -19,7 +19,7 @@ import com.scleroid.nemai.models.Courier;
 /**
  * Created by ganesh on 2/1/18.
  */
-
+@Deprecated
 class CourierListHolder extends RecyclerView.ViewHolder {
 
     public final ImageView courierImageView;

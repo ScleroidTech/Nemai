@@ -12,7 +12,6 @@ import com.scleroid.nemai.R;
 import com.scleroid.nemai.models.Courier;
 import com.scleroid.nemai.models.OrderedCourier;
 import com.scleroid.nemai.models.Parcel;
-import com.scleroid.nemai.viewholders.ParcelHolderForCouriers;
 
 import java.util.ArrayList;
 import java.util.List;

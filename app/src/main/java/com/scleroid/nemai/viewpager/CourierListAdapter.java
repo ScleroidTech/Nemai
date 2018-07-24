@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by ganesh on 2/1/18.
  */
-
+@Deprecated
 public class CourierListAdapter extends RecyclerView.Adapter<CourierListHolder> {
     private final List<Courier> couriers;
 
