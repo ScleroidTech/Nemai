@@ -43,7 +43,7 @@ public interface PinDao {
 	 * @return LiveData object List of all indiaes in database
 	 */
 	@Query("SELECT * from india where pincode LIKE :pincode")
-	Observable<PinCode> getAllIndiaRxViaPin(String pincode);
+	Observable<List<PinCode>> getAllIndiaRxViaPin(String pincode);
 
 
 	/**
@@ -52,7 +52,7 @@ public interface PinDao {
 	 * @return LiveData object List of all indiaes in database
 	 */
 	@Query("SELECT * from india where location LIKE :pincode or area LIKE :pincode")
-	Observable<PinCode> getAllIndiaRxViaCity(String pincode);
+	Observable<List<PinCode>>  getAllIndiaRxViaCity(String pincode);
 
 
 	/**
