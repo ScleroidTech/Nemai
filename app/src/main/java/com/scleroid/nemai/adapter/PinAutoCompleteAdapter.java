@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
 
 /**
  * Created by scleroid on 15/9/17.
@@ -91,7 +91,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
                 List<PinCode> pinCodes;
                 if (data != null) {
 
-                    Observable<PinCode> observable;
+                    Flowable<PinCode> observable;
 
                     // performFiltering is already performed on a worker thread
                     // so we don't need to subscribeOn a background thread explicitly
