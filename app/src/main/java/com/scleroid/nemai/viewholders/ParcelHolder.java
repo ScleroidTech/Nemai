@@ -10,6 +10,8 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,9 +21,9 @@ import android.widget.TextView;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.activity.MainActivity;
 import com.scleroid.nemai.adapter.PinAutoCompleteAdapter;
-import com.scleroid.nemai.data.localdb.PinCode;
-import com.scleroid.nemai.data.models.Parcel;
 import com.scleroid.nemai.fragment.DatePickerFragment;
+import com.scleroid.nemai.models.Parcel;
+import com.scleroid.nemai.models.PinCode;
 import com.scleroid.nemai.other.DelayedAutoCompleteTextView;
 import com.scleroid.nemai.utils.DateUtils;
 
@@ -127,47 +129,47 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
         pinDestinationAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter1);
 
 
-        pinDestinationAutoCompleteTextView.setOnItemClickListener(
-                (adapterView, view, position, id) -> {
-                    mPinCodeDestination = (PinCode) adapterView.getItemAtPosition(position);
-                    pinDestinationAutoCompleteTextView.setText(String.format("%s, %s, %s",
-                            mPinCodeDestination.getLocation(), mPinCodeDestination.getPincode(),
-                            mPinCodeDestination.getState()));
-                });
+        pinDestinationAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                mPinCodeDestination = (PinCode) adapterView.getItemAtPosition(position);
+                pinDestinationAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeDestination.getLocation(), mPinCodeDestination.getPincode(), mPinCodeDestination.getState()));
+            }
+        });
 
 
         pinSourceAutoCompleteTextView.setThreshold(THRESHOLD);
         PinAutoCompleteAdapter pinAutoCompleteAdapter = new PinAutoCompleteAdapter(context);
         pinAutoCompleteAdapter.notifyDataSetChanged();
 
-        pinSourceAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter); // 'this' is Activity
-        // instance
+        pinSourceAutoCompleteTextView.setAdapter(pinAutoCompleteAdapter); // 'this' is Activity instance
 
-        pinSourceAutoCompleteTextView.setOnItemClickListener((adapterView, view, position, id) -> {
-            mPinCodeSource = (PinCode) adapterView.getItemAtPosition(position);
+        pinSourceAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                mPinCodeSource = (PinCode) adapterView.getItemAtPosition(position);
 
-            pinSourceAutoCompleteTextView.setText(
-                    String.format("%s, %s, %s", mPinCodeSource.getLocation(),
-                            mPinCodeSource.getPincode(), mPinCodeSource.getState()));
-        });
-
-
-        mWeightEditText.setOnFocusChangeListener((view, hasFocus) -> {
-            if (hasFocus) {
-                mWeightUnitTextView.setTextColor(
-                        context.getResources().getColor(R.color.colorPrimary));
-            } else {
-                mWeightUnitTextView.setTextColor(
-                        context.getResources().getColor(R.color.colorHint));
+                pinSourceAutoCompleteTextView.setText(String.format("%s, %s, %s", mPinCodeSource.getLocation(), mPinCodeSource.getPincode(), mPinCodeSource.getState()));
             }
         });
-        mInvoiceValueEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                mCurrencyUnitTextView.setTextColor(
-                        context.getResources().getColor(R.color.colorPrimary));
-            } else {
-                mCurrencyUnitTextView.setTextColor(
-                        context.getResources().getColor(R.color.colorHint));
+
+
+        mWeightEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus)
+                    mWeightUnitTextView.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+                else
+                    mWeightUnitTextView.setTextColor(context.getResources().getColor(R.color.colorHint));
+            }
+        });
+        mInvoiceValueEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    mCurrencyUnitTextView.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+                else
+                    mCurrencyUnitTextView.setTextColor(context.getResources().getColor(R.color.colorHint));
             }
         });
 
@@ -175,42 +177,54 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
         mDocumentRadioButton.setTypeface(null, Typeface.BOLD);
         mParcelRadioButton.setTypeface(null, Typeface.NORMAL);
 
-        mDocumentRadioButton.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                //mDocumentLinearLayout.setVisibility(View.VISIBLE);
-                toggleDocParcel = false;
-                mParcelLinearLayout.setVisibility(View.GONE);
+        mDocumentRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    //mDocumentLinearLayout.setVisibility(View.VISIBLE);
+                    toggleDocParcel = false;
+                    mParcelLinearLayout.setVisibility(View.GONE);
 
-                mDescriptionEditText.setMinLines(6);
-                mDocumentRadioButton.setTypeface(null, Typeface.BOLD);
-                mParcelRadioButton.setTypeface(null, Typeface.NORMAL);
+                    mDescriptionEditText.setMinLines(6);
+                    mDocumentRadioButton.setTypeface(null, Typeface.BOLD);
+                    mParcelRadioButton.setTypeface(null, Typeface.NORMAL);
+                }
             }
         });
 
-        mParcelRadioButton.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                mParcelLinearLayout.setVisibility(View.VISIBLE);
-                // mDocumentLinearLayout.setVisibility(View.GONE);
-                mDescriptionEditText.setMinLines(1);
-                toggleDocParcel = true;
-                mParcelRadioButton.setTypeface(null, Typeface.BOLD);
-                mDocumentRadioButton.setTypeface(null, Typeface.NORMAL);
+        mParcelRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    mParcelLinearLayout.setVisibility(View.VISIBLE);
+                    // mDocumentLinearLayout.setVisibility(View.GONE);
+                    mDescriptionEditText.setMinLines(1);
+                    toggleDocParcel = true;
+                    mParcelRadioButton.setTypeface(null, Typeface.BOLD);
+                    mDocumentRadioButton.setTypeface(null, Typeface.NORMAL);
+                }
             }
         });
 
-        mInternationalRadioButton.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                mInternationalRadioButton.setTypeface(null, Typeface.BOLD);
-                mDomesticRadioButton.setTypeface(null, Typeface.NORMAL);
-                toggleDomInternational = true;
+        mInternationalRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    mInternationalRadioButton.setTypeface(null, Typeface.BOLD);
+                    mDomesticRadioButton.setTypeface(null, Typeface.NORMAL);
+                    toggleDomInternational = true;
+                }
             }
         });
 
-        mDomesticRadioButton.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                mDomesticRadioButton.setTypeface(null, Typeface.BOLD);
-                mDomesticRadioButton.setTypeface(null, Typeface.NORMAL);
-                toggleDomInternational = false;
+        mDomesticRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    mDomesticRadioButton.setTypeface(null, Typeface.BOLD);
+                    mDomesticRadioButton.setTypeface(null, Typeface.NORMAL);
+                    toggleDomInternational = false;
+                }
             }
         });
 
@@ -221,7 +235,9 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
             dialogFragment.setTargetFragment(fragmentManager.findFragmentByTag(CURRENT_TAG), REQUEST_DATE);
             dialogFragment.show(fragmentManager, DIALOG_DATE);
         });
+
     }
+
 
     public Parcel validateFields(Parcel parcel) {
         boolean noSubmit = false;
@@ -235,25 +251,36 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
         if (isEmpty(pinSourceAutoCompleteTextView)) {
             mPinSourceTIL.setErrorEnabled(true);
             mPinSourceTIL.setError("Enter the Source first");
+            noSubmit = true;/*else if (!isValidDate(textClockDate)) {
+            mDateTIL.setErrorEnabled(true);
+            mDateTIL.setError("Dude, That's in the past. Please Enter a Date after today");
             noSubmit = true;
-
+        } */
         } else mPinSourceTIL.setErrorEnabled(false);
 
         if (isEmpty(pinDestinationAutoCompleteTextView)) {
+
             mPinDestTIL.setErrorEnabled(true);
             mPinDestTIL.setError("Enter the Destination too");
             noSubmit = true;
         } else mPinDestTIL.setErrorEnabled(false);
 
         if (isEmpty(mWeightEditText)) {
+
             mWeightTIL.setErrorEnabled(true);
-            mWeightTIL.setError("Enter the Weight");
+            mWeightTIL.setError("Enter the Weight ");
             noSubmit = true;
-        } else if (Integer.valueOf(mWeightEditText.getText().toString().trim()) > 20) {
-            mWeightTIL.setErrorEnabled(true);
-            mWeightTIL.setError("Weight Should be below 20Kg");
-            noSubmit = true;
-        } else { mWeightTIL.setErrorEnabled(false); }
+
+        } else {
+            if(Integer.valueOf(mWeightEditText.getText().toString())>20){
+                mWeightTIL.setErrorEnabled(true);
+                mWeightTIL.setError("Enter the Weight and not greater than 20");
+                noSubmit = true;
+
+
+            }else {
+                mWeightTIL.setErrorEnabled(false);}
+}
 
         if (isEmpty(mInvoiceValueEditText)) {
             mInvoiceTIL.setErrorEnabled(true);
@@ -266,7 +293,7 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
         if (toggleDocParcel) {
 
 
-            if (isEmpty(mPackageWidthParcelEditText)) {
+            if (isEmpty(mPackageWidthParcelEditText)){
                 mWidthTIL.setErrorEnabled(true);
                 mWidthTIL.setError("Enter the Width");
                 noSubmit = true;
@@ -343,6 +370,7 @@ public class ParcelHolder extends RecyclerView.ViewHolder {
         return parcel.updateInstance(source, destination, deliveryType, "Document", weight, invoice, 0, 0, 0, description, parcelDate, parcel.getSerialNo(), mPinCodeSource, mPinCodeDestination);
 
     }
+
 
     public void bindParcels(Parcel parcel) {
         this.parcel = parcel;

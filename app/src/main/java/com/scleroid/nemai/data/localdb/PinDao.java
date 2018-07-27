@@ -43,7 +43,9 @@ public interface PinDao {
 	 * @return LiveData object List of all indiaes in database
 	 */
 	@Query("SELECT * from india where pincode LIKE :pincode")
+
 	Flowable<PinCode> getAllIndiaRxViaPin(String pincode);
+
 
 
 	/**
@@ -53,6 +55,7 @@ public interface PinDao {
 	 */
 	@Query("SELECT * from india where location LIKE :pincode or area LIKE :pincode")
 	Flowable<PinCode> getAllIndiaRxViaCity(String pincode);
+
 
 
 	/**
