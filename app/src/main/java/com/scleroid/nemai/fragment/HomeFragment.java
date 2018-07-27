@@ -39,22 +39,24 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
-import com.scleroid.nemai.AppDatabase;
 import com.scleroid.nemai.R;
-import com.scleroid.nemai.activity.SelectCourierActivity;
+import com.scleroid.nemai.activity.selectcourieractivity.SelectCourierActivity;
 import com.scleroid.nemai.adapter.recyclerview.PagerAdapter;
-import com.scleroid.nemai.controller.ParcelLab;
-import com.scleroid.nemai.models.Parcel;
-import com.scleroid.nemai.models.PinCode;
+import com.scleroid.nemai.data.AppDatabase;
+import com.scleroid.nemai.data.controller.ParcelLab;
+import com.scleroid.nemai.data.localdb.PinCode;
+import com.scleroid.nemai.data.models.Parcel;
 import com.scleroid.nemai.utils.Events;
 import com.scleroid.nemai.utils.GlobalBus;
+import com.scleroid.nemai.utils.ShowLoader;
 import com.scleroid.nemai.viewmodels.ParcelViewModel;
-import com.scleroid.nemai.volley_support.ShowLoader;
 
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_PARCEL;
 
@@ -173,10 +175,9 @@ public class HomeFragment extends Fragment {
         mSubmitButton = v.findViewById(R.id.btn_submit);
 
         mSubmitButton.setOnClickListener(view -> {
-            startActivity(new Intent(getContext(), SelectCourierActivity.class));
-            //TODO change this, temp
-            if (submitData() != null)
-                sendCouriers();
+            //startActivity(new Intent(getContext(), SelectCourierActivity.class));
+
+            if (validateFields()) { sendCouriers(); }
 
 
             // Intent i = new Intent(getActivity(), PartnerActivity.class);
@@ -201,9 +202,12 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public Parcel createDefaultParcel() {
-        Parcel parcel = ParcelLab.newParcel(context);
-        return parcel;
+    public void createDefaultParcel() {
+
+        Disposable subscribe = ParcelLab.newParcel(context).subscribe(parcel1 -> {
+            //	parcel = parcel1;
+            parcelCurrent = parcel1;
+        });
     }
 
     private void setupRecyclerView(View v, LayoutInflater inflater, Context context) {
@@ -306,37 +310,43 @@ public class HomeFragment extends Fragment {
     private void setButtonsVisibility(int newPosition) {
         if (crimes != null) {
 
-            if (crimes.size() <= 1) fabDeleteCourier.setVisibility(View.GONE);
-            else fabDeleteCourier.setVisibility(View.VISIBLE);
-            if (newPosition == crimes.size() - 1) fabNewCourier.setVisibility(View.VISIBLE);
-            else fabNewCourier.setVisibility(View.GONE);
+            if (crimes.size() <= 1) { fabDeleteCourier.setVisibility(View.GONE); } else {
+                fabDeleteCourier.setVisibility(View.VISIBLE);
+            }
+            if (newPosition == crimes.size() - 1) {
+                fabNewCourier.setVisibility(View.VISIBLE);
+            } else { fabNewCourier.setVisibility(View.GONE); }
+            if (crimes.size() >= 5) fabNewCourier.setVisibility(View.GONE);
         } else {
             fabDeleteCourier.setVisibility(View.GONE);
             fabNewCourier.setVisibility(View.VISIBLE);
         }
     }
 
+    private boolean submitData() {
+        if (validateFields()) return false;
 
-    private Parcel submitData() {
+
+        //ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(getContext()));
+        createDefaultParcel();
+        return true;
+
+
+    }
+
+    private boolean validateFields() {
         if (parcelCurrent == null) parcelCurrent = recycleViewPagerAdapter.holder.getParcel();
-        //TODO added on time
-        // ParcelLab.addParcel(parcelCurrent, AppDatabase.getAppDatabase(getContext()));
+
         for (Parcel parcel :
-             crimes) {
+                crimes) {
             //TODO check for all blank values
             Parcel parcelNew = recycleViewPagerAdapter.holder.validateFields(parcel);
             if (parcelNew == null) {
                 recyclerViewPager.scrollToPosition(crimes.indexOf(parcel));
-                return null;
+                return true;
             }
         }
-
-
-        /*ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(getContext()));*/
-        parcelCurrent = createDefaultParcel();
-        return parcel;
-        //    parcels = updateParcelList(context);
-
+        return false;
     }
 
     private void sendCouriers() {
