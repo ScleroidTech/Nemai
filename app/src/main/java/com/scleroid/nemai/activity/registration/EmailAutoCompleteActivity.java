@@ -34,7 +34,7 @@ abstract class EmailAutoCompleteActivity extends AppCompatActivity implements Lo
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-    public AutoCompleteTextView mEmailView;
+    public AutoCompleteTextView  mEmailView;
     ShowLoader loader;
 
     public void populateAutoComplete() {
