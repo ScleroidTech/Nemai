@@ -26,7 +26,8 @@ import com.scleroid.nemai.data.models.Parcel;
  * @see Address
  * @see OrderedCourier
  */
-@Database(entities = {Parcel.class, Address.class, OrderedCourier.class, Courier.class}, version = 4)
+@Database(entities = {Parcel.class, Address.class, OrderedCourier.class, Courier.class}, version
+        = 5)
 public abstract class AppDatabase extends RoomDatabase {
     /**
      * Holds the instance of the database
