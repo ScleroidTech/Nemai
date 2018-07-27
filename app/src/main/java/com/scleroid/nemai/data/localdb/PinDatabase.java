@@ -12,7 +12,7 @@ import com.huma.room_for_asset.RoomAsset;
  * @author Ganesh Kaple
  * @since 7/24/18
  */
-@Database(entities = PinCode.class, version = 2)
+@Database(entities = PinCode.class, version = 3)
 public abstract class PinDatabase extends RoomDatabase {
 
 	/**

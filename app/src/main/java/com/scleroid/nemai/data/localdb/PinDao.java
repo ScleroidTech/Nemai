@@ -7,7 +7,7 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
@@ -43,7 +43,9 @@ public interface PinDao {
 	 * @return LiveData object List of all indiaes in database
 	 */
 	@Query("SELECT * from india where pincode LIKE :pincode")
-	Observable<List<PinCode>> getAllIndiaRxViaPin(String pincode);
+
+	Flowable<PinCode> getAllIndiaRxViaPin(String pincode);
+
 
 
 	/**
@@ -52,7 +54,8 @@ public interface PinDao {
 	 * @return LiveData object List of all indiaes in database
 	 */
 	@Query("SELECT * from india where location LIKE :pincode or area LIKE :pincode")
-	Observable<List<PinCode>>  getAllIndiaRxViaCity(String pincode);
+	Flowable<PinCode> getAllIndiaRxViaCity(String pincode);
+
 
 
 	/**
