@@ -36,10 +36,11 @@ public abstract class PinDatabase extends RoomDatabase {
 		if (instance == null) {
 			instance =
 					RoomAsset.databaseBuilder(context.getApplicationContext(), PinDatabase.class,
-							"pincode-db")
+							"pincode-db.db")
 							//While Migration of database, it destroys previous versions, should
 							// be removed
-							//	.fallbackToDestructiveMigration()
+							.allowMainThreadQueries()
+							.fallbackToDestructiveMigration()
 							.build();
 		}
 		return instance;

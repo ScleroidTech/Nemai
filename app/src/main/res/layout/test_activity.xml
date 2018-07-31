@@ -13,14 +13,7 @@
         android:hint="@string/data_here"
         android:inputType="textPersonName" />
 
-    <com.scleroid.nemai.other.DelayedAutoCompleteTextView
-        android:id="@+id/test_input2"
-        android:layout_width="match_parent"
 
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/data_here"
-        android:inputType="textPersonName" />
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"

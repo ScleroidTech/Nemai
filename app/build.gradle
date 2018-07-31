@@ -110,6 +110,12 @@ dependencies {
 // RxJava support for Room
     implementation "android.arch.persistence.room:rxjava2:1.1.1"
     implementation 'com.github.humazed:RoomAsset:1.0.3'
+
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    // Optional, if you use support library fragments:
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
 }
 
 

@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.scleroid.nemai.R;
 import com.scleroid.nemai.ServerConstants;
 import com.scleroid.nemai.data.localdb.PinCode;
-import com.scleroid.nemai.data.localdb.PinDatabase;
 import com.scleroid.nemai.data.localdb.PinDatabaseHelper;
 import com.scleroid.nemai.volley_support.VolleyCompleteListener;
 
@@ -88,30 +87,31 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
             @Override
             protected FilterResults performFiltering(CharSequence data) {
                 FilterResults filterResults = new FilterResults();
-                List<PinCode> pinCodes;
+
                 if (data != null) {
 
                     Flowable<PinCode> observable;
+                    List<PinCode> pinCodes = findPins(data.toString(), mContext);
 
                     // performFiltering is already performed on a worker thread
                     // so we don't need to subscribeOn a background thread explicitly
 
-                    if (numberOrNot(data.toString())) {
+                  /*  if (numberOrNot(data.toString())) {
 
                         // query = "SELECT * from india where pincode LIKE ?";
-                        observable = PinDatabase.getPinDatabase(mContext)
+                      *//*  pinCodes = PinDatabase.getPinDatabase(mContext)
                                 .pinDao()
-                                .getAllIndiaRxViaPin(data.toString());
-                        pinCodes = observable.toList().blockingGet();
+                                .getAllIndiaViaPin(data.toString());*//*
+                  //      pinCodes = observable.toList().blockingGet();
 
                         Log.d(TAG, true + "number");
                     } else {
-                        observable = PinDatabase.getPinDatabase(mContext)
+                   *//*     pinCodes = PinDatabase.getPinDatabase(mContext)
                                 .pinDao()
-                                .getAllIndiaRxViaCity(data.toString());
-                        pinCodes = observable.toList().blockingGet();
+                                .getAllIndiaViaCity(data.toString());*//*
+                       // pinCodes = observable.toList().blockingGet();
                     }
-
+*/
 
                     if (pinCodes != null) {
 
@@ -140,7 +140,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
             }};
     }
 
-    boolean numberOrNot(String input) {
+    private boolean numberOrNot(String input) {
         try {
             Integer.parseInt(input);
         } catch (NumberFormatException ex) {
