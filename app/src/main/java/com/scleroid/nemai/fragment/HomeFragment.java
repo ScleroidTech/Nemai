@@ -129,13 +129,14 @@ public class HomeFragment extends Fragment {
 		parcelViewModel = ViewModelProviders.of(HomeFragment.this).get(ParcelViewModel.class);
 
 		parcelViewModel.getParcelList().observe(HomeFragment.this, (List<Parcel> parcels) -> {
+			if ((parcels != null ? parcels.size() : 0) == 0)
+				createDefaultParcel();
 
 			recycleViewPagerAdapter.updateParcelList(parcels);
 
 			crimes = parcels;
 
-			if ((parcels != null ? parcels.size() : 0) == 0)
-				createDefaultParcel();
+
 			setButtonsVisibility(recyclerViewPager.getCurrentPosition());
 
 
@@ -189,6 +190,7 @@ public class HomeFragment extends Fragment {
 		Disposable subscribe = ParcelLab.newParcel(context).subscribe(parcel1 -> {
 			//	parcel = parcel1;
 			parcelCurrent = parcel1;
+
 		});
 	}
 
