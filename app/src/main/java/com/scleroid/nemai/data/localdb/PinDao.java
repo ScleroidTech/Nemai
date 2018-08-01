@@ -7,7 +7,7 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
@@ -25,7 +25,7 @@ public interface PinDao {
 	 *
 	 * @return List of all indiaes in database
 	 */
-	@Query("SELECT * FROM India")
+	@Query("SELECT * FROM india")
 	List<PinCode> getAll();
 
 	/**
@@ -33,8 +33,16 @@ public interface PinDao {
 	 *
 	 * @return LiveData object List of all indiaes in database
 	 */
-	@Query("SELECT * FROM India")
+	@Query("SELECT * FROM india")
 	LiveData<List<PinCode>> getAllIndiaLive();
+
+	/**
+	 * Returns  list of all indiaes
+	 *
+	 * @return LiveData object List of all indiaes in database
+	 */
+	@Query("SELECT * from india")
+	Flowable<PinCode> getAllIndiaRx();
 
 
 	/**
@@ -43,7 +51,16 @@ public interface PinDao {
 	 * @return LiveData object List of all indiaes in database
 	 */
 	@Query("SELECT * from india where pincode LIKE :pincode")
-	Observable<PinCode> getAllIndiaRxViaPin(String pincode);
+	Flowable<PinCode> getAllIndiaRxViaPin(String pincode);
+
+
+	/**
+	 * Returns  list of all indiaes
+	 *
+	 * @return LiveData object List of all indiaes in database
+	 */
+	@Query("SELECT * from india where pincode LIKE :pincode")
+	List<PinCode> getAllIndiaViaPin(String pincode);
 
 
 	/**
@@ -52,7 +69,15 @@ public interface PinDao {
 	 * @return LiveData object List of all indiaes in database
 	 */
 	@Query("SELECT * from india where location LIKE :pincode or area LIKE :pincode")
-	Observable<PinCode> getAllIndiaRxViaCity(String pincode);
+	Flowable<PinCode> getAllIndiaRxViaCity(String pincode);
+
+	/**
+	 * Returns  list of all indiaes
+	 *
+	 * @return LiveData object List of all indiaes in database
+	 */
+	@Query("SELECT * from india where location LIKE :pincode or area LIKE :pincode")
+	List<PinCode> getAllIndiaViaCity(String pincode);
 
 
 	/**
@@ -60,7 +85,7 @@ public interface PinDao {
 	 *
 	 * @return number of total entries in the table
 	 */
-	@Query("SELECT COUNT(*) from India")
+	@Query("SELECT COUNT(*) from india")
 	int countIndia();
 
 	/**
@@ -75,7 +100,7 @@ public interface PinDao {
 	/**
 	 * Let the database be a part of history I meant, it deletes the whole table
 	 */
-	@Query("DELETE FROM India")
+	@Query("DELETE FROM india")
 	void nukeTable();
 
 }

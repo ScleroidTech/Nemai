@@ -1,34 +1,16 @@
 package com.scleroid.nemai.fragment;
 /*https://try.kotlinlang.org/
 https://hackernoon.com/android-butterknife-vs-data-binding-fffceb77ed88
-    //TODO read this https://medium.com/square-corner-blog/advocating-against-android-fragments
-    -81fd0b462c97
-    //TODo & this too http://smarterer.com/tests/android-developer https://www.buzzingandroid
-    .com/ http://www.jbrugge.com/glean/index.html
-    //TODO 7 this too https://www.infoq.com/presentations/Android-Design/ https://antonioleiva
-    .com/free-guide/
-    //TODO this too www.codacy.com https://possiblemobile.com/ http://www.andreamaglie
-    .com/dont-waste-time-coding-2/
-    //TODO https://androidbycode.wordpress
-    .com/2015/02/13/static-code-analysis-automation-using-findbugs-android-studio/
-    //TODO read this https://www.bignerdranch.com/blog/categories/android/ https://www
-    .bignerdranch.com/blog/building-interfaces-with-constraintlayout/ https://www.bignerdranch
-    .com/blog/the-rxjava-repository-pattern/ https://www.bignerdranch
-    .com/blog/room-data-storage-for-everyone/ https://www.bignerdranch
-    .com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/ https://www
-    .bignerdranch.com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/
-    https://www.bignerdranch.com/blog/frame-animations-in-android/ https://www.bignerdranch
-    .com/blog/building-animations-android-transition-framework-part-2/ https://www.bignerdranch
-    .com/blog/testing-the-android-way/
+    //TODO read this https://medium.com/square-corner-blog/advocating-against-android-fragments-81fd0b462c97
+    //TODo & this too http://smarterer.com/tests/android-developer https://www.buzzingandroid.com/ http://www.jbrugge.com/glean/index.html
+    //TODO 7 this too https://www.infoq.com/presentations/Android-Design/ https://antonioleiva.com/free-guide/
+    //TODO this too www.codacy.com https://possiblemobile.com/ http://www.andreamaglie.com/dont-waste-time-coding-2/
+    //TODO https://androidbycode.wordpress.com/2015/02/13/static-code-analysis-automation-using-findbugs-android-studio/
+    //TODO read this https://www.bignerdranch.com/blog/categories/android/ https://www.bignerdranch.com/blog/building-interfaces-with-constraintlayout/ https://www.bignerdranch.com/blog/the-rxjava-repository-pattern/ https://www.bignerdranch.com/blog/room-data-storage-for-everyone/ https://www.bignerdranch.com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/ https://www.bignerdranch.com/blog/two-way-data-binding-on-android-observing-your-view-with-xml/ https://www.bignerdranch.com/blog/frame-animations-in-android/ https://www.bignerdranch.com/blog/building-animations-android-transition-framework-part-2/ https://www.bignerdranch.com/blog/testing-the-android-way/
     https://blog.mindorks.com/a-complete-guide-to-learn-kotlin-for-android-development-b1e5d23cc2d8
-    https://developer.android.com/topic/libraries/architecture/room.html https://medium
-    .com/google-developers/7-steps-to-room-27a5fe5f99b2 https://medium.com/@ajaysaini
-    .official/building-database-with-room-persistence-library-ecf7d0b8f3e9 https://android.jlelse
-    .eu/room-store-your-data-c6d49b4d53a3 http://www.vogella.com/tutorials/AndroidSQLite/article
-    .html
+    https://developer.android.com/topic/libraries/architecture/room.html https://medium.com/google-developers/7-steps-to-room-27a5fe5f99b2 https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9 https://android.jlelse.eu/room-store-your-data-c6d49b4d53a3 http://www.vogella.com/tutorials/AndroidSQLite/article.html
     https://android.jlelse.eu/demystifying-the-jvmoverloads-in-kotlin-10dd098e6f72
-     //TODO IMP https://android.jlelse
-     .eu/android-architecture-components-room-livedata-and-viewmodel-fca5da39e26b
+     //TODO IMP https://android.jlelse.eu/android-architecture-components-room-livedata-and-viewmodel-fca5da39e26b
      //TODO https://uk.linkedin.com/in/chrisbanes/
 */
 //TODO https://uk.linkedin.com/in/chrisbanes/
@@ -98,7 +80,7 @@ public class HomeFragment extends Fragment {
 	ParcelViewModel parcelViewModel;
 	Button mSubmitButton;
 	FloatingActionButton fabNewCourier;
-	//Parcel parcel;
+	Parcel parcel;
 	PagerAdapter recycleViewPagerAdapter;
 	RecyclerViewPager recyclerViewPager;
 	List<Parcel> crimes;
@@ -137,7 +119,8 @@ public class HomeFragment extends Fragment {
 
 		setupRecyclerView(v, inflater, context);
 
-		if (state != null) { listState = state.getParcelable(LIST_STATE_KEY); }
+		if (state != null)
+			listState = state.getParcelable(LIST_STATE_KEY);
 		if (listState != null) {
 			recyclerViewPager.getLayoutManager().onRestoreInstanceState(listState);
 		}
@@ -145,13 +128,14 @@ public class HomeFragment extends Fragment {
 
 		parcelViewModel = ViewModelProviders.of(HomeFragment.this).get(ParcelViewModel.class);
 
-		parcelViewModel.getParcelList().observe(HomeFragment.this, parcels -> {
+		parcelViewModel.getParcelList().observe(HomeFragment.this, (List<Parcel> parcels) -> {
 
 			recycleViewPagerAdapter.updateParcelList(parcels);
 
 			crimes = parcels;
 
-			if ((parcels != null ? parcels.size() : 0) == 0) { createDefaultParcel(); }
+			if ((parcels != null ? parcels.size() : 0) == 0)
+				createDefaultParcel();
 			setButtonsVisibility(recyclerViewPager.getCurrentPosition());
 
 
@@ -165,8 +149,7 @@ public class HomeFragment extends Fragment {
 		fabDeleteCourier.setOnClickListener(v1 -> deleteParcel());
 		fabNewCourier = v.findViewById(R.id.fab_new_data);
 		fabNewCourier.setOnClickListener(v1 -> {
-//TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data
-// before sending it to server.& send all data to server at once
+//TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data before sending it to server.& send all data to server at once
 
 
 			//validateFields(false);
@@ -181,8 +164,10 @@ public class HomeFragment extends Fragment {
 
 		mSubmitButton.setOnClickListener(view -> {
 			//startActivity(new Intent(getContext(), SelectCourierActivity.class));
-			//TODO change this, temp
-			if (validateFields()) { sendCouriers(); }
+
+			if (validateFields()) {
+				sendCouriers();
+			}
 
 
 			// Intent i = new Intent(getActivity(), PartnerActivity.class);
@@ -211,8 +196,8 @@ public class HomeFragment extends Fragment {
 		recyclerViewPager = v.findViewById(R.id.pager);
 		recyclerViewPager.setLayoutManager(new LinearLayoutManager(this.context,
 				LinearLayoutManager.HORIZONTAL, false));
-		recycleViewPagerAdapter =
-				new PagerAdapter(recyclerViewPager, inflater, context, new ArrayList<Parcel>());
+		recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, inflater, context,
+				new ArrayList<Parcel>());
 		recyclerViewPager.setAdapter(recycleViewPagerAdapter);
 		recyclerViewPager.setTriggerOffset(0.15f);
 		recyclerViewPager.setFlingFactor(0.25f);
@@ -230,14 +215,11 @@ public class HomeFragment extends Fragment {
 //                mPositionText.setText("First: " + mRecyclerViewPager.getFirstVisiblePosition());
 				int childCount = recyclerViewPager.getChildCount();
 				int width = 0;
-				if (recyclerViewPager.getChildAt(0) != null) {
+				if (recyclerViewPager.getChildAt(0) != null)
 					width = recyclerViewPager.getChildAt(0).getWidth();
-				}
 				int padding = (recyclerViewPager.getWidth() - width) / 4;
 				Log.d(TAG,
-						"childCount " + childCount + " width " + width + " padding " + padding +
-								"" +
-								" widthMain " + recyclerViewPager
+						"childCount " + childCount + " width " + width + " padding " + padding + " widthMain " + recyclerViewPager
 								.getWidth());
 
 
@@ -255,12 +237,13 @@ public class HomeFragment extends Fragment {
 					} else {
 
 						if (v.getLeft() <= recyclerView.getWidth() - padding) {
-							rate =
-									(recyclerView.getWidth() - padding - v.getLeft()) * 1f / v
-											.getWidth();
+							rate = (recyclerView.getWidth() - padding - v.getLeft()) * 1f / v
+									.getWidth();
 						}
 						v.setScaleY(0.9f + rate * 0.1f);
 					}
+					v.setScaleY(0.9f + rate * 0.1f);
+
 				}
 			}
 		});
@@ -269,18 +252,15 @@ public class HomeFragment extends Fragment {
 		// recyclerViewPager.scrollToPosition();
 		recyclerViewPager.addOnPageChangedListener((oldPosition, newPosition) -> {
 
-			if (!crimes.get(oldPosition).equals(recycleViewPagerAdapter.holder.getParcel())) {
+			if (!crimes.get(oldPosition).equals(recycleViewPagerAdapter.holder.getParcel()))
 				ParcelLab.addParcel(recycleViewPagerAdapter.holder.getParcel(),
 						AppDatabase.getAppDatabase(context));
-			}
 			setButtonsVisibility(newPosition);
 
 			Log.d("test",
-					"oldPosition:" + oldPosition + " newPosition:" + newPosition + " parcel at " +
-							"old" +
-							" " + crimes
-							.get(oldPosition)
-							.toString() + " parcel at new " + crimes.get(newPosition).toString());
+					"oldPosition:" + oldPosition + " newPosition:" + newPosition + " parcel at old " + crimes
+							.get(oldPosition).toString() + " parcel at new " + crimes
+							.get(newPosition).toString());
 		});
 
 		recyclerViewPager.addOnLayoutChangeListener(
@@ -322,12 +302,16 @@ public class HomeFragment extends Fragment {
 	private void setButtonsVisibility(int newPosition) {
 		if (crimes != null) {
 
-			if (crimes.size() <= 1) { fabDeleteCourier.setVisibility(View.GONE); } else {
+			if (crimes.size() <= 1) {
+				fabDeleteCourier.setVisibility(View.GONE);
+			} else {
 				fabDeleteCourier.setVisibility(View.VISIBLE);
 			}
 			if (newPosition == crimes.size() - 1) {
 				fabNewCourier.setVisibility(View.VISIBLE);
-			} else { fabNewCourier.setVisibility(View.GONE); }
+			} else {
+				fabNewCourier.setVisibility(View.GONE);
+			}
 			if (crimes.size() >= 5) fabNewCourier.setVisibility(View.GONE);
 		} else {
 			fabDeleteCourier.setVisibility(View.GONE);
@@ -362,11 +346,11 @@ public class HomeFragment extends Fragment {
 	}
 
 	private void sendCouriers() {
-
-		//startActivity(new Intent(getContext(), SelectCourierActivity.class));
-
+		//TODO Change this
 		startActivity(new Intent(getContext(), SelectCourierActivity.class));
-
+       /* for (Parcel parcelTemp : crimes) {
+            submitCouriers(context, parcelTemp, TAG_COURIERS, loader);
+        }*/
 	}
 
 	@Override
@@ -450,9 +434,8 @@ public class HomeFragment extends Fragment {
 	public void updateUI(Context context) {
 
 		if (recycleViewPagerAdapter == null) {
-			recycleViewPagerAdapter =
-					new PagerAdapter(recyclerViewPager, getLayoutInflater(), getContext(),
-							new ArrayList<Parcel>());
+			recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, getLayoutInflater(),
+					getContext(), new ArrayList<Parcel>());
 			recyclerViewPager.setAdapter(recycleViewPagerAdapter);
 		}/* else {
             int pos = RecyclerView.generateViewId();
@@ -461,6 +444,9 @@ public class HomeFragment extends Fragment {
         }
 */
 		// updateSubtitle();
+	}
+
+	private void updateSubtitle() {
 	}
 
 	@Subscribe

@@ -14,6 +14,7 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.facebook.FacebookSdk;
 import com.scleroid.nemai.BuildConfig;
+import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
 
@@ -52,6 +53,13 @@ public class AppController extends Application {
         FacebookSdk.sdkInitialize(mInstance);
         MultiDex.install(this);
 
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+        // Normal app init code...
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }

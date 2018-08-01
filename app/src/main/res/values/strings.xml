@@ -141,6 +141,7 @@
     <string name="estimated_delivery">Estimated delivery</string>
     <string name="courier">Courier</string>
     <string name="domestic">Domestic</string>
+    <string name="entercity">Enter city</string>
     <string name="international">International</string>
     <string name="source_city">Source City</string>
 

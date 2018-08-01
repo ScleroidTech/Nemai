@@ -12,7 +12,7 @@ import com.huma.room_for_asset.RoomAsset;
  * @author Ganesh Kaple
  * @since 7/24/18
  */
-@Database(entities = PinCode.class, version = 2)
+@Database(entities = PinCode.class, version = 4)
 public abstract class PinDatabase extends RoomDatabase {
 
 	/**
@@ -36,10 +36,11 @@ public abstract class PinDatabase extends RoomDatabase {
 		if (instance == null) {
 			instance =
 					RoomAsset.databaseBuilder(context.getApplicationContext(), PinDatabase.class,
-							"pincode-db")
+							"pincode-db.db")
 							//While Migration of database, it destroys previous versions, should
 							// be removed
-							//	.fallbackToDestructiveMigration()
+							.allowMainThreadQueries()
+							.fallbackToDestructiveMigration()
 							.build();
 		}
 		return instance;

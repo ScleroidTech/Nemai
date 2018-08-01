@@ -58,7 +58,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.google.android.gms:play-services-auth:15.0.1'
     compile 'com.basgeekball:awesome-validation:2.0'
- //   compile files('libs/volley.jar')
+   // compile files('libs/volley.jar')
     compile 'com.facebook.android:facebook-android-sdk:4.27.0'
     compile 'com.msg91.sendotp.library:library:3.1'
     //noinspection GradleCompatible
@@ -104,10 +104,18 @@ dependencies {
     // OkHttp Logging Interceptor
     implementation "com.squareup.okhttp3:okhttp:3.10.0"
     implementation "com.squareup.okhttp3:logging-interceptor:3.8.1"
+// Testing support
+    androidTestImplementation 'android.arch.core:core-testing:1.1.1'
 
-
-
+// RxJava support for Room
+    implementation "android.arch.persistence.room:rxjava2:1.1.1"
     implementation 'com.github.humazed:RoomAsset:1.0.3'
+
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    // Optional, if you use support library fragments:
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
 }
 
 

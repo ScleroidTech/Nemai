@@ -31,7 +31,7 @@ public class TestDBActivity extends Activity {
         dbHelper = new PinDatabaseHelper(this);
         Log.d(TAG, getFilesDir().getAbsolutePath());
         /*try {
-            dbHelper.prepareDatabase();
+            dbHelper.prepuppareDatabase();
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
         }
@@ -43,11 +43,10 @@ public class TestDBActivity extends Activity {
         PinAutoCompleteAdapter pinAutoCompleteAdapter1 = new PinAutoCompleteAdapter(getApplicationContext());
         pinAutoCompleteAdapter1.notifyDataSetChanged();
         editText.setAdapter(pinAutoCompleteAdapter1);
-        editText2 = findViewById(R.id.test_input2);
-        editText2.setThreshold(THRESHOLD);
+
         PinAutoCompleteAdapter pinAutoCompleteAdapter = new PinAutoCompleteAdapter(getApplicationContext());
         pinAutoCompleteAdapter1.notifyDataSetChanged();
-        editText2.setAdapter(pinAutoCompleteAdapter);
+
 
 
 
@@ -80,7 +79,7 @@ public class TestDBActivity extends Activity {
     }
 
     private void showData(String input) {
-        List<PinCode> list = dbHelper.getPincodes(input);
+	    List<PinCode> list = dbHelper.getPincodes(input);
         StringBuffer data = new StringBuffer();
         for (int i =0; i< list.size(); i++) {
             PinCode pin = list.get(i);

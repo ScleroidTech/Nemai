@@ -1,6 +1,7 @@
 package com.scleroid.nemai.data.localdb;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -21,6 +22,17 @@ public class PinCode implements Parcelable {
             return new PinCode[size];
         }
     };
+
+	@PrimaryKey(autoGenerate = true)
+	private long serialNo;
+
+	public long getSerialNo() {
+		return serialNo;
+	}
+
+	public void setSerialNo(final long serialNo) {
+		this.serialNo = serialNo;
+	}
     private String location, pincode, state, area;
 
     public PinCode(String location, String pincode, String state, String area) {
