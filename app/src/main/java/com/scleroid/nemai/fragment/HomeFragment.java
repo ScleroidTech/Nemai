@@ -327,7 +327,7 @@ public class HomeFragment extends Fragment {
         if (validateFields()) return false;
 
 
-        //ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(getContext()));
+        ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(getContext()));
         createDefaultParcel();
         return true;
 
