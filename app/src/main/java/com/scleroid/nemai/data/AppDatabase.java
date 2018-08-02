@@ -49,7 +49,7 @@ public abstract class AppDatabase extends RoomDatabase {
 					Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class,
 							"nemai-database")
 							//While Migration of database, it destroys previous versions, should
-                            // be removed
+							// be removed
 							.fallbackToDestructiveMigration()
 							.build();
 		}

@@ -60,14 +60,15 @@
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal"
                 android:weightSum="1.6">
+
                 <RadioButton
                     android:id="@+id/rEntercity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:checked="true"
-                    android:paddingEnd="0dp"
                     android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
                     android:text="@string/entercity"
                     android:textColor="@drawable/selector_textview"
                     android:textSize="17sp"
@@ -80,8 +81,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:checked="true"
-                    android:paddingEnd="0dp"
                     android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
                     android:text="@string/domestic"
                     android:textColor="@drawable/selector_textview"
                     android:textSize="17sp"

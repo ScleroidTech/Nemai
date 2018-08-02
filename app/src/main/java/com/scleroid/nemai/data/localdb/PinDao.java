@@ -35,13 +35,13 @@ public interface PinDao {
 	 */
 	@Query("SELECT * FROM india")
 	LiveData<List<PinCode>> getAllIndiaLive();
+
 	/**
 	 * Returns  list of all indiaes
 	 *
 	 * @return LiveData object List of all indiaes in database
 	 */
 	@Query("SELECT * from india")
-
 	Flowable<PinCode> getAllIndiaRx();
 
 
@@ -51,7 +51,6 @@ public interface PinDao {
 	 * @return LiveData object List of all indiaes in database
 	 */
 	@Query("SELECT * from india where pincode LIKE :pincode")
-
 	Flowable<PinCode> getAllIndiaRxViaPin(String pincode);
 
 
@@ -61,9 +60,7 @@ public interface PinDao {
 	 * @return LiveData object List of all indiaes in database
 	 */
 	@Query("SELECT * from india where pincode LIKE :pincode")
-
 	List<PinCode> getAllIndiaViaPin(String pincode);
-
 
 
 	/**

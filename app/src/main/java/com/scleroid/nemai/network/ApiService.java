@@ -25,15 +25,14 @@ public interface ApiService {
 	@POST("/alreadyexisteduser")
 	Single<Boolean> isAUser(@Query("email_id") String userName);
 
-	@FormUrlEncoded
+
 	Completable subMitCourier(@Body Courier courier);
 
 	//TODO Need to test this call first
-	@FormUrlEncoded
+
 	Completable subMitCouriers(@Body List<Courier> couriers);
 
 
-	@FormUrlEncoded
 	@POST("/insert")
 	Flowable<List<Courier>> getCouriers(@Body Parcel header);
 }

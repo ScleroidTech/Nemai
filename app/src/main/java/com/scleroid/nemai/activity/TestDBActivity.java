@@ -79,7 +79,7 @@ public class TestDBActivity extends Activity {
     }
 
     private void showData(String input) {
-        List<PinCode> list =dbHelper.getPincodes(input);
+	    List<PinCode> list = dbHelper.getPincodes(input);
         StringBuffer data = new StringBuffer();
         for (int i =0; i< list.size(); i++) {
             PinCode pin = list.get(i);
