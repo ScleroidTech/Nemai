@@ -36,4 +36,11 @@ public interface ApiService {
 	@FormUrlEncoded
 	@POST("/insert")
 	Flowable<List<Courier>> getCouriers(@Body Parcel header);
+
+	@FormUrlEncoded
+	Completable registerUser(@Query("fname") String first_name, @Query("lname") String  last_name,
+	                         @Query("email") String email, @Query("phone")String phone,
+	                         @Query("gender") String gender, @Query("password") String password,
+	                         @Query("login_method") String loginMethod);
+
 }

@@ -65,7 +65,7 @@ public class NetworkCalls {
                         Toasty.error(context, "Something is wrong at our end. Sorry", Toast.LENGTH_LONG, true).show();
                     }
                 } catch (JSONException e) {
-                    jsonErrorToast(e, context);
+                    jsonErrorToast(e.getMessage(), context);
                 }
 
             }
@@ -139,7 +139,7 @@ public class NetworkCalls {
 
                     }
                 } catch (JSONException e) {
-                    jsonErrorToast(e, context);
+                    jsonErrorToast(e.getMessage(), context);
                 }
 
 
@@ -164,9 +164,9 @@ public class NetworkCalls {
 
     }
 
-    private static void jsonErrorToast(JSONException e, Context context) {
-        e.printStackTrace();
-        Log.e(TAG, "jsonException " + e.getMessage());
+    private static void jsonErrorToast(String e, Context context) {
+
+        Log.e(TAG, "jsonException " + e);
         Toasty.error(context,
                 "There's an error on our side, We're sorry", Toast.LENGTH_LONG, true).show();
     }
@@ -226,7 +226,7 @@ public class NetworkCalls {
                         taskErrorToast("There's an error on our side, We're sorry", context, statusCode);
                     }
                 } catch (JSONException e) {
-                    jsonErrorToast(e, context);
+                    jsonErrorToast(e.getMessage(), context);
                 }
 
             }
@@ -342,10 +342,22 @@ public class NetworkCalls {
         verification.putExtra(INTENT_COUNTRY_CODE, countryCode);
         startActivity(verification);
         finish();*/
-
+        ApiService apiService = ApiClient.getService(context);
         Log.d(TAG, "data " + "firstname " + firstName + " lastname " + lastName + " email " + email + " mobile" + phone + " gender " + gender + " password " + password + " login " + loginMethod + " countyr code " + countryCode);
         Log.d(TAG, "data  method" + loginMethod);
-        VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
+
+        apiService.registerUser(firstName,lastName,email,phone,gender,password, loginMethod)
+        .subscribe(() ->{
+
+            Toasty.success(context, "Registered successfully, let's verify you", Toast.LENGTH_LONG, true).show();
+            session.getUser().setUserProfile(firstName, lastName, email, phone, gender);
+
+            //session.setLogin(true);
+            session.setLogin(true);
+
+            context.startActivity(OtpVerificationActivity.newIntent(context, phone, countryCode));
+        }, throwable -> jsonErrorToast(throwable.getMessage(),context));
+        /*VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
             @Override
             public void onTaskCompleted(JSONObject response, int statusCode) {
 
@@ -394,7 +406,7 @@ public class NetworkCalls {
 
 
                 } catch (JSONException e) {
-                    jsonErrorToast(e, context);
+                    jsonErrorToast(e.getMessage(), context);
                 }
 
 
@@ -424,7 +436,7 @@ public class NetworkCalls {
 
         new VolleyPostJSONMethod(context, volleyCompleteListener, params, loader, tag_string_req);
 
-
+*/
 /*
         if (isNetworkAvailable(context)) {
 
