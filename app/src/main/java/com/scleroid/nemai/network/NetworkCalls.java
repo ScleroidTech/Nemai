@@ -181,8 +181,17 @@ public class NetworkCalls {
        /* Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();*/
+        ApiService apiService = ApiClient.getService(context);
+        apiService.loginUser(userName,pass).subscribe( result->{
+            Toasty.success(context, "Login Successful", Toast.LENGTH_LONG, true).show();
+//TODO handle error codes here
+            session.setLogin(true);
 
-        VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
+            MainActivity.newIntent(context);
+
+        }, throwable -> jsonErrorToast(throwable.getMessage(), context));
+
+     /*   VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
             @Override
             public void onTaskCompleted(JSONObject response, int statusCode) {
                 Log.d(TAG, "Login Response: " + response.toString());
@@ -243,89 +252,11 @@ public class NetworkCalls {
         Map<String, String> params = new HashMap<String, String>();
         params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_LOGIN);
         params.put("email_id", userName);
-        params.put("pwd", pass);
+        params.put("password", pass);
 
         new VolleyPostJSONMethod(context, volleyCompleteListener, params, loader, tag);
 
-        /*if (isNetworkAvailable(context)) {
-            String tag_string_req = "req_login";
-
-
-            showProgress(context, true);
-            // Posting params to register url
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("email_id", userName);
-            params.put("pwd", pass);
-
-
-            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_LOGIN, new JSONObject(params), new Response.Listener<JSONObject>() {
-                @SuppressLint("LongLogTag")
-
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    Log.d(TAG, "Login Response: " + jsonObject.toString());
-                    showProgress(context, false);
-
-                    try {
-
-                        // user successfully logged in
-                        // Create login session
-
-
-                        //JSONObject jObj = new JSONObject(jsonObject);
-
-                        boolean error = jsonObject.getBoolean("status");
-                        if (error) {
-
-
-                            Toast.makeText(context, "UserProfile successfully logged in", Toast.LENGTH_LONG).show();
-
-                            session.setLogin(true);
-
-                            MainActivity.newIntent(context);
-                            //finish();
-                        } else {
-
-                            // Error occurred in login. Get the error
-                            // message
-
-                            session.setLogin(false);
-                            String errorMsg = jsonObject.getString("message");
-                            Toast.makeText(context,
-                                    errorMsg, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(context,
-                                "" + e, Toast.LENGTH_LONG).show();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-
-                @SuppressLint("LongLogTag")
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Registration Error: " + error.getMessage());
-                    Toast.makeText(context,
-                            error.getMessage(), Toast.LENGTH_LONG).show();
-                    showProgress(context, false);
-                }
-            }) {
-
-
-            };
-
-         *//*   int socketTimeout = 10000000;//10 seconds - change to what you want
-            strReq.setRetryPolicy(new DefaultRetryPolicy(socketTimeout,
-                    10,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*//*
-            Log.d(TAG, "JSON " + strReq.getBodyContentType() + strReq.getBody().toString());
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-        } else
-            Toast.makeText(context, "Network not connected, try again", Toast.LENGTH_LONG).show();*/
+*/
 
     }
 
@@ -357,209 +288,7 @@ public class NetworkCalls {
 
             context.startActivity(OtpVerificationActivity.newIntent(context, phone, countryCode));
         }, throwable -> jsonErrorToast(throwable.getMessage(),context));
-        /*VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
-            @Override
-            public void onTaskCompleted(JSONObject response, int statusCode) {
 
-                Log.d(TAG, "Register Response: " + response.toString());
-
-                try {
-
-                    // user successfully logged in
-                    // Create login session
-
-
-                    //JSONObject jObj = new JSONObject(jsonObject);
-
-
-
-                        //finish();
-                    String error = response.getString("statusCode");
-                    switch (error) {
-                        case "200":
-
-
-                            Toasty.success(context, "Registered successfully, let's verify you", Toast.LENGTH_LONG, true).show();
-                            session.getUser().setUserProfile(firstName, lastName, email, phone, gender);
-
-                            //session.setLogin(true);
-                            session.setLogin(true);
-
-                            context.startActivity(OtpVerificationActivity.newIntent(context, phone, countryCode));
-                            break;
-                        //finish();
-                        case "201":
-                            session.setLogin(false);
-                            Toasty.warning(context, "Already Registered, Try loggin in", Toast.LENGTH_LONG, true).show();
-                            //   mEmailTextInputLayout.setError("Email/Mobile isn't registered with us");
-                            break;
-
-
-                        default:
-                            // Error occurred in login. Get the error
-                            // message
-                            //TODO define error codes
-                            session.setLogin(false);
-                            String errorMsg = response.getString("message");
-                            taskErrorToast("There's an error on our side, We're sorry", context, statusCode);
-                    }
-
-
-                } catch (JSONException e) {
-                    jsonErrorToast(e.getMessage(), context);
-                }
-
-
-            }
-
-            @Override
-            public void onTaskFailed(String error, int statusCode) {
-                // Log.e(TAG, "Registration Error: " + error);
-                taskErrorToast(error, context, statusCode);
-
-
-            }
-        };
-        Map<String, String> params = new HashMap<String, String>();
-        params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_REGISTER);
-        params.put("first_name", firstName);
-        params.put("last_name", lastName);
-        if (gender != null)
-            params.put("gender", gender);
-        params.put("email_id", email);
-        params.put("phone", phone);
-        if (password != null)
-            params.put("pwd", password);
-
-        // params.put("method",loginMethod);
-
-
-        new VolleyPostJSONMethod(context, volleyCompleteListener, params, loader, tag_string_req);
-
-*/
-/*
-        if (isNetworkAvailable(context)) {
-
-            // Tag used to cancel the request
-            String tag_string_req = "req_register";
-
-
-            showProgress(context, true);
-
-
-            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_REGISTER, new JSONObject(params), new Response.Listener<JSONObject>() {
-                @SuppressLint("LongLogTag")
-
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    Log.d(TAG, "Register Response: " + jsonObject.toString());
-                    showProgress(context, false);
-
-                    try {
-
-                        // user successfully logged in
-                        // Create login session
-
-
-                        //JSONObject jObj = new JSONObject(jsonObject);
-
-                        boolean error = jsonObject.getBoolean("status");
-                        if (error) {
-
-                            Toast.makeText(context, "UserProfile successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
-
-                            //session.setLogin(true);
-
-                            context.startActivity(OtpVerificationActivity.newIntent(context, phone, countryCode));
-                            //finish();
-
-                            // Launch login activity
-                        *//*Intent intent = new Intent(
-                                RegisterActivity.this,
-                                LoginActivity.class);
-                        startActivity(intent);
-                            //finish(); *//*
-                        } else {
-
-                            // Error occurred in registration. Get the error
-                            // message
-                            session.setLogin(false);
-                            String errorMsg = jsonObject.getString("message");
-                            Toast.makeText(context,
-                                    errorMsg, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Error in data parsing " + e.getMessage());
-                        //e.printStackTrace();
-                        Toast.makeText(context,
-                                "" + e, Toast.LENGTH_LONG).show();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-
-                @SuppressLint("LongLogTag")
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Registration Error: " + error.getMessage());
-                    Toast.makeText(context,
-                            error.getMessage(), Toast.LENGTH_LONG).show();
-                    showProgress(context, false);
-                }
-            }) {
-
-
-
-      *//*          @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type", "application/json");
-                    Log.d(TAG, "Headers " + headers);
-
-                    //MyApp.get().addSessionCookie(headers);
-
-                    return headers;
-                }
-
-                @Override
-                public String getBodyContentType() {
-                    return super.getBodyContentType();
-                }*//*
-               *//* @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-
-                }*//*
-    *//*            @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-
-                    return super.getHeaders();
-                }
-
-*//*
-               *//* *//**//**//*
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type", "application/json;");
-                    return headers;
-                }*//*
-
-            };
-
-
-          *//*  int socketTimeout = 10000000;//10 seconds - change to what you want
-            strReq.setRetryPolicy(new DefaultRetryPolicy(socketTimeout,
-                    10,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*//*
-            Log.d(TAG, "JSON " + strReq.getBodyContentType() + strReq.getBody().toString());
-
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-
-        } else
-            Toast.makeText(context, "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();*/
     }
 
     private static void taskErrorToast(String error, Context context, int statusCode) {
@@ -567,117 +296,6 @@ public class NetworkCalls {
         Toasty.error(context,
                 error, Toast.LENGTH_LONG).show();
     }
-    /**
-     * Function to store user in MySQL database will post params(tag, name,
-     * email, password) to register url
-     *//*
-    protected void registerSocialUser(final String firstName, final String lastName, final String email,
-                                      final String phone, final String gender, final String loginMethod) {
-
-        openActivity(phone);
-
-
-        if (isNetworkAvailable(getApplicationContext())) {
-
-            // Tag used to cancel the request
-            String tag_string_req = "req_register";
-
-
-            showProgress(true);
-
-
-            JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                    ServerConstants.serverUrl.POST_REGISTER, null, new Response.Listener<JSONObject>() {
-                @SuppressLint("LongLogTag")
-
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    Log.d(TAG, "Register Response: " + jsonObject.toString());
-                    showProgress(false);
-
-                    try {
-
-                        // user successfully logged in
-                        // Create login session
-
-
-                        //JSONObject jObj = new JSONObject(jsonObject);
-
-                        boolean error = jsonObject.getBoolean("status");
-                        if (error) {
-
-                            Toast.makeText(getApplicationContext(), "UserProfile successfully registered. Let's verify you!", Toast.LENGTH_LONG).show();
-
-                            //session.setLogin(true);
-
-                            openActivity(phone);
-                            // Launch login activity
-                        *//*Intent intent = new Intent(
-                                RegisterActivity.this,
-                                LoginActivity.class);
-                        startActivity(intent);
-                            //finish(); *//*
-                        } else {
-
-                            // Error occurred in registration. Get the error
-                            // message
-                            session.setLogin(false);
-                            String errorMsg = jsonObject.getString("message");
-                            Toast.makeText(getApplicationContext(),
-                                    errorMsg, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Error in data parsing " + e.getMessage());
-                        //e.printStackTrace();
-                        Toast.makeText(getApplicationContext(),
-                                "" + e, Toast.LENGTH_LONG).show();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-
-                @SuppressLint("LongLogTag")
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Registration Error: " + error.getMessage());
-                    Toast.makeText(getApplicationContext(),
-                            error.getMessage(), Toast.LENGTH_LONG).show();
-                    showProgress(false);
-                }
-            }) {
-
-
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting params to register url
-
-
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_REGISTER);
-
-                    params.put("first_name", firstName);
-                    params.put("last_name", lastName);
-                    params.put("gender", gender);
-                    params.put("email_id", email);
-                    params.put("phone", phone);
-                    params.put("method",loginMethod);
-
-                    return params;
-                }
-
-            };
-
-
-
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-
-        } else
-            Toast.makeText(getApplicationContext(), "Internet Connectivity not found. Try again", Toast.LENGTH_LONG).show();
-    }
-
-*/
-
 
 
 }

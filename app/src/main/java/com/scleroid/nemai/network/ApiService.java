@@ -41,5 +41,9 @@ public interface ApiService {
 	                         @Query("email") String email, @Query("phone")String phone,
 	                         @Query("gender") String gender, @Query("password") String password,
 	                         @Query("login_method") String loginMethod);
+	@FormUrlEncoded
+	Single<String> loginUser(@Query("email_id") String email, @Query("password") String password);
+
+
 
 }
