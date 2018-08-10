@@ -107,7 +107,7 @@ public class DatePickerFragment extends DialogFragment {
             tempDate = (Date) bundle.getSerializable(ARG_DATE);
 
             Log.d(TAG, tempDate + "THis should not be empty ");
-          /*  calendar.setTime(tempDate);*/
+            /*  calendar.setTime(tempDate);*/
 
             /*tempDate = (Date) bundle.getSerializable(EXTRA_DATE);
             serialNo = bundle.getLong(EXTRA_SERIAL);
@@ -123,8 +123,6 @@ public class DatePickerFragment extends DialogFragment {
             invoice = bundle.getInt(EXTRA_INVOICE);*/
 
         }
-
-
 
 
         int year = calendar.get(Calendar.YEAR);

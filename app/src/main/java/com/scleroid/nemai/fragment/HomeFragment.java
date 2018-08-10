@@ -67,386 +67,404 @@ import static com.scleroid.nemai.fragment.DatePickerFragment.EXTRA_PARCEL;
 
 
 public class HomeFragment extends Fragment {
-    public static final int THRESHOLD = 3;
-    // YourActivity.java
-    public final static String LIST_STATE_KEY = "recycler_list_state";
-    private static final String ARG_PARCEL_ID = "parcel_id";
-    private static final String TAG = HomeFragment.class.getSimpleName();
-    private static final String TAG_COURIERS = "req_couriers";
-    public static PinCode mPinCodeDestination, mPinCodeSource;
-    public static int parcelCount = 1;
-    static String select;
-    final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
-    ParcelViewModel parcelViewModel;
-    Button mSubmitButton;
-    FloatingActionButton fabNewCourier;
-    Parcel parcel;
-    PagerAdapter recycleViewPagerAdapter;
-   RecyclerViewPager recyclerViewPager;
-    List<Parcel> crimes;
-    Parcel parcelCurrent;
-    Parcelable listState;
-    private Context context;
-    private ShowLoader loader;
-    private LinearLayoutManager mLayoutManager;
-    private FloatingActionButton fabDeleteCourier;
+	public static final int THRESHOLD = 3;
+	// YourActivity.java
+	public final static String LIST_STATE_KEY = "recycler_list_state";
+	private static final String ARG_PARCEL_ID = "parcel_id";
+	private static final String TAG = HomeFragment.class.getSimpleName();
+	private static final String TAG_COURIERS = "req_couriers";
+	public static PinCode mPinCodeDestination, mPinCodeSource;
+	public static int parcelCount = 1;
+	static String select;
+	final CharSequence[] day_radio = {"Pune,MH,India", "Mumbai, MH,India", "Nagpur, MH, India"};
+	ParcelViewModel parcelViewModel;
+	Button mSubmitButton;
+	FloatingActionButton fabNewCourier;
+	Parcel parcel;
+	PagerAdapter recycleViewPagerAdapter;
+	RecyclerViewPager recyclerViewPager;
+	List<Parcel> crimes;
+	Parcel parcelCurrent;
+	Parcelable listState;
+	private Context context;
+	private ShowLoader loader;
+	private LinearLayoutManager mLayoutManager;
+	private FloatingActionButton fabDeleteCourier;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+	public HomeFragment() {
+		// Required empty public constructor
+	}
 
-    public static HomeFragment newInstance(int parcel_id) {
+	public static HomeFragment newInstance(int parcel_id) {
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ARG_PARCEL_ID, parcel_id);
-
-
-        HomeFragment fragment = new HomeFragment();
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_fragment_main, menu);
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle state) {
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(ARG_PARCEL_ID, parcel_id);
 
 
-        context = getActivity();
-        loader = new ShowLoader(context);
+		HomeFragment fragment = new HomeFragment();
+		fragment.setArguments(bundle);
+		return fragment;
+	}
 
-        View v = inflater.inflate(R.layout.fragment_home, container, false);
-        v.clearFocus();
-
-        setupRecyclerView(v, inflater, context);
-
-        if (state != null)
-            listState = state.getParcelable(LIST_STATE_KEY);
-        if (listState != null) {
-            recyclerViewPager.getLayoutManager().onRestoreInstanceState(listState);
-        }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	                         Bundle state) {
 
 
-        parcelViewModel = ViewModelProviders.of(HomeFragment.this).get(ParcelViewModel.class);
+		context = getActivity();
+		loader = new ShowLoader(context);
 
-        parcelViewModel.getParcelList().observe(HomeFragment.this, (List<Parcel> parcels) -> {
+		View v = inflater.inflate(R.layout.fragment_home, container, false);
+		v.clearFocus();
 
-            recycleViewPagerAdapter.updateParcelList(parcels);
+		setupRecyclerView(v, inflater, context);
 
-            crimes = parcels;
+		if (state != null)
+			listState = state.getParcelable(LIST_STATE_KEY);
+		if (listState != null) {
+			recyclerViewPager.getLayoutManager().onRestoreInstanceState(listState);
+		}
 
-            if ((parcels != null ? parcels.size() : 0) == 0)
-                createDefaultParcel();
-            setButtonsVisibility(recyclerViewPager.getCurrentPosition());
+
+		parcelViewModel = ViewModelProviders.of(HomeFragment.this).get(ParcelViewModel.class);
+
+		parcelViewModel.getParcelList().observe(HomeFragment.this, (List<Parcel> parcels) -> {
+			if ((parcels != null ? parcels.size() : 0) == 0)
+				createDefaultParcel();
+
+			recycleViewPagerAdapter.updateParcelList(parcels);
+
+			crimes = parcels;
 
 
-        });
+			setButtonsVisibility(recyclerViewPager.getCurrentPosition());
+
+
+		});
         /*
         if (crimes == null || crimes.size() == 0){
             createDefaultParcel();
             Log.d(TAG,"Adding a parcel");
         }*/
-        fabDeleteCourier = v.findViewById(R.id.fab_delete);
-        fabDeleteCourier.setOnClickListener(v1 -> deleteParcel());
-        fabNewCourier = v.findViewById(R.id.fab_new_data);
-        fabNewCourier.setOnClickListener(v1 -> {
+		fabDeleteCourier = v.findViewById(R.id.fab_delete);
+		fabDeleteCourier.setOnClickListener(v1 -> deleteParcel());
+		fabNewCourier = v.findViewById(R.id.fab_new_data);
+		fabNewCourier.setOnClickListener(v1 -> {
 //TODO Add A cartView, then refresh the layout(done), add data to database, & check existing data before sending it to server.& send all data to server at once
 
 
-            //validateFields(false);
-            //submitRequest(null, false);
-            submitData();
+			//validateFields(false);
+			//submitRequest(null, false);
+			submitData();
 
 
-        });
+		});
 
 
-        mSubmitButton = v.findViewById(R.id.btn_submit);
+		mSubmitButton = v.findViewById(R.id.btn_submit);
 
-        mSubmitButton.setOnClickListener(view -> {
-            //startActivity(new Intent(getContext(), SelectCourierActivity.class));
+		mSubmitButton.setOnClickListener(view -> {
+			//startActivity(new Intent(getContext(), SelectCourierActivity.class));
 
-            if (validateFields()) { sendCouriers(); }
-
-
-            // Intent i = new Intent(getActivity(), PartnerActivity.class);
-            //startActivity(i);
-        });
-        setButtonsVisibility(recyclerViewPager.getCurrentPosition());
-        return v;
-    }
-
-    private void deleteParcel() {
-        int position = recyclerViewPager.getCurrentPosition();
-
-        Parcel parcel = crimes.get(position);
-        ParcelLab.deleteCurrentParcel(AppDatabase.getAppDatabase(context), parcel);
-    }
-
-    public void onSaveInstanceState(Bundle state) {
-        super.onSaveInstanceState(state);
-        // Save list state
-        listState = recyclerViewPager.getLayoutManager().onSaveInstanceState();
-        state.putParcelable(LIST_STATE_KEY, listState);
-    }
+			if (validateFields()) {
+				sendCouriers();
+			}
 
 
-    public void createDefaultParcel() {
+			// Intent i = new Intent(getActivity(), PartnerActivity.class);
+			//startActivity(i);
+		});
+		setButtonsVisibility(recyclerViewPager.getCurrentPosition());
+		return v;
+	}
 
-        Disposable subscribe = ParcelLab.newParcel(context).subscribe(parcel1 -> {
-            //	parcel = parcel1;
-            parcelCurrent = parcel1;
-        });
-    }
+	private void deleteParcel() {
+		int position = recyclerViewPager.getCurrentPosition();
 
-    private void setupRecyclerView(View v, LayoutInflater inflater, Context context) {
-        recyclerViewPager = v.findViewById(R.id.pager);
-        recyclerViewPager.setLayoutManager(new LinearLayoutManager(this.context,
-                LinearLayoutManager.HORIZONTAL, false));
-        recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, inflater, context, new ArrayList<Parcel>());
-        recyclerViewPager.setAdapter(recycleViewPagerAdapter);
-        recyclerViewPager.setTriggerOffset(0.15f);
-        recyclerViewPager.setFlingFactor(0.25f);
-        recyclerViewPager.setHasFixedSize(false);
+		Parcel parcel = crimes.get(position);
+		ParcelLab.deleteCurrentParcel(AppDatabase.getAppDatabase(context), parcel);
+	}
+
+	public void createDefaultParcel() {
+
+		Disposable subscribe = ParcelLab.newParcel(context).subscribe(parcel1 -> {
+			//	parcel = parcel1;
+			parcelCurrent = parcel1;
+
+		});
+	}
+
+	private void setupRecyclerView(View v, LayoutInflater inflater, Context context) {
+		recyclerViewPager = v.findViewById(R.id.pager);
+		recyclerViewPager.setLayoutManager(new LinearLayoutManager(this.context,
+				LinearLayoutManager.HORIZONTAL, false));
+		recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, inflater, context,
+				new ArrayList<Parcel>());
+		recyclerViewPager.setAdapter(recycleViewPagerAdapter);
+		recyclerViewPager.setTriggerOffset(0.15f);
+		recyclerViewPager.setFlingFactor(0.25f);
+		recyclerViewPager.setHasFixedSize(false);
 
 
-        recyclerViewPager.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int scrollState) {
+		recyclerViewPager.setOnScrollListener(new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(RecyclerView recyclerView, int scrollState) {
 
-            }
+			}
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+			@Override
+			public void onScrolled(RecyclerView recyclerView, int i, int i2) {
 //                mPositionText.setText("First: " + mRecyclerViewPager.getFirstVisiblePosition());
-                int childCount = recyclerViewPager.getChildCount();
-                int width = 0;
-                if (recyclerViewPager.getChildAt(0) != null)
-                    width = recyclerViewPager.getChildAt(0).getWidth();
-                int padding = (recyclerViewPager.getWidth() - width) / 4;
-                Log.d(TAG, "childCount " + childCount + " width " + width + " padding " + padding + " widthMain " + recyclerViewPager.getWidth());
+				int childCount = recyclerViewPager.getChildCount();
+				int width = 0;
+				if (recyclerViewPager.getChildAt(0) != null)
+					width = recyclerViewPager.getChildAt(0).getWidth();
+				int padding = (recyclerViewPager.getWidth() - width) / 4;
+				Log.d(TAG,
+						"childCount " + childCount + " width " + width + " padding " + padding + " widthMain " + recyclerViewPager
+								.getWidth());
 
 
-                for (int j = 0; j < childCount; j++) {
-                    View v = recyclerView.getChildAt(j);
+				for (int j = 0; j < childCount; j++) {
+					View v = recyclerView.getChildAt(j);
 
-                    float rate = 0;
-                    if (v.getLeft() <= padding) {
-                        if (v.getLeft() >= padding - v.getWidth()) {
-                            rate = (padding - v.getLeft()) * 1f / v.getWidth();
-                        } else {
-                            rate = 1;
-                        }
-                        v.setScaleY(1 - rate * 0.1f);
-                    } else {
+					float rate = 0;
+					if (v.getLeft() <= padding) {
+						if (v.getLeft() >= padding - v.getWidth()) {
+							rate = (padding - v.getLeft()) * 1f / v.getWidth();
+						} else {
+							rate = 1;
+						}
+						v.setScaleY(1 - rate * 0.1f);
+					} else {
 
-                        if (v.getLeft() <= recyclerView.getWidth() - padding) {
-                            rate = (recyclerView.getWidth() - padding - v.getLeft()) * 1f / v.getWidth();
-                        }
-                        v.setScaleY(0.9f + rate * 0.1f);
-                    }                        v.setScaleY(0.9f + rate * 0.1f);
+						if (v.getLeft() <= recyclerView.getWidth() - padding) {
+							rate = (recyclerView.getWidth() - padding - v.getLeft()) * 1f / v
+									.getWidth();
+						}
+						v.setScaleY(0.9f + rate * 0.1f);
+					}
+					v.setScaleY(0.9f + rate * 0.1f);
 
-                }
-            }
-        });
-        //TODO implement this on empty address
+				}
+			}
+		});
+		//TODO implement this on empty address
 
-        // recyclerViewPager.scrollToPosition();
-        recyclerViewPager.addOnPageChangedListener((oldPosition, newPosition) -> {
+		// recyclerViewPager.scrollToPosition();
+		recyclerViewPager.addOnPageChangedListener((oldPosition, newPosition) -> {
 
-            if (!crimes.get(oldPosition).equals(recycleViewPagerAdapter.holder.getParcel()))
-                ParcelLab.addParcel(recycleViewPagerAdapter.holder.getParcel(), AppDatabase.getAppDatabase(context));
-            setButtonsVisibility(newPosition);
+			if (!crimes.get(oldPosition).equals(recycleViewPagerAdapter.holder.getParcel()))
+				ParcelLab.addParcel(recycleViewPagerAdapter.holder.getParcel(),
+						AppDatabase.getAppDatabase(context));
+			setButtonsVisibility(newPosition);
 
-            Log.d("test", "oldPosition:" + oldPosition + " newPosition:" + newPosition + " parcel at old " + crimes.get(oldPosition).toString() + " parcel at new " + crimes.get(newPosition).toString());
-        });
+			Log.d("test",
+					"oldPosition:" + oldPosition + " newPosition:" + newPosition + " parcel at old " + crimes
+							.get(oldPosition).toString() + " parcel at new " + crimes
+							.get(newPosition).toString());
+		});
 
-        recyclerViewPager.addOnLayoutChangeListener((v12, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            if (recyclerViewPager.getChildCount() < 3) {
-                if (recyclerViewPager.getChildAt(1) != null) {
-                    if (recyclerViewPager.getCurrentPosition() == 0) {
-                        View v1 = recyclerViewPager.getChildAt(1);
-                        v1.setScaleY(0.9f);
-                        //    v1.setScaleX(0.9f);
-                    } else {
-                        View v1 = recyclerViewPager.getChildAt(0);
-                        v1.setScaleY(0.9f);
-                        //   v1.setScaleX(0.9f);
-                    }
-                }
-            } else {
-                if (recyclerViewPager.getChildAt(0) != null) {
-                    View v0 = recyclerViewPager.getChildAt(0);
-                    v0.setScaleY(0.9f);
-                    // v0.setScaleX(0.9f);
-                }
-                if (recyclerViewPager.getChildAt(2) != null) {
-                    View v2 = recyclerViewPager.getChildAt(2);
-                    v2.setScaleY(0.9f);
-                    //  v2.setScaleX(0.9f);
-                }
-            }
-
-
-        });
-    }
-
-    /**
-     * sets the visibility of new & delete FAB
-     *
-     * @param newPosition the position where the view is just scrolled
-     */
-    private void setButtonsVisibility(int newPosition) {
-        if (crimes != null) {
-
-            if (crimes.size() <= 1) { fabDeleteCourier.setVisibility(View.GONE); } else {
-                fabDeleteCourier.setVisibility(View.VISIBLE);
-            }
-            if (newPosition == crimes.size() - 1) {
-                fabNewCourier.setVisibility(View.VISIBLE);
-            } else { fabNewCourier.setVisibility(View.GONE); }
-            if (crimes.size() >= 5) fabNewCourier.setVisibility(View.GONE);
-        } else {
-            fabDeleteCourier.setVisibility(View.GONE);
-            fabNewCourier.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private boolean submitData() {
-        if (validateFields()) return false;
+		recyclerViewPager.addOnLayoutChangeListener(
+				(v12, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+					if (recyclerViewPager.getChildCount() < 3) {
+						if (recyclerViewPager.getChildAt(1) != null) {
+							if (recyclerViewPager.getCurrentPosition() == 0) {
+								View v1 = recyclerViewPager.getChildAt(1);
+								v1.setScaleY(0.9f);
+								//    v1.setScaleX(0.9f);
+							} else {
+								View v1 = recyclerViewPager.getChildAt(0);
+								v1.setScaleY(0.9f);
+								//   v1.setScaleX(0.9f);
+							}
+						}
+					} else {
+						if (recyclerViewPager.getChildAt(0) != null) {
+							View v0 = recyclerViewPager.getChildAt(0);
+							v0.setScaleY(0.9f);
+							// v0.setScaleX(0.9f);
+						}
+						if (recyclerViewPager.getChildAt(2) != null) {
+							View v2 = recyclerViewPager.getChildAt(2);
+							v2.setScaleY(0.9f);
+							//  v2.setScaleX(0.9f);
+						}
+					}
 
 
-        //ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(getContext()));
-        createDefaultParcel();
-        return true;
+				});
+	}
+
+	/**
+	 * sets the visibility of new & delete FAB
+	 *
+	 * @param newPosition the position where the view is just scrolled
+	 */
+	private void setButtonsVisibility(int newPosition) {
+		if (crimes != null) {
+
+			if (crimes.size() <= 1) {
+				fabDeleteCourier.setVisibility(View.GONE);
+			} else {
+				fabDeleteCourier.setVisibility(View.VISIBLE);
+			}
+			if (newPosition == crimes.size() - 1) {
+				fabNewCourier.setVisibility(View.VISIBLE);
+			} else {
+				fabNewCourier.setVisibility(View.GONE);
+			}
+			if (crimes.size() >= 5) fabNewCourier.setVisibility(View.GONE);
+		} else {
+			fabDeleteCourier.setVisibility(View.GONE);
+			fabNewCourier.setVisibility(View.VISIBLE);
+		}
+	}
+
+	private boolean submitData() {
+		if (validateFields()) return false;
 
 
-    }
+		//ParcelLab.addParcel(parcel, AppDatabase.getAppDatabase(getContext()));
+		createDefaultParcel();
+		return true;
 
-    private boolean validateFields() {
-        if (parcelCurrent == null) parcelCurrent = recycleViewPagerAdapter.holder.getParcel();
 
-        for (Parcel parcel :
-                crimes) {
-            //TODO check for all blank values
-            Parcel parcelNew = recycleViewPagerAdapter.holder.validateFields(parcel);
-            if (parcelNew == null) {
-                recyclerViewPager.scrollToPosition(crimes.indexOf(parcel));
-                return true;
-            }
-        }
-        return false;
-    }
+	}
 
-    private void sendCouriers() {
-        //TODO Change this
-        startActivity(new Intent(getContext(), SelectCourierActivity.class));
+	private boolean validateFields() {
+		if (parcelCurrent == null) parcelCurrent = recycleViewPagerAdapter.holder.getParcel();
+
+		for (Parcel parcel :
+				crimes) {
+			//TODO check for all blank values
+			Parcel parcelNew = recycleViewPagerAdapter.holder.validateFields(parcel);
+			if (parcelNew == null) {
+				recyclerViewPager.scrollToPosition(crimes.indexOf(parcel));
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void sendCouriers() {
+		//TODO Change this
+		startActivity(new Intent(getContext(), SelectCourierActivity.class));
        /* for (Parcel parcelTemp : crimes) {
             submitCouriers(context, parcelTemp, TAG_COURIERS, loader);
         }*/
-    }
+	}
 
-    private void showRadioButtonDialog() {
+	@Override
+	public void onResume() {
+		super.onResume();
+		GlobalBus.getBus().register(this);
+		loader.dismissDialog();
+        /*if (listState != null) {
+            recyclerViewPager.getLayoutManager().onRestoreInstanceState(listState);
+        }*/
+	}
 
-        // custom dialog
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.radio_buttondiaglog);
-        List<String> stringList = new ArrayList<>();  // here is list
-        for (int i = 0; i < 5; i++) {
-            stringList.add("RadioButton " + (i + 1));
-        }
-        RadioGroup rg = dialog.findViewById(R.id.radio_group);
+	public void onSaveInstanceState(Bundle state) {
+		super.onSaveInstanceState(state);
+		// Save list state
+		listState = recyclerViewPager.getLayoutManager().onSaveInstanceState();
+		state.putParcelable(LIST_STATE_KEY, listState);
+	}
 
-        for (int i = 0; i < stringList.size(); i++) {
-            RadioButton rb = new RadioButton(getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
-            rb.setText(stringList.get(i));
-            rg.addView(rb);
-        }
-        rg.setOnCheckedChangeListener((group, checkedId) -> {
-            int childCount = group.getChildCount();
-            for (int x = 0; x < childCount; x++) {
-                RadioButton btn = (RadioButton) group.getChildAt(x);
-                if (btn.getId() == checkedId) {
-                    Toast.makeText(getActivity(), btn.getText(), Toast.LENGTH_LONG).show();
+	@Override
+	public void onPause() {
+		super.onPause();
+		GlobalBus.getBus().unregister(this);
 
-                }
-            }
-        });
+	}
 
-        dialog.show();
+	@Override
+	public void onStop() {
+		super.onStop();
+		// GlobalBus.getBus().unregister(this);
+		if (loader != null) {
+			loader.dismissDialog();
+		}
+	}
 
-    }
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.menu_fragment_main, menu);
 
-    public void updateUI(Context context) {
+	}
 
-        if (recycleViewPagerAdapter == null) {
-            recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, getLayoutInflater(), getContext(), new ArrayList<Parcel>());
-            recyclerViewPager.setAdapter(recycleViewPagerAdapter);
-        }/* else {
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void showRadioButtonDialog() {
+
+		// custom dialog
+		final Dialog dialog = new Dialog(getActivity());
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.radio_buttondiaglog);
+		List<String> stringList = new ArrayList<>();  // here is list
+		for (int i = 0; i < 5; i++) {
+			stringList.add("RadioButton " + (i + 1));
+		}
+		RadioGroup rg = dialog.findViewById(R.id.radio_group);
+
+		for (int i = 0; i < stringList.size(); i++) {
+			RadioButton rb = new RadioButton(
+					getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
+			rb.setText(stringList.get(i));
+			rg.addView(rb);
+		}
+		rg.setOnCheckedChangeListener((group, checkedId) -> {
+			int childCount = group.getChildCount();
+			for (int x = 0; x < childCount; x++) {
+				RadioButton btn = (RadioButton) group.getChildAt(x);
+				if (btn.getId() == checkedId) {
+					Toast.makeText(getActivity(), btn.getText(), Toast.LENGTH_LONG).show();
+
+				}
+			}
+		});
+
+		dialog.show();
+
+	}
+
+	public void updateUI(Context context) {
+
+		if (recycleViewPagerAdapter == null) {
+			recycleViewPagerAdapter = new PagerAdapter(recyclerViewPager, getLayoutInflater(),
+					getContext(), new ArrayList<Parcel>());
+			recyclerViewPager.setAdapter(recycleViewPagerAdapter);
+		}/* else {
             int pos = RecyclerView.generateViewId();
             recycleViewPagerAdapter.setParcels(crimes);
             recycleViewPagerAdapter.notifyItemChanged(pos);
         }
 */
-        // updateSubtitle();
-    }
+		// updateSubtitle();
+	}
 
+	private void updateSubtitle() {
+	}
 
-    private void updateSubtitle() {
-    }
+	@Subscribe
+	public void onDateMessage(Events.DateMessage fragmentActivityMessage) {
+		Bundle bundle = fragmentActivityMessage.getMessage();
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        GlobalBus.getBus().register(this);
-        loader.dismissDialog();
-        /*if (listState != null) {
-            recyclerViewPager.getLayoutManager().onRestoreInstanceState(listState);
-        }*/
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        // GlobalBus.getBus().unregister(this);
-        if (loader != null) {
-            loader.dismissDialog();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        GlobalBus.getBus().unregister(this);
-
-    }
-
-    @Subscribe
-    public void onDateMessage(Events.DateMessage fragmentActivityMessage) {
-        Bundle bundle = fragmentActivityMessage.getMessage();
-
-        Parcel parcel = bundle.getParcelable(EXTRA_PARCEL);
+		Parcel parcel = bundle.getParcelable(EXTRA_PARCEL);
        /* Date date = (Date) bundle.getSerializable(EXTRA_DATE);
         long lonely = bundle.getLong(EXTRA_SERIAL);
         Log.d("CHeckout", "onDate Eventbus");*/
-        ParcelLab.updateParcel(context, parcel);
-        recycleViewPagerAdapter.notifyDataSetChanged();
-        // setContent(model);
+		ParcelLab.updateParcel(context, parcel);
+		recycleViewPagerAdapter.notifyDataSetChanged();
+		// setContent(model);
 
 
-    }
+	}
 
 
 }

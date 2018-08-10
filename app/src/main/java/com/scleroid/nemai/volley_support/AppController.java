@@ -14,6 +14,7 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.facebook.FacebookSdk;
 import com.scleroid.nemai.BuildConfig;
+import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
 

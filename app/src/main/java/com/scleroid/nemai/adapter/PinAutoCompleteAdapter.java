@@ -90,8 +90,8 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
                 if (data != null) {
 
-                    Flowable<PinCode> observable;
-                    List<PinCode> pinCodes = findPins(data.toString(), mContext);
+	                Flowable<PinCode> observable;
+	                List<PinCode> pinCodes = findPins(data.toString(), mContext);
 
                     // performFiltering is already performed on a worker thread
                     // so we don't need to subscribeOn a background thread explicitly
@@ -140,7 +140,7 @@ public class PinAutoCompleteAdapter extends BaseAdapter implements Filterable {
             }};
     }
 
-    private boolean numberOrNot(String input) {
+	private boolean numberOrNot(String input) {
         try {
             Integer.parseInt(input);
         } catch (NumberFormatException ex) {
