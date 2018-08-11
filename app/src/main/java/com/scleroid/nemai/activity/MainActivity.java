@@ -111,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements GarlandApp.FakerR
         session = new SessionManager(getApplicationContext());
 
 
-        session.setLogin(true);
-        session.setVerified(true);
+        session.setLogin(false);
+        session.setVerified(false);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
