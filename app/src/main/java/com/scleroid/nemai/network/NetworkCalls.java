@@ -190,78 +190,16 @@ public class NetworkCalls {
 
             Toasty.success(context, "Login Successful", Toast.LENGTH_LONG, true).show();
 //TODO handle error codes here
+
+
+
+
+
             session.setLogin(true);
 
             MainActivity.newIntent(context);
 
         }, throwable -> jsonErrorToast(throwable.getMessage(), context));
-
-     /*   VolleyCompleteListener volleyCompleteListener = new VolleyCompleteListener() {
-            @Override
-            public void onTaskCompleted(JSONObject response, int statusCode) {
-                Log.d(TAG, "Login Response: " + response.toString());
-
-                try {
-
-                    // user successfully logged in
-                    // Create login session
-
-
-                    //JSONObject jObj = new JSONObject(jsonObject);
-
-                    String error = response.getString("statusCode");
-                    switch (error) {
-                        case "200":
-
-                        Toasty.success(context, "Login Successful", Toast.LENGTH_LONG, true).show();
-
-                        session.setLogin(true);
-
-                        MainActivity.newIntent(context);
-                            break;
-                        //finish();
-                        case "201":
-                            session.setLogin(false);
-                            Toasty.warning(context, "Email/Mobile isn't registered with us", Toast.LENGTH_LONG, true).show();
-                            mEmailTextInputLayout.setError("Email/Mobile isn't registered with us");
-                            break;
-
-                        case "202":
-                            session.setLogin(false);
-                            Toasty.warning(context, "Password is incorrect", Toast.LENGTH_LONG, true).show();
-                            mPasswordTextInputLayout.setError("Password is incorrect");
-                            break;
-                        default:
-                        // Error occurred in login. Get the error
-                        // message
-                        //TODO define error codes
-                        session.setLogin(false);
-                        String errorMsg = response.getString("message");
-                        taskErrorToast("There's an error on our side, We're sorry", context, statusCode);
-                    }
-                } catch (JSONException e) {
-                    jsonErrorToast(e.getMessage(), context);
-                }
-
-            }
-
-            @Override
-            public void onTaskFailed(String error, int statusCode) {
-                //   Log.e(TAG, "Registration Error: " + error);
-                taskErrorToast(error, context, statusCode);
-
-            }
-        };
-
-        // Posting params to register url
-        Map<String, String> params = new HashMap<String, String>();
-        params.put(ServerConstants.URL, ServerConstants.serverUrl.POST_LOGIN);
-        params.put("email_id", userName);
-        params.put("password", pass);
-
-        new VolleyPostJSONMethod(context, volleyCompleteListener, params, loader, tag);
-
-*/
 
     }
 
@@ -297,6 +235,7 @@ public class NetworkCalls {
         }, throwable -> jsonErrorToast(throwable.getMessage(),context));
 
     }
+
 
     private static void taskErrorToast(String error, Context context, int statusCode) {
         Log.e(TAG, "APi Error: " + error + " statusCode " + statusCode);
