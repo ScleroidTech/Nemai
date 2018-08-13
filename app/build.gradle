@@ -30,7 +30,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'API_BASE_URL', "\" https://ec2-54-164-191-128.compute-1.amazonaws.com:3306/\""
+        it.buildConfigField 'String', 'API_BASE_URL', "\" http://ec2-54-164-191-128.compute-1.amazonaws.com:3306/\""
     }
     productFlavors {
     }
@@ -118,10 +118,6 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
 
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
-    // Optional, if you use support library fragments:
-    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
 }
 
 

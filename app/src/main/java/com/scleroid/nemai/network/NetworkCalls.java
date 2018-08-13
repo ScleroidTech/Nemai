@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.scleroid.nemai.activity.MainActivity.session;
 import static com.scleroid.nemai.activity.registration.LoginActivity.TAG;
@@ -182,7 +184,10 @@ public class NetworkCalls {
         startActivity(intent);
         finish();*/
         ApiService apiService = ApiClient.getService(context);
-        apiService.loginUser(userName,pass).subscribe( result->{
+        apiService.loginUser(userName,pass)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(result->{
+
             Toasty.success(context, "Login Successful", Toast.LENGTH_LONG, true).show();
 //TODO handle error codes here
             session.setLogin(true);
@@ -278,7 +283,9 @@ public class NetworkCalls {
         Log.d(TAG, "data  method" + loginMethod);
 
         apiService.registerUser(firstName,lastName,email,phone,gender,password, loginMethod)
-        .subscribe(() ->{
+
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(result ->{
 
             Toasty.success(context, "Registered successfully, let's verify you", Toast.LENGTH_LONG, true).show();
             session.getUser().setUserProfile(firstName, lastName, email, phone, gender);

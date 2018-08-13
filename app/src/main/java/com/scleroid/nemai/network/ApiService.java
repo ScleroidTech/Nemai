@@ -3,10 +3,13 @@ package com.scleroid.nemai.network;
 import com.scleroid.nemai.data.models.Courier;
 import com.scleroid.nemai.data.models.Parcel;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -38,13 +41,13 @@ public interface ApiService {
 
 	@FormUrlEncoded
 	@POST("/register")
-	Completable registerUser(@Field("fname") String first_name, @Field("lname") String last_name,
-	                         @Field("email") String email, @Field("phone") String phone,
-	                         @Field("gender") String gender, @Field("password") String password,
-	                         @Field("login_method") String loginMethod);
+	Maybe<JSONObject> registerUser(@Field("fname") String first_name, @Field("lname") String last_name,
+								   @Field("email") String email, @Field("phone") String phone,
+								   @Field("gender") String gender, @Field("password") String password,
+								   @Field("login_method") String loginMethod);
 	@FormUrlEncoded
 	@POST("/login")
-	Single<String> loginUser(@Field("email_id") String email, @Field("password") String password);
+	Single<JSONObject> loginUser(@Field("email_id") String email, @Field("password") String password);
 
 
 
